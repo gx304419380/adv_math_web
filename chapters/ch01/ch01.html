@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 1 章 · 函数与极限 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：函数与极限的原创讲解、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script type="module" src="../../assets/js/boot.js"></script>
+<script type="module" src="demo.js"></script>
+</head>
+<body data-chapter="ch01">
+
+<header class="chapter-hero">
+  <a class="back-link" href="../../index.html">← 返回首页</a>
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">1</span> 章 · <span data-slot="volume">上册</span></div>
+    <h1 data-slot="title">函数与极限</h1>
+    <p class="hero-sub" data-slot="subtitle">从变量到无限逼近：把「越来越近」说清楚</p>
+    <div class="hero-meta">
+      <span>约 <span data-slot="estMinutes">95</span> 分钟</span><span>·</span>
+      <span>10 节</span><span>·</span><span>10 个交互演示</span><span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <ul class="goal-list" data-goal-list>
+        <li><label><input type="checkbox"> 把函数理解成「输入 → 唯一输出」的对应，而不只是一串公式</label></li>
+        <li><label><input type="checkbox"> 能用 ε-N 和 ε-δ 说清「无限逼近」到底在说什么，并知道谁先谁后</label></li>
+        <li><label><input type="checkbox"> 看懂两个重要极限的几何来源，会用夹逼准则判断极限存在</label></li>
+        <li><label><input type="checkbox"> 分清四类间断点，理解闭区间上连续函数的三个性质为什么需要「闭」和「连续」</label></li>
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">这一章其实只做了一件事：把「越来越近」这句模糊的话，改写成可以检验的精确条件。后半章再把这个条件用到连续性上。</p>
+      <div class="mermaid-box" data-mount="mindmap" data-mermaid>
+graph LR
+  A[映射与函数] --> B[数列极限]
+  A --> C[函数极限]
+  B --> D[ε-N 语言]
+  C --> E[ε-δ 语言]
+  D --> F[极限运算法则]
+  E --> F
+  F --> G[两个重要极限]
+  F --> H[无穷小比较]
+  G --> I[连续与间断点]
+  H --> I
+  I --> J[闭区间连续性质]
+  J --> K[下一章：导数]
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+        <h3>第 1 节 · 映射与函数</h3>
+        <p>先忘掉公式。想象一台机器：你从左边投进去一个数，它从右边吐出<strong>唯一确定</strong>的一个数。这台机器就是函数。写成 \(y=f(x)\) 时，\(x\) 的取值范围叫<strong>定义域</strong>，所有可能输出组成<strong>值域</strong>，机器内部的规则叫<strong>对应法则</strong>。</p>
+        <p>「唯一确定」是重点：同一个输入不能吐出两个不同的输出。反过来说，两个不同的输入得到同一个输出完全没问题——比如 \(f(x)=x^2\) 里，\(2\) 和 \(-2\) 都送到 \(4\)。</p>
+
+        <div class="demo-box" data-demo="function-machine">
+          <div class="demo-title">演示 1 · 函数机器：换一条规则看看输出怎么变</div>
+          <div class="demo-caption">拖动输入值，或切换机器内部的规则，观察输出如何被唯一确定。</div>
+        </div>
+
+        <div data-card="def">
+          <strong>函数</strong>：设 \(D\) 是一个非空实数集。若对每个 \(x\in D\)，按某个规则都有唯一一个实数 \(y\) 与之对应，则称这个对应为定义在 \(D\) 上的函数，记作 \(y=f(x)\)。
+        </div>
+        <div data-card="tip" class="insight">
+          <strong>直观理解 · 几何意义</strong>：在图像上，「唯一输出」等价于<strong>竖直检验</strong>——任意一条竖直线最多与图像交于一点。圆为什么不是 \(y=f(x)\)？因为一条竖线会交出上下两个点。
+        </div>
+      </article>
+
+      <article class="section" id="s2">
+        <h3>第 2 节 · 数列的极限</h3>
+        <p>数列就是按编号排好队的一串数 \(a_1,a_2,a_3,\dots\)。研究它的极限时，我们只关心<strong>队伍的尾巴往哪儿去</strong>：前面有限项怎么闹腾都不影响结论。</p>
+        <p>把「尾巴都挤到某个值 \(L\) 附近」说精确，就是 ε-N 语言：无论你把允许的误差 \(\varepsilon>0\) 取得多小，总能找到一个位置 \(N\)，使得第 \(N\) 项<strong>之后的所有</strong>项都满足 \(|a_n-L|&lt;\varepsilon\)。</p>
+
+        <div class="demo-box" data-demo="epsilon-N">
+          <div class="demo-title">演示 2 · ε-N：把误差带收窄，看需要等到第几项</div>
+          <div class="demo-caption">播放动画或拖动 ε，观察「N 之后全部落入带内」这件事如何成立。</div>
+        </div>
+
+        <div data-card="tip" class="insight">
+          <strong>直观理解</strong>：ε 是别人出的考题（要多准），N 是你的答案（从第几项起能保证）。先有 ε，才找 N；而且 N 通常随着 ε 变小而变大。把前 100 项全改成别的值，极限一点不变——因为定义只管尾巴。
+        </div>
+      </article>
+
+      <article class="section" id="s3">
+        <h3>第 3 节 · 函数的极限</h3>
+        <p>现在自变量不再只取整数编号，而是连续地靠近 \(x_0\)。我们问：当 \(x\) 无限接近 \(x_0\)（但<strong>不必等于</strong> \(x_0\)）时，\(f(x)\) 无限接近谁？函数在 \(x_0\) 处有没有定义、定义成多少，都不影响这个答案。</p>
+        <p>ε-δ 语言把这句话锁死：对任意 \(\varepsilon>0\)，存在 \(\delta>0\)，使得当 \(0&lt;|x-x_0|&lt;\delta\) 时，恒有 \(|f(x)-L|&lt;\varepsilon\)。那个小小的 \(0&lt;\) 就是「去心」——把 \(x_0\) 本身挖掉。</p>
+
+        <div class="demo-box" data-demo="epsilon-delta">
+          <div class="demo-title">演示 3 · ε-δ：拖窄误差带，δ 窗口自动收紧</div>
+          <div class="demo-caption">以 \(f(x)=2x+1\)、\(x_0=1\)、\(L=3\) 为例，亲手验证 \(\delta=\varepsilon/2\) 为什么够用。</div>
+        </div>
+
+        <div data-card="tip" class="insight">
+          <strong>直观理解 · 几何意义</strong>：ε 画出一条<strong>水平的误差带</strong>，δ 画出一段<strong>竖直的自变量窗口</strong>。定义说的是：窗口里每一条竖线，与曲线的交点都必须落在水平带里。窗口越窄越好找，所以 δ 从来不是唯一的。
+        </div>
+      </article>
+
+      <article class="section" id="s4">
+        <h3>第 4 节 · 无穷小与无穷大</h3>
+        <p>这两个词最容易被当成「很小／很大的数」，其实它们描述的是<strong>变化趋势</strong>：以 0 为极限的变量叫无穷小；绝对值无限增大的变量叫无穷大。\(10^{-100}\) 再小也只是个常数，不是无穷小。</p>
+        <p>在同一个变化过程中，非零无穷小的倒数是无穷大，无穷大的倒数是无穷小。两者相乘则没有固定答案——这正是后面「未定式」的源头。</p>
+        <table style="width:100%;border-collapse:collapse;font-size:.9rem;margin:1rem 0">
+          <thead><tr style="border-bottom:2px solid var(--border);text-align:left"><th style="padding:.5rem">当 \(x\to 0^+\)</th><th style="padding:.5rem">\(x\)</th><th style="padding:.5rem">\(x^2\)</th><th style="padding:.5rem">\(\sqrt{x}\)</th><th style="padding:.5rem">\(1/x\)</th></tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)"><td style="padding:.5rem">趋向</td><td style="padding:.5rem">0</td><td style="padding:.5rem">0（更快）</td><td style="padding:.5rem">0（更慢）</td><td style="padding:.5rem">∞</td></tr>
+            <tr><td style="padding:.5rem">称呼</td><td style="padding:.5rem">无穷小</td><td style="padding:.5rem">高阶无穷小</td><td style="padding:.5rem">低阶无穷小</td><td style="padding:.5rem">无穷大</td></tr>
+          </tbody>
+        </table>
+        <div data-card="warning">
+          <strong>别踩坑</strong>：\(\infty\) 不是实数，不能代进四则运算当成普通数字。\(\infty-\infty\)、\(0\cdot\infty\)、\(1^\infty\) 都需要另外处理，结果因题而异。
+        </div>
+      </article>
+
+      <article class="section" id="s5">
+        <h3>第 5 节 · 极限运算法则</h3>
+        <p>若 \(\lim f(x)=A\)、\(\lim g(x)=B\)，则和、差、积的极限分别等于 \(A\pm B\)、\(A\cdot B\)；当 \(B\neq 0\) 时，商的极限等于 \(A/B\)。复合函数的极限在相应条件下也可以「由内到外」逐层求。</p>
+        <div data-card="example">
+          <strong>自编例题</strong>：求 \(\lim\limits_{x\to 1}\dfrac{x^2-1}{x-1}\)。<br>
+          直接代入得到 \(0/0\)，说明不能急着用商的法则。先对 \(x\neq 1\) 约分：\(\dfrac{x^2-1}{x-1}=x+1\)，于是极限为 \(2\)。<br>
+          注意约分之所以合法，正因为极限<strong>不关心 \(x=1\) 这一点</strong>。
+        </div>
+        <div data-card="tip" class="insight">
+          <strong>直观理解</strong>：运算法则的前提是「每个零件的极限都存在」。遇到 \(\infty-\infty\) 这类组合，先通分、有理化或提公因式把它变成存在的形式，再用法则。
+        </div>
+      </article>
+
+      <article class="section" id="s6">
+        <h3>第 6 节 · 极限存在准则与两个重要极限</h3>
+        <p>有两条判断「极限存在」的常用准则：<strong>夹逼准则</strong>（被夹在两条趋于同一值的曲线之间）和<strong>单调有界准则</strong>（单调且有界必有极限）。它们不要求你先猜出极限值，特别适合处理振荡的函数。</p>
+
+        <p><strong>重要极限一</strong>：\(\lim\limits_{x\to 0}\dfrac{\sin x}{x}=1\)。它的根在几何里：单位圆中当 \(x\) 很小时，正弦线、弧长、切线长几乎一样长。</p>
+        <div class="demo-box" data-demo="sinx-over-x">
+          <div class="demo-title">演示 4 · 单位圆：三条长度如何被夹到相等</div>
+          <div class="demo-caption">拖动角度 x，比较 sin x、弧长 x、tan x，以及对应三个图形的面积。</div>
+        </div>
+
+        <p><strong>重要极限二</strong>：\(\lim\limits_{x\to\infty}\left(1+\dfrac{1}{x}\right)^x=e\)。它来自「利滚利」：把增长拆成越来越多次、每次越来越小的增量，总量不会爆炸，而是稳定在 \(e\approx 2.71828\)。</p>
+        <div class="demo-box" data-demo="limit-e">
+          <div class="demo-title">演示 5 · 连续复利：数值如何稳定到 e</div>
+          <div class="demo-caption">拖动 x 或播放，观察曲线与数值表一起逼近 2.71828…</div>
+        </div>
+
+        <div class="demo-box" data-demo="squeeze">
+          <div class="demo-title">演示 6 · 夹逼定理：振荡曲线被两条包络挤住</div>
+          <div class="demo-caption">拖动缩放滑块，看 x²·sin(1/x) 如何被 ±x² 夹到 0。</div>
+        </div>
+
+        <div data-card="tip" class="insight">
+          <strong>直观理解</strong>：夹逼的精髓是「不用知道中间那条曲线具体怎么抖，只要知道它跑不出上下两条边界」。两个重要极限分别对应「弧度制的几何」和「指数增长的连续极限」，后面求导、泰勒展开都要反复用到。
+        </div>
+      </article>
+
+      <article class="section" id="s7">
+        <h3>第 7 节 · 无穷小的比较</h3>
+        <p>同样趋于 0，速度可以差很多。用比值的极限来分类：若 \(\lim \beta/\alpha=0\)，称 \(\beta\) 是比 \(\alpha\) <strong>高阶</strong>的无穷小（跑得更快）；比值是常数 \(c\neq 0\) 时称<strong>同阶</strong>；\(c=1\) 时称<strong>等价</strong>，记作 \(\alpha\sim\beta\)。</p>
+        <p>常用等价无穷小（\(x\to 0\)）：\(\sin x\sim x\)、\(\tan x\sim x\)、\(e^x-1\sim x\)、\(\ln(1+x)\sim x\)、\(1-\cos x\sim x^2/2\)。</p>
+
+        <div class="demo-box" data-demo="infinitesimal-order">
+          <div class="demo-title">演示 7 · 幂次决定速度：xᵖ 与 xᵘ 谁更快贴近 0</div>
+          <div class="demo-caption">分别拖动两个幂次，观察曲线与比值 xᵖ/xᵘ 在 x→0⁺ 时的走向。</div>
+        </div>
+
+        <div data-card="warning">
+          <strong>最容易错的地方</strong>：等价替换<strong>只能用于相乘或相除的因子</strong>，不能在和差中逐项替换。例如求 \(\lim\limits_{x\to 0}\dfrac{x-\sin x}{x^3}\) 时把 \(\sin x\) 换成 \(x\)，分子直接变成 0，就丢掉了真正起作用的三阶项。
+        </div>
+      </article>
+
+      <article class="section" id="s8">
+        <h3>第 8 节 · 函数的连续性与间断点</h3>
+        <p>连续就是把三件事对齐：函数在 \(x_0\) 有定义、极限 \(\lim\limits_{x\to x_0}f(x)\) 存在、两者相等。用增量写更顺手：\(\lim\limits_{\Delta x\to 0}\Delta y=0\)——自变量只动一点点，函数值也只动一点点。</p>
+        <p>只要有一条不满足，\(x_0\) 就是间断点。按左右极限的情况分成四类：</p>
+        <ul>
+          <li><strong>可去</strong>：左右极限存在且相等，但函数值没定义或对不上（补一个点就能接上）；</li>
+          <li><strong>跳跃</strong>：左右极限都存在但不相等（台阶）；</li>
+          <li><strong>无穷</strong>：至少一侧趋于无穷（竖直渐近线）；</li>
+          <li><strong>振荡</strong>：函数值在附近无限次来回摆，极限根本不存在。</li>
+        </ul>
+
+        <div class="demo-box" data-demo="discontinuity">
+          <div class="demo-title">演示 8 · 四类间断点逐一切换</div>
+          <div class="demo-caption">点按钮切换类型，观察左右极限的标注与图像形状。</div>
+        </div>
+
+        <div data-card="tip" class="insight">
+          <strong>直观理解</strong>：连续就是「一笔画得出来，不用抬笔」。可去间断是纸上有个针孔，跳跃是断层，无穷间断是笔直接飞出纸面，振荡则是笔尖在原地疯狂抖动。
+        </div>
+      </article>
+
+      <article class="section" id="s9">
+        <h3>第 9 节 · 连续函数的运算与初等函数的连续性</h3>
+        <p>连续函数做四则运算（分母不为零）、复合、求反函数，结果仍连续；所有基本初等函数在其定义区间内都连续。于是<strong>初等函数在定义区间内处处连续</strong>。</p>
+        <p>这条结论的实际价值很大：求初等函数在某点的极限时，只要这点在定义区间内，直接把值代进去就是极限，不必再走 ε-δ。</p>
+        <div data-card="example">
+          <strong>自编例题</strong>：\(\lim\limits_{x\to 2}\dfrac{\ln(x+1)}{\sqrt{x^2+1}}=\dfrac{\ln 3}{\sqrt 5}\)。因为 \(x=2\) 处在各层函数的定义区间内，逐层代入即可。
+        </div>
+      </article>
+
+      <article class="section" id="s10">
+        <h3>第 10 节 · 闭区间上连续函数的性质</h3>
+        <p>把定义域限制在<strong>闭区间</strong> \([a,b]\) 且函数连续，就能得到三条很强的结论：</p>
+        <ul>
+          <li><strong>有界性与最值</strong>：函数一定有界，且一定能取到最大值和最小值；</li>
+          <li><strong>介值定理</strong>：最大值与最小值之间的任何一个值，函数都至少取到一次；</li>
+          <li><strong>零点定理</strong>：若两端函数值异号，区间内至少有一个零点（二分法求根的理论依据）。</li>
+        </ul>
+
+        <div class="demo-box" data-demo="ivt">
+          <div class="demo-title">演示 9 · 介值定理：拖动水平线，总能找到交点</div>
+          <div class="demo-caption">在闭区间上拖动水平线 c，观察曲线与它相交的位置；顺带标出最大值与最小值。</div>
+        </div>
+
+        <div data-card="warning">
+          <strong>两个条件缺一不可</strong>：开区间 \((0,1)\) 上的 \(f(x)=1/x\) 连续却无界；而 \([0,1]\) 上带跳跃的函数虽然闭区间，却会「跳过」某些中间值。把任意一个条件拿掉，结论就可能失效。
+        </div>
+      </article>
+
+      <article class="section" id="preview">
+        <h3>章末预告 · 从「逼近」走向「变化率」</h3>
+        <p>这一章反复在做一件事：让一个量无限靠近另一个量。下一章把这个动作转向斜率——把过两点的割线，让第二点沿曲线滑向第一点，割线的极限位置就是<strong>切线</strong>，它的斜率就是<strong>导数</strong>。先玩一玩：</p>
+        <div class="demo-box" data-demo="secant-to-tangent">
+          <div class="demo-title">演示 10 · 割线逼近切线（通往第 2 章）</div>
+          <div class="demo-caption">拖动 h 让它趋近 0，看割线斜率如何收敛到 2。</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+      <div data-card="warning">
+        <strong>误区一 · 把 ε 和 δ 的顺序说反</strong>：定义是「先任给 ε，再找 δ」，δ 依赖于 ε。反过来「先定一个 δ 再看误差」什么也没保证。
+      </div>
+      <div data-card="warning">
+        <strong>误区二 · 以为极限就是函数值</strong>：\(\lim\limits_{x\to x_0}f(x)\) 与 \(f(x_0)\) 是两件事。可去间断点处极限存在但函数值缺席或对不上；连续的定义恰恰是在说「这两件事恰好相等」。
+      </div>
+      <div data-card="warning">
+        <strong>误区三 · 在加减里乱用等价无穷小</strong>：等价替换保留的是主项，和差中主项可能正好抵消。遇到减法先考虑通分、有理化或泰勒展开。
+      </div>
+      <div data-card="warning">
+        <strong>误区四 · 把「无穷大」当成很大的常数</strong>：\(1/x\) 在 \(x\to 0\) 时是无穷大，但 \(x\to 0^+\) 与 \(x\to 0^-\) 方向相反，谈「极限是 ∞」必须说清是哪一侧。
+      </div>
+    </section>
+
+    <!-- ⑥ 交互式自测 -->
+    <section id="quiz" class="block">
+      <h2>自测一下</h2>
+      <p class="hint">题目为本站自编，点选项立刻看解析，答完可以重做。</p>
+      <div data-mount="quiz">
+        <script type="application/json">
+        [
+          {
+            "q": "把数列前 100 项全部改成 999，其余项不变。这个数列的极限会怎样？",
+            "options": ["变成 999", "不变", "不存在", "变成 0"],
+            "answer": 1,
+            "explain": "极限只由尾巴决定。有限项的改动不会影响 ε-N 条件中的 N，把 N 取到 100 之后即可。"
+          },
+          {
+            "q": "设 f(x)=2x+1，考察 x→1。若要求 |f(x)−3| < 0.1，下列哪个 δ 一定够用？",
+            "options": ["δ = 0.5", "δ = 0.05", "δ = 0.1 且 δ = 0.5 都够", "只有 δ = 0.05 才够，0.5 不行"],
+            "answer": 1,
+            "explain": "|f(x)−3| = 2|x−1|，要小于 0.1 需 |x−1| < 0.05。δ 不是唯一的，但 0.5 太大，不能保证全部落进带内。"
+          },
+          {
+            "q": "关于 lim( sin x / x ) 当 x→0，下列说法正确的是？",
+            "options": ["等于 0，因为分子趋于 0", "等于 1，可由单位圆面积夹逼得到", "不存在，因为分母趋于 0", "等于 ∞"],
+            "answer": 1,
+            "explain": "由 sin x < x < tan x（0<x<π/2）可得 cos x < sin x / x < 1，两侧都趋于 1，故夹逼得到极限为 1。"
+          },
+          {
+            "q": "x→0 时，下列哪个是比 x 更高阶的无穷小？",
+            "options": ["√x", "2x", "x²", "sin x"],
+            "answer": 2,
+            "explain": "x²/x = x → 0，所以 x² 更高阶；√x 更低阶，2x 与 sin x 都与 x 同阶（sin x ~ x）。"
+          },
+          {
+            "q": "介值定理为什么要求闭区间 [a,b] 上连续？",
+            "options": ["只是书写习惯，开区间也一定成立", "因为要用到端点函数值，且需保证最值能取到、中间值不被跳过", "因为开区间上函数一定有界", "因为闭区间上函数一定可导"],
+            "answer": 1,
+            "explain": "开区间如 (0,1) 上的 1/x 连续却无界；有跳跃的函数虽在闭区间上也会跳过某些值。连续性保证不跳，闭区间保证最值存在。"
+          }
+        ]
+        </script>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+      <p>这一章把「越来越近」翻译成了两句话：数列用 <strong>ε-N</strong>（从第几项起），函数用 <strong>ε-δ</strong>（自变量凑多近）。有了精确定义，运算法则、两个重要极限、无穷小的阶、连续性与闭区间上的性质才站得住。</p>
+      <p>如果只记住一幅图，就记住那条<strong>水平误差带</strong>：别人把带子收得多窄，你总能找到一个足够小的自变量窗口，让曲线全部落进带里。下一章，我们把「无限靠近」用到斜率上，导数就自然出现了。</p>
+      <div data-chapter-nav></div>
+    </section>
+
+    <!-- ⑧ 页脚 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

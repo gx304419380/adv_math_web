@@ -1,0 +1,25 @@
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+(CC BY-NC-SA 4.0)
+
+本仓库中的原创文字、示意图形、动画代码与页面代码采用
+知识共享「署名-非商业性使用-相同方式共享 4.0 国际」许可协议。
+
+你可以：
+  - 分享：以任何媒介或格式复制、分发本作品
+  - 改编：修改、转换或以本作品为基础进行创作
+
+但必须遵守：
+  - 署名：注明原作者与来源链接，说明是否作了修改
+  - 非商业性使用：不得将本作品用于商业目的
+  - 相同方式共享：若改编本作品，须以相同许可分发
+  - 不得附加额外限制
+
+完整法律文本：
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-hans
+
+重要说明：
+  1. 本许可仅覆盖本仓库的原创内容，不覆盖同济大学《高等数学》教材本身；
+     本站不含该教材的原文、例题、习题或插图。
+  2. 通过 CDN 引用的第三方库（KaTeX、JSXGraph、three.js、GSAP、Mermaid）
+     各自遵守其原始开源许可，不在本许可范围内。
+  3. 详见 DISCLAIMER.md。

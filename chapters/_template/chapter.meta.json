@@ -1,0 +1,18 @@
+{
+  "id": "chXX",
+  "index": 0,
+  "volume": "上册",
+  "title": "章节名",
+  "subtitle": "一句话副标题",
+  "sections": [
+    { "id": "s1", "title": "节名" }
+  ],
+  "prerequisites": [],
+  "prev": null,
+  "next": null,
+  "estMinutes": 90,
+  "status": "planned",
+  "demos": [],
+  "tags": [],
+  "mtime": "2026-11-07"
+}

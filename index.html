@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高等数学 · 互动学习站</title>
+<meta name="description" content="非官方学习辅助：把同济版高等数学讲得更直观，配原创示意图、动画与交互自测">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script type="module" src="assets/js/boot.js"></script>
+</head>
+<body>
+
+<header class="home-hero">
+  <div class="hero-inner">
+    <div class="hero-index">Interactive Calculus · 非官方学习辅助</div>
+    <h1>把高等数学「看」明白</h1>
+    <p class="hero-sub">章节与同济大学《高等数学》第七版对齐，讲解全部原创，每个难点都配可以拖动的图和动画。</p>
+    <div class="hero-meta">
+      <span>12 章</span><span>·</span><span>上下册</span><span>·</span>
+      <span>零构建纯静态</span><span>·</span><span>手机也能看</span>
+    </div>
+    <div class="btn-row" style="margin-top:1.4rem">
+      <a class="btn primary" href="chapters/ch01/ch01.html" style="color:#fff">从第 1 章开始 →</a>
+      <a class="btn" href="DISCLAIMER.md" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff">关于本站与版权说明</a>
+    </div>
+  </div>
+</header>
+
+<div class="home-wrap">
+
+  <div class="progress-panel" data-progress-board></div>
+
+  <h2>章节导览</h2>
+  <p class="hint">按教材顺序编排。已完成的章节可以直接点开，计划中的章节会随进度逐个上线。</p>
+  <div class="chapter-grid" data-chapter-grid></div>
+
+  <h2>这个站怎么用</h2>
+  <div class="chapter-grid">
+    <div class="chapter-card">
+      <div class="cc-num">01 · 先建立直觉</div>
+      <div class="cc-title">先玩图，再看公式</div>
+      <div class="cc-sub">每节都有一块可交互的图：拖动滑块、拉动点，观察曲线和数值怎么一起变。图的下面会解释它在说什么。</div>
+    </div>
+    <div class="chapter-card">
+      <div class="cc-num">02 · 再看推导</div>
+      <div class="cc-title">分步动画拆开难点</div>
+      <div class="cc-sub">ε-δ、夹逼、黎曼和这类抽象定义，被拆成可以一步步播放、随时回看的动画，不用一口气咽下去。</div>
+    </div>
+    <div class="chapter-card">
+      <div class="cc-num">03 · 最后自检</div>
+      <div class="cc-title">自测与常见误区</div>
+      <div class="cc-sub">每章末尾有自编的自测题和「最容易想错的地方」，答完立刻能看到解析，方便对照教材复习。</div>
+    </div>
+  </div>
+
+  <div data-card="warning" style="margin-top:2.4rem">
+    <strong>关于内容边界</strong>：本站不是教材电子版，不含原书正文、例题、习题、答案或原图，也不提供任何扫描件下载。
+    这里只用章节名称与知识点名称对齐学习进度，讲解、图形、动画、题目全部原创，用于辅助理解。
+    请以正式教材和课堂为准，详见 <a href="DISCLAIMER.md">免责声明</a>。
+  </div>
+
+  <footer class="site-footer">
+    <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+    <p>本站与同济大学、高等教育出版社无任何关联 · <a href="DISCLAIMER.md">免责声明</a> · <a href="README.md">README</a></p>
+    <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可 · 第三方库经 CDN 引用，各自遵守其原始许可</p>
+  </footer>
+</div>
+
+</body>
+</html>

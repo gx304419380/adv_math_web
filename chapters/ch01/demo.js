@@ -1,0 +1,551 @@
+/* 第 1 章 · 10 个原创交互演示
+   绘图统一复用 assets/js/plot.js；单位圆与函数机器用原生 SVG / CSS */
+
+import { Plot, PLOT_COLORS as C } from '../../assets/js/plot.js';
+import { StepController } from '../../assets/js/steps.js';
+
+/* ---------- 通用小工具 ---------- */
+
+function injectCSS() {
+  const s = document.createElement('style');
+  s.textContent = `
+  .machine{display:flex;align-items:center;justify-content:center;gap:.8rem;flex-wrap:wrap;
+    background:var(--bg-soft);border:1px solid var(--border);border-radius:9px;padding:1.2rem .8rem;position:relative;overflow:hidden}
+  .m-node{width:88px;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.55rem}
+  .m-node span,.m-box span{display:block;font-size:.72rem;color:var(--fg-muted)}
+  .m-node b,.m-box b{display:block;font-size:1.15rem;font-family:monospace;color:var(--accent)}
+  .m-box{width:118px;text-align:center;background:var(--accent-soft);border:2px dashed var(--accent);border-radius:12px;padding:.55rem}
+  .m-arrow{font-size:1.4rem;color:var(--fg-muted)}
+  .m-ball{position:absolute;left:1.2rem;top:50%;width:14px;height:14px;border-radius:50%;
+    background:var(--accent-2);transform:translateY(-50%);box-shadow:0 0 0 4px rgba(8,145,178,.18)}
+  .unit-svg{width:100%;max-width:520px;height:auto;display:block;margin:0 auto;background:var(--bg-soft);
+    border:1px solid var(--border);border-radius:9px}
+  .unit-svg text{font-size:12px;fill:var(--fg-muted)}
+  .unit-svg .lbl{font-size:13px;font-weight:700}
+  `;
+  document.head.appendChild(s);
+}
+
+function controls(el, inner) {
+  const d = document.createElement('div');
+  d.className = 'demo-controls';
+  d.innerHTML = inner;
+  el.appendChild(d);
+  return d;
+}
+function readout(el) {
+  const d = document.createElement('div');
+  d.className = 'readout';
+  el.appendChild(d);
+  return d;
+}
+function bindRange(root, sel, fn) {
+  const s = root.querySelector(sel);
+  if (!s) return null;
+  s.addEventListener('input', () => fn(Number(s.value), s));
+  return s;
+}
+function btnRow(el, items) {
+  const d = document.createElement('div');
+  d.className = 'btn-row';
+  items.forEach((it, i) => {
+    const b = document.createElement('button');
+    b.className = 'btn' + (i === 0 ? ' is-active' : '');
+    b.type = 'button';
+    b.textContent = it.label;
+    b.addEventListener('click', () => {
+      [...d.children].forEach(x => x.classList.remove('is-active'));
+      b.classList.add('is-active');
+      it.run();
+    });
+    d.appendChild(b);
+  });
+  el.appendChild(d);
+  return d;
+}
+const f4 = v => (Math.abs(v) < 1e-10 ? 0 : v).toFixed(4);
+
+/* ---------- 演示 1 · 函数机器 ---------- */
+
+function functionMachine(el) {
+  const RULES = [
+    { label: 'x²', fn: x => x * x, tex: 'x²' },
+    { label: '2x + 1', fn: x => 2 * x + 1, tex: '2x+1' },
+    { label: '|x|', fn: x => Math.abs(x), tex: '|x|' }
+  ];
+  const stage = document.createElement('div');
+  stage.className = 'machine';
+  stage.innerHTML = `
+    <div class="m-node"><span>输入 x</span><b data-in>1.0</b></div>
+    <div class="m-arrow">→</div>
+    <div class="m-box"><span>对应法则 f</span><b data-rule>x²</b></div>
+    <div class="m-arrow">→</div>
+    <div class="m-node"><span>输出 f(x)</span><b data-out>1.00</b></div>
+    <div class="m-ball" data-ball></div>`;
+  el.appendChild(stage);
+
+  const c = controls(el, `
+    <label>输入 x <input type="range" data-x min="-3" max="3" step="0.1" value="1"><output data-xv>1.0</output></label>
+    <button class="btn" data-play>▶ 投进去</button>`);
+  const out = readout(el);
+  let x = 1, rule = 0;
+
+  const paint = () => {
+    const y = RULES[rule].fn(x);
+    stage.querySelector('[data-in]').textContent = f4(x).slice(0, 5);
+    stage.querySelector('[data-rule]').textContent = RULES[rule].tex;
+    stage.querySelector('[data-out]').textContent = f4(y);
+    c.querySelector('[data-xv]').textContent = f4(x).slice(0, 5);
+    out.innerHTML = `规则 <b>f(x) = ${RULES[rule].tex}</b>　输入 x = <b>${f4(x)}</b>　→　唯一输出 f(x) = <b>${f4(y)}</b><br>同一个输入永远只得到一个输出，这就是「函数」；换个规则，输出就变了。`;
+  };
+  const play = () => {
+    const ball = stage.querySelector('[data-ball]');
+    ball.style.transition = 'none';
+    ball.style.left = '1.2rem';
+    void ball.offsetWidth;
+    ball.style.transition = 'left 1.05s ease-in-out';
+    ball.style.left = `calc(100% - 2.6rem)`;
+  };
+
+  bindRange(c, '[data-x]', v => { x = v; paint(); });
+  c.querySelector('[data-play]').addEventListener('click', play);
+  btnRow(el, RULES.map((r, i) => ({ label: r.label, run: () => { rule = i; paint(); play(); } })));
+  paint();
+}
+
+/* ---------- 演示 2 · ε-N 数列逼近 ---------- */
+
+function epsilonN(el) {
+  const L = 1, MAXN = 60;
+  const p = new Plot(el, { xmin: 0, xmax: MAXN, ymin: -1, ymax: 3, grid: true });
+  const c = controls(el, `
+    <label>误差 ε <input type="range" data-eps min="0.05" max="1.5" step="0.05" value="0.4"><output data-epsv>0.40</output></label>
+    <label>已显示项数 <input type="range" data-n min="1" max="60" step="1" value="12"><output data-nv>12</output></label>
+    <button class="btn primary" data-play>▶ 播放</button>`);
+  const out = readout(el);
+  const st = { eps: 0.4, n: 12 };
+
+  const a = n => L + (n % 2 ? -1 : 1) * 2 / n;
+  const draw = () => {
+    p.clear();
+    p.rect(0, L - st.eps, MAXN, L + st.eps, { fill: C.ok, alpha: .12, stroke: C.ok, dash: true });
+    p.line(0, L, MAXN, L, { color: C.ok, dash: true, width: 1.5 });
+    p.text(1, L + st.eps + .12, `L + ε = ${f4(L + st.eps)}`, { color: C.ok, size: 11 });
+    p.text(1, L - st.eps - .18, `L − ε = ${f4(L - st.eps)}`, { color: C.ok, size: 11 });
+    for (let n = 1; n <= Math.min(st.n, MAXN); n++) {
+      const v = a(n);
+      p.dot(n, v, { r: 3.4, color: Math.abs(v - L) < st.eps ? C.ok : C.warn });
+    }
+    const N = Math.floor(2 / st.eps) + 1;
+    p.line(N, -1, N, 3, { color: C.accent, dash: true, width: 1.6 });
+    p.text(N + .6, 2.6, `N = ${N}`, { color: C.accent, size: 11 });
+    out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　需要 <b>N = ${N}</b>（因为 |aₙ − 1| = 2/n &lt; ε 要求 n &gt; 2/ε）<br>` +
+      `当前显示前 <b>${Math.round(st.n)}</b> 项；绿色点已落入带内，橙色点还在带外。N 之后全部是绿色 —— 这就是极限。`;
+  };
+  p.onResize = draw;
+  const play = () => {
+    st.n = 1;
+    if (window.gsap) {
+      window.gsap.killTweensOf(st);
+      window.gsap.to(st, { n: MAXN, duration: 2.6, ease: 'none',
+        onUpdate: () => { c.querySelector('[data-n]').value = Math.round(st.n); c.querySelector('[data-nv]').textContent = Math.round(st.n); draw(); },
+        onComplete: draw });
+    } else {
+      const t = setInterval(() => {
+        st.n += 1;
+        c.querySelector('[data-n]').value = st.n; c.querySelector('[data-nv]').textContent = st.n;
+        draw();
+        if (st.n >= MAXN) clearInterval(t);
+      }, 45);
+    }
+  };
+  bindRange(c, '[data-eps]', v => { st.eps = v; c.querySelector('[data-epsv]').textContent = f4(v); draw(); });
+  bindRange(c, '[data-n]', v => { st.n = v; c.querySelector('[data-nv]').textContent = Math.round(v); draw(); });
+  c.querySelector('[data-play]').addEventListener('click', play);
+  draw();
+}
+
+/* ---------- 演示 3 · ε-δ 定义 ---------- */
+
+function epsilonDelta(el) {
+  const f = x => 2 * x + 1, X0 = 1, LIM = 3;
+  const p = new Plot(el, { xmin: -1.5, xmax: 3.5, ymin: -1, ymax: 7, grid: true });
+  const c = controls(el, `
+    <label>误差 ε <input type="range" data-eps min="0.2" max="2.4" step="0.1" value="1.2"><output data-epsv>1.20</output></label>
+    <span class="hint">拖动 ε，看 δ 窗口自动收紧</span>`);
+  const out = readout(el);
+  const st = { eps: 1.2 };
+
+  const draw = () => {
+    const d = st.eps / 2;
+    p.clear();
+    /* 水平误差带：由 ε 决定 */
+    p.rect(-1.5, LIM - st.eps, 3.5, LIM + st.eps, { fill: C.ok, alpha: .13, stroke: C.ok, dash: true });
+    p.line(-1.5, LIM + st.eps, 3.5, LIM + st.eps, { color: C.ok, dash: true, width: 1.4 });
+    p.line(-1.5, LIM - st.eps, 3.5, LIM - st.eps, { color: C.ok, dash: true, width: 1.4 });
+    p.text(-1.35, LIM - st.eps - .32, `L−ε = ${f4(LIM - st.eps)}`, { color: C.ok, size: 11 });
+    /* 竖直自变量窗口：由 δ = ε/2 决定 */
+    p.rect(X0 - d, -1, X0 + d, 7, { fill: C.accent, alpha: .1, stroke: C.accent, dash: true });
+    p.line(X0 - d, -1, X0 - d, 7, { color: C.accent, dash: true, width: 1.2 });
+    p.line(X0 + d, -1, X0 + d, 7, { color: C.accent, dash: true, width: 1.2 });
+    /* 曲线与落在窗口内的那一段 */
+    p.curve(f, { from: -1.5, to: 3.5, color: C.accent, width: 2.4 });
+    p.curve(f, { from: X0 - d, to: X0 + d, color: C.ok, width: 5 });
+    p.dot(X0, LIM, { r: 5, color: C.accent });
+    p.text(X0 + .1, LIM + .38, '(1, 3)', { color: C.accent, size: 11 });
+    out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　δ = ε/2 = <b>${f4(d)}</b>　验证：2δ = <b>${f4(2 * d)}</b> = ε<br>` +
+      `当 0 &lt; |x − 1| &lt; δ 时，|f(x) − 3| = 2|x − 1| &lt; 2δ = ε，定义成立。`;
+  };
+  p.onResize = draw;
+
+  /* 分步动画改成「逐步收窄 ε」：每一步都保留完整图形，避免关键内容被藏起来 */
+  const epsSeq = [1.2, 0.8, 0.4, 0.2];
+  const steps = epsSeq.map(e => ({
+    label: `ε 收窄到 ${e}`,
+    run: () => {
+      st.eps = e;
+      c.querySelector('[data-eps]').value = String(e);
+      c.querySelector('[data-epsv]').textContent = f4(e);
+      draw();
+    }
+  }));
+  new StepController(el, steps, { interval: 1700 });
+
+  bindRange(c, '[data-eps]', v => {
+    st.eps = v;
+    c.querySelector('[data-epsv]').textContent = f4(v);
+    draw();
+  });
+  draw();
+}
+
+/* ---------- 演示 4 · 单位圆与 sin x / x ---------- */
+
+function sinxOverX(el) {
+  const R = 150, OX = 110, OY = 235;
+  const svg = document.createElement('div');
+  svg.innerHTML = `<svg class="unit-svg" viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg">
+    <line x1="20" y1="${OY}" x2="440" y2="${OY}" stroke="currentColor" stroke-opacity=".35"/>
+    <line x1="${OX}" y1="290" x2="${OX}" y2="10" stroke="currentColor" stroke-opacity=".35"/>
+    <path data-big fill="#d97706" fill-opacity=".13" stroke="#d97706" stroke-width="1" stroke-dasharray="5 4"/>
+    <path data-sec fill="#0891b2" fill-opacity=".20" stroke="#0891b2" stroke-width="1.5"/>
+    <path data-small fill="#059669" fill-opacity=".28" stroke="#059669" stroke-width="1.5"/>
+    <path d="M ${OX + R} ${OY} A ${R} ${R} 0 0 0 ${OX} ${OY - R}" fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="1.5"/>
+    <line data-sin stroke="#059669" stroke-width="3"/>
+    <line data-tan stroke="#d97706" stroke-width="3"/>
+    <line x1="${OX}" y1="${OY}" x2="${OX + R}" y2="${OY}" stroke="currentColor" stroke-width="1.5"/>
+    <line data-op stroke="#4f46e5" stroke-width="2"/>
+    <circle data-p r="5" fill="#4f46e5"/>
+    <text x="${OX - 22}" y="${OY + 20}">O</text>
+    <text x="${OX + R + 6}" y="${OY + 20}">A</text>
+    <text data-tp x="0" y="0" class="lbl" fill="#d97706">T</text>
+    <text data-pp x="0" y="0" class="lbl" fill="#4f46e5">P</text>
+    <text x="300" y="40">三个面积（半径取 1）：</text>
+    <text data-a1 x="300" y="62" fill="#059669">△OAP = sin x / 2</text>
+    <text data-a2 x="300" y="84" fill="#0891b2">扇形 OAP = x / 2</text>
+    <text data-a3 x="300" y="106" fill="#d97706">△OAT = tan x / 2</text>
+    <text data-ineq x="300" y="138" class="lbl">sin x &lt; x &lt; tan x</text>
+    <text data-clamp x="300" y="164">cos x &lt; sin x / x &lt; 1</text>
+  </svg>`;
+  el.appendChild(svg.firstChild);
+  const root = el.querySelector('svg');
+  const c = controls(el, `
+    <label>角度 x（弧度） <input type="range" data-x min="0.08" max="0.9" step="0.01" value="0.5"><output data-xv>0.50</output></label>`);
+  const out = readout(el);
+
+  const draw = x => {
+    const P = [OX + R * Math.cos(x), OY - R * Math.sin(x)];
+    const T = [OX + R, OY - R * Math.tan(x)];
+    const A = [OX + R, OY];
+    root.querySelector('[data-big]').setAttribute('d', `M ${OX} ${OY} L ${A[0]} ${A[1]} L ${T[0]} ${T[1]} Z`);
+    root.querySelector('[data-sec]').setAttribute('d', `M ${OX} ${OY} L ${A[0]} ${A[1]} A ${R} ${R} 0 0 0 ${P[0]} ${P[1]} Z`);
+    root.querySelector('[data-small]').setAttribute('d', `M ${OX} ${OY} L ${A[0]} ${A[1]} L ${P[0]} ${P[1]} Z`);
+    root.querySelector('[data-sin]').setAttribute('x1', P[0]); root.querySelector('[data-sin]').setAttribute('y1', OY);
+    root.querySelector('[data-sin]').setAttribute('x2', P[0]); root.querySelector('[data-sin]').setAttribute('y2', P[1]);
+    root.querySelector('[data-tan]').setAttribute('x1', A[0]); root.querySelector('[data-tan]').setAttribute('y1', A[1]);
+    root.querySelector('[data-tan]').setAttribute('x2', T[0]); root.querySelector('[data-tan]').setAttribute('y2', T[1]);
+    root.querySelector('[data-op]').setAttribute('x1', OX); root.querySelector('[data-op]').setAttribute('y1', OY);
+    root.querySelector('[data-op]').setAttribute('x2', P[0]); root.querySelector('[data-op]').setAttribute('y2', P[1]);
+    root.querySelector('[data-p]').setAttribute('cx', P[0]); root.querySelector('[data-p]').setAttribute('cy', P[1]);
+    root.querySelector('[data-tp]').setAttribute('x', T[0] + 8); root.querySelector('[data-tp]').setAttribute('y', T[1] - 4);
+    root.querySelector('[data-pp]').setAttribute('x', P[0] + 8); root.querySelector('[data-pp]').setAttribute('y', P[1] - 6);
+    root.querySelector('[data-a1]').textContent = `△OAP  = ${f4(Math.sin(x) / 2)}`;
+    root.querySelector('[data-a2]').textContent = `扇形   = ${f4(x / 2)}`;
+    root.querySelector('[data-a3]').textContent = `△OAT  = ${f4(Math.tan(x) / 2)}`;
+    root.querySelector('[data-clamp]').textContent = `${f4(Math.cos(x))} < sin x/x < 1`;
+    c.querySelector('[data-xv]').textContent = f4(x);
+    const ratio = Math.sin(x) / x;
+    out.innerHTML = `x = <b>${f4(x)}</b>　sin x = <b>${f4(Math.sin(x))}</b>　x = <b>${f4(x)}</b>　tan x = <b>${f4(Math.tan(x))}</b><br>` +
+      `sin x / x = <b>${f4(ratio)}</b>，被夹在 cos x = <b>${f4(Math.cos(x))}</b> 与 1 之间。` +
+      `把 x 拖到接近 0，两侧都挤向 1，于是极限为 1。`;
+  };
+  bindRange(c, '[data-x]', draw);
+  draw(0.5);
+}
+
+/* ---------- 演示 5 · (1 + 1/x)^x → e ---------- */
+
+function limitE(el) {
+  const E = Math.E;
+  const fn = x => Math.pow(1 + 1 / x, x);
+  const p = new Plot(el, { xmin: 1, xmax: 60, ymin: 1.9, ymax: 2.9, grid: true });
+  const c = controls(el, `
+    <label>x <input type="range" data-x min="1" max="200" step="1" value="5"><output data-xv>5</output></label>
+    <button class="btn primary" data-play>▶ 播放增长</button>`);
+  const out = readout(el);
+  const st = { x: 5 };
+
+  const draw = () => {
+    p.clear();
+    p.line(1, E, 60, E, { color: C.warn, dash: true, width: 1.6 });
+    p.text(30, E + .06, `e ≈ ${E.toFixed(5)}`, { color: C.warn, size: 11 });
+    p.curve(fn, { from: 1, to: 60, color: C.accent, width: 2.6 });
+    const marked = Math.min(st.x, 60);
+    p.dot(marked, fn(marked), { r: 5, color: C.cyan });
+    const v = fn(st.x);
+    out.innerHTML = `x = <b>${st.x}</b>　(1 + 1/x)ˣ = <b>${v.toFixed(6)}</b>　e = <b>${E.toFixed(6)}</b>　差距 = <b>${Math.abs(E - v).toExponential(2)}</b><br>` +
+      `x 越大，每次增量越小、次数越多，总量稳稳停在 e；这就是「连续复利」。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-x]', v => { st.x = Math.round(v); c.querySelector('[data-xv]').textContent = st.x; draw(); });
+  c.querySelector('[data-play]').addEventListener('click', () => {
+    if (window.gsap) {
+      window.gsap.killTweensOf(st);
+      window.gsap.to(st, { x: 200, duration: 2.8, ease: 'power1.inOut',
+        onUpdate: () => { st.x = Math.round(st.x); c.querySelector('[data-x]').value = st.x; c.querySelector('[data-xv]').textContent = st.x; draw(); } });
+    } else {
+      const t = setInterval(() => { st.x = Math.min(200, st.x + 2); c.querySelector('[data-x]').value = st.x; c.querySelector('[data-xv]').textContent = st.x; draw(); if (st.x >= 200) clearInterval(t); }, 30);
+    }
+  });
+  draw();
+}
+
+/* ---------- 演示 6 · 夹逼定理 ---------- */
+
+function squeezeDemo(el) {
+  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -3.2, ymax: 3.2, grid: true });
+  const c = controls(el, `
+    <label>观察窗口 r <input type="range" data-r min="0.2" max="3" step="0.05" value="3"><output data-rv>3.00</output></label>
+    <span class="hint">把窗口收窄，看振荡被 ±x² 夹到 0</span>`);
+  const out = readout(el);
+  const st = { r: 3 };
+  const f = x => x === 0 ? 0 : x * x * Math.sin(1 / x);
+
+  const draw = () => {
+    const r = st.r, top = Math.max(.35, r * r * 1.15);
+    p.o.xmin = -r; p.o.xmax = r; p.o.ymin = -top; p.o.ymax = top;
+    p.clear();
+    p.curve(x => x * x, { from: -r, to: r, color: C.warn, width: 2, dash: true });
+    p.curve(x => -x * x, { from: -r, to: r, color: C.warn, width: 2, dash: true });
+    p.curve(f, { from: -r, to: r, color: C.accent, width: 2.4, samples: 1200 });
+    p.dot(0, 0, { r: 5, color: C.ok });
+    p.text(r * .05, top * .82, `上界 +x²`, { color: C.warn, size: 11 });
+    p.text(r * .05, -top * .9, `下界 −x²`, { color: C.warn, size: 11 });
+    out.innerHTML = `窗口 [−r, r] = [−<b>${f4(r)}</b>, <b>${f4(r)}</b>]　包络 ±r² = ±<b>${f4(r * r)}</b><br>` +
+      `无论中间那条曲线抖得多厉害，它始终满足 −x² ≤ x²·sin(1/x) ≤ x²；两侧都趋于 0，故 f(x) → 0。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-r]', v => { st.r = v; c.querySelector('[data-rv]').textContent = f4(v); draw(); });
+  draw();
+}
+
+/* ---------- 演示 7 · 无穷小的阶 ---------- */
+
+function infinitesimalOrder(el) {
+  const p = new Plot(el, { xmin: 0, xmax: 1, ymin: 0, ymax: 1.1, grid: true });
+  const c = controls(el, `
+    <label>p <input type="range" data-p min="0.5" max="4" step="0.1" value="2"><output data-pv>2.0</output></label>
+    <label>q <input type="range" data-q min="0.5" max="4" step="0.1" value="1"><output data-qv>1.0</output></label>`);
+  const out = readout(el);
+  const st = { p: 2, q: 1 };
+
+  const draw = () => {
+    p.clear();
+    p.curve(x => Math.pow(x, st.p), { from: 0, to: 1, color: C.accent, width: 2.6 });
+    p.curve(x => Math.pow(x, st.q), { from: 0, to: 1, color: C.cyan, width: 2.6 });
+    p.text(.62, Math.pow(.62, st.p) + .09, `x^${f4(st.p).slice(0, 3)}`, { color: C.accent, size: 11 });
+    p.text(.62, Math.pow(.62, st.q) + .09, `x^${f4(st.q).slice(0, 3)}`, { color: C.cyan, size: 11 });
+    const ratio = Math.pow(0.001, st.p - st.q);
+    const kind = st.p > st.q + 1e-9 ? 'xᵖ 是比 xᵘ 高阶的无穷小（更快贴近 0）'
+      : Math.abs(st.p - st.q) < 1e-9 ? '两者同阶且等价（曲线重合）'
+      : 'xᵖ 是比 xᵘ 低阶的无穷小（更慢贴近 0）';
+    out.innerHTML = `p = <b>${f4(st.p)}</b>，q = <b>${f4(st.q)}</b>　比值 xᵖ/xᵘ = x^(p−q)，在 x = 0.001 处约为 <b>${ratio.toExponential(2)}</b><br>${kind}。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-p]', v => { st.p = v; c.querySelector('[data-pv]').textContent = v.toFixed(1); draw(); });
+  bindRange(c, '[data-q]', v => { st.q = v; c.querySelector('[data-qv]').textContent = v.toFixed(1); draw(); });
+  draw();
+}
+
+/* ---------- 演示 8 · 四类间断点 ---------- */
+
+function discontinuity(el) {
+  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -4, ymax: 4, grid: true });
+  const out = readout(el);
+  const EPS = 0.004;
+  const TYPES = [
+    {
+      name: '可去间断', color: C.ok,
+      parts: [[-1, 1 - EPS, x => x + 1], [1 + EPS, 3, x => x + 1]],
+      extra: q => {
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
+        q.dot(1, 2, { r: 6, fill: bg, color: C.ok, stroke: C.ok });   // 空心：极限值处该点未被取到
+        q.dot(1, .5, { r: 5, color: C.danger });                       // 实心：函数实际取值
+      },
+      note: '左右极限都存在且相等（都是 2），但 f(1) 被单独定义成 0.5。把红点挪到空心点处就连续了。',
+      lr: '左极限 = 右极限 = 2 ≠ f(1) = 0.5'
+    },
+    {
+      name: '跳跃间断', color: C.warn,
+      parts: [[-1, 1 - EPS, x => x * .6], [1 + EPS, 3, x => x * .6 + 1.4]],
+      extra: q => {
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
+        q.dot(1, .6, { r: 6, fill: bg, color: C.warn, stroke: C.warn });
+        q.dot(1, 2, { r: 5, color: C.warn });
+      },
+      note: '左右极限各自存在但不相等，图像出现一道台阶，怎么补点都接不上。',
+      lr: '左极限 ≈ 0.6，右极限 ≈ 2.0'
+    },
+    {
+      name: '无穷间断', color: C.danger,
+      parts: [[-1, 1 - EPS, x => 1 / (x - 1)], [1 + EPS, 3, x => 1 / (x - 1)]],
+      extra: q => q.line(1, -4, 1, 4, { color: C.danger, dash: true, width: 1.5 }),
+      note: '至少一侧趋于无穷，x = 1 是竖直渐近线，极限不存在。',
+      lr: '左极限 → −∞，右极限 → +∞'
+    },
+    {
+      name: '振荡间断', color: C.accent,
+      parts: [[-1, 1 - EPS, x => 1.6 * Math.sin(1 / (x - 1))], [1 + EPS, 3, x => 1.6 * Math.sin(1 / (x - 1))]],
+      extra: q => {},
+      note: '越靠近 1 摆得越密，函数值在 −1.6 与 1.6 之间无限次往返，极限根本不存在。',
+      lr: '左右极限都不存在（无限振荡）'
+    }
+  ];
+  let cur = 0;
+  const draw = () => {
+    p.clear();
+    const t = TYPES[cur];
+    t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.4, samples: 1400 }));
+    t.extra(p);
+    p.line(1, -4, 1, 4, { color: C.axis, dash: true, width: 1 });
+    p.text(1.05, 3.6, 'x = 1', { color: C.text, size: 11 });
+    out.innerHTML = `<b>${t.name}</b>　${t.lr}<br>${t.note}`;
+  };
+  p.onResize = draw;
+  btnRow(el, TYPES.map((t, i) => ({ label: t.name, run: () => { cur = i; draw(); } })));
+  draw();
+}
+
+/* ---------- 演示 9 · 介值定理 ---------- */
+
+function ivtDemo(el) {
+  const f = x => .95 * Math.sin(2.3 * x) + .28 * x + .25;
+  const A = 0, B = 3;
+  let min = Infinity, max = -Infinity, xmin = 0, xmax = 0;
+  for (let i = 0; i <= 2000; i++) {
+    const x = A + (B - A) * i / 2000, y = f(x);
+    if (y < min) { min = y; xmin = x; }
+    if (y > max) { max = y; xmax = x; }
+  }
+  const p = new Plot(el, { xmin: -.2, xmax: 3.2, ymin: min - .45, ymax: max + .45, grid: true });
+  const c = controls(el, `
+    <label>水平线 c <input type="range" data-c min="${min.toFixed(3)}" max="${max.toFixed(3)}" step="0.01" value="${((min + max) / 2).toFixed(3)}"><output data-cv></output></label>`);
+  const out = readout(el);
+  let cv = (min + max) / 2;
+
+  const draw = () => {
+    p.clear();
+    p.curve(f, { from: A, to: B, color: C.accent, width: 2.6 });
+    p.line(A, cv, B, cv, { color: C.warn, dash: true, width: 1.8 });
+    p.dot(xmin, min, { r: 5, color: C.ok });
+    p.dot(xmax, max, { r: 5, color: C.ok });
+    p.text(xmin + .06, min - .2, `最小值 ${f4(min)}`, { color: C.ok, size: 10 });
+    p.text(xmax + .06, max + .18, `最大值 ${f4(max)}`, { color: C.ok, size: 10 });
+
+    const roots = [];
+    let prevX = A, prevY = f(A) - cv;
+    for (let i = 1; i <= 1600; i++) {
+      const x = A + (B - A) * i / 1600, y = f(x) - cv;
+      if (prevY === 0 || prevY * y < 0) {
+        const r = prevX + (x - prevX) * Math.abs(prevY) / (Math.abs(prevY) + Math.abs(y));
+        roots.push(r);
+      }
+      prevX = x; prevY = y;
+    }
+    roots.forEach(r => p.dot(r, cv, { r: 5, color: C.danger }));
+    c.querySelector('[data-cv]').textContent = f4(cv);
+    out.innerHTML = `最小值 <b>${f4(min)}</b>　最大值 <b>${f4(max)}</b>　当前 c = <b>${f4(cv)}</b><br>` +
+      `水平线与曲线相交 <b>${roots.length}</b> 次：${roots.map(r => f4(r)).join('、') || '（无）'}。` +
+      `只要 c 落在最小值与最大值之间，交点就一定存在 —— 这就是介值定理。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-c]', v => { cv = v; draw(); });
+  draw();
+}
+
+/* ---------- 演示 10 · 割线逼近切线 ---------- */
+
+function secantToTangent(el) {
+  const f = x => x * x, X0 = 1;
+  const p = new Plot(el, { xmin: -.6, xmax: 3.4, ymin: -1.2, ymax: 10, grid: true });
+  const c = controls(el, `
+    <label>h <input type="range" data-h min="0.02" max="2.2" step="0.01" value="1.5"><output data-hv>1.50</output></label>
+    <button class="btn primary" data-play>▶ 让 h → 0</button>`);
+  const out = readout(el);
+  const st = { h: 1.5 };
+
+  const draw = () => {
+    const h = st.h, x1 = X0 + h, y1 = f(x1), slope = (y1 - f(X0)) / h;
+    p.clear();
+    p.curve(f, { from: -.6, to: 3.4, color: C.accent, width: 2.4 });
+    p.line(-.6, 2 * (-.6) - 1, 3.4, 2 * 3.4 - 1, { color: C.ok, dash: true, width: 1.8 });
+    p.line(X0, f(X0), x1, y1, { color: C.warn, width: 2.6 });
+    p.dot(X0, f(X0), { r: 5, color: C.accent });
+    p.dot(x1, y1, { r: 5, color: C.warn });
+    p.text(x1 + .08, y1 + .25, `割点 (${f4(x1)}, ${f4(y1)})`, { color: C.warn, size: 10 });
+    out.innerHTML = `h = <b>${f4(h)}</b>　割线斜率 = [(1+h)² − 1] / h = 2 + h = <b>${f4(slope)}</b>　切线斜率 = <b>2</b>　差距 = <b>${f4(slope - 2)}</b><br>` +
+      `把 h 拖到接近 0，割线绕着 (1,1) 转到极限位置 —— 那条绿色虚线就是切线，斜率正是第 2 章要定义的导数。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-h]', v => { st.h = v; c.querySelector('[data-hv]').textContent = f4(v); draw(); });
+  c.querySelector('[data-play]').addEventListener('click', () => {
+    if (window.gsap) {
+      window.gsap.killTweensOf(st);
+      window.gsap.to(st, { h: .02, duration: 2.4, ease: 'power2.inOut',
+        onUpdate: () => { c.querySelector('[data-h]').value = st.h; c.querySelector('[data-hv]').textContent = f4(st.h); draw(); } });
+    } else {
+      const t = setInterval(() => { st.h = Math.max(.02, st.h - .02); c.querySelector('[data-h]').value = st.h; c.querySelector('[data-hv]').textContent = f4(st.h); draw(); if (st.h <= .02) clearInterval(t); }, 25);
+    }
+  });
+  draw();
+}
+
+/* ---------- 装配 ---------- */
+
+const DEMOS = {
+  'function-machine': functionMachine,
+  'epsilon-N': epsilonN,
+  'epsilon-delta': epsilonDelta,
+  'sinx-over-x': sinxOverX,
+  'limit-e': limitE,
+  'squeeze': squeezeDemo,
+  'infinitesimal-order': infinitesimalOrder,
+  'discontinuity': discontinuity,
+  'ivt': ivtDemo,
+  'secant-to-tangent': secantToTangent
+};
+
+injectCSS();
+document.querySelectorAll('[data-demo]').forEach(el => {
+  const key = el.dataset.demo;
+  const run = DEMOS[key];
+  if (!run) return;
+  try { run(el); }
+  catch (err) {
+    console.warn(`[ch01] 演示 ${key} 初始化失败：`, err);
+    const box = document.createElement('div');
+    box.className = 'lib-error';
+    box.textContent = `演示「${key}」初始化失败：${err.message}`;
+    el.appendChild(box);
+  }
+});

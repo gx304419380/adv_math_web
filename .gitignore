@@ -1,0 +1,17 @@
+# 凭据与本地环境（绝不入库）
+.env
+.env.*
+*.token
+*.pem
+*.key
+
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+
+# 本地验收产物（截图与报告只在本地查看）
+screenshots/
+report.json

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 X 章 · 章节名 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：原创讲解、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script type="module" src="../../assets/js/boot.js"></script>
+<!-- 本章专属交互脚本（按需） -->
+<!-- <script type="module" src="demo.js"></script> -->
+</head>
+<body data-chapter="chXX">
+
+<!-- ① 章节头 -->
+<header class="chapter-hero">
+  <a class="back-link" href="../../index.html">← 返回首页</a>
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">X</span> 章</div>
+    <h1 data-slot="title">章节名</h1>
+    <p class="hero-sub" data-slot="subtitle">一句话副标题</p>
+    <div class="hero-meta">
+      <span data-slot="volume">上册</span>
+      <span>·</span>
+      <span>约 <span data-slot="estMinutes">90</span> 分钟</span>
+      <span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <!-- 侧栏由 assets/js/nav.js 依 chapters.json 自动生成 -->
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <ul class="goal-list" data-goal-list>
+        <li><label><input type="checkbox"> 目标一</label></li>
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">先看清这一章的知识是怎么长出来的，再逐节往下读。</p>
+      <div class="mermaid-box" data-mount="mindmap" data-mermaid>
+graph LR
+  A[前置知识] --> B[本节核心]
+  B --> C[后续章节]
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+        <h3>第 1 节 · 节名</h3>
+        <p>原创讲解文字。公式用 <code>\( ... \)</code> 或 <code>$$ ... $$</code>。</p>
+
+        <div data-card="def">
+          <strong>定义</strong>：用原创语言把概念说清楚。
+        </div>
+
+        <!-- 交互演示挂载点：data-mount 值对应 assets/js 中的模块 -->
+        <!-- <div class="demo-box" data-mount="graph" data-fn="sin(x)" data-caption="说明文字"></div> -->
+
+        <div data-card="tip" class="insight">
+          <strong>直观理解 · 几何意义</strong>：这里解释图形在说什么，帮助学生建立直觉。
+        </div>
+      </article>
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+      <div data-card="warning">
+        <strong>误区</strong>：写出学生最容易犯的错，并说明为什么错。
+      </div>
+    </section>
+
+    <!-- ⑥ 交互式自测 -->
+    <section id="quiz" class="block">
+      <h2>自测一下</h2>
+      <div data-mount="quiz">
+        <script type="application/json">
+        [
+          {
+            "q": "题目（自编）",
+            "options": ["A", "B", "C", "D"],
+            "answer": 1,
+            "explain": "解析"
+          }
+        ]
+        </script>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结与下一章导航 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+      <p>用三五句话把这一章串起来。</p>
+      <div data-chapter-nav></div>
+    </section>
+
+    <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
