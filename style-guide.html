@@ -137,7 +137,53 @@
   </div>
   <p>正文中首次出现的概念用 <strong class="term">术语强调</strong>（紫色加粗 + 点线下划线），需要学生记住的结论用 <mark class="key">重点高亮</mark>（荧光笔底色 + 加粗）。普通加粗只用于结构性词组，不滥用。</p>
 
-  <h2>四、配色与页面骨架</h2>
+    <h2 id="math">四、数学排版（强制）</h2>
+  <p class="hint">以下都是“必须这样写”的标准样式，完整规则见 <code>docs/MATH_TYPESET.md</code>。核心一句话：<strong>变量斜体，函数名和常数正体，页面上不许出现源码。</strong></p>
+
+  <div class="math-block def">
+    <div class="mb-head"><span class="mb-tag">斜体 / 正体</span><span class="mb-title">谁该斜体，谁该正体</span></div>
+    <div class="mb-body">
+      <div class="table-scroll">
+        <table class="spec-table">
+          <thead><tr><th>类别</th><th>正确</th><th>错误</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr><td>变量</td><td>\(x,\ y,\ f(x),\ a_n\)</td><td>—</td><td>默认斜体，无需命令</td></tr>
+            <tr><td>函数名</td><td>\(\sin x,\ \ln x,\ \lim\)</td><td>sin x / ln x / lim</td><td>不写反斜杠会变成 s·i·n 相乘</td></tr>
+            <tr><td>微分 d</td><td>\(\mathrm{d}x\)</td><td>\(dx\)</td><td>微分算子正体，与变量 x 区分</td></tr>
+            <tr><td>自然常数 e</td><td>\(\mathrm{e}^x\)</td><td>\(e^x\)</td><td>ISO 80000-2 规定正体</td></tr>
+            <tr><td>虚数单位 i</td><td>\(\mathrm{i}\)</td><td>\(i\)</td><td>同上</td></tr>
+            <tr><td>中文说明</td><td>\(\lim_{x\to 0}\frac{\sin x}{x}=1\)（重要极限）</td><td>把「重要极限」直接写进公式里</td><td>汉字会被当成斜体变量；中文一律放公式外，或包在 <code>\text{}</code> 内</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-block property">
+    <div class="mb-head"><span class="mb-tag">标准示例</span><span class="mb-title">导数定义 · 本站统一写法</span></div>
+    <div class="mb-body">
+      <div class="formula-box">
+        <span class="fb-no">(0.1)</span>
+        $$f'(x_0)=\lim_{\Delta x\to 0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}=\left.\frac{\mathrm{d}y}{\mathrm{d}x}\right|_{x=x_0}$$
+      </div>
+      <p class="hint">逐项对照：\(\Delta\) 自动正体、\(x\) 斜体、\(\mathrm{d}\) 正体、\(\lim\) 带反斜杠、分数用 <code>\frac</code>、大括号用 <code>\left( \right)</code> 自适应高度。</p>
+    </div>
+  </div>
+
+  <div class="math-block pitfall">
+    <div class="mb-head"><span class="mb-tag">禁止</span><span class="mb-title">页面上出现这些就是 bug</span></div>
+    <div class="mb-body">
+      <ul>
+        <li><strong>裸露的源码</strong>：页面上直接显示 <code>\frac{a}{b}</code>、<code>\lim</code>、<code>$$</code>、<code>\(</code></li>
+        <li><strong>Unicode 数学符号</strong>：Σ ∫ √ ≤ ≥ α ∞ —— 一律换成 <code>\sum</code> <code>\int</code> <code>\sqrt</code> <code>\le</code> <code>\ge</code> <code>\alpha</code> <code>\infty</code></li>
+        <li><strong>用符号凑</strong>：<code>-></code> 当箭头、<code>*</code> 当乘号、<code>a/b</code> 当分式</li>
+        <li><strong>中文与公式粘连</strong>：写成“函数\(y=f(x)\)的图像”，应留空格</li>
+        <li><strong>就地改字号</strong>：在章节里写 <code>style="font-size:…"</code>，应改 <code>base.css</code> 的 <code>--math-*</code></li>
+      </ul>
+    </div>
+  </div>
+
+<h2>五、配色与页面骨架</h2>
   <div class="chapter-grid">
     <div class="chapter-card"><div class="cc-num">主色</div><div class="cc-title color-accent">靛蓝 #4f46e5</div><div class="cc-sub">章节头、链接、定义、主按钮、进度环</div></div>
     <div class="chapter-card"><div class="cc-num">辅助</div><div class="cc-title color-cyan">青 #0891b2</div><div class="cc-sub">性质、图像辅助线、渐变终点</div></div>

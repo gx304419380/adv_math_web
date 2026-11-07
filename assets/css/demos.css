@@ -28,3 +28,23 @@
 .color-accent { color: var(--accent); }
 .color-cyan { color: var(--accent-2); }
 .color-key { color: var(--key); }
+
+/* ---------- 按钮与读数里的公式（由 texInline 渲染） ----------
+   数学形式的按钮文字不能靠 Unicode 凑，必须走 KaTeX。
+   这里保证按钮高度一致、公式与文字基线对齐、分数不被压扁。 */
+.btn .tex-inline,
+.readout .tex-inline,
+.tex-inline { display: inline-block; vertical-align: middle; line-height: 1; }
+.btn .katex { font-size: 1.02em; }
+.btn:has(.katex) { padding-left: .85rem; padding-right: .85rem; }
+
+/* 读数区里的行内分数：\dfrac 在行内会撑高行距，收紧一点 */
+.readout .katex .mfrac > span > span { padding: .05em .12em; }
+.readout .tex-inline { margin: 0 .1em; }
+
+/* 读数里的文字说明与公式混排时，行高统一 */
+.readout { line-height: 1.9; }
+
+/* 机器盒子里"对应法则"显示的公式 */
+.m-box b .katex { font-size: 1.05em; }
+.m-box b { display: inline-flex; align-items: center; }

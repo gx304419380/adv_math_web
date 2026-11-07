@@ -29,7 +29,8 @@ function btnRow(el, items) {
     const b = document.createElement('button');
     b.className = 'btn' + (i === 0 ? ' is-active' : '');
     b.type = 'button';
-    b.textContent = it.label;
+    // 数学形式的按钮文字一律走 KaTeX，禁止用 x² 这种 Unicode 凑出来的“假上标”
+    if (it.tex) b.appendChild(texInline(it.tex)); else b.textContent = it.label;
     b.addEventListener('click', () => {
       [...d.children].forEach(x => x.classList.remove('is-active'));
       b.classList.add('is-active');
@@ -46,16 +47,16 @@ const f4 = v => (Math.abs(v) < 1e-10 ? 0 : v).toFixed(4);
 
 function functionMachine(el) {
   const RULES = [
-    { label: 'x²', fn: x => x * x, tex: 'x²' },
-    { label: '2x + 1', fn: x => 2 * x + 1, tex: '2x+1' },
-    { label: '|x|', fn: x => Math.abs(x), tex: '|x|' }
+    { tex: 'x^{2}', fn: x => x * x },
+    { tex: '2x+1', fn: x => 2 * x + 1 },
+    { tex: '\\left|x\\right|', fn: x => Math.abs(x) }
   ];
   const stage = document.createElement('div');
   stage.className = 'machine';
   stage.innerHTML = `
     <div class="m-node"><span>输入 x</span><b data-in>1.0</b></div>
     <div class="m-arrow">→</div>
-    <div class="m-box"><span>对应法则 f</span><b data-rule>x²</b></div>
+    <div class="m-box"><span>对应法则 f</span><b data-rule></b></div>
     <div class="m-arrow">→</div>
     <div class="m-node"><span>输出 f(x)</span><b data-out>1.00</b></div>
     <div class="m-ball" data-ball></div>`;
@@ -70,10 +71,11 @@ function functionMachine(el) {
   const paint = () => {
     const y = RULES[rule].fn(x);
     stage.querySelector('[data-in]').textContent = f4(x).slice(0, 5);
-    stage.querySelector('[data-rule]').textContent = RULES[rule].tex;
+    stage.querySelector('[data-rule]').innerHTML = '';
+    stage.querySelector('[data-rule]').appendChild(texInline(RULES[rule].tex));
     stage.querySelector('[data-out]').textContent = f4(y);
     c.querySelector('[data-xv]').textContent = f4(x).slice(0, 5);
-    out.innerHTML = `规则 <b>f(x) = ${RULES[rule].tex}</b>　输入 x = <b>${f4(x)}</b>　→　唯一输出 f(x) = <b>${f4(y)}</b><br>同一个输入永远只得到一个输出，这就是「函数」；换个规则，输出就变了。`;
+    out.innerHTML = `规则 <b>f(x) = ${texHTML(RULES[rule].tex)}</b>　输入 <b>${texHTML('x=' + f4(x))}</b>　→　唯一输出 <b>${texHTML('f(x)=' + f4(y))}</b><br>同一个输入永远只得到一个输出，这就是「函数」；换个规则，输出就变了。`;
   };
   const play = () => {
     const ball = stage.querySelector('[data-ball]');
@@ -86,7 +88,7 @@ function functionMachine(el) {
 
   bindRange(c, '[data-x]', v => { x = v; paint(); });
   c.querySelector('[data-play]').addEventListener('click', play);
-  btnRow(el, RULES.map((r, i) => ({ label: r.label, run: () => { rule = i; paint(); play(); } })));
+  btnRow(el, RULES.map((r, i) => ({ tex: r.tex, run: () => { rule = i; paint(); play(); } })));
   paint();
 }
 
@@ -107,8 +109,8 @@ function epsilonN(el) {
     p.clear();
     p.rect(0, L - st.eps, MAXN, L + st.eps, { fill: PLOT_COLORS.ok, alpha: .12, stroke: PLOT_COLORS.ok, dash: true });
     p.line(0, L, MAXN, L, { color: PLOT_COLORS.ok, dash: true, width: 1.5 });
-    p.text(1, L + st.eps + .12, `L + ε = ${f4(L + st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
-    p.text(1, L - st.eps - .18, `L − ε = ${f4(L - st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
+    p.text(1, L + st.eps + .12, '上边界', { color: PLOT_COLORS.ok, size: 11 });
+    p.text(1, L - st.eps - .18, '下边界', { color: PLOT_COLORS.ok, size: 11 });
     for (let n = 1; n <= Math.min(st.n, MAXN); n++) {
       const v = a(n);
       p.dot(n, v, { r: 3.4, color: Math.abs(v - L) < st.eps ? PLOT_COLORS.ok : PLOT_COLORS.warn });
@@ -116,7 +118,7 @@ function epsilonN(el) {
     const N = Math.floor(2 / st.eps) + 1;
     p.line(N, -1, N, 3, { color: PLOT_COLORS.accent, dash: true, width: 1.6 });
     p.text(N + .6, 2.6, `N = ${N}`, { color: PLOT_COLORS.accent, size: 11 });
-    out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　需要 <b>N = ${N}</b>（因为 |aₙ − 1| = 2/n &lt; ε 要求 n &gt; 2/ε）<br>` +
+    out.innerHTML = `${texHTML('\\varepsilon=' + f4(st.eps))}　→　需要 <b>${texHTML('N=' + N)}</b>（因为 ${texHTML('|a_{n}-1|=\\dfrac{2}{n}<\\varepsilon')} 要求 ${texHTML('n>\\dfrac{2}{\\varepsilon}')}）<br>` +
       `当前显示前 <b>${Math.round(st.n)}</b> 项；绿色点已落入带内，橙色点还在带外。N 之后全部是绿色 —— 这就是极限。`;
   };
   p.onResize = draw;
@@ -160,7 +162,7 @@ function epsilonDelta(el) {
     p.rect(-1.5, LIM - st.eps, 3.5, LIM + st.eps, { fill: PLOT_COLORS.ok, alpha: .13, stroke: PLOT_COLORS.ok, dash: true });
     p.line(-1.5, LIM + st.eps, 3.5, LIM + st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
     p.line(-1.5, LIM - st.eps, 3.5, LIM - st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
-    p.text(-1.35, LIM - st.eps - .32, `L−ε = ${f4(LIM - st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
+    p.text(-1.35, LIM - st.eps - .32, '误差带下界', { color: PLOT_COLORS.ok, size: 11 });
     /* 竖直自变量窗口：由 δ = ε/2 决定 */
     p.rect(X0 - d, -1, X0 + d, 7, { fill: PLOT_COLORS.accent, alpha: .1, stroke: PLOT_COLORS.accent, dash: true });
     p.line(X0 - d, -1, X0 - d, 7, { color: PLOT_COLORS.accent, dash: true, width: 1.2 });
@@ -170,8 +172,8 @@ function epsilonDelta(el) {
     p.curve(f, { from: X0 - d, to: X0 + d, color: PLOT_COLORS.ok, width: 5 });
     p.dot(X0, LIM, { r: 5, color: PLOT_COLORS.accent });
     p.text(X0 + .1, LIM + .38, '(1, 3)', { color: PLOT_COLORS.accent, size: 11 });
-    out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　δ = ε/2 = <b>${f4(d)}</b>　验证：2δ = <b>${f4(2 * d)}</b> = ε<br>` +
-      `当 0 &lt; |x − 1| &lt; δ 时，|f(x) − 3| = 2|x − 1| &lt; 2δ = ε，定义成立。`;
+    out.innerHTML = `${texHTML('\\varepsilon=' + f4(st.eps))}　→　${texHTML('\\delta=\\dfrac{\\varepsilon}{2}=' + f4(d))}　验证：${texHTML('2\\delta=' + f4(2 * d) + '=\\varepsilon')}<br>` +
+      `当 ${texHTML('0<|x-1|<\\delta')} 时，${texHTML('|f(x)-3|=2|x-1|<2\\delta=\\varepsilon')}，定义成立。`;
   };
   p.onResize = draw;
 
@@ -275,12 +277,12 @@ function limitE(el) {
   const draw = () => {
     p.clear();
     p.line(1, E, 60, E, { color: PLOT_COLORS.warn, dash: true, width: 1.6 });
-    p.text(30, E + .06, `e ≈ ${E.toFixed(5)}`, { color: PLOT_COLORS.warn, size: 11 });
+    p.text(30, E + .06, '水平渐近线', { color: PLOT_COLORS.warn, size: 11 });
     p.curve(fn, { from: 1, to: 60, color: PLOT_COLORS.accent, width: 2.6 });
     const marked = Math.min(st.x, 60);
     p.dot(marked, fn(marked), { r: 5, color: PLOT_COLORS.cyan });
     const v = fn(st.x);
-    out.innerHTML = `x = <b>${st.x}</b>　(1 + 1/x)ˣ = <b>${v.toFixed(6)}</b>　e = <b>${E.toFixed(6)}</b>　差距 = <b>${Math.abs(E - v).toExponential(2)}</b><br>` +
+    out.innerHTML = `${texHTML('x=' + st.x)}　${texHTML('\\left(1+\\dfrac{1}{x}\\right)^{x}=' + v.toFixed(6))}　${texHTML('\\mathrm{e}=' + E.toFixed(6))}　差距 <b>${Math.abs(E - v).toExponential(2)}</b><br>` +
       `x 越大，每次增量越小、次数越多，总量稳稳停在 e；这就是「连续复利」。`;
   };
   p.onResize = draw;
@@ -303,7 +305,7 @@ function squeezeDemo(el) {
   const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -3.2, ymax: 3.2, grid: true });
   const c = controls(el, `
     <label>观察窗口 r <input type="range" data-r min="0.2" max="3" step="0.05" value="3"><output data-rv>3.00</output></label>
-    <span class="hint">把窗口收窄，看振荡被 ±x² 夹到 0</span>`);
+    <span class="hint">把窗口收窄，看振荡被包络线夹到 0</span>`);
   const out = readout(el);
   const st = { r: 3 };
   const f = x => x === 0 ? 0 : x * x * Math.sin(1 / x);
@@ -316,10 +318,10 @@ function squeezeDemo(el) {
     p.curve(x => -x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
     p.curve(f, { from: -r, to: r, color: PLOT_COLORS.accent, width: 2.4, samples: 1200 });
     p.dot(0, 0, { r: 5, color: PLOT_COLORS.ok });
-    p.text(r * .05, top * .82, `上界 +x²`, { color: PLOT_COLORS.warn, size: 11 });
-    p.text(r * .05, -top * .9, `下界 −x²`, { color: PLOT_COLORS.warn, size: 11 });
-    out.innerHTML = `窗口 [−r, r] = [−<b>${f4(r)}</b>, <b>${f4(r)}</b>]　包络 ±r² = ±<b>${f4(r * r)}</b><br>` +
-      `无论中间那条曲线抖得多厉害，它始终满足 −x² ≤ x²·sin(1/x) ≤ x²；两侧都趋于 0，故 f(x) → 0。`;
+    p.text(r * .05, top * .82, '上界', { color: PLOT_COLORS.warn, size: 11 });
+    p.text(r * .05, -top * .9, '下界', { color: PLOT_COLORS.warn, size: 11 });
+    out.innerHTML = `窗口 ${texHTML('[-r,r]=[-' + f4(r) + ',' + f4(r) + ']')}　包络 ${texHTML('\\pm r^{2}=\\pm' + f4(r * r))}<br>` +
+      `无论中间那条曲线抖得多厉害，它始终满足 ${texHTML('-x^{2}\\le x^{2}\\sin\\dfrac{1}{x}\\le x^{2}')}；两侧都趋于 0，故 ${texHTML('f(x)\\to 0')}。`;
   };
   p.onResize = draw;
   bindRange(c, '[data-r]', v => { st.r = v; c.querySelector('[data-rv]').textContent = f4(v); draw(); });
@@ -340,13 +342,13 @@ function infinitesimalOrder(el) {
     p.clear();
     p.curve(x => Math.pow(x, st.p), { from: 0, to: 1, color: PLOT_COLORS.accent, width: 2.6 });
     p.curve(x => Math.pow(x, st.q), { from: 0, to: 1, color: PLOT_COLORS.cyan, width: 2.6 });
-    p.text(.62, Math.pow(.62, st.p) + .09, `x^${f4(st.p).slice(0, 3)}`, { color: PLOT_COLORS.accent, size: 11 });
-    p.text(.62, Math.pow(.62, st.q) + .09, `x^${f4(st.q).slice(0, 3)}`, { color: PLOT_COLORS.cyan, size: 11 });
+    p.text(.62, Math.pow(.62, st.p) + .09, '幂次 p', { color: PLOT_COLORS.accent, size: 11 });
+    p.text(.62, Math.pow(.62, st.q) + .09, '幂次 q', { color: PLOT_COLORS.cyan, size: 11 });
     const ratio = Math.pow(0.001, st.p - st.q);
     const kind = st.p > st.q + 1e-9 ? 'xᵖ 是比 xᵘ 高阶的无穷小（更快贴近 0）'
       : Math.abs(st.p - st.q) < 1e-9 ? '两者同阶且等价（曲线重合）'
       : 'xᵖ 是比 xᵘ 低阶的无穷小（更慢贴近 0）';
-    out.innerHTML = `p = <b>${f4(st.p)}</b>，q = <b>${f4(st.q)}</b>　比值 xᵖ/xᵘ = x^(p−q)，在 x = 0.001 处约为 <b>${ratio.toExponential(2)}</b><br>${kind}。`;
+    out.innerHTML = `${texHTML('p=' + f4(st.p))}，${texHTML('q=' + f4(st.q))}　比值 ${texHTML('\\dfrac{x^{p}}{x^{q}}=x^{p-q}')}，在 ${texHTML('x=0.001')} 处约为 <b>${ratio.toExponential(2)}</b><br>${kind}。`;
   };
   p.onResize = draw;
   bindRange(c, '[data-p]', v => { st.p = v; c.querySelector('[data-pv]').textContent = v.toFixed(1); draw(); });
@@ -405,7 +407,7 @@ function discontinuity(el) {
     t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.4, samples: 1400 }));
     t.extra(p);
     p.line(1, -4, 1, 4, { color: PLOT_COLORS.axis, dash: true, width: 1 });
-    p.text(1.05, 3.6, 'x = 1', { color: PLOT_COLORS.text, size: 11 });
+    p.text(1.05, 3.6, '间断点位置', { color: PLOT_COLORS.text, size: 11 });
     out.innerHTML = `<b>${t.name}</b>　${t.lr}<br>${t.note}`;
   };
   p.onResize = draw;
@@ -480,7 +482,7 @@ function secantToTangent(el) {
     p.dot(X0, f(X0), { r: 5, color: PLOT_COLORS.accent });
     p.dot(x1, y1, { r: 5, color: PLOT_COLORS.warn });
     p.text(x1 + .08, y1 + .25, `割点 (${f4(x1)}, ${f4(y1)})`, { color: PLOT_COLORS.warn, size: 10 });
-    out.innerHTML = `h = <b>${f4(h)}</b>　割线斜率 = [(1+h)² − 1] / h = 2 + h = <b>${f4(slope)}</b>　切线斜率 = <b>2</b>　差距 = <b>${f4(slope - 2)}</b><br>` +
+    out.innerHTML = `${texHTML('h=' + f4(h))}　割线斜率 ${texHTML('\\dfrac{(1+h)^{2}-1}{h}=2+h=' + f4(slope))}　切线斜率 <b>${texHTML('2')}</b>　差距 <b>${f4(slope - 2)}</b><br>` +
       `把 h 拖到接近 0，割线绕着 (1,1) 转到极限位置 —— 那条绿色虚线就是切线，斜率正是第 2 章要定义的导数。`;
   };
   p.onResize = draw;
@@ -500,16 +502,17 @@ function secantToTangent(el) {
 /* ---------- 演示 11 · 基本初等函数图库（含竖直检验） ---------- */
 
 function functionGallery(el) {
+  // 每个函数同时给出：按钮用的短 TeX（btn）、正文用的完整 TeX（expr）、定义域/值域的 TeX
   const FUNCS = [
-    { name: 'x²',    expr: 'f(x) = x²',    fn: x => x * x,  domain: 'ℝ',       range: '[0, +∞)',  from: -3,   to: 3 },
-    { name: 'x³',    expr: 'f(x) = x³',    fn: x => x ** 3, domain: 'ℝ',       range: 'ℝ',       from: -2.2, to: 2.2 },
-    { name: 'sin x', expr: 'f(x) = sin x', fn: Math.sin,    domain: 'ℝ',       range: '[−1, 1]', from: -4,   to: 4 },
-    { name: 'cos x', expr: 'f(x) = cos x', fn: Math.cos,    domain: 'ℝ',       range: '[−1, 1]', from: -4,   to: 4 },
-    { name: 'eˣ',    expr: 'f(x) = eˣ',    fn: Math.exp,    domain: 'ℝ',       range: '(0, +∞)', from: -2,   to: 1.7 },
-    { name: 'ln x',  expr: 'f(x) = ln x',  fn: Math.log,    domain: '(0, +∞)', range: 'ℝ',       from: 0.02, to: 5 },
-    { name: '1/x',   expr: 'f(x) = 1/x',   fn: x => 1 / x,  domain: 'x ≠ 0',   range: 'y ≠ 0',   from: -3,   to: 3, split: true },
-    { name: '|x|',   expr: 'f(x) = |x|',   fn: Math.abs,    domain: 'ℝ',       range: '[0, +∞)', from: -3,   to: 3 },
-    { name: '√x',    expr: 'f(x) = √x',    fn: Math.sqrt,   domain: '[0, +∞)', range: '[0, +∞)', from: 0,    to: 5 }
+    { btn: 'x^{2}',     expr: 'f(x)=x^{2}',              fn: x => x * x,  dom: '\\mathbb{R}', range: '[0,+\\infty)', from: -3,   to: 3 },
+    { btn: 'x^{3}',     expr: 'f(x)=x^{3}',              fn: x => x ** 3, dom: '\\mathbb{R}', range: '\\mathbb{R}', from: -2.2, to: 2.2 },
+    { btn: '\\sin x',   expr: 'f(x)=\\sin x',             fn: Math.sin,    dom: '\\mathbb{R}', range: '[-1,1]', from: -4,   to: 4 },
+    { btn: '\\cos x',   expr: 'f(x)=\\cos x',             fn: Math.cos,    dom: '\\mathbb{R}', range: '[-1,1]', from: -4,   to: 4 },
+    { btn: '\\mathrm{e}^{x}', expr: 'f(x)=\\mathrm{e}^{x}', fn: Math.exp, dom: '\\mathbb{R}', range: '(0,+\\infty)', from: -2, to: 1.7 },
+    { btn: '\\ln x',    expr: 'f(x)=\\ln x',              fn: Math.log,    dom: '(0,+\\infty)', range: '\\mathbb{R}', from: 0.02, to: 5 },
+    { btn: '\\dfrac{1}{x}', expr: 'f(x)=\\dfrac{1}{x}',   fn: x => 1 / x,  dom: 'x\\neq 0',   range: 'y\\neq 0', from: -3, to: 3, split: true },
+    { btn: '\\left|x\\right|', expr: 'f(x)=\\left|x\\right|', fn: Math.abs, dom: '\\mathbb{R}', range: '[0,+\\infty)', from: -3, to: 3 },
+    { btn: '\\sqrt{x}', expr: 'f(x)=\\sqrt{x}',           fn: Math.sqrt,   dom: '[0,+\\infty)', range: '[0,+\\infty)', from: 0, to: 5 }
   ];
   const p = new Plot(el, { xmin: -3, xmax: 5, ymin: -3, ymax: 5, grid: true });
   const c = controls(el, `
@@ -532,13 +535,15 @@ function functionGallery(el) {
     const y = F.fn(vx);
     const inside = vx >= F.from && vx <= F.to && Number.isFinite(y);
     if (inside) p.dot(vx, y, { r: 5, color: PLOT_COLORS.ok });
-    p.text(vx + .12, 4.55, `x = ${f4(vx)}`, { color: PLOT_COLORS.warn, size: 11 });
-    out.innerHTML = `<b>${F.expr}</b>　定义域 ${F.domain}　值域 ${F.range}<br>` +
-      `竖直线 x = ${f4(vx)} ${inside ? '与图像交于 <b>1</b> 个点' : '不与图像相交（该点不在定义域内）'} —— 任意竖线最多一个交点，即<b>通过竖直检验</b>。`;
+    // 画布内无法保证变量斜体，标签只写“检验线”，具体数值放到下方读数区用 KaTeX 排
+    p.text(vx + .12, 4.55, '检验线', { color: PLOT_COLORS.warn, size: 11 });
+    out.innerHTML =
+      `<b>${texHTML(F.expr)}</b>　定义域 ${texHTML(F.dom)}　值域 ${texHTML(F.range)}<br>` +
+      `竖直线 ${texHTML('x=' + f4(vx))} ${inside ? '与图像交于 <b>1</b> 个点' : '不与图像相交（该点不在定义域内）'} —— 任意竖线最多一个交点，即<b>通过竖直检验</b>。`;
   };
   p.onResize = draw;
   bindRange(c, '[data-vx]', v => { vx = v; c.querySelector('[data-vxv]').textContent = f4(v); draw(); });
-  btnRow(el, FUNCS.map((F, i) => ({ label: F.name, run: () => { cur = i; draw(); } })));
+  btnRow(el, FUNCS.map((F, i) => ({ tex: F.btn, run: () => { cur = i; draw(); } })));
   draw();
 }
 
@@ -558,8 +563,8 @@ function infinitesimalVsInfinity(el) {
     p.curve(Math.sqrt, { from: 0, to: r, color: PLOT_COLORS.warn, width: 2.4 });
     p.curve(x => x, { from: 0, to: r, color: PLOT_COLORS.accent, width: 2.4 });
     p.curve(x => x * x, { from: 0, to: r, color: PLOT_COLORS.ok, width: 2.4 });
-    p.text(r * .5, 2.9, '1/x → ∞', { color: PLOT_COLORS.danger, size: 11 });
-    out.innerHTML = `在 x = <b>${f4(r)}</b> 处：1/x = <b>${f4(1 / r)}</b>　√x = <b>${f4(Math.sqrt(r))}</b>　x = <b>${f4(r)}</b>　x² = <b>${f4(r * r)}</b><br>` +
+    p.text(r * .5, 2.9, '这条冲向无穷', { color: PLOT_COLORS.danger, size: 11 });
+    out.innerHTML = `在 ${texHTML('x=' + f4(r))} 处：${texHTML('\\dfrac{1}{x}=' + f4(1 / r))}　${texHTML('\\sqrt{x}=' + f4(Math.sqrt(r)))}　${texHTML('x=' + f4(r))}　${texHTML('x^{2}=' + f4(r * r))}<br>` +
       `红色虚线冲向无穷（<b>无穷大</b>），另外三条都趋于 0（<b>无穷小</b>）但速度不同：幂次越高越快。注意 ∞ 不是数，只是趋势。`;
   };
   p.onResize = draw;
@@ -585,7 +590,7 @@ function cancelAndLimit(el) {
     p.dot(1, 2, { r: 6, fill: bg, color: PLOT_COLORS.accent, stroke: PLOT_COLORS.accent });
     p.line(xx, -1, xx, 5, { color: PLOT_COLORS.warn, dash: true, width: 1.4 });
     if (Math.abs(xx - 1) > .01) p.dot(xx, xx + 1, { r: 5, color: PLOT_COLORS.warn });
-    out.innerHTML = `x = <b>${f4(xx)}</b>　(x²−1)/(x−1) = <b>${Math.abs(xx - 1) > .01 ? f4((xx * xx - 1) / (xx - 1)) : '无定义'}</b>　x+1 = <b>${f4(xx + 1)}</b><br>` +
+    out.innerHTML = `${texHTML('x=' + f4(xx))}　${texHTML('\\dfrac{x^{2}-1}{x-1}=' + (Math.abs(xx - 1) > .01 ? f4((xx * xx - 1) / (xx - 1)) : '\\text{无定义}'))}　${texHTML('x+1=' + f4(xx + 1))}<br>` +
       `绿色虚线 y = x+1 与蓝色曲线除 x=1 一点外<strong>完全重合</strong>；极限只看去心邻域，故极限为 <b>2</b>。把滑块拖到 1 会看到那个空心点。`;
   };
   p.onResize = draw;
@@ -598,19 +603,19 @@ function cancelAndLimit(el) {
 function continuityOperations(el) {
   const CASES = [
     {
-      name: '复合连续 sin(x²)', color: PLOT_COLORS.accent,
+      nameTex: '\\sin(x^{2})', color: PLOT_COLORS.accent,
       parts: [[-3, 3, x => Math.sin(x * x)]],
-      note: 'sin 与 x² 处处连续，复合后仍处处连续。图像一笔画到底，没有断点。', ok: true
+      note: '正弦与幂函数都处处连续，复合后仍处处连续。图像一笔画到底，没有断点。', ok: true
     },
     {
-      name: '分段连续 |x|', color: PLOT_COLORS.accent,
+      name: '分段连续（带尖角）', nameTex: '\\left|x\\right|', color: PLOT_COLORS.accent,
       parts: [[-3, 3, Math.abs]],
-      note: '两段连续函数拼成，在 x=0 处左右极限都等于 0 且等于函数值，因此连续（但这里有尖角，不可导）。', ok: true
+      note: '两段连续函数在分段点拼起来，左右极限都等于 0 且等于函数值，因此连续；但这里有尖角，不可导。', ok: true
     },
     {
       name: '分段跳跃（不连续）', color: PLOT_COLORS.danger,
       parts: [[-3, -0.001, () => -0.8], [0.001, 3, () => 0.8]],
-      note: '左右极限分别是 −0.8 与 0.8，不相等，x=0 是跳跃间断点。', ok: false
+      note: '左右极限一个是 −0.8、一个是 0.8，不相等，分段点是跳跃间断点。', ok: false
     },
     {
       name: '可去间断（可修补）', color: PLOT_COLORS.warn,
@@ -630,10 +635,11 @@ function continuityOperations(el) {
     p.clear();
     t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.7, samples: 900 }));
     if (t.extra) t.extra(p);
-    out.innerHTML = `<b>${t.name}</b>　${t.ok ? '<span style="color:var(--ok)">✓ 连续</span>' : '<span style="color:var(--danger)">✗ 有间断点</span>'}<br>${t.note}`;
+    const title = t.nameTex ? texHTML(t.nameTex) : t.name;
+    out.innerHTML = `<b>${title}</b>　${t.ok ? '<span class="txt-ok">连续</span>' : '<span class="txt-danger">有间断点</span>'}<br>${t.note}`;
   };
   p.onResize = draw;
-  btnRow(el, CASES.map((t, i) => ({ label: t.name, run: () => { cur = i; draw(); } })));
+  btnRow(el, CASES.map((t, i) => ({ label: t.name, tex: t.nameTex, run: () => { cur = i; draw(); } })));
   draw();
 }
 

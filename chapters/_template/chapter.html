@@ -116,12 +116,11 @@
           <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">结论名称</span><span class="mb-no">X.2</span></div>
           <div class="mb-body">
             定理内容。
-            <details class="proof-fold">
-              <summary>展开推导（N 步）</summary>
-              <ol class="derive">
-                <li><span class="derive-eq">$$...$$</span><span class="derive-note">这一步在做什么</span></li>
-              </ol>
-            </details>
+            <!-- 证明必须直接显示，不折叠（见 docs/PRINCIPLES.md §7、MATH_TYPESET.md） -->
+            <div class="proof-title">证明 · 结论名称（N 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">\(\cdots\)</span><span class="derive-note">这一步在做什么，为什么能这么做</span></li>
+            </ol>
           </div>
         </div>
 

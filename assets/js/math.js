@@ -67,3 +67,73 @@ function auditMath(root = document) {
   }
   return issues;
 }
+
+/* ============================================================
+   运行时公式渲染入口：按钮、读数、标签都用它，禁止用 Unicode 凑数学
+   ------------------------------------------------------------
+   反面例子（曾经出现在演示按钮上，已全部修掉）：
+     'x²'  'x³'  'eˣ'  '√x'  '1/x'  'P(x)'      ← 上下标是字符、根号是符号
+   正确做法：
+     texInline('x^{2}') → <span class="katex">…真正的上标…</span>
+   JS 里画布内无法渲染 KaTeX 时，才允许退化为 Unicode，且必须走 canvasLabel()。
+   ============================================================ */
+function texInline(tex, opts = {}) {
+  const span = document.createElement('span');
+  span.className = 'tex-inline';
+  if (!window.katex) {
+    // 极端降级：库没加载上时给出可读文本，绝不显示反斜杠
+    span.textContent = tex.replace(/[\\{}^_]/g, '');
+    return span;
+  }
+  try {
+    window.katex.render(tex, span, {
+      displayMode: false,
+      throwOnError: false,
+      strict: 'ignore',
+      trust: false,
+      output: opts.output || 'html'
+    });
+  } catch (err) {
+    span.textContent = tex.replace(/[\\{}^_]/g, '');
+  }
+  return span;
+}
+
+/* 把 texInline 的 HTML 字符串直接塞进 innerHTML 用（按钮、读数） */
+function texHTML(tex, opts) {
+  return texInline(tex, opts).outerHTML;
+}
+
+/* 画布内文字：KaTeX 用不了，这里统一做最保守的降级，且不用于正文 */
+function canvasLabel(tex) {
+  return String(tex)
+    .replace(/\\mathrm\{([^}]*)\}/g, '$1')
+    .replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, '$1/$2')
+    .replace(/\\sqrt\{([^}]*)\}/g, '√($1)')
+    .replace(/\\cdot|\\times/g, '×')
+    .replace(/\\to/g, '→')
+    .replace(/\\infty/g, '∞')
+    .replace(/\\le/g, '≤').replace(/\\ge/g, '≥').replace(/\\ne|\\neq/g, '≠')
+    .replace(/\\pi/g, 'π').replace(/\\alpha/g, 'α').replace(/\\varepsilon/g, 'ε')
+    .replace(/\\Delta/g, 'Δ').replace(/\\delta/g, 'δ')
+    .replace(/\\,|\\;|\\quad|\\qquad|\\ /g, ' ')
+    .replace(/[\^_]\{([^{}]*)\}/g, (m, p1) => SUP[p1] || ('^' + p1))
+    .replace(/\\[a-zA-Z]+/g, '')
+    .replace(/[{}]/g, '')
+    .trim();
+}
+const SUP = {
+  '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵',
+  '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻', '+': '⁺', 'n': 'ⁿ', 'x': 'ˣ'
+};
+
+/* 把一个容器里的 \[data-tex] 元素批量渲染成公式（按钮栏、读数用） */
+function renderTexNodes(root = document) {
+  root.querySelectorAll('[data-tex]').forEach(el => {
+    if (el.dataset.texDone === '1') return;
+    const tex = el.getAttribute('data-tex');
+    el.innerHTML = '';
+    el.appendChild(texInline(tex));
+    el.dataset.texDone = '1';
+  });
+}

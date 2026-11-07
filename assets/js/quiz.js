@@ -26,6 +26,7 @@ function mountQuiz(el, data) {
     const q = document.createElement('div');
     q.className = 'quiz-q';
     q.innerHTML = `${qi + 1}. ${item.q}`;
+    if (window.initMath) window.initMath(q);
     card.appendChild(q);
 
     const opts = document.createElement('div');
@@ -38,7 +39,8 @@ function mountQuiz(el, data) {
       const btn = document.createElement('button');
       btn.className = 'quiz-opt';
       btn.type = 'button';
-      btn.textContent = text;
+      btn.innerHTML = text;
+      if (window.initMath) window.initMath(btn);
       btn.addEventListener('click', () => {
         if (card.dataset.done) return;
         card.dataset.done = '1';
@@ -51,6 +53,7 @@ function mountQuiz(el, data) {
           else if (k === oi) b.classList.add('is-wrong');
         });
         explain.innerHTML = `<strong>${right ? '答对了' : '再想想'}</strong>：${item.explain || ''}`;
+        if (window.initMath) window.initMath(explain);
         explain.hidden = false;
         updateScore();
       });

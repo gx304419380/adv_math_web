@@ -95,6 +95,16 @@ for f in assets/css/base.css assets/css/design-system.css assets/css/demos.css \
 done
 [ "$MISSING" -eq 0 ] && ok '视觉规范、设计 token 与维护文档齐全'
 
+# 4) 按钮 / 读数 / 标签里不得用 Unicode 凑数学（见 docs/MATH_TYPESET.md §9）
+if grep -nE "label: *'[^']*[²³ˣⁿ√]|name: *'[^']*[²³ˣⁿ√]" chapters/*/demo.js assets/js/*.js 2>/dev/null | head -1 | grep -q .; then
+  bad "按钮/标签用了 Unicode 假数学（x²、eˣ、√x 等），应改用 tex: '...' 走 KaTeX"
+else ok "按钮与标签均使用规范数学排版"; fi
+
+# 5) 定理证明不得折叠（只允许习题答案折叠）
+if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head -1 | grep -q .; then
+  bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
+else ok "证明与推导均直接显示，未折叠"; fi
+
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
 
@@ -120,6 +130,16 @@ if python3 tools/audit-math.py >/tmp/math-audit.log 2>&1; then
 else
   bad "数学排版问题：$(tail -1 /tmp/math-audit.log)；明细运行 python3 tools/audit-math.py"
 fi
+
+# 4) 按钮 / 读数 / 标签里不得用 Unicode 凑数学（见 docs/MATH_TYPESET.md §9）
+if grep -nE "label: *'[^']*[²³ˣⁿ√]|name: *'[^']*[²³ˣⁿ√]" chapters/*/demo.js assets/js/*.js 2>/dev/null | head -1 | grep -q .; then
+  bad "按钮/标签用了 Unicode 假数学（x²、eˣ、√x 等），应改用 tex: '...' 走 KaTeX"
+else ok "按钮与标签均使用规范数学排版"; fi
+
+# 5) 定理证明不得折叠（只允许习题答案折叠）
+if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head -1 | grep -q .; then
+  bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
+else ok "证明与推导均直接显示，未折叠"; fi
 
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
