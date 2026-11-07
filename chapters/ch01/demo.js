@@ -1,30 +1,7 @@
-/* 第 1 章 · 10 个原创交互演示
+/* 第 1 章 · 14 个原创交互演示
    绘图统一复用 assets/js/plot.js；单位圆与函数机器用原生 SVG / CSS */
 
-import { Plot, PLOT_COLORS as C } from '../../assets/js/plot.js';
-import { StepController } from '../../assets/js/steps.js';
-
 /* ---------- 通用小工具 ---------- */
-
-function injectCSS() {
-  const s = document.createElement('style');
-  s.textContent = `
-  .machine{display:flex;align-items:center;justify-content:center;gap:.8rem;flex-wrap:wrap;
-    background:var(--bg-soft);border:1px solid var(--border);border-radius:9px;padding:1.2rem .8rem;position:relative;overflow:hidden}
-  .m-node{width:88px;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.55rem}
-  .m-node span,.m-box span{display:block;font-size:.72rem;color:var(--fg-muted)}
-  .m-node b,.m-box b{display:block;font-size:1.15rem;font-family:monospace;color:var(--accent)}
-  .m-box{width:118px;text-align:center;background:var(--accent-soft);border:2px dashed var(--accent);border-radius:12px;padding:.55rem}
-  .m-arrow{font-size:1.4rem;color:var(--fg-muted)}
-  .m-ball{position:absolute;left:1.2rem;top:50%;width:14px;height:14px;border-radius:50%;
-    background:var(--accent-2);transform:translateY(-50%);box-shadow:0 0 0 4px rgba(8,145,178,.18)}
-  .unit-svg{width:100%;max-width:520px;height:auto;display:block;margin:0 auto;background:var(--bg-soft);
-    border:1px solid var(--border);border-radius:9px}
-  .unit-svg text{font-size:12px;fill:var(--fg-muted)}
-  .unit-svg .lbl{font-size:13px;font-weight:700}
-  `;
-  document.head.appendChild(s);
-}
 
 function controls(el, inner) {
   const d = document.createElement('div');
@@ -128,17 +105,17 @@ function epsilonN(el) {
   const a = n => L + (n % 2 ? -1 : 1) * 2 / n;
   const draw = () => {
     p.clear();
-    p.rect(0, L - st.eps, MAXN, L + st.eps, { fill: C.ok, alpha: .12, stroke: C.ok, dash: true });
-    p.line(0, L, MAXN, L, { color: C.ok, dash: true, width: 1.5 });
-    p.text(1, L + st.eps + .12, `L + ε = ${f4(L + st.eps)}`, { color: C.ok, size: 11 });
-    p.text(1, L - st.eps - .18, `L − ε = ${f4(L - st.eps)}`, { color: C.ok, size: 11 });
+    p.rect(0, L - st.eps, MAXN, L + st.eps, { fill: PLOT_COLORS.ok, alpha: .12, stroke: PLOT_COLORS.ok, dash: true });
+    p.line(0, L, MAXN, L, { color: PLOT_COLORS.ok, dash: true, width: 1.5 });
+    p.text(1, L + st.eps + .12, `L + ε = ${f4(L + st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
+    p.text(1, L - st.eps - .18, `L − ε = ${f4(L - st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
     for (let n = 1; n <= Math.min(st.n, MAXN); n++) {
       const v = a(n);
-      p.dot(n, v, { r: 3.4, color: Math.abs(v - L) < st.eps ? C.ok : C.warn });
+      p.dot(n, v, { r: 3.4, color: Math.abs(v - L) < st.eps ? PLOT_COLORS.ok : PLOT_COLORS.warn });
     }
     const N = Math.floor(2 / st.eps) + 1;
-    p.line(N, -1, N, 3, { color: C.accent, dash: true, width: 1.6 });
-    p.text(N + .6, 2.6, `N = ${N}`, { color: C.accent, size: 11 });
+    p.line(N, -1, N, 3, { color: PLOT_COLORS.accent, dash: true, width: 1.6 });
+    p.text(N + .6, 2.6, `N = ${N}`, { color: PLOT_COLORS.accent, size: 11 });
     out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　需要 <b>N = ${N}</b>（因为 |aₙ − 1| = 2/n &lt; ε 要求 n &gt; 2/ε）<br>` +
       `当前显示前 <b>${Math.round(st.n)}</b> 项；绿色点已落入带内，橙色点还在带外。N 之后全部是绿色 —— 这就是极限。`;
   };
@@ -180,19 +157,19 @@ function epsilonDelta(el) {
     const d = st.eps / 2;
     p.clear();
     /* 水平误差带：由 ε 决定 */
-    p.rect(-1.5, LIM - st.eps, 3.5, LIM + st.eps, { fill: C.ok, alpha: .13, stroke: C.ok, dash: true });
-    p.line(-1.5, LIM + st.eps, 3.5, LIM + st.eps, { color: C.ok, dash: true, width: 1.4 });
-    p.line(-1.5, LIM - st.eps, 3.5, LIM - st.eps, { color: C.ok, dash: true, width: 1.4 });
-    p.text(-1.35, LIM - st.eps - .32, `L−ε = ${f4(LIM - st.eps)}`, { color: C.ok, size: 11 });
+    p.rect(-1.5, LIM - st.eps, 3.5, LIM + st.eps, { fill: PLOT_COLORS.ok, alpha: .13, stroke: PLOT_COLORS.ok, dash: true });
+    p.line(-1.5, LIM + st.eps, 3.5, LIM + st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
+    p.line(-1.5, LIM - st.eps, 3.5, LIM - st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
+    p.text(-1.35, LIM - st.eps - .32, `L−ε = ${f4(LIM - st.eps)}`, { color: PLOT_COLORS.ok, size: 11 });
     /* 竖直自变量窗口：由 δ = ε/2 决定 */
-    p.rect(X0 - d, -1, X0 + d, 7, { fill: C.accent, alpha: .1, stroke: C.accent, dash: true });
-    p.line(X0 - d, -1, X0 - d, 7, { color: C.accent, dash: true, width: 1.2 });
-    p.line(X0 + d, -1, X0 + d, 7, { color: C.accent, dash: true, width: 1.2 });
+    p.rect(X0 - d, -1, X0 + d, 7, { fill: PLOT_COLORS.accent, alpha: .1, stroke: PLOT_COLORS.accent, dash: true });
+    p.line(X0 - d, -1, X0 - d, 7, { color: PLOT_COLORS.accent, dash: true, width: 1.2 });
+    p.line(X0 + d, -1, X0 + d, 7, { color: PLOT_COLORS.accent, dash: true, width: 1.2 });
     /* 曲线与落在窗口内的那一段 */
-    p.curve(f, { from: -1.5, to: 3.5, color: C.accent, width: 2.4 });
-    p.curve(f, { from: X0 - d, to: X0 + d, color: C.ok, width: 5 });
-    p.dot(X0, LIM, { r: 5, color: C.accent });
-    p.text(X0 + .1, LIM + .38, '(1, 3)', { color: C.accent, size: 11 });
+    p.curve(f, { from: -1.5, to: 3.5, color: PLOT_COLORS.accent, width: 2.4 });
+    p.curve(f, { from: X0 - d, to: X0 + d, color: PLOT_COLORS.ok, width: 5 });
+    p.dot(X0, LIM, { r: 5, color: PLOT_COLORS.accent });
+    p.text(X0 + .1, LIM + .38, '(1, 3)', { color: PLOT_COLORS.accent, size: 11 });
     out.innerHTML = `ε = <b>${f4(st.eps)}</b>　→　δ = ε/2 = <b>${f4(d)}</b>　验证：2δ = <b>${f4(2 * d)}</b> = ε<br>` +
       `当 0 &lt; |x − 1| &lt; δ 时，|f(x) − 3| = 2|x − 1| &lt; 2δ = ε，定义成立。`;
   };
@@ -297,11 +274,11 @@ function limitE(el) {
 
   const draw = () => {
     p.clear();
-    p.line(1, E, 60, E, { color: C.warn, dash: true, width: 1.6 });
-    p.text(30, E + .06, `e ≈ ${E.toFixed(5)}`, { color: C.warn, size: 11 });
-    p.curve(fn, { from: 1, to: 60, color: C.accent, width: 2.6 });
+    p.line(1, E, 60, E, { color: PLOT_COLORS.warn, dash: true, width: 1.6 });
+    p.text(30, E + .06, `e ≈ ${E.toFixed(5)}`, { color: PLOT_COLORS.warn, size: 11 });
+    p.curve(fn, { from: 1, to: 60, color: PLOT_COLORS.accent, width: 2.6 });
     const marked = Math.min(st.x, 60);
-    p.dot(marked, fn(marked), { r: 5, color: C.cyan });
+    p.dot(marked, fn(marked), { r: 5, color: PLOT_COLORS.cyan });
     const v = fn(st.x);
     out.innerHTML = `x = <b>${st.x}</b>　(1 + 1/x)ˣ = <b>${v.toFixed(6)}</b>　e = <b>${E.toFixed(6)}</b>　差距 = <b>${Math.abs(E - v).toExponential(2)}</b><br>` +
       `x 越大，每次增量越小、次数越多，总量稳稳停在 e；这就是「连续复利」。`;
@@ -335,12 +312,12 @@ function squeezeDemo(el) {
     const r = st.r, top = Math.max(.35, r * r * 1.15);
     p.o.xmin = -r; p.o.xmax = r; p.o.ymin = -top; p.o.ymax = top;
     p.clear();
-    p.curve(x => x * x, { from: -r, to: r, color: C.warn, width: 2, dash: true });
-    p.curve(x => -x * x, { from: -r, to: r, color: C.warn, width: 2, dash: true });
-    p.curve(f, { from: -r, to: r, color: C.accent, width: 2.4, samples: 1200 });
-    p.dot(0, 0, { r: 5, color: C.ok });
-    p.text(r * .05, top * .82, `上界 +x²`, { color: C.warn, size: 11 });
-    p.text(r * .05, -top * .9, `下界 −x²`, { color: C.warn, size: 11 });
+    p.curve(x => x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
+    p.curve(x => -x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
+    p.curve(f, { from: -r, to: r, color: PLOT_COLORS.accent, width: 2.4, samples: 1200 });
+    p.dot(0, 0, { r: 5, color: PLOT_COLORS.ok });
+    p.text(r * .05, top * .82, `上界 +x²`, { color: PLOT_COLORS.warn, size: 11 });
+    p.text(r * .05, -top * .9, `下界 −x²`, { color: PLOT_COLORS.warn, size: 11 });
     out.innerHTML = `窗口 [−r, r] = [−<b>${f4(r)}</b>, <b>${f4(r)}</b>]　包络 ±r² = ±<b>${f4(r * r)}</b><br>` +
       `无论中间那条曲线抖得多厉害，它始终满足 −x² ≤ x²·sin(1/x) ≤ x²；两侧都趋于 0，故 f(x) → 0。`;
   };
@@ -361,10 +338,10 @@ function infinitesimalOrder(el) {
 
   const draw = () => {
     p.clear();
-    p.curve(x => Math.pow(x, st.p), { from: 0, to: 1, color: C.accent, width: 2.6 });
-    p.curve(x => Math.pow(x, st.q), { from: 0, to: 1, color: C.cyan, width: 2.6 });
-    p.text(.62, Math.pow(.62, st.p) + .09, `x^${f4(st.p).slice(0, 3)}`, { color: C.accent, size: 11 });
-    p.text(.62, Math.pow(.62, st.q) + .09, `x^${f4(st.q).slice(0, 3)}`, { color: C.cyan, size: 11 });
+    p.curve(x => Math.pow(x, st.p), { from: 0, to: 1, color: PLOT_COLORS.accent, width: 2.6 });
+    p.curve(x => Math.pow(x, st.q), { from: 0, to: 1, color: PLOT_COLORS.cyan, width: 2.6 });
+    p.text(.62, Math.pow(.62, st.p) + .09, `x^${f4(st.p).slice(0, 3)}`, { color: PLOT_COLORS.accent, size: 11 });
+    p.text(.62, Math.pow(.62, st.q) + .09, `x^${f4(st.q).slice(0, 3)}`, { color: PLOT_COLORS.cyan, size: 11 });
     const ratio = Math.pow(0.001, st.p - st.q);
     const kind = st.p > st.q + 1e-9 ? 'xᵖ 是比 xᵘ 高阶的无穷小（更快贴近 0）'
       : Math.abs(st.p - st.q) < 1e-9 ? '两者同阶且等价（曲线重合）'
@@ -385,36 +362,36 @@ function discontinuity(el) {
   const EPS = 0.004;
   const TYPES = [
     {
-      name: '可去间断', color: C.ok,
+      name: '可去间断', color: PLOT_COLORS.ok,
       parts: [[-1, 1 - EPS, x => x + 1], [1 + EPS, 3, x => x + 1]],
       extra: q => {
         const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
-        q.dot(1, 2, { r: 6, fill: bg, color: C.ok, stroke: C.ok });   // 空心：极限值处该点未被取到
-        q.dot(1, .5, { r: 5, color: C.danger });                       // 实心：函数实际取值
+        q.dot(1, 2, { r: 6, fill: bg, color: PLOT_COLORS.ok, stroke: PLOT_COLORS.ok });   // 空心：极限值处该点未被取到
+        q.dot(1, .5, { r: 5, color: PLOT_COLORS.danger });                       // 实心：函数实际取值
       },
       note: '左右极限都存在且相等（都是 2），但 f(1) 被单独定义成 0.5。把红点挪到空心点处就连续了。',
       lr: '左极限 = 右极限 = 2 ≠ f(1) = 0.5'
     },
     {
-      name: '跳跃间断', color: C.warn,
+      name: '跳跃间断', color: PLOT_COLORS.warn,
       parts: [[-1, 1 - EPS, x => x * .6], [1 + EPS, 3, x => x * .6 + 1.4]],
       extra: q => {
         const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
-        q.dot(1, .6, { r: 6, fill: bg, color: C.warn, stroke: C.warn });
-        q.dot(1, 2, { r: 5, color: C.warn });
+        q.dot(1, .6, { r: 6, fill: bg, color: PLOT_COLORS.warn, stroke: PLOT_COLORS.warn });
+        q.dot(1, 2, { r: 5, color: PLOT_COLORS.warn });
       },
       note: '左右极限各自存在但不相等，图像出现一道台阶，怎么补点都接不上。',
       lr: '左极限 ≈ 0.6，右极限 ≈ 2.0'
     },
     {
-      name: '无穷间断', color: C.danger,
+      name: '无穷间断', color: PLOT_COLORS.danger,
       parts: [[-1, 1 - EPS, x => 1 / (x - 1)], [1 + EPS, 3, x => 1 / (x - 1)]],
-      extra: q => q.line(1, -4, 1, 4, { color: C.danger, dash: true, width: 1.5 }),
+      extra: q => q.line(1, -4, 1, 4, { color: PLOT_COLORS.danger, dash: true, width: 1.5 }),
       note: '至少一侧趋于无穷，x = 1 是竖直渐近线，极限不存在。',
       lr: '左极限 → −∞，右极限 → +∞'
     },
     {
-      name: '振荡间断', color: C.accent,
+      name: '振荡间断', color: PLOT_COLORS.accent,
       parts: [[-1, 1 - EPS, x => 1.6 * Math.sin(1 / (x - 1))], [1 + EPS, 3, x => 1.6 * Math.sin(1 / (x - 1))]],
       extra: q => {},
       note: '越靠近 1 摆得越密，函数值在 −1.6 与 1.6 之间无限次往返，极限根本不存在。',
@@ -427,8 +404,8 @@ function discontinuity(el) {
     const t = TYPES[cur];
     t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.4, samples: 1400 }));
     t.extra(p);
-    p.line(1, -4, 1, 4, { color: C.axis, dash: true, width: 1 });
-    p.text(1.05, 3.6, 'x = 1', { color: C.text, size: 11 });
+    p.line(1, -4, 1, 4, { color: PLOT_COLORS.axis, dash: true, width: 1 });
+    p.text(1.05, 3.6, 'x = 1', { color: PLOT_COLORS.text, size: 11 });
     out.innerHTML = `<b>${t.name}</b>　${t.lr}<br>${t.note}`;
   };
   p.onResize = draw;
@@ -455,12 +432,12 @@ function ivtDemo(el) {
 
   const draw = () => {
     p.clear();
-    p.curve(f, { from: A, to: B, color: C.accent, width: 2.6 });
-    p.line(A, cv, B, cv, { color: C.warn, dash: true, width: 1.8 });
-    p.dot(xmin, min, { r: 5, color: C.ok });
-    p.dot(xmax, max, { r: 5, color: C.ok });
-    p.text(xmin + .06, min - .2, `最小值 ${f4(min)}`, { color: C.ok, size: 10 });
-    p.text(xmax + .06, max + .18, `最大值 ${f4(max)}`, { color: C.ok, size: 10 });
+    p.curve(f, { from: A, to: B, color: PLOT_COLORS.accent, width: 2.6 });
+    p.line(A, cv, B, cv, { color: PLOT_COLORS.warn, dash: true, width: 1.8 });
+    p.dot(xmin, min, { r: 5, color: PLOT_COLORS.ok });
+    p.dot(xmax, max, { r: 5, color: PLOT_COLORS.ok });
+    p.text(xmin + .06, min - .2, `最小值 ${f4(min)}`, { color: PLOT_COLORS.ok, size: 10 });
+    p.text(xmax + .06, max + .18, `最大值 ${f4(max)}`, { color: PLOT_COLORS.ok, size: 10 });
 
     const roots = [];
     let prevX = A, prevY = f(A) - cv;
@@ -472,7 +449,7 @@ function ivtDemo(el) {
       }
       prevX = x; prevY = y;
     }
-    roots.forEach(r => p.dot(r, cv, { r: 5, color: C.danger }));
+    roots.forEach(r => p.dot(r, cv, { r: 5, color: PLOT_COLORS.danger }));
     c.querySelector('[data-cv]').textContent = f4(cv);
     out.innerHTML = `最小值 <b>${f4(min)}</b>　最大值 <b>${f4(max)}</b>　当前 c = <b>${f4(cv)}</b><br>` +
       `水平线与曲线相交 <b>${roots.length}</b> 次：${roots.map(r => f4(r)).join('、') || '（无）'}。` +
@@ -497,12 +474,12 @@ function secantToTangent(el) {
   const draw = () => {
     const h = st.h, x1 = X0 + h, y1 = f(x1), slope = (y1 - f(X0)) / h;
     p.clear();
-    p.curve(f, { from: -.6, to: 3.4, color: C.accent, width: 2.4 });
-    p.line(-.6, 2 * (-.6) - 1, 3.4, 2 * 3.4 - 1, { color: C.ok, dash: true, width: 1.8 });
-    p.line(X0, f(X0), x1, y1, { color: C.warn, width: 2.6 });
-    p.dot(X0, f(X0), { r: 5, color: C.accent });
-    p.dot(x1, y1, { r: 5, color: C.warn });
-    p.text(x1 + .08, y1 + .25, `割点 (${f4(x1)}, ${f4(y1)})`, { color: C.warn, size: 10 });
+    p.curve(f, { from: -.6, to: 3.4, color: PLOT_COLORS.accent, width: 2.4 });
+    p.line(-.6, 2 * (-.6) - 1, 3.4, 2 * 3.4 - 1, { color: PLOT_COLORS.ok, dash: true, width: 1.8 });
+    p.line(X0, f(X0), x1, y1, { color: PLOT_COLORS.warn, width: 2.6 });
+    p.dot(X0, f(X0), { r: 5, color: PLOT_COLORS.accent });
+    p.dot(x1, y1, { r: 5, color: PLOT_COLORS.warn });
+    p.text(x1 + .08, y1 + .25, `割点 (${f4(x1)}, ${f4(y1)})`, { color: PLOT_COLORS.warn, size: 10 });
     out.innerHTML = `h = <b>${f4(h)}</b>　割线斜率 = [(1+h)² − 1] / h = 2 + h = <b>${f4(slope)}</b>　切线斜率 = <b>2</b>　差距 = <b>${f4(slope - 2)}</b><br>` +
       `把 h 拖到接近 0，割线绕着 (1,1) 转到极限位置 —— 那条绿色虚线就是切线，斜率正是第 2 章要定义的导数。`;
   };
@@ -544,18 +521,18 @@ function functionGallery(el) {
     const F = FUNCS[cur];
     p.o.xmin = -3; p.o.xmax = 5; p.o.ymin = -3; p.o.ymax = 5;
     p.clear();
-    if (F.from > -2.99) p.rect(-3, -3, F.from, 5, { fill: C.danger, alpha: .06 });
+    if (F.from > -2.99) p.rect(-3, -3, F.from, 5, { fill: PLOT_COLORS.danger, alpha: .06 });
     if (F.split) {
-      p.curve(F.fn, { from: -3, to: -0.06, color: C.accent, width: 2.8 });
-      p.curve(F.fn, { from: 0.06, to: 3, color: C.accent, width: 2.8 });
+      p.curve(F.fn, { from: -3, to: -0.06, color: PLOT_COLORS.accent, width: 2.8 });
+      p.curve(F.fn, { from: 0.06, to: 3, color: PLOT_COLORS.accent, width: 2.8 });
     } else {
-      p.curve(F.fn, { from: F.from, to: F.to, color: C.accent, width: 2.8, samples: 900 });
+      p.curve(F.fn, { from: F.from, to: F.to, color: PLOT_COLORS.accent, width: 2.8, samples: 900 });
     }
-    p.line(vx, -3, vx, 5, { color: C.warn, dash: true, width: 1.6 });
+    p.line(vx, -3, vx, 5, { color: PLOT_COLORS.warn, dash: true, width: 1.6 });
     const y = F.fn(vx);
     const inside = vx >= F.from && vx <= F.to && Number.isFinite(y);
-    if (inside) p.dot(vx, y, { r: 5, color: C.ok });
-    p.text(vx + .12, 4.55, `x = ${f4(vx)}`, { color: C.warn, size: 11 });
+    if (inside) p.dot(vx, y, { r: 5, color: PLOT_COLORS.ok });
+    p.text(vx + .12, 4.55, `x = ${f4(vx)}`, { color: PLOT_COLORS.warn, size: 11 });
     out.innerHTML = `<b>${F.expr}</b>　定义域 ${F.domain}　值域 ${F.range}<br>` +
       `竖直线 x = ${f4(vx)} ${inside ? '与图像交于 <b>1</b> 个点' : '不与图像相交（该点不在定义域内）'} —— 任意竖线最多一个交点，即<b>通过竖直检验</b>。`;
   };
@@ -577,11 +554,11 @@ function infinitesimalVsInfinity(el) {
   const draw = () => {
     p.o.xmin = 0; p.o.xmax = r; p.o.ymin = -.2; p.o.ymax = 3.2;
     p.clear();
-    p.curve(x => 1 / x, { from: Math.min(.34, r), to: r, color: C.danger, width: 2.2, dash: true, samples: 700 });
-    p.curve(Math.sqrt, { from: 0, to: r, color: C.warn, width: 2.4 });
-    p.curve(x => x, { from: 0, to: r, color: C.accent, width: 2.4 });
-    p.curve(x => x * x, { from: 0, to: r, color: C.ok, width: 2.4 });
-    p.text(r * .5, 2.9, '1/x → ∞', { color: C.danger, size: 11 });
+    p.curve(x => 1 / x, { from: Math.min(.34, r), to: r, color: PLOT_COLORS.danger, width: 2.2, dash: true, samples: 700 });
+    p.curve(Math.sqrt, { from: 0, to: r, color: PLOT_COLORS.warn, width: 2.4 });
+    p.curve(x => x, { from: 0, to: r, color: PLOT_COLORS.accent, width: 2.4 });
+    p.curve(x => x * x, { from: 0, to: r, color: PLOT_COLORS.ok, width: 2.4 });
+    p.text(r * .5, 2.9, '1/x → ∞', { color: PLOT_COLORS.danger, size: 11 });
     out.innerHTML = `在 x = <b>${f4(r)}</b> 处：1/x = <b>${f4(1 / r)}</b>　√x = <b>${f4(Math.sqrt(r))}</b>　x = <b>${f4(r)}</b>　x² = <b>${f4(r * r)}</b><br>` +
       `红色虚线冲向无穷（<b>无穷大</b>），另外三条都趋于 0（<b>无穷小</b>）但速度不同：幂次越高越快。注意 ∞ 不是数，只是趋势。`;
   };
@@ -601,13 +578,13 @@ function cancelAndLimit(el) {
   const g = x => Math.abs(x - 1) < 1e-9 ? NaN : (x * x - 1) / (x - 1);
   const draw = () => {
     p.clear();
-    p.line(-1, 0, 3, 4, { color: C.ok, width: 2.2, dash: true });
-    p.curve(g, { from: -1, to: .995, color: C.accent, width: 3.2 });
-    p.curve(g, { from: 1.005, to: 3, color: C.accent, width: 3.2 });
+    p.line(-1, 0, 3, 4, { color: PLOT_COLORS.ok, width: 2.2, dash: true });
+    p.curve(g, { from: -1, to: .995, color: PLOT_COLORS.accent, width: 3.2 });
+    p.curve(g, { from: 1.005, to: 3, color: PLOT_COLORS.accent, width: 3.2 });
     const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
-    p.dot(1, 2, { r: 6, fill: bg, color: C.accent, stroke: C.accent });
-    p.line(xx, -1, xx, 5, { color: C.warn, dash: true, width: 1.4 });
-    if (Math.abs(xx - 1) > .01) p.dot(xx, xx + 1, { r: 5, color: C.warn });
+    p.dot(1, 2, { r: 6, fill: bg, color: PLOT_COLORS.accent, stroke: PLOT_COLORS.accent });
+    p.line(xx, -1, xx, 5, { color: PLOT_COLORS.warn, dash: true, width: 1.4 });
+    if (Math.abs(xx - 1) > .01) p.dot(xx, xx + 1, { r: 5, color: PLOT_COLORS.warn });
     out.innerHTML = `x = <b>${f4(xx)}</b>　(x²−1)/(x−1) = <b>${Math.abs(xx - 1) > .01 ? f4((xx * xx - 1) / (xx - 1)) : '无定义'}</b>　x+1 = <b>${f4(xx + 1)}</b><br>` +
       `绿色虚线 y = x+1 与蓝色曲线除 x=1 一点外<strong>完全重合</strong>；极限只看去心邻域，故极限为 <b>2</b>。把滑块拖到 1 会看到那个空心点。`;
   };
@@ -621,26 +598,26 @@ function cancelAndLimit(el) {
 function continuityOperations(el) {
   const CASES = [
     {
-      name: '复合连续 sin(x²)', color: C.accent,
+      name: '复合连续 sin(x²)', color: PLOT_COLORS.accent,
       parts: [[-3, 3, x => Math.sin(x * x)]],
       note: 'sin 与 x² 处处连续，复合后仍处处连续。图像一笔画到底，没有断点。', ok: true
     },
     {
-      name: '分段连续 |x|', color: C.accent,
+      name: '分段连续 |x|', color: PLOT_COLORS.accent,
       parts: [[-3, 3, Math.abs]],
       note: '两段连续函数拼成，在 x=0 处左右极限都等于 0 且等于函数值，因此连续（但这里有尖角，不可导）。', ok: true
     },
     {
-      name: '分段跳跃（不连续）', color: C.danger,
+      name: '分段跳跃（不连续）', color: PLOT_COLORS.danger,
       parts: [[-3, -0.001, () => -0.8], [0.001, 3, () => 0.8]],
       note: '左右极限分别是 −0.8 与 0.8，不相等，x=0 是跳跃间断点。', ok: false
     },
     {
-      name: '可去间断（可修补）', color: C.warn,
+      name: '可去间断（可修补）', color: PLOT_COLORS.warn,
       parts: [[-3, -0.001, x => x + 1], [0.001, 3, x => x + 1]],
       extra: q => {
         const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
-        q.dot(0, 1, { r: 6, fill: bg, color: C.warn, stroke: C.warn });
+        q.dot(0, 1, { r: 6, fill: bg, color: PLOT_COLORS.warn, stroke: PLOT_COLORS.warn });
       },
       note: '极限存在且等于 1，但该点函数值缺失；把空心点补上就连续了。', ok: false
     }
@@ -679,7 +656,6 @@ const DEMOS = {
   'secant-to-tangent': secantToTangent
 };
 
-injectCSS();
 document.querySelectorAll('[data-demo]').forEach(el => {
   const key = el.dataset.demo;
   const run = DEMOS[key];

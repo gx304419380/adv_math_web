@@ -1,7 +1,5 @@
 /* JSXGraph 薄封装：所有章节的图像演示共用这一层 */
 
-import { hasLib, libError } from './cdn.js';
-
 let seq = 0;
 
 const HELPER = {
@@ -16,7 +14,7 @@ const HELPER = {
 };
 
 /** 把 "sin(x)/x" 这类自写表达式转成可求值函数（表达式均来自本站静态代码） */
-export function toFn(expr) {
+function toFn(expr) {
   if (typeof expr === 'function') return expr;
   const names = Object.keys(HELPER);
   const body = `const {${names.join(',')}} = H; return (${expr});`;
@@ -25,7 +23,7 @@ export function toFn(expr) {
 }
 
 /** 建一块画布并初始化 board，返回 { board, box } */
-export function createBoard(el, opts = {}) {
+function createBoard(el, opts = {}) {
   if (!hasLib('jsxgraph')) { libError(el, 'JSXGraph'); return null; }
   const box = document.createElement('div');
   box.className = 'demo-canvas' + (opts.tall ? ' tall' : '');
@@ -48,7 +46,7 @@ export function createBoard(el, opts = {}) {
 }
 
 /** 在已有 board 上画一条函数曲线 */
-export function addCurve(board, fn, opts = {}) {
+function addCurve(board, fn, opts = {}) {
   const f = toFn(fn);
   const a = opts.from ?? board.getBoundingBox()[0];
   const b = opts.to ?? board.getBoundingBox()[2];
@@ -63,7 +61,7 @@ export function addCurve(board, fn, opts = {}) {
 }
 
 /** 完整封装：一块画布 + 一条可更新的函数曲线 */
-export function mountGraph(el, opts = {}) {
+function mountGraph(el, opts = {}) {
   const made = createBoard(el, opts);
   if (!made) return null;
   const { board, box } = made;

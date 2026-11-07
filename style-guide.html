@@ -8,12 +8,23 @@
 <link rel="stylesheet" href="assets/css/layout.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/demos.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-<script type="module" src="assets/js/boot.js"></script>
-<script type="module" src="assets/js/polish.js"></script>
+<script defer src="assets/js/chapters.js"></script>
+<script defer src="assets/js/cdn.js"></script>
+<script defer src="assets/js/math.js"></script>
+<script defer src="assets/js/graph.js"></script>
+<script defer src="assets/js/plot.js"></script>
+<script defer src="assets/js/steps.js"></script>
+<script defer src="assets/js/mindmap.js"></script>
+<script defer src="assets/js/quiz.js"></script>
+<script defer src="assets/js/theme.js"></script>
+<script defer src="assets/js/nav.js"></script>
+<script defer src="assets/js/polish.js"></script>
+<script defer src="assets/js/boot.js"></script>
 </head>
 <body>
 
@@ -33,22 +44,22 @@
   <p class="home-lead">这一页是全站唯一的样式准绳。后续 11 章必须直接套用下面的语义组件，不再另起一套颜色或卡片样式。每类内容「长什么样」在这里都能看到实例。</p>
 
   <h2>一、语义组件总表</h2>
-  <div style="overflow-x:auto">
-  <table style="width:100%;border-collapse:collapse;font-size:.9rem;min-width:620px">
-    <thead><tr style="border-bottom:2px solid var(--border);text-align:left">
-      <th style="padding:.55rem">内容类型</th><th style="padding:.55rem">class</th><th style="padding:.55rem">主色</th><th style="padding:.55rem">用途</th>
+  <div class="table-scroll">
+  <table class="spec-table">
+    <thead><tr>
+      <th>内容类型</th><th>class</th><th>主色</th><th>用途</th>
     </tr></thead>
     <tbody>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>定义</strong></td><td style="padding:.55rem"><code>.math-block.definition</code></td><td style="padding:.55rem">靛蓝</td><td style="padding:.55rem">给出概念的精确表述，带编号</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>定理</strong></td><td style="padding:.55rem"><code>.math-block.theorem</code></td><td style="padding:.55rem">紫</td><td style="padding:.55rem">重要结论，可挂证明折叠区</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>性质 / 推论</strong></td><td style="padding:.55rem"><code>.math-block.property</code></td><td style="padding:.55rem">青</td><td style="padding:.55rem">由定理直接得到的常用结论</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>推导 / 证明</strong></td><td style="padding:.55rem"><code>.math-block.proof</code> + <code>.derive</code></td><td style="padding:.55rem">石板</td><td style="padding:.55rem">编号步骤 + 每步说明，默认折叠</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>例题</strong></td><td style="padding:.55rem"><code>.math-block.example</code> + <code>.ex-part</code></td><td style="padding:.55rem">绿</td><td style="padding:.55rem">题干 / 解 / 评注 三段式</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>习题</strong></td><td style="padding:.55rem"><code>.exercise-card</code></td><td style="padding:.55rem">琥珀</td><td style="padding:.55rem">题号 + 难度 + 折叠答案</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>直观理解</strong></td><td style="padding:.55rem"><code>.math-block.insight</code></td><td style="padding:.55rem">绿松</td><td style="padding:.55rem">几何意义、类比、图像在说什么</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>常见误区</strong></td><td style="padding:.55rem"><code>.math-block.pitfall</code></td><td style="padding:.55rem">红</td><td style="padding:.55rem">学生最容易犯的错 + 为什么错</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>注记</strong></td><td style="padding:.55rem"><code>.math-block.remark</code></td><td style="padding:.55rem">灰</td><td style="padding:.55rem">补充说明、符号约定、边界条件</td></tr>
-      <tr><td style="padding:.55rem"><strong>公式</strong></td><td style="padding:.55rem"><code>.formula-box</code></td><td style="padding:.55rem">淡紫</td><td style="padding:.55rem">需要编号、反复引用的主公式</td></tr>
+      <tr><td><strong>定义</strong></td><td><code>.math-block.definition</code></td><td>靛蓝</td><td>给出概念的精确表述，带编号</td></tr>
+      <tr><td><strong>定理</strong></td><td><code>.math-block.theorem</code></td><td>紫</td><td>重要结论，可挂证明折叠区</td></tr>
+      <tr><td><strong>性质 / 推论</strong></td><td><code>.math-block.property</code></td><td>青</td><td>由定理直接得到的常用结论</td></tr>
+      <tr><td><strong>推导 / 证明</strong></td><td><code>.math-block.proof</code> + <code>.derive</code></td><td>石板</td><td>编号步骤 + 每步说明，默认折叠</td></tr>
+      <tr><td><strong>例题</strong></td><td><code>.math-block.example</code> + <code>.ex-part</code></td><td>绿</td><td>题干 / 解 / 评注 三段式</td></tr>
+      <tr><td><strong>习题</strong></td><td><code>.exercise-card</code></td><td>琥珀</td><td>题号 + 难度 + 折叠答案</td></tr>
+      <tr><td><strong>直观理解</strong></td><td><code>.math-block.insight</code></td><td>绿松</td><td>几何意义、类比、图像在说什么</td></tr>
+      <tr><td><strong>常见误区</strong></td><td><code>.math-block.pitfall</code></td><td>红</td><td>学生最容易犯的错 + 为什么错</td></tr>
+      <tr><td><strong>注记</strong></td><td><code>.math-block.remark</code></td><td>灰</td><td>补充说明、符号约定、边界条件</td></tr>
+      <tr><td><strong>公式</strong></td><td><code>.formula-box</code></td><td>淡紫</td><td>需要编号、反复引用的主公式</td></tr>
     </tbody>
   </table>
   </div>
@@ -128,9 +139,9 @@
 
   <h2>四、配色与页面骨架</h2>
   <div class="chapter-grid">
-    <div class="chapter-card"><div class="cc-num">主色</div><div class="cc-title" style="color:var(--accent)">靛蓝 #4f46e5</div><div class="cc-sub">章节头、链接、定义、主按钮、进度环</div></div>
-    <div class="chapter-card"><div class="cc-num">辅助</div><div class="cc-title" style="color:var(--accent-2)">青 #0891b2</div><div class="cc-sub">性质、图像辅助线、渐变终点</div></div>
-    <div class="chapter-card"><div class="cc-num">强调</div><div class="cc-title" style="color:var(--key)">琥珀 #f59e0b</div><div class="cc-sub">重点高亮、习题、待办状态</div></div>
+    <div class="chapter-card"><div class="cc-num">主色</div><div class="cc-title color-accent">靛蓝 #4f46e5</div><div class="cc-sub">章节头、链接、定义、主按钮、进度环</div></div>
+    <div class="chapter-card"><div class="cc-num">辅助</div><div class="cc-title color-cyan">青 #0891b2</div><div class="cc-sub">性质、图像辅助线、渐变终点</div></div>
+    <div class="chapter-card"><div class="cc-num">强调</div><div class="cc-title color-key">琥珀 #f59e0b</div><div class="cc-sub">重点高亮、习题、待办状态</div></div>
   </div>
   <p class="hint">页面骨架统一为：顶部导航条（sticky）+ 阅读进度条 + 渐变章节头 + 左侧章节目录 + 右侧内容区 + 每页固定免责声明页脚。深浅色由右上角圆形按钮切换并记忆。响应式断点 900px / 375px。</p>
 

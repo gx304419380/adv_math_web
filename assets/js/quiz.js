@@ -1,6 +1,6 @@
 /* 交互式自测：题目写在页面内的 <script type="application/json"> 中 */
 
-export function mountQuiz(el, data) {
+function mountQuiz(el, data) {
   if (!el) return;
   let items = data;
   if (!items) {

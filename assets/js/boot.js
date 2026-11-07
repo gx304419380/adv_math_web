@@ -1,18 +1,10 @@
 /* 页面装配总入口：单章 HTML 只需引入这一个模块 */
 
-import { initMath } from './math.js';
-import { initNav } from './nav.js';
-import { initTheme, initNavToggle } from './theme.js';
-import { renderMindmap } from './mindmap.js';
-import { mountQuiz } from './quiz.js';
-import { mountGraph } from './graph.js';
-import { libError } from './cdn.js';
-
 const isHome = !document.body.dataset.chapter;
 const base = isHome ? '' : '../../';
 const currentId = document.body.dataset.chapter || null;
 // 相对模块自身位置解析，不依赖页面所在层级，Pages 子路径下同样有效
-const metaUrl = new URL('../../chapters.json', import.meta.url).href;
+const metaUrl = (isHome ? '' : '../../') + 'chapters.json';
 
 initTheme();
 initNavToggle();

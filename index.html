@@ -9,9 +9,20 @@
 <link rel="stylesheet" href="assets/css/layout.css">
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="assets/css/demos.css">
 <script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
-<script type="module" src="assets/js/boot.js"></script>
-<script type="module" src="assets/js/polish.js"></script>
+<script defer src="assets/js/chapters.js"></script>
+<script defer src="assets/js/cdn.js"></script>
+<script defer src="assets/js/math.js"></script>
+<script defer src="assets/js/graph.js"></script>
+<script defer src="assets/js/plot.js"></script>
+<script defer src="assets/js/steps.js"></script>
+<script defer src="assets/js/mindmap.js"></script>
+<script defer src="assets/js/quiz.js"></script>
+<script defer src="assets/js/theme.js"></script>
+<script defer src="assets/js/nav.js"></script>
+<script defer src="assets/js/polish.js"></script>
+<script defer src="assets/js/boot.js"></script>
 </head>
 <body>
 
@@ -33,13 +44,15 @@
     <h1>把高等数学「看」明白</h1>
     <p class="hero-sub">章节与同济大学《高等数学》第七版对齐，讲解全部原创，每个难点都配函数图像、可拖动的示意图和分步动画。</p>
     <div class="hero-meta">
-      <span>12 章</span><span>·</span><span>上下册</span><span>·</span>
-      <span>零构建纯静态</span><span>·</span><span>手机也能看</span>
+      <span>双击 index.html 即可学习</span><span>·</span>
+      <span>无需安装 / 无需命令行</span><span>·</span>
+      <span>12 章 · 上下册</span><span>·</span>
+      <span>联网加载公式与图形</span>
     </div>
-    <div class="btn-row" style="margin-top:1.4rem">
+    <div class="btn-row hero-actions">
       <a class="btn primary" href="chapters/ch01/ch01.html" style="color:#fff">从第 1 章开始 →</a>
-      <a class="btn" href="style-guide.html" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff">视觉与内容规范</a>
-      <a class="btn" href="DISCLAIMER.md" style="background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff">版权说明</a>
+      <a class="btn" href="style-guide.html" class="on-hero">视觉与内容规范</a>
+      <a class="btn" href="DISCLAIMER.md" class="on-hero">版权说明</a>
     </div>
   </div>
 </header>
@@ -47,6 +60,11 @@
 <div class="home-wrap">
 
   <div class="progress-panel" data-progress-board></div>
+
+  <div class="math-block insight">
+    <div class="mb-head"><span class="mb-tag">零门槛</span><span class="mb-title">怎么用这个站</span></div>
+    <div class="mb-body">直接用浏览器打开 <strong>index.html</strong> 就能学：不需要安装软件、不需要敲命令、不需要启动服务器。唯一要求是<strong class="term">联网</strong>（公式、图形、动画库通过公共 CDN 加载）。手机上把这个文件夹发给自己，点开 index.html 一样能看。</div>
+  </div>
 
   <h2>章节导览</h2>
   <p class="hint">按教材上下册顺序编排。已完成的章节可以直接点开，计划中的章节会随进度逐个上线。</p>
@@ -76,7 +94,7 @@
     </div>
   </div>
 
-  <div class="math-block pitfall" style="margin-top:2.4rem">
+  <div class="math-block pitfall mt-lg">
     <div class="mb-head"><span class="mb-tag">边界说明</span><span class="mb-title">关于内容</span></div>
     <div class="mb-body">
       本站不是教材电子版，不含原书正文、例题、习题、答案或原图，也不提供任何扫描件下载。

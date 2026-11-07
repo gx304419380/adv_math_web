@@ -7,7 +7,7 @@ const C = {
   warn: '#d97706', ok: '#059669', danger: '#dc2626'
 };
 
-export class Plot {
+class Plot {
   constructor(el, opts = {}) {
     this.o = Object.assign({
       xmin: -5, xmax: 5, ymin: -3, ymax: 3,
@@ -181,4 +181,4 @@ export class Plot {
   destroy() { if (this._ro) this._ro.disconnect(); this.wrap.remove(); }
 }
 
-export { C as PLOT_COLORS };
+window.PLOT_COLORS = C;

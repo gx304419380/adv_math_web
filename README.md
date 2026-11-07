@@ -27,15 +27,26 @@
 
 首页的进度看板由 [`chapters.json`](chapters.json) 自动生成，改这一个文件即可更新全站导航。
 
-## 本地运行
+## 开始学习（普通用户）
 
-纯静态站点，不需要安装依赖或构建：
+**直接用浏览器打开根目录的 `index.html` 即可。**
 
-```bash
-bash tools/serve.sh          # 默认 http://localhost:8000
-```
+不需要安装任何软件、不需要命令行、不需要启动服务器、不需要构建。页面是纯静态的，唯一要求是**联网**（公式、图形、动画库通过公共 CDN 加载）；第一次打开若图形没出现，刷新一下即可。手机上把这个文件夹发给自己，点开 `index.html` 一样能看。
 
-也可以直接用浏览器打开 `index.html`（公式与图形库走公共 CDN，需要联网）。
+> 维护本仓库前请先读 [docs/PRINCIPLES.md](docs/PRINCIPLES.md)（最高原则）与 [docs/README.md](docs/README.md)（规范文档索引）。
+
+## 维护者工具（普通用户请跳过）
+
+仅开发、校验与部署时才用得到：
+
+| 命令 | 用途 |
+|---|---|
+| `bash tools/serve.sh` | 本地预览服务 `http://localhost:8000` |
+| `bash tools/check.sh` | 静态校验、公式复核、CDN 检查 |
+| `python3 tools/shot.py --chapter ch01` | playwright 逐章截图验收 |
+| `python3 tools/sync-chapters.py` | 从 `chapters.json` 重新生成 `chapters.js` |
+
+规范、原则、章节计划与维护流程见 [docs/](docs/README.md)。
 
 ## 目录结构
 

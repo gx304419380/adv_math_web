@@ -1,6 +1,6 @@
 /* 分步动画控制器：把推导拆成可播放、可回放的步骤 */
 
-export class StepController {
+class StepController {
   /**
    * @param {HTMLElement} el 控制条挂载位置
    * @param {Array<{label?:string, run:(i:number)=>void}>} steps

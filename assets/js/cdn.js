@@ -1,6 +1,6 @@
 /* 统一 CDN 版本与依赖检查；加载失败时给出降级提示，不让页面白屏 */
 
-export const CDN = Object.freeze({
+const CDN = Object.freeze({
   katex: '0.16.11',
   jsxgraph: '1.8.0',
   gsap: '3.12.5',
@@ -16,12 +16,12 @@ const CHECKS = {
   g6: () => !!window.G6 && typeof window.G6.Graph === 'function'
 };
 
-export function hasLib(name) {
+function hasLib(name) {
   try { return !!(CHECKS[name] && CHECKS[name]()); }
   catch { return false; }
 }
 
-export function libError(el, name) {
+function libError(el, name) {
   if (!el) return;
   const box = document.createElement('div');
   box.className = 'lib-error';

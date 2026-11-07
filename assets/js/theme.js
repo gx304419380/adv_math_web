@@ -2,7 +2,7 @@
 
 const KEY = 'am-theme';
 
-export function initTheme() {
+function initTheme() {
   let theme = null;
   try { theme = localStorage.getItem(KEY); } catch (_) {}
   if (!theme) {
@@ -28,7 +28,7 @@ export function initTheme() {
 }
 
 /** 移动端侧栏折叠开关 */
-export function initNavToggle() {
+function initNavToggle() {
   const sidebar = document.querySelector('[data-nav-sidebar]');
   if (!sidebar) return;
   const btn = document.createElement('button');

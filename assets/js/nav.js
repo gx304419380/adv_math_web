@@ -7,17 +7,21 @@ const STATUS = {
   planned: { text: '计划中', cls: 'planned' }
 };
 
-export async function initNav({ metaUrl, base = '', currentId = null, isHome = false } = {}) {
-  let data;
-  try {
-    data = await fetch(metaUrl).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.json();
-    });
-  } catch (err) {
-    console.warn('[nav] 章节元数据加载失败：', err);
-    return null;
+async function initNav({ metaUrl, base = '', currentId = null, isHome = false } = {}) {
+  // file:// 直接打开时无法 fetch，优先使用内嵌的 chapters.js 数据
+  let data = window.AM_CHAPTERS || null;
+  if (!data && metaUrl) {
+    try {
+      data = await fetch(metaUrl).then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      });
+    } catch (err) {
+      console.warn('[nav] 章节元数据加载失败：', err);
+      return null;
+    }
   }
+  if (!data) return null;
   const chapters = data.chapters || [];
   const byId = Object.fromEntries(chapters.map(c => [c.id, c]));
   const current = currentId ? byId[currentId] : null;

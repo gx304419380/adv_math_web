@@ -80,6 +80,21 @@ if bad:
 print(f'   ✓ {len(urls)} 个 CDN 资源全部返回 200')
 PY
 
+echo "== 6. 章节数据同步与全局样式约束 =="
+python3 tools/sync-chapters.py --check || FAIL=1
+if grep -rInE 'type="module"|injectCSS|import\.meta' --include='*.js' --include='*.html' assets chapters index.html style-guide.html 2>/dev/null; then
+  bad '发现 ES module / 动态注入 CSS / import.meta 残留（会破坏 file:// 直开）'
+else
+  ok '无 module / 动态注入 / import.meta 残留，file:// 可直接打开'
+fi
+MISSING=0
+for f in assets/css/base.css assets/css/design-system.css assets/css/demos.css \
+         docs/PRINCIPLES.md docs/VISUAL_SPEC.md docs/CONTENT_SPEC.md \
+         docs/PROJECT_PLAN.md docs/MAINTAINER_GUIDE.md style-guide.html; do
+  if [ ! -f "$f" ]; then bad "缺少规范文件 $f"; MISSING=1; fi
+done
+[ "$MISSING" -eq 0 ] && ok '视觉规范、设计 token 与维护文档齐全'
+
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
 exit "$FAIL"

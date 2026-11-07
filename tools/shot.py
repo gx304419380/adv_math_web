@@ -51,8 +51,9 @@ def main():
         page.on('pageerror', lambda e: errors.append(f'pageerror: {e}'))
         page.on('requestfailed', lambda r: failed_requests.append(f'{r.url} :: {r.failure}'))
 
-        page.goto(base + page_url, wait_until='networkidle', timeout=45000)
-        page.wait_for_timeout(1200)  # 等 mermaid / KaTeX 异步渲染完成
+        # 用 load 而非 networkidle：CDN 偶有慢连接，networkidle 会无限等待
+        page.goto(base + page_url, wait_until='load', timeout=60000)
+        page.wait_for_timeout(2800)  # 等 CDN 脚本、KaTeX 与 G6 渲染完成
 
         katex = page.locator('.katex').count()
         demos = page.locator('[data-demo]').count()

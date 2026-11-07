@@ -1,8 +1,6 @@
 /* KaTeX 自动渲染：全站统一入口 */
 
-import { hasLib } from './cdn.js';
-
-export function initMath(root = document) {
+function initMath(root = document) {
   if (!hasLib('katex') || !hasLib('math')) return false;
   try {
     window.renderMathInElement(root, {

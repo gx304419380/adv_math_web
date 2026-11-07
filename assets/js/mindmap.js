@@ -5,9 +5,7 @@
    kind: root(起点) / core(核心) / branch(分支) / end(出口) / normal
    支持拖拽画布、滚轮缩放、拖节点、悬停高亮、随容器自适应、主题切换重绘。 */
 
-import { hasLib } from './cdn.js';
-
-let seq = 0;
+let g6Seq = 0;
 const graphs = new WeakMap();
 
 function readData(el, text) {
@@ -52,7 +50,7 @@ function palette(dark) {
   };
 }
 
-export async function renderMindmap(el, text) {
+async function renderMindmap(el, text) {
   if (!el) return;
   const data = readData(el, text);
   if (!data) { fallback(el, { nodes: [], edges: [] }, '缺少节点数据'); return; }
@@ -69,7 +67,7 @@ export async function renderMindmap(el, text) {
     if (old && !old.get('destroyed')) old.destroy();
 
     const holder = document.createElement('div');
-    holder.id = `g6-mindmap-${++seq}`;
+    holder.id = `g6-mindmap-${++g6Seq}`;
     holder.style.cssText = 'width:100%;height:340px;';
     el.innerHTML = '';
     el.appendChild(holder);
