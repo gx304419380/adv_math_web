@@ -23,7 +23,7 @@ document.querySelectorAll('[data-mount]').forEach(el => {
   const type = el.dataset.mount;
   try {
     if (type === 'mindmap') {
-      renderMindmap(el, el.textContent);
+      renderMindmap(el);
     } else if (type === 'quiz') {
       mountQuiz(el);
     } else if (type === 'graph') {

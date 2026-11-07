@@ -4,34 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>第 X 章 · 章节名 | 高等数学互动学习站</title>
-<meta name="description" content="非官方学习辅助：原创讲解、交互示意图与动画">
+<meta name="description" content="非官方学习辅助：原创讲解、函数图像、交互示意图与动画">
 <link rel="stylesheet" href="../../assets/css/base.css">
 <link rel="stylesheet" href="../../assets/css/layout.css">
 <link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/design-system.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js"></script>
 <script type="module" src="../../assets/js/boot.js"></script>
-<!-- 本章专属交互脚本（按需） -->
-<!-- <script type="module" src="demo.js"></script> -->
+<script type="module" src="../../assets/js/polish.js"></script>
+<!-- 本章专属交互脚本：每章一个 demo.js，用 data-demo 挂载 -->
+<script type="module" src="demo.js"></script>
 </head>
 <body data-chapter="chXX">
 
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="../../index.html">首页</a>
+    <a href="chXX.html">本章</a>
+    <a href="../../style-guide.html">视觉规范</a>
+    <a href="../../DISCLAIMER.md">免责声明</a>
+  </nav>
+  <span class="tb-hint">同济第七版 · 章节对齐 · 内容原创</span>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
 <!-- ① 章节头 -->
 <header class="chapter-hero">
-  <a class="back-link" href="../../index.html">← 返回首页</a>
   <div class="hero-inner">
-    <div class="hero-index">第 <span data-slot="index">X</span> 章</div>
+    <div class="hero-index">第 <span data-slot="index">X</span> 章 · <span data-slot="volume">上册</span></div>
     <h1 data-slot="title">章节名</h1>
     <p class="hero-sub" data-slot="subtitle">一句话副标题</p>
     <div class="hero-meta">
-      <span data-slot="volume">上册</span>
-      <span>·</span>
-      <span>约 <span data-slot="estMinutes">90</span> 分钟</span>
-      <span>·</span>
+      <span>约 <span data-slot="estMinutes">90</span> 分钟</span><span>·</span>
+      <span>N 节</span><span>·</span><span>若干交互演示</span><span>·</span>
       <span data-status-badge>进度</span>
     </div>
   </div>
@@ -46,39 +59,80 @@
     <!-- ② 学习目标 -->
     <section id="goals" class="block">
       <h2>这一章你会学到什么</h2>
+      <p class="hint">按教材节序展开，知识点名称与术语保持规范；定义、定理的表述与例题图形均为本站原创，编号为本站自用。</p>
       <ul class="goal-list" data-goal-list>
         <li><label><input type="checkbox"> 目标一</label></li>
+        <li><label><input type="checkbox"> 目标二</label></li>
       </ul>
     </section>
 
-    <!-- ③ 知识结构图 -->
+    <!-- ③ 知识结构图（AntV G6）：nodes + edges 的 JSON，kind 决定配色 -->
     <section id="map" class="block">
       <h2>知识结构图</h2>
-      <p class="hint">先看清这一章的知识是怎么长出来的，再逐节往下读。</p>
-      <div class="mermaid-box" data-mount="mindmap" data-mermaid>
-graph LR
-  A[前置知识] --> B[本节核心]
-  B --> C[后续章节]
+      <p class="hint">先看清这一章的知识是怎么长出来的，再逐节往下读。图可拖动、缩放，悬停可高亮相连链路。</p>
+      <div class="mermaid-box" data-mount="mindmap">
+        <script type="application/json">
+        {
+          "nodes": [
+            {"id":"a","label":"前置知识","kind":"root"},
+            {"id":"b","label":"本章核心","kind":"core"},
+            {"id":"c","label":"主要结论","kind":"branch"},
+            {"id":"d","label":"下一章","kind":"end"}
+          ],
+          "edges": [
+            {"source":"a","target":"b"},
+            {"source":"b","target":"c"},
+            {"source":"c","target":"d"}
+          ]
+        }
+        </script>
       </div>
     </section>
 
-    <!-- ④ 逐节讲解 -->
+    <!-- ④ 逐节讲解：每节按「原创讲解 → 定义/定理 → 函数图像或交互演示 → 直观理解」组织 -->
     <section id="sections" class="block">
       <h2>逐节讲解</h2>
 
       <article class="section" id="s1">
         <h3>第 1 节 · 节名</h3>
-        <p>原创讲解文字。公式用 <code>\( ... \)</code> 或 <code>$$ ... $$</code>。</p>
+        <p>原创讲解文字。公式用 <code>\( ... \)</code> 或 <code>$$ ... $$</code>；术语用 <code>&lt;strong class="term"&gt;</code>，重点结论用 <code>&lt;mark class="key"&gt;</code>。</p>
 
-        <div data-card="def">
-          <strong>定义</strong>：用原创语言把概念说清楚。
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">概念名称</span><span class="mb-no">X.1</span></div>
+          <div class="mb-body">用原创语言精确表述，<mark class="key">把最容易忽略的条件高亮</mark>。</div>
         </div>
 
-        <!-- 交互演示挂载点：data-mount 值对应 assets/js 中的模块 -->
-        <!-- <div class="demo-box" data-mount="graph" data-fn="sin(x)" data-caption="说明文字"></div> -->
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">结论名称</span><span class="mb-no">X.2</span></div>
+          <div class="mb-body">
+            定理内容。
+            <details class="proof-fold">
+              <summary>展开推导（N 步）</summary>
+              <ol class="derive">
+                <li><span class="derive-eq">$$...$$</span><span class="derive-note">这一步在做什么</span></li>
+              </ol>
+            </details>
+          </div>
+        </div>
 
-        <div data-card="tip" class="insight">
-          <strong>直观理解 · 几何意义</strong>：这里解释图形在说什么，帮助学生建立直觉。
+        <!-- 函数图像 / 交互演示：由本章 demo.js 按 data-demo 挂载 -->
+        <div class="demo-box" data-demo="demo-name">
+          <div class="demo-title">演示 1 · 标题</div>
+          <div class="demo-caption">说明这个图在演示什么，学生可以拖什么。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">例题标题</span><span class="mb-no">例 X.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">自编题目</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>解答过程</span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">思路小结</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">几何意义</span></div>
+          <div class="mb-body">解释图形在说什么，帮助建立直觉。</div>
         </div>
       </article>
     </section>
@@ -86,25 +140,35 @@ graph LR
     <!-- ⑤ 常见误区 -->
     <section id="pitfalls" class="block">
       <h2>常见误区</h2>
-      <div data-card="warning">
-        <strong>误区</strong>：写出学生最容易犯的错，并说明为什么错。
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">最容易犯的错</span></div>
+        <div class="mb-body">写出错误做法，并说明为什么错、应该怎么改。</div>
       </div>
     </section>
 
-    <!-- ⑥ 交互式自测 -->
+    <!-- ⑥ 习题与自测 -->
     <section id="quiz" class="block">
-      <h2>自测一下</h2>
-      <div data-mount="quiz">
-        <script type="application/json">
-        [
-          {
-            "q": "题目（自编）",
-            "options": ["A", "B", "C", "D"],
-            "answer": 1,
-            "explain": "解析"
-          }
-        ]
-        </script>
+      <h2>习题与自测</h2>
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">纸笔练习</span><span class="mb-no">练习 1</span></div>
+        <div class="mb-body">
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>自编题目</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">解析</div></details>
+          </div>
+        </div>
+      </div>
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">自测</span><span class="mb-title">交互选择题</span></div>
+        <div class="mb-body">
+          <div data-mount="quiz">
+            <script type="application/json">
+            [
+              { "q": "题目（自编）", "options": ["A", "B", "C", "D"], "answer": 1, "explain": "解析" }
+            ]
+            </script>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -118,9 +182,10 @@ graph LR
     <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
     <footer class="site-footer">
       <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
-      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创 ·
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
          <a href="../../DISCLAIMER.md">免责声明</a> ·
-         <a href="../../README.md">关于本站</a></p>
+         <a href="../../README.md">关于本站</a> ·
+         <a href="../../style-guide.html">视觉规范</a></p>
       <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
     </footer>
 

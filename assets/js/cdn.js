@@ -5,14 +5,15 @@ export const CDN = Object.freeze({
   jsxgraph: '1.8.0',
   gsap: '3.12.5',
   three: '0.160.0',
-  mermaid: 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'
+  g6: 'https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js'
 });
 
 const CHECKS = {
   katex: () => !!window.katex,
   math: () => typeof window.renderMathInElement === 'function',
   jsxgraph: () => !!window.JXG && !!window.JXG.JSXGraph,
-  gsap: () => !!window.gsap
+  gsap: () => !!window.gsap,
+  g6: () => !!window.G6 && typeof window.G6.Graph === 'function'
 };
 
 export function hasLib(name) {

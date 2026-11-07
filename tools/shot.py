@@ -56,9 +56,9 @@ def main():
 
         katex = page.locator('.katex').count()
         demos = page.locator('[data-demo]').count()
-        mermaid = page.locator('.mermaid-box svg').count()
+        mermaid = page.locator('.mermaid-box canvas, .mermaid-box svg').count()
         chapters_in_nav = page.locator('[data-nav-sidebar] a[href*="chapters/"]').count()
-        print(f'章节 {ch}：KaTeX 节点 {katex}，交互演示 {demos}，知识图 svg {mermaid}，侧栏章节链接 {chapters_in_nav}')
+        print(f'章节 {ch}：KaTeX 节点 {katex}，交互演示 {demos}，G6 知识图画布 {mermaid}，侧栏章节链接 {chapters_in_nav}')
 
         for name in args.viewports.split(','):
             name = name.strip()

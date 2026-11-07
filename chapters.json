@@ -24,7 +24,7 @@
       ],
       "prerequisites": [], "prev": null, "next": "ch02", "estMinutes": 95,
       "status": "done",
-      "demos": ["epsilon-delta", "epsilon-N", "sinx-over-x", "limit-e", "squeeze", "infinitesimal-order", "discontinuity", "ivt", "function-machine", "secant-to-tangent"],
+      "demos": ["function-machine", "function-gallery", "epsilon-N", "epsilon-delta", "infinitesimal-vs-infinity", "cancel-and-limit", "sinx-over-x", "limit-e", "squeeze", "infinitesimal-order", "discontinuity", "continuity-operations", "ivt", "secant-to-tangent"],
       "tags": ["极限", "连续", "ε-δ", "夹逼"], "mtime": "2026-11-07"
     },
     {

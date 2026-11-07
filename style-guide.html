@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>视觉与内容规范 · 高等数学互动学习站</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/design-system.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script type="module" src="assets/js/boot.js"></script>
+<script type="module" src="assets/js/polish.js"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="index.html">首页</a>
+    <a href="chapters/ch01/ch01.html">第 1 章</a>
+    <a href="style-guide.html">视觉规范</a>
+    <a href="DISCLAIMER.md">免责声明</a>
+  </nav>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
+<div class="home-wrap" style="padding-top:2rem">
+  <h1>视觉与内容规范 <span class="badge done">v1 · 已确立</span></h1>
+  <p class="home-lead">这一页是全站唯一的样式准绳。后续 11 章必须直接套用下面的语义组件，不再另起一套颜色或卡片样式。每类内容「长什么样」在这里都能看到实例。</p>
+
+  <h2>一、语义组件总表</h2>
+  <div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:.9rem;min-width:620px">
+    <thead><tr style="border-bottom:2px solid var(--border);text-align:left">
+      <th style="padding:.55rem">内容类型</th><th style="padding:.55rem">class</th><th style="padding:.55rem">主色</th><th style="padding:.55rem">用途</th>
+    </tr></thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>定义</strong></td><td style="padding:.55rem"><code>.math-block.definition</code></td><td style="padding:.55rem">靛蓝</td><td style="padding:.55rem">给出概念的精确表述，带编号</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>定理</strong></td><td style="padding:.55rem"><code>.math-block.theorem</code></td><td style="padding:.55rem">紫</td><td style="padding:.55rem">重要结论，可挂证明折叠区</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>性质 / 推论</strong></td><td style="padding:.55rem"><code>.math-block.property</code></td><td style="padding:.55rem">青</td><td style="padding:.55rem">由定理直接得到的常用结论</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>推导 / 证明</strong></td><td style="padding:.55rem"><code>.math-block.proof</code> + <code>.derive</code></td><td style="padding:.55rem">石板</td><td style="padding:.55rem">编号步骤 + 每步说明，默认折叠</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>例题</strong></td><td style="padding:.55rem"><code>.math-block.example</code> + <code>.ex-part</code></td><td style="padding:.55rem">绿</td><td style="padding:.55rem">题干 / 解 / 评注 三段式</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>习题</strong></td><td style="padding:.55rem"><code>.exercise-card</code></td><td style="padding:.55rem">琥珀</td><td style="padding:.55rem">题号 + 难度 + 折叠答案</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>直观理解</strong></td><td style="padding:.55rem"><code>.math-block.insight</code></td><td style="padding:.55rem">绿松</td><td style="padding:.55rem">几何意义、类比、图像在说什么</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>常见误区</strong></td><td style="padding:.55rem"><code>.math-block.pitfall</code></td><td style="padding:.55rem">红</td><td style="padding:.55rem">学生最容易犯的错 + 为什么错</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem"><strong>注记</strong></td><td style="padding:.55rem"><code>.math-block.remark</code></td><td style="padding:.55rem">灰</td><td style="padding:.55rem">补充说明、符号约定、边界条件</td></tr>
+      <tr><td style="padding:.55rem"><strong>公式</strong></td><td style="padding:.55rem"><code>.formula-box</code></td><td style="padding:.55rem">淡紫</td><td style="padding:.55rem">需要编号、反复引用的主公式</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>二、组件实例</h2>
+
+  <div class="math-block definition">
+    <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">函数的极限（ε-δ 描述）</span><span class="mb-no">1.3</span></div>
+    <div class="mb-body">
+      设函数 \(f(x)\) 在 \(x_0\) 的某去心邻域内有定义。若对任意 \(\varepsilon&gt;0\)，总存在 \(\delta&gt;0\)，使得当 \(0&lt;|x-x_0|&lt;\delta\) 时恒有 \(|f(x)-L|&lt;\varepsilon\)，则称 <strong class="term">\(L\)</strong> 为 \(f(x)\) 当 \(x\to x_0\) 时的极限。
+      <mark class="key">关键在「先任给 ε，再找 δ」</mark>，δ 依赖于 ε。
+    </div>
+  </div>
+
+  <div class="math-block theorem">
+    <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">夹逼准则</span><span class="mb-no">1.6</span></div>
+    <div class="mb-body">
+      若在 \(x_0\) 的去心邻域内 \(g(x)\le f(x)\le h(x)\)，且 \(\lim g(x)=\lim h(x)=L\)，则 <mark class="key">\(\lim f(x)=L\)</mark>。
+      <details class="proof-fold">
+        <summary>展开证明思路（4 步）</summary>
+        <ol class="derive">
+          <li><span class="derive-eq">由 \(\lim g=\lim h=L\)，对给定 \(\varepsilon\) 存在公共 \(\delta\)，使 \(|g-L|&lt;\varepsilon\) 且 \(|h-L|&lt;\varepsilon\)</span><span class="derive-note">两个 δ 取较小者即可共用</span></li>
+          <li><span class="derive-eq">\(L-\varepsilon&lt;g(x)\le f(x)\le h(x)&lt;L+\varepsilon\)</span><span class="derive-note">把夹逼不等式与两条极限界合并</span></li>
+          <li><span class="derive-eq">\(|f(x)-L|&lt;\varepsilon\)</span><span class="derive-note">这正是极限定义要求的形式</span></li>
+          <li><span class="derive-eq">故 \(\lim f(x)=L\)</span><span class="derive-note">证毕</span></li>
+        </ol>
+      </details>
+    </div>
+  </div>
+
+  <div class="math-block property">
+    <div class="mb-head"><span class="mb-tag">性质</span><span class="mb-title">连续函数的四则运算保持连续性</span><span class="mb-no">1.9</span></div>
+    <div class="mb-body">若 \(f,g\) 在 \(x_0\) 连续，则 \(f\pm g\)、\(fg\) 连续；当 \(g(x_0)\neq 0\) 时 \(f/g\) 也连续。<strong class="term">初等函数在其定义区间内处处连续</strong>。</div>
+  </div>
+
+  <div class="math-block example">
+    <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">约分后求极限</span><span class="mb-no">例 1.5</span></div>
+    <div class="mb-body">
+      <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\lim\limits_{x\to 1}\dfrac{x^2-1}{x-1}\)。</span></div>
+      <div class="ex-part"><span class="ex-label">解</span><span>对 \(x\neq 1\) 约去公因式：\(\dfrac{x^2-1}{x-1}=x+1\)，于是极限为 \(2\)。</span></div>
+      <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">约分合法，是因为极限不关心 \(x=1\) 这一点的取值。</span></div>
+    </div>
+  </div>
+
+  <div class="math-block exercise">
+    <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">随堂练习（自编）</span><span class="mb-no">练习 1</span></div>
+    <div class="mb-body">
+      <div class="exercise-card">
+        <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>把数列前 100 项改成 999，极限会？</strong></div>
+        <div class="ex-options"><span>A. 变成 999</span><span>B. 不变</span><span>C. 不存在</span></div>
+        <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body"><strong>B</strong>。极限只由尾巴决定，取 \(N\ge 100\) 即可，有限项改动不影响 ε-N 条件。</div></details>
+      </div>
+    </div>
+  </div>
+
+  <div class="math-block insight">
+    <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">ε-δ 的几何意义</span></div>
+    <div class="mb-body">ε 画出一条<strong>水平误差带</strong>，δ 画出一段<strong>竖直自变量窗口</strong>。定义说的是：窗口里每一条竖线与曲线的交点都必须落在带内。</div>
+  </div>
+
+  <div class="math-block pitfall">
+    <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">在加减中乱用等价无穷小</span></div>
+    <div class="mb-body">等价替换<strong>只能用于相乘或相除的因子</strong>。求 \(\lim\limits_{x\to0}\dfrac{x-\sin x}{x^3}\) 时把 \(\sin x\) 换成 \(x\)，会丢掉真正起作用的三阶项。</div>
+  </div>
+
+  <div class="math-block remark">
+    <div class="mb-head"><span class="mb-tag">注记</span><span class="mb-title">符号约定</span></div>
+    <div class="mb-body">本站用 \(x\to x_0^+\) / \(x\to x_0^-\) 表示单侧趋于；\(\infty\) 不作为实数参与四则运算。</div>
+  </div>
+
+  <h2>三、公式块与文字强调</h2>
+  <div class="formula-box">
+    <span class="fb-no">(1.1)</span>
+    $$\lim_{x\to 0}\frac{\sin x}{x}=1$$
+  </div>
+  <p>正文中首次出现的概念用 <strong class="term">术语强调</strong>（紫色加粗 + 点线下划线），需要学生记住的结论用 <mark class="key">重点高亮</mark>（荧光笔底色 + 加粗）。普通加粗只用于结构性词组，不滥用。</p>
+
+  <h2>四、配色与页面骨架</h2>
+  <div class="chapter-grid">
+    <div class="chapter-card"><div class="cc-num">主色</div><div class="cc-title" style="color:var(--accent)">靛蓝 #4f46e5</div><div class="cc-sub">章节头、链接、定义、主按钮、进度环</div></div>
+    <div class="chapter-card"><div class="cc-num">辅助</div><div class="cc-title" style="color:var(--accent-2)">青 #0891b2</div><div class="cc-sub">性质、图像辅助线、渐变终点</div></div>
+    <div class="chapter-card"><div class="cc-num">强调</div><div class="cc-title" style="color:var(--key)">琥珀 #f59e0b</div><div class="cc-sub">重点高亮、习题、待办状态</div></div>
+  </div>
+  <p class="hint">页面骨架统一为：顶部导航条（sticky）+ 阅读进度条 + 渐变章节头 + 左侧章节目录 + 右侧内容区 + 每页固定免责声明页脚。深浅色由右上角圆形按钮切换并记忆。响应式断点 900px / 375px。</p>
+
+  <footer class="site-footer">
+    <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+    <p>本站不含教材原文、例题、习题或原图 · <a href="DISCLAIMER.md">免责声明</a> · <a href="index.html">返回首页</a></p>
+    <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+  </footer>
+</div>
+
+</body>
+</html>

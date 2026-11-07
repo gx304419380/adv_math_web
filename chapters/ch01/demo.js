@@ -520,17 +520,161 @@ function secantToTangent(el) {
   draw();
 }
 
+/* ---------- 演示 11 · 基本初等函数图库（含竖直检验） ---------- */
+
+function functionGallery(el) {
+  const FUNCS = [
+    { name: 'x²',    expr: 'f(x) = x²',    fn: x => x * x,  domain: 'ℝ',       range: '[0, +∞)',  from: -3,   to: 3 },
+    { name: 'x³',    expr: 'f(x) = x³',    fn: x => x ** 3, domain: 'ℝ',       range: 'ℝ',       from: -2.2, to: 2.2 },
+    { name: 'sin x', expr: 'f(x) = sin x', fn: Math.sin,    domain: 'ℝ',       range: '[−1, 1]', from: -4,   to: 4 },
+    { name: 'cos x', expr: 'f(x) = cos x', fn: Math.cos,    domain: 'ℝ',       range: '[−1, 1]', from: -4,   to: 4 },
+    { name: 'eˣ',    expr: 'f(x) = eˣ',    fn: Math.exp,    domain: 'ℝ',       range: '(0, +∞)', from: -2,   to: 1.7 },
+    { name: 'ln x',  expr: 'f(x) = ln x',  fn: Math.log,    domain: '(0, +∞)', range: 'ℝ',       from: 0.02, to: 5 },
+    { name: '1/x',   expr: 'f(x) = 1/x',   fn: x => 1 / x,  domain: 'x ≠ 0',   range: 'y ≠ 0',   from: -3,   to: 3, split: true },
+    { name: '|x|',   expr: 'f(x) = |x|',   fn: Math.abs,    domain: 'ℝ',       range: '[0, +∞)', from: -3,   to: 3 },
+    { name: '√x',    expr: 'f(x) = √x',    fn: Math.sqrt,   domain: '[0, +∞)', range: '[0, +∞)', from: 0,    to: 5 }
+  ];
+  const p = new Plot(el, { xmin: -3, xmax: 5, ymin: -3, ymax: 5, grid: true });
+  const c = controls(el, `
+    <label>竖直检验线 x = <input type="range" data-vx min="-2.8" max="4.8" step="0.1" value="1.2"><output data-vxv>1.2</output></label>`);
+  const out = readout(el);
+  let cur = 0, vx = 1.2;
+
+  const draw = () => {
+    const F = FUNCS[cur];
+    p.o.xmin = -3; p.o.xmax = 5; p.o.ymin = -3; p.o.ymax = 5;
+    p.clear();
+    if (F.from > -2.99) p.rect(-3, -3, F.from, 5, { fill: C.danger, alpha: .06 });
+    if (F.split) {
+      p.curve(F.fn, { from: -3, to: -0.06, color: C.accent, width: 2.8 });
+      p.curve(F.fn, { from: 0.06, to: 3, color: C.accent, width: 2.8 });
+    } else {
+      p.curve(F.fn, { from: F.from, to: F.to, color: C.accent, width: 2.8, samples: 900 });
+    }
+    p.line(vx, -3, vx, 5, { color: C.warn, dash: true, width: 1.6 });
+    const y = F.fn(vx);
+    const inside = vx >= F.from && vx <= F.to && Number.isFinite(y);
+    if (inside) p.dot(vx, y, { r: 5, color: C.ok });
+    p.text(vx + .12, 4.55, `x = ${f4(vx)}`, { color: C.warn, size: 11 });
+    out.innerHTML = `<b>${F.expr}</b>　定义域 ${F.domain}　值域 ${F.range}<br>` +
+      `竖直线 x = ${f4(vx)} ${inside ? '与图像交于 <b>1</b> 个点' : '不与图像相交（该点不在定义域内）'} —— 任意竖线最多一个交点，即<b>通过竖直检验</b>。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-vx]', v => { vx = v; c.querySelector('[data-vxv]').textContent = f4(v); draw(); });
+  btnRow(el, FUNCS.map((F, i) => ({ label: F.name, run: () => { cur = i; draw(); } })));
+  draw();
+}
+
+/* ---------- 演示 12 · 无穷小与无穷大的图像对比 ---------- */
+
+function infinitesimalVsInfinity(el) {
+  const p = new Plot(el, { xmin: 0, xmax: 1.2, ymin: -.2, ymax: 3.2, grid: true });
+  const c = controls(el, `
+    <label>观察窗口 r <input type="range" data-r min="0.15" max="1.2" step="0.01" value="1"><output data-rv>1.00</output></label>
+    <span class="hint">把窗口推向 0，看谁先贴近横轴</span>`);
+  const out = readout(el);
+  let r = 1;
+  const draw = () => {
+    p.o.xmin = 0; p.o.xmax = r; p.o.ymin = -.2; p.o.ymax = 3.2;
+    p.clear();
+    p.curve(x => 1 / x, { from: Math.min(.34, r), to: r, color: C.danger, width: 2.2, dash: true, samples: 700 });
+    p.curve(Math.sqrt, { from: 0, to: r, color: C.warn, width: 2.4 });
+    p.curve(x => x, { from: 0, to: r, color: C.accent, width: 2.4 });
+    p.curve(x => x * x, { from: 0, to: r, color: C.ok, width: 2.4 });
+    p.text(r * .5, 2.9, '1/x → ∞', { color: C.danger, size: 11 });
+    out.innerHTML = `在 x = <b>${f4(r)}</b> 处：1/x = <b>${f4(1 / r)}</b>　√x = <b>${f4(Math.sqrt(r))}</b>　x = <b>${f4(r)}</b>　x² = <b>${f4(r * r)}</b><br>` +
+      `红色虚线冲向无穷（<b>无穷大</b>），另外三条都趋于 0（<b>无穷小</b>）但速度不同：幂次越高越快。注意 ∞ 不是数，只是趋势。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-r]', v => { r = v; c.querySelector('[data-rv]').textContent = f4(v); draw(); });
+  draw();
+}
+
+/* ---------- 演示 13 · 约分与可去间断 ---------- */
+
+function cancelAndLimit(el) {
+  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -1, ymax: 5, grid: true });
+  const c = controls(el, `
+    <label>取 x = <input type="range" data-x min="-0.5" max="2.5" step="0.05" value="1.6"><output data-xv>1.60</output></label>`);
+  const out = readout(el);
+  let xx = 1.6;
+  const g = x => Math.abs(x - 1) < 1e-9 ? NaN : (x * x - 1) / (x - 1);
+  const draw = () => {
+    p.clear();
+    p.line(-1, 0, 3, 4, { color: C.ok, width: 2.2, dash: true });
+    p.curve(g, { from: -1, to: .995, color: C.accent, width: 3.2 });
+    p.curve(g, { from: 1.005, to: 3, color: C.accent, width: 3.2 });
+    const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
+    p.dot(1, 2, { r: 6, fill: bg, color: C.accent, stroke: C.accent });
+    p.line(xx, -1, xx, 5, { color: C.warn, dash: true, width: 1.4 });
+    if (Math.abs(xx - 1) > .01) p.dot(xx, xx + 1, { r: 5, color: C.warn });
+    out.innerHTML = `x = <b>${f4(xx)}</b>　(x²−1)/(x−1) = <b>${Math.abs(xx - 1) > .01 ? f4((xx * xx - 1) / (xx - 1)) : '无定义'}</b>　x+1 = <b>${f4(xx + 1)}</b><br>` +
+      `绿色虚线 y = x+1 与蓝色曲线除 x=1 一点外<strong>完全重合</strong>；极限只看去心邻域，故极限为 <b>2</b>。把滑块拖到 1 会看到那个空心点。`;
+  };
+  p.onResize = draw;
+  bindRange(c, '[data-x]', v => { xx = v; c.querySelector('[data-xv]').textContent = f4(v); draw(); });
+  draw();
+}
+
+/* ---------- 演示 14 · 连续函数的运算 ---------- */
+
+function continuityOperations(el) {
+  const CASES = [
+    {
+      name: '复合连续 sin(x²)', color: C.accent,
+      parts: [[-3, 3, x => Math.sin(x * x)]],
+      note: 'sin 与 x² 处处连续，复合后仍处处连续。图像一笔画到底，没有断点。', ok: true
+    },
+    {
+      name: '分段连续 |x|', color: C.accent,
+      parts: [[-3, 3, Math.abs]],
+      note: '两段连续函数拼成，在 x=0 处左右极限都等于 0 且等于函数值，因此连续（但这里有尖角，不可导）。', ok: true
+    },
+    {
+      name: '分段跳跃（不连续）', color: C.danger,
+      parts: [[-3, -0.001, () => -0.8], [0.001, 3, () => 0.8]],
+      note: '左右极限分别是 −0.8 与 0.8，不相等，x=0 是跳跃间断点。', ok: false
+    },
+    {
+      name: '可去间断（可修补）', color: C.warn,
+      parts: [[-3, -0.001, x => x + 1], [0.001, 3, x => x + 1]],
+      extra: q => {
+        const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-soft').trim() || '#fff';
+        q.dot(0, 1, { r: 6, fill: bg, color: C.warn, stroke: C.warn });
+      },
+      note: '极限存在且等于 1，但该点函数值缺失；把空心点补上就连续了。', ok: false
+    }
+  ];
+  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -2, ymax: 2, grid: true });
+  const out = readout(el);
+  let cur = 0;
+  const draw = () => {
+    const t = CASES[cur];
+    p.clear();
+    t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.7, samples: 900 }));
+    if (t.extra) t.extra(p);
+    out.innerHTML = `<b>${t.name}</b>　${t.ok ? '<span style="color:var(--ok)">✓ 连续</span>' : '<span style="color:var(--danger)">✗ 有间断点</span>'}<br>${t.note}`;
+  };
+  p.onResize = draw;
+  btnRow(el, CASES.map((t, i) => ({ label: t.name, run: () => { cur = i; draw(); } })));
+  draw();
+}
+
 /* ---------- 装配 ---------- */
 
 const DEMOS = {
   'function-machine': functionMachine,
+  'function-gallery': functionGallery,
   'epsilon-N': epsilonN,
   'epsilon-delta': epsilonDelta,
+  'infinitesimal-vs-infinity': infinitesimalVsInfinity,
+  'cancel-and-limit': cancelAndLimit,
   'sinx-over-x': sinxOverX,
   'limit-e': limitE,
   'squeeze': squeezeDemo,
   'infinitesimal-order': infinitesimalOrder,
   'discontinuity': discontinuity,
+  'continuity-operations': continuityOperations,
   'ivt': ivtDemo,
   'secant-to-tangent': secantToTangent
 };
