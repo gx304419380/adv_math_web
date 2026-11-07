@@ -1,23 +1,54 @@
 # 视觉规范
 
-活规范见根目录 [`style-guide.html`](../style-guide.html)（可直接用浏览器打开，展示所有组件的实际效果）。实现集中在 `assets/css/design-system.css` 与 `assets/css/demos.css`。
+活规范见根目录 [`style-guide.html`](../style-guide.html)（可直接用浏览器打开，展示所有组件的实际效果）。实现集中在 `assets/css/design-system.css`、`assets/css/layout.css` 与 `assets/css/demos.css`。
+
+## 0. 风格定位：学术文档，不是营销落地页
+
+**参考对象**：GitHub（Primer）、MDN、可汗学院这类**工具型/教育型**站点。
+**判断标准**：一个学生打开页面，注意力应该落在「这段文字在讲什么」，而不是「这个卡片真好看」。
+
+### 明确禁止（这些是"AI 味"的主要来源）
+
+| 禁止 | 原因 | 替代做法 |
+|---|---|---|
+| **渐变色块**（尤其是紫蓝渐变横幅） | 装饰压过内容；生成式模板的标志性特征 | 纯色底 + 1px 边框 |
+| **大圆角**（≥12px）套在内容容器上 | 显得像消费类 App，不像学习资料 | 统一 6px，小控件 3px |
+| **彩色阴影**（紫/蓝光晕） | 视觉噪音，没有任何信息价值 | 正文容器不用阴影；浮层才用中性阴影 |
+| **卡片套卡片**（页面上叠 2–3 层白卡） | 层级含混，边界冗余 | 内容直接坐在页面上，靠细线分层 |
+| **hover 时上浮 + 放大阴影** | 炫技，干扰阅读节奏 | hover 只换底色（`--bg-soft`） |
+| **彩色装饰竖条 / 装饰圆点** | 无信息量的色块 | 用编号、字重、留白建立层级 |
+| **一个概念配一种颜色**（紫题、青性质、绿例题…） | 颜色过多等于没有重点 | 收在 5 个色族内，绝大多数用中性灰 |
+
+### 应该这样做
+
+- **层级靠排版建立**：字号、字重、间距、1px 细线。不靠色块和阴影。
+- **强调色只有一个用途**：标记「可以点」与「当前所在」。
+- **正文列宽受控**（760px 左右），一行的字数在舒适区。
+- **密度可以高**：目录、列表按行密排，比大卡片更容易扫读。
 
 ## 1. 设计 token：唯一来源
 
 **所有可配置项只在 `assets/css/base.css` 的 `:root` 中定义一次**，其余文件一律 `var(--xxx)` 引用，不得出现硬编码颜色。
 
+取色与尺度取自 GitHub Primer（MIT 许可）的浅色/深色中性阶与功能色。
+
 | 类别 | 变量 | 用途 |
 |---|---|---|
-| 背景/文字 | `--bg` `--bg-soft` `--card` `--fg` `--fg-muted` `--border` | 页面底、卡片、正文、次要文字、描边 |
-| 主色 | `--accent` `--accent-soft` `--accent-2` | 靛蓝主色、浅底、青色辅助 |
-| 状态色 | `--ok` `--warn` `--danger` | 正确/提醒/错误 |
-| 尺寸 | `--radius` `--radius-sm` `--maxw` `--shadow` `--shadow-lg` | 圆角、最大宽度、阴影 |
-| 字体 | `--font` `--mono` | 正文与等宽 |
-| 语义色 | `--def` `--thm` `--prop` `--proof` `--ex` `--exer` `--remark` `--insight` `--pitfall` `--key` 及各自 `-rgb` | 十类内容组件的专属色 |
+| 表面 | `--bg` `--bg-soft` `--bg-inset` `--card` | 页面白、浅灰区、更深的内嵌块 |
+| 文字 | `--fg` `--fg-muted` `--fg-subtle` | 正文 / 次要 / 弱化（三级足够） |
+| 边框 | `--border` `--border-muted` `--border-soft` | 结构边框 / 面板内分隔 / 极淡分隔 |
+| 强调 | `--accent` `--accent-hover` `--accent-soft` | 只用于链接、当前项、主按钮 |
+| 状态 | `--ok` `--warn` `--danger` 及各自 `-soft` | 正确/提醒/错误 |
+| 字号 | `--fs-xs`…`--fs-2xl`（12/13/16/17/20/24/32） | 全部文本只从这几档取 |
+| 行高 | `--lh-tight` `--lh-base` | 标题 1.35 / 正文 1.72 |
+| 间距 | `--sp-1`…`--sp-7`（4/8/12/16/24/32/48） | 4px 基准，不写裸数值 |
+| 圆角 | `--radius-sm` `--radius` `--radius-lg`（3/6/12） | 内容容器一律 6px |
+| 阴影 | `--shadow`（正文=none）`--shadow-lg`（浮层） | 正文不用阴影 |
+| 语义色 | `--def` `--thm` `--prop` `--ex` `--exer` `--remark` `--insight` `--pitfall` `--key` + `-rgb` | 九类组件，收在 5 个色族内 |
 
-`[data-theme="dark"]` 覆盖基础色；语义色保持不变（组件用 `rgba(var(--cr), .1)` 自适应深浅）。
+`[data-theme="dark"]` 覆盖表面、文字、边框与强调色；语义色同步换成深色底上可读的亮色。
 
-**改样式只改这里**。想换主色，改 `--accent` 一处，全站按钮、链接、章节头、进度环、曲线、知识图起点节点一起变。
+**改样式只改这里**。想换主色，改 `--accent` 一处，全站按钮、链接、当前小节标记一起变。
 
 ## 2. 语义组件表
 
@@ -26,13 +57,13 @@
 | 内容类型 | class | 语义色 | 用途 |
 |---|---|---|---|
 | 定义 | `.math-block.definition` | `--def` 靛蓝 | 概念的精确表述，带编号 |
-| 定理 | `.math-block.theorem` | `--thm` 紫 | 重要结论，可挂证明折叠区 |
-| 性质 / 推论 | `.math-block.property` | `--prop` 青 | 由定理直接得到的常用结论 |
-| 推导 / 证明 | `.math-block.proof` + `.derive` | `--proof` 石板 | 编号步骤 + 每步说明，默认折叠 |
-| 例题 | `.math-block.example` + `.ex-part` | `--ex` 绿 | 题目 / 解 / 评注 三段式 |
+| 定理 | `.math-block.theorem` | `--thm` 墨紫 | 重要结论，证明直接展开（**不折叠**） |
+| 性质 / 推论 | `.math-block.property` | `--prop` 绿 | 由定理直接得到的常用结论 |
+| 推导 / 证明 | `.proof-title` + `.derive` | `--proof` 石板 | 编号步骤 + 每步说明，**常显不折叠** |
+| 例题 | `.math-block.example` + `.ex-part` | `--ex` 绿 | 题目 / 思路 / 解 / 评注 四段式 |
 | 习题 | `.math-block.exercise` + `.exercise-card` | `--exer` 琥珀 | 题号 + 难度 + 折叠答案 |
 | 注记 | `.math-block.remark` | `--remark` 灰 | 符号约定、边界条件、补充 |
-| 直观理解 | `.math-block.insight` | `--insight` 绿松 | 几何意义、类比、「图在说什么」 |
+| 直观理解 | `.math-block.insight` | `--insight` 蓝 | 几何意义、类比、「图在说什么」 |
 | 常见误区 | `.math-block.pitfall` | `--pitfall` 红 | 最容易犯的错 + 为什么错 |
 
 其他：

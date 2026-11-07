@@ -38,11 +38,10 @@
   <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
   <nav class="tb-nav">
     <a href="../../index.html">首页</a>
-    <a href="ch01.html">第 1 章</a>
-    <a href="../../style-guide.html">视觉规范</a>
+    <a href="#" data-chapter-menu>章节目录 ▾</a>
     <a href="../../DISCLAIMER.md">免责声明</a>
   </nav>
-  <span class="tb-hint">同济第七版 · 章节对齐 · 内容原创</span>
+  <span class="tb-hint">同济第七版 · 内容原创</span>
 </div>
 <div class="reading-progress" data-reading-progress></div>
 
@@ -57,7 +56,7 @@
       <span data-status-badge>进度</span>
     </div>
     <div class="btn-row hero-actions">
-      <a class="btn primary" href="../../style-guide.html" style="color:#fff">查看本章视觉规范 →</a>
+      <a class="btn primary" href="#s1">从第 1 节开始 ↓</a>
     </div>
   </div>
 </header>
@@ -118,7 +117,7 @@
 
       <!-- 第 1 节 -->
       <article class="section" id="s1">
-        <h3>第 1 节 · 映射与函数</h3>
+        <h3><span class="sec-badge">1.1</span>映射与函数</h3>
         <p>先忘掉公式。想象一台机器：从左边投进去一个数，它从右边吐出<strong>唯一确定</strong>的一个数，这台机器就是函数。写成 \(y=f(x)\) 时，\(x\) 的取值范围叫<strong class="term">定义域</strong>，全体输出组成<strong class="term">值域</strong>，机器内部的规则叫<strong class="term">对应法则</strong>。</p>
 
         <div class="math-block definition">
@@ -131,12 +130,12 @@
 
         <div class="demo-box" data-demo="function-machine">
           <div class="demo-title">演示 1 · 函数机器：换一条规则，看输出怎么变</div>
-          <div class="demo-caption">拖动输入值或切换规则，观察输出如何被唯一确定。</div>
+          <div class="demo-caption">拖动输入，看输出<b>跟着变但不乱跳</b>；切换三条规则，同一组输入会得到完全不同的输出。关键动作：把 x 定在某个值上反复按「投进去」，输出永远只有那一个数——这就是「唯一确定」的意思，也是函数和「一个输入对应多个输出」的曲线划清界限的地方。</div>
         </div>
 
         <div class="demo-box" data-demo="function-gallery">
           <div class="demo-title">演示 2 · 基本初等函数图库与竖直检验</div>
-          <div class="demo-caption">切换 \(x^{2}\)、\(\sin x\)、\(\mathrm{e}^{x}\)、\(\ln x\)、\(\dfrac{1}{x}\)、\(\left|x\right|\) 等函数，拖动竖直线观察交点个数；浅红区域表示定义域之外。</div>
+          <div class="demo-caption">切换函数，然后<b>把竖直线慢慢从左推到右</b>，数一数它和曲线最多交几个点。留意两件事：\(\dfrac{1}{x}\) 与 \(\ln x\) 左边那片浅红区域是定义域之外（函数在那里根本没有定义）；\(\left|x\right|\) 在 0 处有个尖角，但仍然通过检验。结论：能过竖直检验，不等于曲线光滑。</div>
         </div>
 
         <div class="math-block insight">
@@ -147,7 +146,7 @@
 
       <!-- 第 2 节 -->
       <article class="section" id="s2">
-        <h3>第 2 节 · 数列的极限</h3>
+        <h3><span class="sec-badge">1.2</span>数列的极限</h3>
         <p>数列是按编号排好队的一串数 \(a_1,a_2,a_3,\dots\)。研究极限时只关心<strong>队伍的尾巴往哪儿去</strong>：前面有限项怎么变都不影响结论。</p>
 
         <div class="math-block definition">
@@ -160,7 +159,7 @@
 
         <div class="demo-box" data-demo="epsilon-N">
           <div class="demo-title">演示 3 · ε-N：把误差带收窄，看需要等到第几项</div>
-          <div class="demo-caption">播放动画或拖动 ε，绿点落入带内、橙点还在带外，N 之后全部是绿色。</div>
+          <div class="demo-caption">先把 ε 拖到很大，几乎每一项都在带内；再把 ε 一路拖小，带子变窄，你需要等比数列<b>更靠后</b>的位置才能全部进去。盯住橙色虚线 N 的位置——它随着 ε 变小不断右移。这正是「ε 是考题，N 是答案」：你出多难的题，我给一个够远的 N。</div>
         </div>
 
         <div class="math-block theorem">
@@ -184,7 +183,7 @@
 
       <!-- 第 3 节 -->
       <article class="section" id="s3">
-        <h3>第 3 节 · 函数的极限</h3>
+        <h3><span class="sec-badge">1.3</span>函数的极限</h3>
         <p>自变量不再只取整数编号，而是连续地靠近 \(x_0\)。我们问：当 \(x\) 无限接近 \(x_0\)（<strong>不必等于</strong> \(x_0\)）时，\(f(x)\) 无限接近谁？</p>
 
         <div class="math-block definition">
@@ -202,7 +201,7 @@
 
         <div class="demo-box" data-demo="epsilon-delta">
           <div class="demo-title">演示 4 · ε-δ：拖窄误差带，δ 窗口自动收紧</div>
-          <div class="demo-caption">以 \(f(x)=2x+1\)、\(x_0=1\)、\(L=3\) 为例，验证 \(\delta=\varepsilon/2\) 为什么够用；分步动画会逐步收窄 ε。</div>
+          <div class="demo-caption">绿带是误差要求（上下各 ε），蓝框是自变量窗口（左右各 δ）。<b>先拖 ε 变窄</b>，注意蓝框必须跟着一起缩——因为 \(\delta=\varepsilon/2\)。判断标准只有一条：<b>蓝框内部的曲线，是不是整段都落在绿带里</b>。如果落在外面，说明这个 δ 不合格。</div>
         </div>
 
         <div class="math-block property">
@@ -220,7 +219,7 @@
 
       <!-- 第 4 节 -->
       <article class="section" id="s4">
-        <h3>第 4 节 · 无穷小与无穷大</h3>
+        <h3><span class="sec-badge">1.4</span>无穷小与无穷大</h3>
         <p>这两个词最容易被当成「很小／很大的数」，其实它们描述的是<strong class="term">变化趋势</strong>：以 0 为极限的变量叫无穷小；绝对值无限增大的变量叫无穷大。\(10^{-100}\) 再小也只是常数。</p>
 
         <div class="math-block definition">
@@ -233,7 +232,7 @@
 
         <div class="demo-box" data-demo="infinitesimal-vs-infinity">
           <div class="demo-title">演示 5 · 谁冲向无穷，谁贴近横轴</div>
-          <div class="demo-caption">同屏比较 \(\dfrac{1}{x}\)、\(\sqrt{x}\)、\(x\)、\(x^{2}\) 在 \(x\to 0^{+}\) 时的走向，把观察窗口推向 0。</div>
+          <div class="demo-caption">四条曲线都从原点到右边。<b>把窗口 r 一路推向 0</b>，看每条的数值如何变化：\(x^{2}\) 最快贴到 0，\(\sqrt{x}\) 最慢，\(\dfrac{1}{x}\) 反而冲向无穷。<b>无穷小与无穷大不是「小」和「大」，而是「往哪走」</b>——同样缩窗口，有的归零，有的失控。</div>
         </div>
 
         <div class="math-block remark">
@@ -246,7 +245,7 @@
 
       <!-- 第 5 节 -->
       <article class="section" id="s5">
-        <h3>第 5 节 · 极限运算法则</h3>
+        <h3><span class="sec-badge">1.5</span>极限运算法则</h3>
 
         <div class="math-block theorem">
           <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">极限的四则运算法则</span><span class="mb-no">1.7</span></div>
@@ -258,17 +257,20 @@
         </div>
 
         <div class="math-block example">
-          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">0/0 型先约分再代入</span><span class="mb-no">例 1.1</span></div>
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">0/0 型：根号差式的有理化</span><span class="mb-no">例 1.1</span></div>
           <div class="mb-body">
-            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\lim\limits_{x\to 1}\dfrac{x^2-1}{x-1}\)。</span></div>
-            <div class="ex-part"><span class="ex-label">解</span><span>直接代入得 \(0/0\)，商的法则暂时不适用。对 \(x\neq 1\) 约分：\(\dfrac{x^2-1}{x-1}=x+1\)，故极限为 \(2\)。</span></div>
-            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">约分合法，正因为极限不关心 \(x=1\) 这一点的取值。</span></div>
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\lim\limits_{x\to 0}\dfrac{\sqrt{1+x}-1}{x}\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先代入试试：分子 \(\sqrt{1+0}-1=0\)，分母也是 \(0\)，得到 \(\dfrac{0}{0}\)。商的极限法则要求分母极限不为零，这里不满足，所以<strong>不能</strong>直接算，得先变形。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>分子有理化，同乘 \(\sqrt{1+x}+1\)：<br>
+              \(\dfrac{\sqrt{1+x}-1}{x}\cdot\dfrac{\sqrt{1+x}+1}{\sqrt{1+x}+1}=\dfrac{(1+x)-1}{x\left(\sqrt{1+x}+1\right)}=\dfrac{1}{\sqrt{1+x}+1}\)。<br>
+              这时分母不再趋于 0，可以代入：极限为 \(\dfrac{1}{1+1}=\dfrac{1}{2}\)。</span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">「先看分母是不是 0」是每一步的固定动作。遇到根号差式，有理化几乎总是第一步；这道题也是后面求 \(\sqrt{\cdot}\) 类导数与等价无穷小的基础。</span></div>
           </div>
         </div>
 
         <div class="demo-box" data-demo="cancel-and-limit">
           <div class="demo-title">演示 6 · 约分前后：两条图像只差一个点</div>
-          <div class="demo-caption">蓝色为 \(\dfrac{x^{2}-1}{x-1}\)，绿色虚线为 \(y=x+1\)；把滑块拖到 \(x=1\) 观察那个空心点。</div>
+          <div class="demo-caption">蓝色曲线是 \(\dfrac{x^{2}-1}{x-1}\)，绿色虚线是 \(y=x+1\)。把滑块拖到 \(x=1\) 附近：两张图像处处重合，只在 \(x=1\) 处留下一个空心点——这就是「0/0 型也能有极限」的样子。约分的作用是把那条看不见的洞补上。</div>
         </div>
 
         <div class="math-block pitfall">
@@ -279,7 +281,7 @@
 
       <!-- 第 6 节 -->
       <article class="section" id="s6">
-        <h3>第 6 节 · 极限存在准则与两个重要极限</h3>
+        <h3><span class="sec-badge">1.6</span>极限存在准则与两个重要极限</h3>
         <p>有两条不要求预先猜出极限值的存在准则，特别适合处理振荡函数。</p>
 
         <div class="math-block theorem">
@@ -304,18 +306,18 @@
         <p><strong>重要极限一</strong>的根在几何里：单位圆中当 \(x\) 很小时，正弦线、弧长、切线长几乎一样长，于是 \(\cos x&lt;\dfrac{\sin x}{x}&lt;1\)，由夹逼得到极限 1。</p>
         <div class="demo-box" data-demo="sinx-over-x">
           <div class="demo-title">演示 7 · 单位圆：三条长度与三个面积如何被夹到相等</div>
-          <div class="demo-caption">拖动角度 x，比较 sin x、弧长 x、tan x，以及小三角形、扇形、大三角形的面积。</div>
+          <div class="demo-caption">拖动角度，同时看三样东西：三根线的长度（\(\sin x &lt; x &lt; \tan x\)），和三块图形的面积（小三角形 &lt; 扇形 &lt; 大三角形）。<b>角度越小，三层夹得越紧</b>。把 x 拖到接近 0 时，你会发现三条线快要重合——这就是 \(\dfrac{\sin x}{x}\to 1\) 的几何来源，不是背出来的。</div>
         </div>
 
         <p><strong>重要极限二</strong>来自「利滚利」：把增长拆成越来越多次、每次越来越小的增量，总量不会爆炸，而是稳定在 \(e\approx 2.71828\)。</p>
         <div class="demo-box" data-demo="limit-e">
           <div class="demo-title">演示 8 · 连续复利：数值如何稳定到 e</div>
-          <div class="demo-caption">拖动 \(x\) 或播放，观察 \(\left(1+\dfrac{1}{x}\right)^{x}\) 的曲线与数值表一起逼近 2.71828…</div>
+          <div class="demo-caption">曲线表示 \(\left(1+\dfrac{1}{x}\right)^{x}\)，虚线是 2.71828。把 x 从 1 一路拖大：存款次数越多，本息越接近这条虚线，但<b>永远不越过它</b>。换成负数方向拖，你会发现它也朝同一个值靠拢。这条水平线就是后面所有「以 e 为底」的由来。</div>
         </div>
 
         <div class="demo-box" data-demo="squeeze">
           <div class="demo-title">演示 9 · 夹逼定理：振荡曲线被两条包络挤住</div>
-          <div class="demo-caption">拖动窗口 \(r\)，看 \(x^{2}\sin\dfrac{1}{x}\) 如何被 \(\pm x^{2}\) 夹到 0。</div>
+          <div class="demo-caption">中间那条曲线在疯狂振荡，光看它本身根本判断不了极限。<b>把窗口 r 往 0 缩</b>：振荡越来越密，但始终被上下两条包络线关住，而包络线自己趋向 0——夹逼完成。要点：<b>不需要知道中间曲线具体怎么抖，只要能框住就够</b>。</div>
         </div>
 
         <div class="math-block insight">
@@ -326,7 +328,7 @@
 
       <!-- 第 7 节 -->
       <article class="section" id="s7">
-        <h3>第 7 节 · 无穷小的比较</h3>
+        <h3><span class="sec-badge">1.7</span>无穷小的比较</h3>
 
         <div class="math-block definition">
           <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">无穷小的阶与等价</span><span class="mb-no">1.9</span></div>
@@ -345,7 +347,7 @@
 
         <div class="demo-box" data-demo="infinitesimal-order">
           <div class="demo-title">演示 10 · 幂次决定速度：\(x^{p}\) 与 \(x^{q}\) 谁更快贴近 0</div>
-          <div class="demo-caption">分别拖动两个幂次，观察曲线与比值 \(\dfrac{x^{p}}{x^{q}}\) 在 \(x\to 0^{+}\) 时的走向。</div>
+          <div class="demo-caption">分别拖两个幂次 p 和 q，看两条曲线谁先贴到 0。<b>关键看比值那一栏</b>：p &gt; q 时比值趋于 0（分子先归零，是更高阶）；p = q 时比值是常数（同阶）；p &lt; q 时比值趋于无穷（分子反而更慢）。比较无穷小，比的从来不是「谁小」，而是「谁快」。</div>
         </div>
 
         <div class="math-block pitfall">
@@ -356,7 +358,7 @@
 
       <!-- 第 8 节 -->
       <article class="section" id="s8">
-        <h3>第 8 节 · 函数的连续性与间断点</h3>
+        <h3><span class="sec-badge">1.8</span>函数的连续性与间断点</h3>
 
         <div class="math-block definition">
           <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">连续性</span><span class="mb-no">1.11</span></div>
@@ -375,7 +377,7 @@
 
         <div class="demo-box" data-demo="discontinuity">
           <div class="demo-title">演示 11 · 四类间断点逐一切换</div>
-          <div class="demo-caption">点按钮切换类型，观察左右极限标注与空心／实心点的区别。</div>
+          <div class="demo-caption">切换四种情形，每一种都<b>先看左右两个极限是否相等</b>，再看那个点是空心还是实心。<b>空心 = 该点无定义或值不在此处，实心 = 就是函数值</b>。「可去间断」最容易误会：极限明明存在，只是那一点被挖掉了，补上就连续。</div>
         </div>
 
         <div class="math-block insight">
@@ -386,7 +388,7 @@
 
       <!-- 第 9 节 -->
       <article class="section" id="s9">
-        <h3>第 9 节 · 连续函数的运算与初等函数的连续性</h3>
+        <h3><span class="sec-badge">1.9</span>连续函数的运算与初等函数的连续性</h3>
 
         <div class="math-block theorem">
           <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">连续函数的运算与初等函数的连续性</span><span class="mb-no">1.13</span></div>
@@ -398,22 +400,25 @@
 
         <div class="demo-box" data-demo="continuity-operations">
           <div class="demo-title">演示 12 · 复合、分段、跳跃：连续性逐一看图</div>
-          <div class="demo-caption">切换四种情形，观察图像能否一笔画到底，以及空心点表示什么。</div>
+          <div class="demo-caption">判断连续性只需要一句话：<b>能不能不提笔从头画到尾</b>。逐个切换看哪条断了、断在哪。注意「分段连续」那条虽然连着，但 0 处有个尖角——<b>连续不等于光滑</b>，这是第 2 章「不可导」的伏笔。</div>
         </div>
 
         <div class="math-block example">
-          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">初等函数求极限可直接代入</span><span class="mb-no">例 1.2</span></div>
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">求参数使分段函数连续</span><span class="mb-no">例 1.2</span></div>
           <div class="mb-body">
-            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\lim\limits_{x\to 2}\dfrac{\ln(x+1)}{\sqrt{x^2+1}}\)。</span></div>
-            <div class="ex-part"><span class="ex-label">解</span><span>\(x=2\) 处在各层函数的定义区间内，直接代入得 \(\dfrac{\ln 3}{\sqrt 5}\)。</span></div>
-            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">这条「代入即可」的便利，正是初等函数连续性定理带来的。</span></div>
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x)=\begin{cases}\dfrac{\sin 2x}{x}, &amp; x\neq 0,\\[2pt] a, &amp; x=0.\end{cases}\) 问 \(a\) 取何值时 \(f\) 在 \(x=0\) 处连续。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>连续的判定是<strong>三件事同时成立</strong>：极限存在、函数值存在、两者相等。这里函数值已经有了（\(a\)），缺的是极限。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>先求极限。把 \(\dfrac{\sin 2x}{x}\) 凑成重要极限的形状：\(\dfrac{\sin 2x}{x}=2\cdot\dfrac{\sin 2x}{2x}\)。<br>
+              令 \(t=2x\)，则 \(x\to 0\) 时 \(t\to 0\)，于是 \(\dfrac{\sin 2x}{2x}\to 1\)，故 \(\lim\limits_{x\to 0}f(x)=2\)。<br>
+              要连续需 \(a=\lim\limits_{x\to 0}f(x)=2\)。</span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">难点不在最后一步，而在「凑出 \(\dfrac{\sin t}{t}\) 的形式」。看到 \(\sin kx\) 就先乘除一个 \(k\)，这是固定套路。另外注意：如果题目问的是「\(a\) 取何值时极限存在」，答案同样是 2，但含义不同——那说的是极限，不是连续性。</span></div>
           </div>
         </div>
       </article>
 
       <!-- 第 10 节 -->
       <article class="section" id="s10">
-        <h3>第 10 节 · 闭区间上连续函数的性质</h3>
+        <h3><span class="sec-badge">1.10</span>闭区间上连续函数的性质</h3>
 
         <div class="math-block theorem">
           <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">闭区间上连续函数的三条性质</span><span class="mb-no">1.14</span></div>
@@ -428,7 +433,7 @@
 
         <div class="demo-box" data-demo="ivt">
           <div class="demo-title">演示 13 · 介值定理：拖动水平线，总能找到交点</div>
-          <div class="demo-caption">拖动水平线 c，观察交点个数与位置；图中同时标出了最大值与最小值。</div>
+          <div class="demo-caption">图中已标出最大值和最小值。<b>把水平线拖到两者之间任意高度</b>，总会撞到曲线——这就是介值定理。再试着拖到最高点以上：一个交点都没有。<b>条件是「闭区间 + 连续」，两个都不能少</b>：把区间挖个洞，立刻能构造出反例。</div>
         </div>
 
         <div class="math-block pitfall">
@@ -443,7 +448,7 @@
         <p>这一章反复在做一件事：让一个量无限靠近另一个量。下一章把这个动作转向斜率——把过两点的割线，让第二点沿曲线滑向第一点，割线的极限位置就是<strong class="term">切线</strong>，它的斜率就是<strong class="term">导数</strong>。</p>
         <div class="demo-box" data-demo="secant-to-tangent">
           <div class="demo-title">演示 14 · 割线逼近切线（通往第 2 章）</div>
-          <div class="demo-caption">拖动 h 让它趋近 0，看割线斜率如何收敛到 2。</div>
+          <div class="demo-caption">橙色是割线，它连接曲线上两点，两点间距就是 h。<b>把 h 一路拖到 0</b>：以 \(f(x)=x^{2}\) 在 \(x=1\) 处为例，割线斜率正好是 \(2+h\)：h 从 1.5 起步，斜率 3.5 一路滑向 2。<b>拖得越小，越接近，但永远差一点点</b>——所以导数只能用极限定义，不能直接取两点算斜率。这就是第 2 章的开头。</div>
         </div>
       </article>
     </section>
@@ -530,7 +535,7 @@
       <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
          <a href="../../DISCLAIMER.md">免责声明</a> ·
          <a href="../../README.md">关于本站</a> ·
-         <a href="../../style-guide.html">视觉规范</a></p>
+         <a href="../../README.md">关于本站</a></p>
       <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
     </footer>
 

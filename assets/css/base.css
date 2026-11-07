@@ -1,57 +1,136 @@
 /* 基础变量、排版、深浅色主题 */
 :root {
-  --bg: #f6f7fb;
-  --bg-soft: #ffffff;
+  /* ============================================================
+     设计 token · 唯一来源（规范见 docs/VISUAL_SPEC.md）
+     ------------------------------------------------------------
+     取色与尺度参考 GitHub Primer（MIT）：
+       画布/背景分层用中性灰阶，强调色只用于"可点击"，不做装饰；
+       圆角只有 3px / 6px / 12px 三档，绝大多数元素用 6px；
+       阴影只在浮层用一次，正文容器一律靠 1px 边框分层。
+     刻意不用：渐变色块、大圆角、彩色投影、紫色主色。
+     ============================================================ */
+
+  /* 表面（由浅到深三层，靠边框而不是阴影区分） */
+  --bg: #ffffff;
+  --bg-soft: #f6f8fa;
+  --bg-inset: #eff2f5;
   --card: #ffffff;
-  --fg: #1b2030;
-  --fg-muted: #5c6579;
-  --border: #e2e7f1;
-  --accent: #4f46e5;
-  --accent-soft: #eef0ff;
-  --accent-2: #0891b2;
-  --ok: #059669;
-  --warn: #d97706;
-  --danger: #dc2626;
-  --shadow: 0 2px 14px rgba(28, 40, 90, .07);
-  --shadow-lg: 0 10px 34px rgba(28, 40, 90, .12);
-  --radius: 14px;
-  --radius-sm: 9px;
-  --maxw: 1200px;
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  /* 语义色：定义/定理/性质/推导/例题/习题/注记/直观理解/误区/重点 */
-  --def:      #4f46e5; --def-rgb:     79, 70, 229;
-  --thm:      #7c3aed; --thm-rgb:    124, 58, 237;
-  --prop:     #0891b2; --prop-rgb:     8, 145, 178;
-  --proof:    #475569; --proof-rgb:   71, 85, 105;
-  --ex:       #059669; --ex-rgb:       5, 150, 105;
-  --exer:     #d97706; --exer-rgb:   217, 119, 6;
-  --remark:   #64748b; --remark-rgb: 100, 116, 139;
-  --insight:  #0d9488; --insight-rgb: 13, 148, 136;
-  --pitfall:  #dc2626; --pitfall-rgb:220, 38, 38;
-  --key:      #f59e0b;
+
+  /* 文字 */
+  --fg: #1f2328;
+  --fg-muted: #59636e;
+  --fg-subtle: #818b98;
+
+  /* 边框：3 档粗细感，主边框最实 */
+  --border: #d1d9e0;
+  --border-muted: #d8dee4;
+  --border-soft: #eaeef2;
+
+  /* 强调色：只给链接、当前项、主按钮 */
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+  --accent-soft: #ddf4ff;
+
+  /* 语义色 */
+  --ok: #1a7f37;
+  --ok-soft: #dafbe1;
+  --warn: #9a6700;
+  --warn-soft: #fff8c5;
+  --danger: #cf222e;
+  --danger-soft: #ffebe9;
+  --accent-2: #0969da;
+
+  /* 字号阶梯（Primer：12 / 14 / 16 / 20 / 24 / 32） */
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 16px;
+  --fs-md: 17px;
+  --fs-lg: 20px;
+  --fs-xl: 24px;
+  --fs-2xl: 32px;
+  --lh-tight: 1.35;
+  --lh-base: 1.72;
+
+  /* 间距：4px 基准 */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+  /* 圆角：只保留三档 */
+  --radius: 6px;
+  --radius-sm: 3px;
+  --radius-lg: 12px;
+
+  /* 阴影：正文不用；浮层用一次 */
+  --shadow: none;
+  --shadow-lg: 0 8px 24px rgba(140, 149, 159, .2);
+  --shadow-resting: 0 1px 0 rgba(31, 35, 40, .04);
+
+  --maxw: 1180px;
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+
+  /* 语义色：定义/定理/性质/推导/例题/习题/注记/直观理解/误区/重点
+     全部收在「墨蓝 / 绿 / 琥珀 / 红 / 灰」五族内，不再用紫粉青混搭 */
+  --def:      #0969da; --def-rgb:      9, 105, 218;
+  --thm:      #6639ba; --thm-rgb:    102,  57, 186;
+  --prop:     #1a7f37; --prop-rgb:    26, 127,  55;
+  --proof:    #59636e; --proof-rgb:   89,  99, 110;
+  --ex:       #1a7f37; --ex-rgb:      26, 127,  55;
+  --exer:     #9a6700; --exer-rgb:   154, 103,   0;
+  --remark:   #59636e; --remark-rgb:  89,  99, 110;
+  --insight:  #0969da; --insight-rgb:  9, 105, 218;
+  --pitfall:  #cf222e; --pitfall-rgb:207,  34,  46;
+  --key:      #bf8700;
+
   /* 数学排版：字号比例与间距，全站公式只认这几个值（规范见 docs/MATH_TYPESET.md） */
-  --math-inline-scale: 1.06;   /* 行内公式相对正文字号的倍率 */
-  --math-display-scale: 1.14;  /* 独立公式的字号倍率 */
-  --math-display-gap: .9rem;   /* 独立公式上下留白 */
+  --math-inline-scale: 1.06;
+  --math-display-scale: 1.14;
+  --math-display-gap: .9rem;
 }
 
 [data-theme="dark"] {
-  --bg: #10131c;
-  --bg-soft: #171b27;
-  --card: #1b2030;
-  --fg: #eef1f8;
-  --fg-muted: #a2abc0;
-  --border: #2c3346;
-  --accent: #9b93ff;
-  --accent-soft: #262a45;
-  --accent-2: #4fd1e5;
-  --ok: #34d399;
-  --warn: #fbbf24;
-  --danger: #f87171;
-  --shadow: 0 2px 14px rgba(0, 0, 0, .3);
-  --shadow-lg: 0 10px 34px rgba(0, 0, 0, .45);
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --bg-inset: #21262d;
+  --card: #0d1117;
+
+  --fg: #e6edf3;
+  --fg-muted: #9198a1;
+  --fg-subtle: #6e7681;
+
+  --border: #30363d;
+  --border-muted: #21262d;
+  --border-soft: #21262d;
+
+  --accent: #4493f8;
+  --accent-hover: #6cb6ff;
+  --accent-soft: #121d2f;
+
+  --ok: #3fb950;
+  --ok-soft: #0f2417;
+  --warn: #d29922;
+  --warn-soft: #241d0a;
+  --danger: #f85149;
+  --danger-soft: #25171c;
+  --accent-2: #4493f8;
+
+  --shadow: none;
+  --shadow-lg: 0 8px 24px rgba(1, 4, 9, .6);
+  --shadow-resting: 0 1px 0 rgba(255, 255, 255, .04);
+
+  --def:      #6cb6ff; --def-rgb:    108, 182, 255;
+  --thm:      #b392f0; --thm-rgb:    179, 146, 240;
+  --prop:     #3fb950; --prop-rgb:    63, 185,  80;
+  --proof:    #9198a1; --proof-rgb:  145, 152, 161;
+  --ex:       #3fb950; --ex-rgb:      63, 185,  80;
+  --exer:     #d29922; --exer-rgb:   210, 153,  34;
+  --remark:   #9198a1; --remark-rgb: 145, 152, 161;
+  --insight:  #6cb6ff; --insight-rgb:108, 182, 255;
+  --pitfall:  #f85149; --pitfall-rgb:248,  81,  73;
+  --key:      #d29922;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -63,31 +142,44 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-h1, h2, h3, h4 { line-height: 1.35; font-weight: 700; letter-spacing: .01em; }
-h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 .5rem; }
-h2 { font-size: clamp(1.35rem, 2.6vw, 1.75rem); margin: 0 0 1rem; }
-h3 { font-size: 1.2rem; margin: 2.4rem 0 .9rem; }
+/* 标题层级：靠字号与字重区分，不用装饰线与色块 */
+h1, h2, h3, h4 { line-height: var(--lh-tight); font-weight: 600; letter-spacing: -.01em; }
+h1 { font-size: var(--fs-2xl); margin: 0 0 var(--sp-2); font-weight: 600; }
+h2 {
+  font-size: var(--fs-xl); margin: var(--sp-7) 0 var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border-soft);
+}
+h3 { font-size: var(--fs-lg); margin: var(--sp-6) 0 var(--sp-3); }
+h4 { font-size: var(--fs-md); margin: var(--sp-5) 0 var(--sp-2); }
 
-p { margin: 0 0 1.1rem; }
-ul, ol { padding-left: 1.4rem; }
-li { margin: .35rem 0; }
+p { margin: 0 0 var(--sp-4); }
+ul, ol { padding-left: 1.5rem; margin: 0 0 var(--sp-4); }
+li { margin: var(--sp-1) 0; }
+li > p { margin-bottom: var(--sp-2); }
+
+strong, b { font-weight: 600; }
 
 code {
   font-family: var(--mono);
-  font-size: .9em;
-  background: var(--accent-soft);
-  color: var(--accent);
-  padding: .12em .4em;
-  border-radius: 5px;
+  font-size: .88em;
+  background: var(--bg-inset);
+  color: var(--fg);
+  padding: .15em .4em;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-soft);
 }
+
+hr { border: 0; border-top: 1px solid var(--border-soft); margin: var(--sp-5) 0; }
 
 .hint { color: var(--fg-muted); font-size: .93rem; }
 

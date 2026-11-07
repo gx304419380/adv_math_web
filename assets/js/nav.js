@@ -7,6 +7,39 @@ const STATUS = {
   planned: { text: '计划中', cls: 'planned' }
 };
 
+/* 侧栏小节高亮：滚到哪一节，左侧就高亮哪一条。
+   用 IntersectionObserver 而不是 scroll 事件，性能更好，手机上也不会抖。 */
+function initSectionSpy() {
+  const links = [...document.querySelectorAll('.sb-secs .sec-link')];
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  const map = new Map();
+  links.forEach(a => {
+    const el = document.getElementById(a.dataset.sec);
+    if (el) map.set(el, a);
+  });
+  if (!map.size) return;
+
+  const setActive = a => links.forEach(l => l.classList.toggle('is-active', l === a));
+
+  const io = new IntersectionObserver(entries => {
+    // 取视口内最靠上的那一节作为"当前"
+    const visible = entries.filter(e => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    if (visible.length) setActive(map.get(visible[0].target));
+  }, { rootMargin: '-64px 0px -65% 0px', threshold: 0 });
+
+  map.forEach((_, el) => io.observe(el));
+
+  // 初始：有锚点跟锚点，否则高亮第一节
+  const hash = decodeURIComponent(location.hash.slice(1));
+  const target = hash ? map.get(document.getElementById(hash)) : null;
+  setActive(target || links[0]);
+
+  // 点击后立刻高亮，不等滚动结束
+  links.forEach(a => a.addEventListener('click', () => setActive(a)));
+}
+
 async function initNav({ metaUrl, base = '', currentId = null, isHome = false } = {}) {
   // file:// 直接打开时无法 fetch，优先使用内嵌的 chapters.js 数据
   let data = window.AM_CHAPTERS || null;
@@ -46,25 +79,71 @@ async function initNav({ metaUrl, base = '', currentId = null, isHome = false } 
     }
   }
 
-  /* 侧栏 */
+  /* 侧栏：进入某一章后，只显示本章的小节目录。
+     已经在这一章里了，再列 12 章的标题没有意义——学生要的是「跳到第 7 节」。
+     全站章节导航移到页面顶部的「章节目录」下拉里。 */
   const sidebar = document.querySelector('[data-nav-sidebar]');
-  if (sidebar) {
-    const parts = ['<h4>全站章节</h4>'];
-    ['上册', '下册'].forEach(vol => {
-      parts.push(`<div class="nav-divider"></div>`);
-      chapters.filter(c => c.volume === vol).forEach(c => {
-        const on = c.id === currentId ? ' is-current' : '';
-        const s = STATUS[c.status] || STATUS.planned;
-        parts.push(`<a class="${on.trim()}" href="${link(c.id)}">${String(c.index).padStart(2, '0')} ${c.title}${s.cls === 'planned' ? '' : ' · ' + s.text}</a>`);
-      });
+  if (sidebar && current && current.sections && current.sections.length) {
+    const parts = [
+      `<div class="sb-head">`,
+      `  <span class="sb-chno">第 ${current.index} 章</span>`,
+      `  <span class="sb-chtitle">${current.title}</span>`,
+      `</div>`,
+      `<nav class="sb-secs" aria-label="本章小节">`
+    ];
+    current.sections.forEach((s, i) => {
+      const id = s.id || 's' + (i + 1);
+      parts.push(`<a class="sec-link" href="#${id}" data-sec="${id}"><span class="sec-no">${current.index}.${i + 1}</span>${s.title}</a>`);
     });
-    if (current && current.sections) {
-      parts.push('<div class="nav-divider"></div><h4>本章目录</h4>');
-      current.sections.forEach((s, i) => {
-        parts.push(`<a class="sec-link" href="#${s.id || 's' + (i + 1)}">${s.title}</a>`);
+    parts.push('</nav>');
+
+    // 本章其它资源：知识结构图、习题、下一章
+    const extra = [];
+    [['map', '知识结构图'], ['pitfalls', '常见误区'], ['quiz', '习题与自测'], ['summary', '本章小结']]
+      .forEach(([id, label]) => {
+        if (document.getElementById(id)) extra.push(`<a href="#${id}">${label}</a>`);
       });
+    if (extra.length) {
+      parts.push('<div class="sb-foot">' + extra.join('') + '</div>');
     }
     sidebar.innerHTML = parts.join('');
+  } else if (sidebar) {
+    sidebar.innerHTML = '<div class="sb-head"><span class="sb-chtitle">目录</span></div>';
+  }
+
+  // 必须等侧栏 DOM 就绪后再绑定滚动高亮
+  initSectionSpy();
+
+  /* 顶部「章节目录」下拉：全站 12 章的入口集中在这里，
+     侧栏则专注当前章的小节，两者分工不重叠 */
+  const menuBtn = document.querySelector('[data-chapter-menu]');
+  if (menuBtn) {
+    const wrap = document.createElement('div');
+    wrap.className = 'ch-menu';
+    menuBtn.parentElement.appendChild(wrap);
+    wrap.appendChild(menuBtn);
+    const panel = document.createElement('div');
+    panel.className = 'ch-menu-panel';
+    panel.innerHTML = ['上册', '下册'].map(vol => {
+      const items = chapters.filter(c => c.volume === vol).map(c => {
+        const on = c.id === currentId ? ' is-current' : '';
+        const st = STATUS[c.status] || STATUS.planned;
+        return `<a class="${on.trim()}" href="${link(c.id)}"><span class="cm-no">${String(c.index).padStart(2, '0')}</span><span class="cm-t">${c.title}</span><span class="cm-s ${st.cls}">${st.text}</span></a>`;
+      }).join('');
+      return `<div class="cm-vol">${vol}</div>${items}`;
+    }).join('');
+    wrap.appendChild(panel);
+
+    menuBtn.addEventListener('click', e => {
+      e.preventDefault();
+      wrap.classList.toggle('open');
+    });
+    document.addEventListener('click', e => {
+      if (!wrap.contains(e.target)) wrap.classList.remove('open');
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') wrap.classList.remove('open');
+    });
   }
 
   /* 上一章 / 下一章 */
@@ -102,10 +181,15 @@ async function initNav({ metaUrl, base = '', currentId = null, isHome = false } 
       const s = STATUS[c.status] || STATUS.planned;
       const planned = c.status === 'planned' ? ' is-planned' : '';
       const href = c.status === 'planned' ? 'javascript:void(0)' : link(c.id);
-      const tag = `<div class="cc-top"><span class="cc-num">${c.volume} · 第 ${String(c.index).padStart(2, '0')} 章</span><span class="badge ${s.cls}">${s.text}</span></div>
-        <div class="cc-title">${c.title}</div>
-        <div class="cc-sub">${c.subtitle}</div>
-        <div class="cc-foot">${c.sections.length} 节 · 约 ${c.estMinutes} 分钟${c.demos.length ? ' · ' + c.demos.length + ' 个交互演示' : ''}</div>`;
+      // 表格式列表：编号 / 标题 / 副标题 / 元信息 / 状态，一行一章。
+      // 比卡片网格扫读效率高得多，也更接近「目录」该有的样子。
+      const tag = `<span class="cc-num">${String(c.index).padStart(2, '0')}</span>
+        <span class="cc-main">
+          <span class="cc-title">${c.title}</span>
+          <span class="cc-sub">${c.subtitle}</span>
+        </span>
+        <span class="cc-foot">${c.sections.length} 节 · ${c.estMinutes} 分钟${c.demos.length ? ' · ' + c.demos.length + ' 个演示' : ''}</span>
+        <span class="badge ${s.cls}">${s.text}</span>`;
       return c.status === 'planned'
         ? `<div class="chapter-card${planned}" aria-disabled="true">${tag}</div>`
         : `<a class="chapter-card" href="${href}">${tag}</a>`;

@@ -47,9 +47,10 @@ def check_file(path: str):
     else:
         html_wo = html
 
-    # 定界符配对
+    # 定界符配对。注意 \[2pt] 这类 LaTeX 换行/间距参数不是定界符，先剔除再数
+    no_tex_spacing = re.sub(r'\\\\\[[^\]]*\]', '', html_wo)
     for left, right, name in [(r'\(', r'\)', r'\( \)'), (r'\[', r'\]', r'\[ \]')]:
-        a, b = html_wo.count(left), html_wo.count(right)
+        a, b = no_tex_spacing.count(left), no_tex_spacing.count(right)
         if a != b:
             issues.append((0, f'{name} 数量不配对（{a} 个开、{b} 个闭）'))
     if html_wo.count('$$') % 2:
@@ -58,10 +59,12 @@ def check_file(path: str):
     for ln, tex, display in extract_math(html_wo):
         tag = '独立公式' if display else '行内公式'
 
-        # &lt; 是必需的（字面 < 会被 HTML 解析器当成标签开头）；
-        # &gt; / &amp; 则多余，应该直接写 > 和 &
-        if re.search(r'&(gt|amp);', tex):
-            issues.append((ln, f'{tag} 含多余的 HTML 实体 &gt;/&amp;，应直接写 > 和 &（&lt; 可保留）'))
+        # &lt; 与 &amp; 在 LaTeX 环境里都是必需的：
+        #   <  会被 HTML 解析器当成标签开头；
+        #   &  是 cases / matrix / align 等环境的列对齐符，在 HTML 里必须写 &amp;
+        # 只有 &gt; 是多余转义，应直接写 >
+        if '&gt;' in tex:
+            issues.append((ln, f'{tag} 含多余的 &gt;，应直接写 >（&lt; 与 &amp; 可保留）'))
 
         bad = [c for c in tex if c in UNICODE_MATH]
         if bad:

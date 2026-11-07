@@ -72,7 +72,9 @@ function functionMachine(el) {
     const y = RULES[rule].fn(x);
     stage.querySelector('[data-in]').textContent = f4(x).slice(0, 5);
     stage.querySelector('[data-rule]').innerHTML = '';
-    stage.querySelector('[data-rule]').appendChild(texInline(RULES[rule].tex));
+    // 机器盒空间有限：用内联 \frac（不用 \dfrac），并强制单行
+    stage.querySelector('[data-rule]').appendChild(
+      texInline(RULES[rule].tex.replace(/\\dfrac/g, '\\frac'), { output: 'html' }));
     stage.querySelector('[data-out]').textContent = f4(y);
     c.querySelector('[data-xv]').textContent = f4(x).slice(0, 5);
     out.innerHTML = `规则 <b>f(x) = ${texHTML(RULES[rule].tex)}</b>　输入 <b>${texHTML('x=' + f4(x))}</b>　→　唯一输出 <b>${texHTML('f(x)=' + f4(y))}</b><br>同一个输入永远只得到一个输出，这就是「函数」；换个规则，输出就变了。`;

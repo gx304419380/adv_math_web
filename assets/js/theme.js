@@ -34,7 +34,27 @@ function initNavToggle() {
   const btn = document.createElement('button');
   btn.className = 'btn nav-toggle';
   btn.type = 'button';
-  btn.textContent = '☰ 目录';
-  btn.addEventListener('click', () => sidebar.classList.toggle('is-open'));
+  btn.setAttribute('aria-expanded', 'false');
+  btn.innerHTML = '<span aria-hidden="true">☰</span> 本节目录';
+  const sync = () => {
+    const open = sidebar.classList.contains('is-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.classList.toggle('is-open', open);
+  };
+  btn.addEventListener('click', () => {
+    sidebar.classList.toggle('is-open');
+    sync();
+    // 展开后把侧栏滚进视野，否则按钮在底部、目录在页面上方，用户不知道去哪看
+    if (sidebar.classList.contains('is-open')) {
+      sidebar.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+  });
+  // 点某一条小节后自动收起，避免目录挡住刚跳过去的内容
+  sidebar.addEventListener('click', e => {
+    if (e.target.closest('.sec-link') && window.matchMedia('(max-width:900px)').matches) {
+      sidebar.classList.remove('is-open');
+      sync();
+    }
+  });
   document.body.appendChild(btn);
 }
