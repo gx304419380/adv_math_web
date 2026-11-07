@@ -93,3 +93,59 @@ chapters.js → cdn.js → math.js → graph.js → plot.js → steps.js
 - 公式与数值由 `tools/symcheck.py`（sympy）复核；新增章节的关键公式请加进该脚本的 `CHECKS`。
 - 图形必须与公式一致。曲线、极限值、交点数值都要和 readout 对得上。
 - 数学定义与定理要准确且完整，但文字必须原创，见 [CONTENT_SPEC.md](CONTENT_SPEC.md)。
+
+---
+
+## 附录 B：怎么把站点放到公网上（给维护者，不给学生）
+
+**给学生的说法永远是「双击 `index.html`」**。以下都是维护者自己要看/要发链接时才做的事。
+
+### B.1 三个概念别混
+
+| 地址 | 谁能访问 | 用途 |
+|---|---|---|
+| `file:///…/index.html` | 只有本机 | **学生默认用法**，双击即可 |
+| `http://localhost:8000` | **只有运行服务的这台机器** | 维护者本机调试。在云服务器上跑，你在家用浏览器是**打不开**的 |
+| `https://<用户名>.github.io/<仓库名>/` | 所有人 | 真正能发给别人的地址（需要一个静态托管） |
+
+> `localhost` 永远指“你正在用的这台电脑”。服务器上的 `localhost:8000` 只属于服务器，不是公网地址。这是最常见的误会。
+
+### B.2 GitHub Pages（推荐，免费且永久）
+
+仓库推上去之后，只差一步开关：**Settings → Pages → Source 选 `Deploy from a branch` → 分支 `main`、目录 `/ (root)` → Save**。
+
+用 API 开启需要 PAT 具备 **Pages: Read and Write** 权限（只有 `Contents` 是不够的，会返回 `403 Resource not accessible by personal access token`）。开好后访问：
+
+```
+https://gx304419380.github.io/adv_math_web/
+```
+
+**本站已为 Pages 子路径做好适配**：全部用相对路径，无 module、无 `fetch`，放在 `/adv_math_web/` 这种子目录下同样能跑。
+
+### B.3 临时公网预览（没有 Pages 时）
+
+在**有公网 IP 的机器**上：
+
+```bash
+python3 -m http.server 8000 --directory . --bind 0.0.0.0
+# 然后浏览器访问 http://<这台机器的公网IP>:8000
+```
+
+前提：云厂商安全组放行 8000 端口。若机器没有公网 IP（NAT 后面），此法不可用，只能走 B.2 或 B.4。
+
+### B.4 内网穿透（有 NAT 时）
+
+```bash
+cloudflared tunnel --url http://localhost:8000
+```
+
+会给出一个 `https://xxx.trycloudflare.com` 临时地址，重启即失效，仅适合临时演示。
+
+### B.5 部署前必跑
+
+```bash
+bash tools/check.sh          # 元数据、版权、公式复核、CDN、数学排版
+python3 tools/shot.py --chapter ch01 --viewports desktop,mobile
+```
+
+两项都通过、控制台 0 错误，才能给别人地址。

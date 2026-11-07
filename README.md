@@ -41,7 +41,7 @@
 
 | 命令 | 用途 |
 |---|---|
-| `bash tools/serve.sh` | 本地预览服务 `http://localhost:8000` |
+| `bash tools/serve.sh` | 本地预览服务 `http://localhost:8000`（**只在本机有效**；在服务器上跑，自己电脑打不开，见 [部署附录](docs/MAINTAINER_GUIDE.md#附录-b怎么把站点放到公网上给维护者不给学生)） |
 | `bash tools/check.sh` | 静态校验、公式复核、CDN 检查 |
 | `python3 tools/shot.py --chapter ch01` | playwright 逐章截图验收 |
 | `python3 tools/sync-chapters.py` | 从 `chapters.json` 重新生成 `chapters.js` |

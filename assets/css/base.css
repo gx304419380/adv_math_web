@@ -31,6 +31,10 @@
   --insight:  #0d9488; --insight-rgb: 13, 148, 136;
   --pitfall:  #dc2626; --pitfall-rgb:220, 38, 38;
   --key:      #f59e0b;
+  /* 数学排版：字号比例与间距，全站公式只认这几个值（规范见 docs/MATH_TYPESET.md） */
+  --math-inline-scale: 1.06;   /* 行内公式相对正文字号的倍率 */
+  --math-display-scale: 1.14;  /* 独立公式的字号倍率 */
+  --math-display-gap: .9rem;   /* 独立公式上下留白 */
 }
 
 [data-theme="dark"] {
@@ -94,6 +98,35 @@ code {
   padding: .35rem 0;
   margin: 1rem 0 !important;
 }
+
+/* ============================================================
+   数学排版：全局唯一来源（详细规范见 docs/MATH_TYPESET.md）
+   字号/行距/间距如需调整，只改这里和 :root 中的 --math-* 变量
+   ============================================================ */
+
+/* 行内公式：与中文正文同号，稍大一点点补偿 KaTeX 的视觉收缩 */
+.katex { font-size: calc(1em * var(--math-inline-scale)); }
+
+/* 行内公式不要被汉字行高挤偏基线 */
+.katex .base { line-height: 1.2; }
+
+/* 独立公式（$$...$$）：居中、与正文拉开距离、字号略大便于阅读 */
+.katex-display > .katex { font-size: calc(1em * var(--math-display-scale)); }
+
+/* 独立公式上下留白由变量控制，全站统一 */
+.formula-box .katex-display { margin: var(--math-display-gap) 0 !important; }
+/* 行内公式在中文里不要被行高挤到下一行 */
+
+/* 公式过多时（如极限四则运算）允许横向滚动而不是挤压变形 */
+.formula-box { overflow-x: auto; overflow-y: hidden; }
+
+/* 长公式在窄屏上的兜底：只滚动公式本身，不带动整页 */
+@media (max-width: 640px) {
+  .katex-display > .katex { font-size: 1em; }
+}
+
+/* 数学变量在正文中如需强调（如“设 x 为自变量”），用 .var 走数学斜体 */
+.var { font-family: KaTeX_Math, 'Times New Roman', serif; font-style: italic; }
 
 img, svg { max-width: 100%; height: auto; }
 

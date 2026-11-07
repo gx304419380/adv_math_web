@@ -34,3 +34,8 @@ document.querySelectorAll('[data-mount]').forEach(el => {
 });
 
 document.dispatchEvent(new CustomEvent('site:ready'));
+
+/* 渲染完成后再审计一次：确认没有原始 TeX / 中文混入公式漏到页面上（见 docs/MATH_TYPESET.md） */
+window.addEventListener('load', () => {
+  setTimeout(() => auditMath(document), 600);
+});

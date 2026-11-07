@@ -4,11 +4,14 @@
 
 | 文档 | 讲什么 | 什么时候读 |
 |---|---|---|
-| [PRINCIPLES.md](PRINCIPLES.md) | **最高原则**：把学生当零基础来教、能加图就加图、能放动画就放动画、纯静态零门槛、基于教材但不复制 | 每次动手前，必读 |
+| [PRINCIPLES.md](PRINCIPLES.md) | **最高原则（12 条）**：零基础教学、能加图就加图、能放动画就放动画、基于教材不复制、纯静态零门槛、全局统一、数学排版合规、术语统一、结论落地、可跳读、可维护、准确优先 | 每次动手前，**必读** |
+| [MATH_TYPESET.md](MATH_TYPESET.md) | **数学排版规范**：斜体/正体对照、禁止原始写法、公式编号、间距、统一宏、自动审计、提交自查清单 | **写任何公式前**，必读 |
 | [VISUAL_SPEC.md](VISUAL_SPEC.md) | 视觉规范：设计 token 的唯一来源、语义组件表、页面骨架、响应式、禁止事项 | 改样式、做新组件时 |
-| [CONTENT_SPEC.md](CONTENT_SPEC.md) | 内容规范：单章 8 区块、每节结构、如何贴近教材、原创边界、讲解语言 | 写新章节内容时 |
+| [CONTENT_SPEC.md](CONTENT_SPEC.md) | 内容规范：单章 8 区块、每节结构、如何贴近教材、原创边界、讲解语言、术语表 | 写新章节内容时 |
 | [PROJECT_PLAN.md](PROJECT_PLAN.md) | 12 章清单、分批计划、当前进度、逐章生产流程与验收门槛 | 排期、接手新章节时 |
 | [MAINTAINER_GUIDE.md](MAINTAINER_GUIDE.md) | 技术架构、`file://` 兼容规则、脚本加载顺序、新增一章的操作步骤、验收与部署 | 改代码、提交、部署时 |
+
+**阅读顺序**：`PRINCIPLES` → `MATH_TYPESET` → `CONTENT_SPEC` → `VISUAL_SPEC` → `MAINTAINER_GUIDE`。
 
 ## 一句话
 

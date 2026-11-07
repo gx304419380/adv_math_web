@@ -190,7 +190,7 @@ strong.term, .term {
   position: absolute; right: .85rem; top: .5rem;
   font-family: var(--mono); font-size: .74rem; color: var(--fg-muted);
 }
-.formula-box .katex-display { margin: .2rem 0 !important; }
+/* 公式间距统一由 base.css 的 --math-display-gap 控制，此处不再覆盖 */
 
 /* ---------- 页面级：导航条、阅读进度、章节装饰 ---------- */
 

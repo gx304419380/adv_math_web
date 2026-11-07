@@ -97,4 +97,30 @@ done
 
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
+
+# ---- 数学排版静态检查（见 docs/MATH_TYPESET.md）----
+echo
+echo "== 7. 数学排版 =="
+FILES=$(git ls-files '*.html' 2>/dev/null)
+[ -z "$FILES" ] && FILES=$(find . -name '*.html' -not -path './.git/*')
+
+# 1) 单美元定界符（本站规定统一用 \( \)）
+if grep -nE '(^|[^\\$])\$[^$]{1,80}\$([^$]|$)' $FILES 2>/dev/null | grep -v 'fb-no' | head -1 | grep -q .; then
+  bad "存在 $…$ 单美元定界符，应改为 \\( \\)"
+else ok "定界符统一（未使用单美元）"; fi
+
+# 2) Unicode 数学符号
+if grep -nP '[\x{03A3}\x{222B}\x{221A}\x{2264}\x{2265}\x{221E}\x{03B1}-\x{03C9}]' $FILES 2>/dev/null | head -1 | grep -q .; then
+  bad "存在 Unicode 数学符号（Σ ∫ √ ≤ ≥ α ∞ 等），请改用 LaTeX 宏"
+else ok "无 Unicode 数学符号"; fi
+
+# 3) 综合审计：HTML 实体、中文裸进公式、函数名缺反斜杠、定界符配对
+if python3 tools/audit-math.py >/tmp/math-audit.log 2>&1; then
+  ok "无残留原始写法 / 中文进公式 / 函数名缺正体"
+else
+  bad "数学排版问题：$(tail -1 /tmp/math-audit.log)；明细运行 python3 tools/audit-math.py"
+fi
+
+echo
+if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
 exit "$FAIL"
