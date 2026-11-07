@@ -105,6 +105,18 @@ if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head
   bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
 else ok "证明与推导均直接显示，未折叠"; fi
 
+# 6) 组件库文档必须存在，且组件库里提到的类要真的在 CSS 里有定义
+MISSING_COMP=0
+for f in docs/COMPONENTS.md docs/MATH_TYPESET.md docs/PRINCIPLES.md docs/VISUAL_SPEC.md; do
+  [ -f "$f" ] || { bad "缺少 $f"; MISSING_COMP=1; }
+done
+
+# 抽查组件库里的核心类是否有样式定义（防止文档写了、样式没了）
+for cls in math-block mb-head mb-tag derive derive-eq ex-part formula-box demo-box mm-node; do
+  grep -q "\\.$cls" assets/css/*.css || { bad "组件库登记的 .$cls 在 CSS 中找不到定义"; MISSING_COMP=1; }
+done
+[ "$MISSING_COMP" -eq 0 ] && ok '组件库文档与样式定义齐全'
+
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
 
@@ -140,6 +152,18 @@ else ok "按钮与标签均使用规范数学排版"; fi
 if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head -1 | grep -q .; then
   bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
 else ok "证明与推导均直接显示，未折叠"; fi
+
+# 6) 组件库文档必须存在，且组件库里提到的类要真的在 CSS 里有定义
+MISSING_COMP=0
+for f in docs/COMPONENTS.md docs/MATH_TYPESET.md docs/PRINCIPLES.md docs/VISUAL_SPEC.md; do
+  [ -f "$f" ] || { bad "缺少 $f"; MISSING_COMP=1; }
+done
+
+# 抽查组件库里的核心类是否有样式定义（防止文档写了、样式没了）
+for cls in math-block mb-head mb-tag derive derive-eq ex-part formula-box demo-box mm-node; do
+  grep -q "\\.$cls" assets/css/*.css || { bad "组件库登记的 .$cls 在 CSS 中找不到定义"; MISSING_COMP=1; }
+done
+[ "$MISSING_COMP" -eq 0 ] && ok '组件库文档与样式定义齐全'
 
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi

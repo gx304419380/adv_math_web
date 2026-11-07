@@ -19,6 +19,18 @@ ROOT = Path(__file__).resolve().parent.parent
 SHOTS = ROOT / 'screenshots'
 
 
+def clean_old(chapter):
+    '''清掉本章的旧截图。演示增删会让文件名里的序号改变，
+    不清就会新旧混杂、越积越多（曾累积到 75 张 16MB）。'''
+    if not SHOTS.exists():
+        return 0
+    n = 0
+    for f in SHOTS.glob(f'{chapter}-*.png'):
+        f.unlink()
+        n += 1
+    return n
+
+
 def start_server():
     class Quiet(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a): pass
@@ -37,6 +49,9 @@ def main():
 
     SHOTS.mkdir(exist_ok=True)
     ch = args.chapter
+    removed = clean_old(ch)
+    if removed:
+        print(f'已清理 {ch} 的旧截图 {removed} 张')
     page_url = f'/chapters/{ch}/{ch}.html'
     viewports = {'desktop': (1280, 900), 'mobile': (375, 812)}
 
@@ -57,9 +72,10 @@ def main():
 
         katex = page.locator('.katex').count()
         demos = page.locator('[data-demo]').count()
-        mermaid = page.locator('.mermaid-box canvas, .mermaid-box svg').count()
-        chapters_in_nav = page.locator('[data-nav-sidebar] a[href*="chapters/"]').count()
-        print(f'章节 {ch}：KaTeX 节点 {katex}，交互演示 {demos}，G6 知识图画布 {mermaid}，侧栏章节链接 {chapters_in_nav}')
+        mermaid = page.locator('.mermaid-box svg, .mermaid-box canvas').count()
+        sec_links = page.locator('.sb-secs .sec-link').count()
+        mind_nodes = page.locator('.mm-node').count()
+        print(f'章节 {ch}：KaTeX {katex}，演示 {demos}，侧栏小节 {sec_links}，知识图节点 {mind_nodes}')
 
         for name in args.viewports.split(','):
             name = name.strip()

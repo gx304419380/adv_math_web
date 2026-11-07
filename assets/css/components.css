@@ -37,15 +37,24 @@
   margin: 0 0 .1rem;
 }
 .demo-box .demo-caption { font-size: .83rem; color: var(--fg-muted); margin: 0 0 .6rem; }
+/* 画布容器：画布尺寸由 Plot 按数学比例算出（见 assets/js/plot.js），
+   这里只负责居中。不设固定高度，避免把非等比的尺寸强加给等比例图形。 */
 .demo-canvas {
-  width: 100%; height: 330px;
-  background: var(--bg-soft);
-  border-radius: 7px;
-  border: 1px solid var(--border);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  min-height: 200px;
 }
-.demo-canvas.tall { height: 400px; }
+.demo-canvas canvas {
+  display: block;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 100%;
+}
 .jxgbox { background: var(--bg-soft) !important; }
 
 .demo-controls {
@@ -192,8 +201,7 @@
     display: inline-block; position: fixed; left: 1.1rem; bottom: 1.1rem; z-index: 40;
     padding: .5rem .85rem; border-radius: 999px;
   }
-  .demo-canvas { height: 280px; }
-  .demo-canvas.tall { height: 330px; }
+
   .demo-controls input[type="range"] { width: 110px; }
 }
 

@@ -98,7 +98,13 @@ function functionMachine(el) {
 
 function epsilonN(el) {
   const L = 1, MAXN = 60;
-  const p = new Plot(el, { xmin: 0, xmax: MAXN, ymin: -1, ymax: 3, grid: true });
+  // 横轴是「第 n 项」，纵轴是「项的值」——量纲不同，等比会把 60 项压成一条线。
+  // 这种情况必须显式关掉等比例，并由绘图器在图上标注。
+  const p = new Plot(el, {
+    xmin: 0, xmax: MAXN, ymin: -1, ymax: 3, grid: true,
+    equal: false,
+    aspectNote: '横轴为项数 n，与纵轴量纲不同'
+  });
   const c = controls(el, `
     <label>误差 ε <input type="range" data-eps min="0.05" max="1.5" step="0.05" value="0.4"><output data-epsv>0.40</output></label>
     <label>已显示项数 <input type="range" data-n min="1" max="60" step="1" value="12"><output data-nv>12</output></label>
@@ -150,7 +156,10 @@ function epsilonN(el) {
 
 function epsilonDelta(el) {
   const f = x => 2 * x + 1, X0 = 1, LIM = 3;
-  const p = new Plot(el, { xmin: -1.5, xmax: 3.5, ymin: -1, ymax: 7, grid: true });
+  // 直线 y=2x+1 的斜率与误差带都是几何对象，必须等比；y 跨度大所以给足高度
+  // 上界收到 x=3（此时 y=7），保证整条直线都在画布内，不会被裁掉
+  // ε 最大 2.4，误差带上界 = 3+2.4 = 5.4，所以 y 到 5.6 就够，无需到 7
+  const p = new Plot(el, { xmin: -1.6, xmax: 2.8, ymin: -1, ymax: 5.6, grid: true, boxH: 440 });
   const c = controls(el, `
     <label>误差 ε <input type="range" data-eps min="0.2" max="2.4" step="0.1" value="1.2"><output data-epsv>1.20</output></label>
     <span class="hint">拖动 ε，看 δ 窗口自动收紧</span>`);
@@ -161,16 +170,16 @@ function epsilonDelta(el) {
     const d = st.eps / 2;
     p.clear();
     /* 水平误差带：由 ε 决定 */
-    p.rect(-1.5, LIM - st.eps, 3.5, LIM + st.eps, { fill: PLOT_COLORS.ok, alpha: .13, stroke: PLOT_COLORS.ok, dash: true });
-    p.line(-1.5, LIM + st.eps, 3.5, LIM + st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
-    p.line(-1.5, LIM - st.eps, 3.5, LIM - st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
-    p.text(-1.35, LIM - st.eps - .32, '误差带下界', { color: PLOT_COLORS.ok, size: 11 });
+    p.rect(-1.6, LIM - st.eps, 2.8, LIM + st.eps, { fill: PLOT_COLORS.ok, alpha: .13, stroke: PLOT_COLORS.ok, dash: true });
+    p.line(-1.6, LIM + st.eps, 2.8, LIM + st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
+    p.line(-1.6, LIM - st.eps, 2.8, LIM - st.eps, { color: PLOT_COLORS.ok, dash: true, width: 1.4 });
+    p.text(-1.45, LIM - st.eps - .3, '误差带下界', { color: PLOT_COLORS.ok, size: 11 });
     /* 竖直自变量窗口：由 δ = ε/2 决定 */
     p.rect(X0 - d, -1, X0 + d, 7, { fill: PLOT_COLORS.accent, alpha: .1, stroke: PLOT_COLORS.accent, dash: true });
     p.line(X0 - d, -1, X0 - d, 7, { color: PLOT_COLORS.accent, dash: true, width: 1.2 });
     p.line(X0 + d, -1, X0 + d, 7, { color: PLOT_COLORS.accent, dash: true, width: 1.2 });
     /* 曲线与落在窗口内的那一段 */
-    p.curve(f, { from: -1.5, to: 3.5, color: PLOT_COLORS.accent, width: 2.4 });
+    p.curve(f, { from: -1.6, to: 2.8, color: PLOT_COLORS.accent, width: 2.4 });
     p.curve(f, { from: X0 - d, to: X0 + d, color: PLOT_COLORS.ok, width: 5 });
     p.dot(X0, LIM, { r: 5, color: PLOT_COLORS.accent });
     p.text(X0 + .1, LIM + .38, '(1, 3)', { color: PLOT_COLORS.accent, size: 11 });
@@ -269,7 +278,12 @@ function sinxOverX(el) {
 function limitE(el) {
   const E = Math.E;
   const fn = x => Math.pow(1 + 1 / x, x);
-  const p = new Plot(el, { xmin: 1, xmax: 60, ymin: 1.9, ymax: 2.9, grid: true });
+  // x 跨 59 个单位、y 只有 1 个单位，等比会把图压成一条细线，只能作趋势示意
+  const p = new Plot(el, {
+    xmin: 1, xmax: 60, ymin: 1.9, ymax: 2.9, grid: true,
+    equal: false,
+    aspectNote: '纵轴刻度已放大，仅示意趋近趋势'
+  });
   const c = controls(el, `
     <label>x <input type="range" data-x min="1" max="200" step="1" value="5"><output data-xv>5</output></label>
     <button class="btn primary" data-play>▶ 播放增长</button>`);
@@ -304,21 +318,23 @@ function limitE(el) {
 /* ---------- 演示 6 · 夹逼定理 ---------- */
 
 function squeezeDemo(el) {
-  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -3.2, ymax: 3.2, grid: true });
+  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -3.2, ymax: 3.2, grid: true, boxH: 380 });
   const c = controls(el, `
-    <label>观察窗口 r <input type="range" data-r min="0.2" max="3" step="0.05" value="3"><output data-rv>3.00</output></label>
+    <label>观察窗口 r <input type="range" data-r min="0.15" max="1.5" step="0.05" value="0.6"><output data-rv>0.60</output></label>
     <span class="hint">把窗口收窄，看振荡被包络线夹到 0</span>`);
   const out = readout(el);
-  const st = { r: 3 };
+  const st = { r: .6 };
   const f = x => x === 0 ? 0 : x * x * Math.sin(1 / x);
 
   const draw = () => {
     const r = st.r, top = Math.max(.35, r * r * 1.15);
-    p.o.xmin = -r; p.o.xmax = r; p.o.ymin = -top; p.o.ymax = top;
+    // 用 setRange 而不是直接改 o：等比例下画布尺寸要跟着范围一起变
+    p.setRange({ xmin: -r, xmax: r, ymin: -top, ymax: top });
     p.clear();
     p.curve(x => x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
     p.curve(x => -x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
-    p.curve(f, { from: -r, to: r, color: PLOT_COLORS.accent, width: 2.4, samples: 1200 });
+    // dense: 靠近 0 加密采样，否则 sin(1/x) 的振荡会被漏掉、看起来像直线
+    p.curve(f, { from: -r, to: r, color: PLOT_COLORS.accent, width: 2.4, samples: 6000, dense: true });
     p.dot(0, 0, { r: 5, color: PLOT_COLORS.ok });
     p.text(r * .05, top * .82, '上界', { color: PLOT_COLORS.warn, size: 11 });
     p.text(r * .05, -top * .9, '下界', { color: PLOT_COLORS.warn, size: 11 });
@@ -333,7 +349,7 @@ function squeezeDemo(el) {
 /* ---------- 演示 7 · 无穷小的阶 ---------- */
 
 function infinitesimalOrder(el) {
-  const p = new Plot(el, { xmin: 0, xmax: 1, ymin: 0, ymax: 1.1, grid: true });
+  const p = new Plot(el, { xmin: 0, xmax: 1, ymin: 0, ymax: 1.1, grid: true, boxH: 360 });
   const c = controls(el, `
     <label>p <input type="range" data-p min="0.5" max="4" step="0.1" value="2"><output data-pv>2.0</output></label>
     <label>q <input type="range" data-q min="0.5" max="4" step="0.1" value="1"><output data-qv>1.0</output></label>`);
@@ -361,7 +377,8 @@ function infinitesimalOrder(el) {
 /* ---------- 演示 8 · 四类间断点 ---------- */
 
 function discontinuity(el) {
-  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -4, ymax: 4, grid: true });
+  // y 收到 ±3：间断点的关键信息在 x=1 附近，±4 只会让图变窄
+  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -3, ymax: 3, grid: true, boxH: 380 });
   const out = readout(el);
   const EPS = 0.004;
   const TYPES = [
@@ -468,22 +485,23 @@ function ivtDemo(el) {
 
 function secantToTangent(el) {
   const f = x => x * x, X0 = 1;
-  const p = new Plot(el, { xmin: -.6, xmax: 3.4, ymin: -1.2, ymax: 10, grid: true });
+  // 割线斜率就是「竖直增量 / 水平增量」，不等比时会看出错误的斜率
+  const p = new Plot(el, { xmin: -.4, xmax: 2.4, ymin: -.5, ymax: 5.2, grid: true, boxH: 440 });
   const c = controls(el, `
-    <label>h <input type="range" data-h min="0.02" max="2.2" step="0.01" value="1.5"><output data-hv>1.50</output></label>
+    <label>h <input type="range" data-h min="0.02" max="1.2" step="0.01" value="1.0"><output data-hv>1.00</output></label>
     <button class="btn primary" data-play>▶ 让 h → 0</button>`);
   const out = readout(el);
-  const st = { h: 1.5 };
+  const st = { h: 1.0 };
 
   const draw = () => {
     const h = st.h, x1 = X0 + h, y1 = f(x1), slope = (y1 - f(X0)) / h;
     p.clear();
-    p.curve(f, { from: -.6, to: 3.4, color: PLOT_COLORS.accent, width: 2.4 });
-    p.line(-.6, 2 * (-.6) - 1, 3.4, 2 * 3.4 - 1, { color: PLOT_COLORS.ok, dash: true, width: 1.8 });
+    p.curve(f, { from: -.4, to: 2.4, color: PLOT_COLORS.accent, width: 2.4 });
+    p.line(-.4, 2 * (-.4) - 1, 2.4, 2 * 2.4 - 1, { color: PLOT_COLORS.ok, dash: true, width: 1.8 });
     p.line(X0, f(X0), x1, y1, { color: PLOT_COLORS.warn, width: 2.6 });
     p.dot(X0, f(X0), { r: 5, color: PLOT_COLORS.accent });
     p.dot(x1, y1, { r: 5, color: PLOT_COLORS.warn });
-    p.text(x1 + .08, y1 + .25, `割点 (${f4(x1)}, ${f4(y1)})`, { color: PLOT_COLORS.warn, size: 10 });
+    p.text(x1 - .1, y1 + .32, '割点', { color: PLOT_COLORS.warn, size: 10, align: 'right' });
     out.innerHTML = `${texHTML('h=' + f4(h))}　割线斜率 ${texHTML('\\dfrac{(1+h)^{2}-1}{h}=2+h=' + f4(slope))}　切线斜率 <b>${texHTML('2')}</b>　差距 <b>${f4(slope - 2)}</b><br>` +
       `把 h 拖到接近 0，割线绕着 (1,1) 转到极限位置 —— 那条绿色虚线就是切线，斜率正是第 2 章要定义的导数。`;
   };
@@ -516,7 +534,8 @@ function functionGallery(el) {
     { btn: '\\left|x\\right|', expr: 'f(x)=\\left|x\\right|', fn: Math.abs, dom: '\\mathbb{R}', range: '[0,+\\infty)', from: -3, to: 3 },
     { btn: '\\sqrt{x}', expr: 'f(x)=\\sqrt{x}',           fn: Math.sqrt,   dom: '[0,+\\infty)', range: '[0,+\\infty)', from: 0, to: 5 }
   ];
-  const p = new Plot(el, { xmin: -3, xmax: 5, ymin: -3, ymax: 5, grid: true });
+  // x、y 范围相同 → 等比后画布是正方形，y=x 正好是 45°
+  const p = new Plot(el, { xmin: -3, xmax: 5, ymin: -3, ymax: 5, grid: true, boxH: 420 });
   const c = controls(el, `
     <label>竖直检验线 x = <input type="range" data-vx min="-2.8" max="4.8" step="0.1" value="1.2"><output data-vxv>1.2</output></label>`);
   const out = readout(el);
@@ -552,7 +571,12 @@ function functionGallery(el) {
 /* ---------- 演示 12 · 无穷小与无穷大的图像对比 ---------- */
 
 function infinitesimalVsInfinity(el) {
-  const p = new Plot(el, { xmin: 0, xmax: 1.2, ymin: -.2, ymax: 3.2, grid: true });
+  // 观察窗口 r 从 0.15 变到 1.2，等比会让画布宽度变化 8 倍；且 1/x 与 x² 量纲不同
+  const p = new Plot(el, {
+    xmin: 0, xmax: 1.2, ymin: -.2, ymax: 3.2, grid: true,
+    equal: false,
+    aspectNote: '窗口缩放演示，纵横刻度不同'
+  });
   const c = controls(el, `
     <label>观察窗口 r <input type="range" data-r min="0.15" max="1.2" step="0.01" value="1"><output data-rv>1.00</output></label>
     <span class="hint">把窗口推向 0，看谁先贴近横轴</span>`);
@@ -577,7 +601,7 @@ function infinitesimalVsInfinity(el) {
 /* ---------- 演示 13 · 约分与可去间断 ---------- */
 
 function cancelAndLimit(el) {
-  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -1, ymax: 5, grid: true });
+  const p = new Plot(el, { xmin: -1, xmax: 3, ymin: -1, ymax: 5, grid: true, boxH: 400 });
   const c = controls(el, `
     <label>取 x = <input type="range" data-x min="-0.5" max="2.5" step="0.05" value="1.6"><output data-xv>1.60</output></label>`);
   const out = readout(el);
@@ -629,7 +653,7 @@ function continuityOperations(el) {
       note: '极限存在且等于 1，但该点函数值缺失；把空心点补上就连续了。', ok: false
     }
   ];
-  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -2, ymax: 2, grid: true });
+  const p = new Plot(el, { xmin: -3, xmax: 3, ymin: -2, ymax: 2, grid: true, boxH: 360 });
   const out = readout(el);
   let cur = 0;
   const draw = () => {

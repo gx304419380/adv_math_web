@@ -38,10 +38,26 @@ function createBoard(el, opts = {}) {
     grid: opts.grid ?? true,
     showCopyright: false,
     showNavigation: false,
-    keepaspectratio: false,
+    /* 必须保持等比例：1 个单位在横纵方向占同样像素。
+       关掉的话 (1,1) 会被拉成长条、圆变成椭圆、斜率失真——
+       学生看到的是错的图形。只有「横轴不是同一量纲」的图
+       （如以项数 n、时间为横轴）才可显式传 equal: false。 */
+    keepaspectratio: opts.equal !== false,
     pan: { enabled: false },
     zoom: { enabled: false }
   });
+
+  // JSXGraph 在 keepaspectratio 下会自动调整 boundingbox，
+  // 若纵横比与容器差太多会留白，这里提示作者调整范围
+  if (opts.equal !== false) {
+    const bb = board.getBoundingBox();
+    const boxW = box.clientWidth || 1, boxH = box.clientHeight || 1;
+    const ratioBB = (bb[2] - bb[0]) / (bb[1] - bb[3]);
+    const ratioBox = boxW / boxH;
+    if (Math.abs(ratioBB / ratioBox - 1) > 0.6) {
+      console.info('[graph] 显示范围的宽高比与容器差得较多，会留白；建议调整 xmin/xmax/ymin/ymax 或传 equal:false');
+    }
+  }
   return { board, box };
 }
 
