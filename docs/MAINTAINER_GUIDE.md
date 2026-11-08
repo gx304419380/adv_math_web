@@ -41,19 +41,21 @@ chapters.js → cdn.js → math.js → graph.js → plot.js → steps.js
 
 ## 2. 新增一章（照做即可）
 
-1. 复制 `chapters/_template/chapter.html` → `chapters/chNN/chNN.html`；复制 `chapter.meta.json` 作参考。
-2. 在 `chapters.json` 登记本章：`id / index / volume / title / subtitle / sections / prev / next / estMinutes / status / demos / tags / mtime`。`prev`/`next` 必须闭合。
-3. 运行 `python3 tools/sync-chapters.py` 重新生成 `assets/js/chapters.js`（**改了 chapters.json 就必须跑**）。
-4. 按 [CONTENT_SPEC.md](CONTENT_SPEC.md) 的 8 区块写内容；用 `design-system.css` 的语义组件，不写内联样式。
-5. 新建 `chapters/chNN/demo.js`，复用 `AM.Plot` / `AM.StepController` / `PLOT_COLORS`，注册进 `DEMOS` 表；页面用 `data-demo` 挂载。
-6. 知识图用 G6 的 JSON 数据（`nodes` + `edges` + `kind`）。
-7. 验收：
+章节正文走**数据驱动生产线**：撰写者只写 `tools/content/chNN.txt`，不要手改 `chapters/chNN/chNN.html`——它是生成物，会被覆盖。
+
+1. 在 `chapters.json` 登记本章：`id / index / volume / title / subtitle / sections / prev / next / estMinutes / status / demos / tags / mtime`。`prev`/`next` 必须闭合；`demos` 的顺序对应各节 `data-demo` 的 key。
+2. 运行 `python3 tools/sync-chapters.py` 重新生成 `assets/js/chapters.js`（**改了 chapters.json 就必须跑**）。
+3. 写 `tools/content/chNN.txt`：用 `=== KEY ===` 分段，必须包含 `GOALS`、`MAP`、`SECTION:s1`…、`PITFALLS`、`EXERCISES`、`QUIZ`、`SUMMARY`、`DEMOJS`。每节必备四段式例题、`data-demo` 演示盒与直观理解；格式照抄 `tools/content/ch02.txt`。
+4. 演示只写薄配置，复用 `assets/js/demo-presets.js` 的 `sliderCurve / twoSliders / riemann / polyApprox / partialSum / custom`，不要复制绘图样板。等比例是默认值；只有两轴量纲不同才允许 `equal:false`，且必须带 `aspectNote` 告示。
+5. 生成与自检：
    ```bash
-   bash tools/check.sh
-   python3 tools/shot.py --chapter chNN --viewports desktop,mobile
+   python3 tools/fill-chapter.py chNN
+   python3 tools/check-demos.py --chapter chNN
+   python3 tools/audit-math.py && node --check chapters/chNN/demo.js
    ```
-   并**额外用 `file://` 直接打开**确认无控制台错误。
-8. 提交 `feat(chNN): …`，把 `chapters.json` 的 `status` 改为 `done` 后再跑一次 `sync-chapters.py`。
+6. 知识图是 `MAP` 段里的合法 JSON（`nodes` + `edges` + `kind`），由 `assets/js/mindmap.js` 用原生 SVG 手算坐标绘制，**不依赖 G6**。
+7. **所有例题、习题、自测题与演示例子必须由另一个独立智能体复核**（数学正确性、解析自洽、零基础、原创性、演示取值），按复核报告改完再进入下一步。
+8. 全站验收 `bash tools/check.sh` 与 `python3 tools/verify-pages.py --mobile`；最后把 `chapters.json` 里该章 `status` 改为 `done`，再跑一次 `sync-chapters.py`（首页会把 `planned` 章节渲染成不可点击）。
 
 ## 3. 改样式
 
@@ -69,12 +71,18 @@ chapters.js → cdn.js → math.js → graph.js → plot.js → steps.js
 |---|---|---|
 | `python3 tools/sync-chapters.py` | 从 `chapters.json` 生成 `chapters.js` | ❌ |
 | `python3 tools/sync-chapters.py --check` | 只校验两者是否一致 | ❌ |
-| `bash tools/check.sh` | 元数据、模板、版权关键词、sympy 公式复核、CDN 可用性 | ❌ |
+| `bash tools/check.sh` | 元数据、模板、版权关键词、章节装配、sympy 公式复核、CDN、数学排版、图像交互 | ❌ |
+| `python3 tools/fill-chapter.py chNN` | 把 `tools/content/chNN.txt` 注入骨架，生成章节 HTML 与 demo.js | ❌ |
+| `python3 tools/check-demos.py` | 检查占位符、标记区、MAP/QUIZ JSON、每节组件、`data-demo` 与 `DEMOS` 一一对应、JS 语法 | ❌ |
+| `python3 tools/verify-pages.py --mobile` | **不起服务**，直接以 `file://` 打开全部页面，采集渲染与控制台指标 | ❌ |
 | `python3 tools/shot.py --chapter ch01` | 自动起本地服务，playwright 逐章截图验收 | ❌ |
-| `bash tools/serve.sh` | 本地预览服务 `http://localhost:8000` | ❌ 仅维护者调试/部署 |
+| `bash tools/serve.sh` | 本地预览服务 `http://localhost:8000` | ❌ 仅维护者调试 |
 | `python3 tools/symcheck.py` | sympy 复核关键公式 | ❌ |
+| `python3 tools/audit-math.py` | KaTeX 定界符、HTML 实体、正体函数名、中文裸进公式 | ❌ |
 
 `tools/serve.sh` 与 `shot.py` 里启动的服务**只给维护者**用。面向用户的说明里只写「双击 `index.html`」。
+
+`check-demos.py` 会自动识别 ch01 这类**手工样板章**（没有生产线标记区）并跳过装配检查，但占位符检查对它同样生效。正文源片段 `tools/content/chNN.txt` 是唯一需要手写的文件；`chapters/chNN/*` 全部由生成器产出。
 
 ## 5. 面向用户的文案规则
 
@@ -84,9 +92,16 @@ chapters.js → cdn.js → math.js → graph.js → plot.js → steps.js
 
 ## 6. 部署
 
-- GitHub Pages：Settings → Pages → Deploy from a branch → `main` / `/(root)`。仓库内已有 `.nojekyll`，保证静态文件原样发布。地址 `https://gx304419380.github.io/adv_math_web/`。
-- 也可以把整个目录直接放到任意静态托管或本地磁盘，双击即可。
-- **凭据安全**：任何 token / 密钥只经环境变量单次传入，禁止写入仓库文件、`.git/config`、remote URL、提交历史或文档。`.gitignore` 已排除 `.env*`、`*.token`、`*.key`。推送用完的 PAT 应及时撤销。
+本站发布到 **WorkBuddy 云服务器**，由平台自动分配域名；**不使用 GitHub Pages**（项目约定）。
+
+```bash
+node /root/.codebuddy/skills/sites/scripts/publish.js --dir /workspace/adv_math_web
+```
+
+命令输出形如 `https://…app.workbuddy.host/?sharecode=…` 的地址，直接发给学生即可。站点是纯静态、全部相对路径、无 module、无 `fetch`，放在任何子目录下都能跑；本地双击 `index.html` 也照样能学。
+
+- **凭据安全**：任何 token / 密钥只经环境变量单次传入，禁止写入仓库文件、`.git/config`、remote URL、提交历史或文档。`.gitignore` 已排除 `.env*`、`*.token`、`*.key`。
+- 发布前必须 `bash tools/check.sh` 与 `python3 tools/verify-pages.py` 全绿。
 
 ## 7. 内容准确性
 
@@ -106,46 +121,28 @@ chapters.js → cdn.js → math.js → graph.js → plot.js → steps.js
 |---|---|---|
 | `file:///…/index.html` | 只有本机 | **学生默认用法**，双击即可 |
 | `http://localhost:8000` | **只有运行服务的这台机器** | 维护者本机调试。在云服务器上跑，你在家用浏览器是**打不开**的 |
-| `https://<用户名>.github.io/<仓库名>/` | 所有人 | 真正能发给别人的地址（需要一个静态托管） |
+| `https://…app.workbuddy.host/?sharecode=…` | 所有人 | 真正能发给别人的地址，由 WorkBuddy 发布命令生成 |
 
 > `localhost` 永远指“你正在用的这台电脑”。服务器上的 `localhost:8000` 只属于服务器，不是公网地址。这是最常见的误会。
 
-### B.2 GitHub Pages（推荐，免费且永久）
-
-仓库推上去之后，只差一步开关：**Settings → Pages → Source 选 `Deploy from a branch` → 分支 `main`、目录 `/ (root)` → Save**。
-
-用 API 开启需要 PAT 具备 **Pages: Read and Write** 权限（只有 `Contents` 是不够的，会返回 `403 Resource not accessible by personal access token`）。开好后访问：
-
-```
-https://gx304419380.github.io/adv_math_web/
-```
-
-**本站已为 Pages 子路径做好适配**：全部用相对路径，无 module、无 `fetch`，放在 `/adv_math_web/` 这种子目录下同样能跑。
-
-### B.3 临时公网预览（没有 Pages 时）
-
-在**有公网 IP 的机器**上：
+### B.2 WorkBuddy 云服务器发布（本站采用）
 
 ```bash
-python3 -m http.server 8000 --directory . --bind 0.0.0.0
-# 然后浏览器访问 http://<这台机器的公网IP>:8000
+node /root/.codebuddy/skills/sites/scripts/publish.js --dir /workspace/adv_math_web
 ```
 
-前提：云厂商安全组放行 8000 端口。若机器没有公网 IP（NAT 后面），此法不可用，只能走 B.2 或 B.4。
+平台托管整个目录并生成可分享的域名。重新发布会更新同一站点内容；发布前先跑完 B.4 的验收。
 
-### B.4 内网穿透（有 NAT 时）
+### B.3 其他方式（不推荐，仅备用）
 
-```bash
-cloudflared tunnel --url http://localhost:8000
-```
+在有公网 IP 且安全组放行的机器上可用 `python3 -m http.server 8000 --directory . --bind 0.0.0.0`，NAT 后面可用 `cloudflared tunnel --url http://localhost:8000` 做临时演示。这些地址要么只在服务器本机有效、要么重启即失效，不适合发给学生。
 
-会给出一个 `https://xxx.trycloudflare.com` 临时地址，重启即失效，仅适合临时演示。
-
-### B.5 部署前必跑
+### B.4 部署前必跑
 
 ```bash
-bash tools/check.sh          # 元数据、版权、公式复核、CDN、数学排版
+bash tools/check.sh
+python3 tools/verify-pages.py --mobile
 python3 tools/shot.py --chapter ch01 --viewports desktop,mobile
 ```
 
-两项都通过、控制台 0 错误，才能给别人地址。
+三项都通过、控制台 0 错误、无横向溢出，才能给别人地址。
