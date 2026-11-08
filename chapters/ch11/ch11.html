@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 11 章 · 曲线积分与曲面积分 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：曲线积分与曲面积分 的原创讲解、函数图像、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/design-system.css">
+<link rel="stylesheet" href="../../assets/css/demos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js"></script>
+<script defer src="../../assets/js/chapters.js"></script>
+<script defer src="../../assets/js/cdn.js"></script>
+<script defer src="../../assets/js/math.js"></script>
+<script defer src="../../assets/js/graph.js"></script>
+<script defer src="../../assets/js/plot.js"></script>
+<script defer src="../../assets/js/steps.js"></script>
+<script defer src="../../assets/js/mindmap.js"></script>
+<script defer src="../../assets/js/quiz.js"></script>
+<script defer src="../../assets/js/theme.js"></script>
+<script defer src="../../assets/js/nav.js"></script>
+<script defer src="../../assets/js/polish.js"></script>
+<script defer src="../../assets/js/boot.js"></script>
+<script defer src="../../assets/js/demo-kit.js"></script>
+<script defer src="../../assets/js/demo-presets.js"></script>
+<script defer src="demo.js"></script>
+</head>
+<body data-chapter="ch11">
+
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="../../index.html">首页</a>
+    <a href="#" data-chapter-menu>章节目录 ▾</a>
+    <a href="../../DISCLAIMER.md">免责声明</a>
+  </nav>
+  <span class="tb-hint">同济第七版 · 内容原创</span>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
+<header class="chapter-hero">
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">11</span> 章 · <span data-slot="volume">下册</span></div>
+    <h1 data-slot="title">曲线积分与曲面积分</h1>
+    <p class="hero-sub" data-slot="subtitle">沿着曲线、穿过曲面的累加与三大公式</p>
+    <div class="hero-meta">
+      <span>约 <span data-slot="estMinutes">105</span> 分钟</span><span>·</span>
+      <span>7 节</span><span>·</span><span>7 个交互演示</span><span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+    <div class="btn-row hero-actions">
+      <a class="btn primary" href="#s1">从第 1 节开始 ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <!-- 侧栏由 assets/js/nav.js 依 chapters.json 自动生成，只显示本章小节 -->
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <p class="hint">本章按教材的节序展开，知识点名称与术语保持规范一致；定义与定理的表述、例题与图形均为本站原创。文中编号是本站自用编号，不是教材原编号。</p>
+      <ul class="goal-list" data-goal-list>
+<!-- GOALS:BEGIN -->
+        <li><label><input type="checkbox">把一段曲线用参数方程表示，算出弧长元素 \(\mathrm{d}s\)，把对弧长的曲线积分化成一元定积分</label></li>
+        <li><label><input type="checkbox">按给定方向计算对坐标的曲线积分（功），说清反向为什么变号，并用 \(\mathrm{d}x=\cos\alpha\,\mathrm{d}s\) 互换两类曲线积分</label></li>
+        <li><label><input type="checkbox">用格林公式把闭曲线积分换成二重积分，判断曲线积分是否与路径无关，并逐条核对闭区域、正向边界、偏导连续、无奇点</label></li>
+        <li><label><input type="checkbox">区分两类曲面积分、判定曲面取的「侧」，用高斯公式与斯托克斯公式把通量、环流量同散度、旋度联系起来</label></li>
+<!-- GOALS:END -->
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">先看清这一章的知识点怎么长出来，再逐节往下读。点节点可高亮相连链路。</p>
+      <div class="mermaid-box" data-mount="mindmap">
+        <!-- MAP:BEGIN -->
+<script type="application/json">
+{
+  "nodes": [
+    { "id": "n0", "label": "对弧长的曲线积分", "kind": "root" },
+    { "id": "n1", "label": "弧长元素与参数化", "kind": "core" },
+    { "id": "n2", "label": "对坐标的曲线积分", "kind": "core" },
+    { "id": "n3", "label": "两类曲线积分的关系", "kind": "branch" },
+    { "id": "n4", "label": "格林公式", "kind": "core" },
+    { "id": "n5", "label": "曲线积分与路径无关", "kind": "branch" },
+    { "id": "n6", "label": "对面积的曲面积分", "kind": "core" },
+    { "id": "n7", "label": "对坐标的曲面积分", "kind": "core" },
+    { "id": "n8", "label": "高斯公式·通量与散度", "kind": "core" },
+    { "id": "n9", "label": "斯托克斯公式·环流量与旋度", "kind": "core" },
+    { "id": "end", "label": "下一章：无穷级数", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n2", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n0", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n3", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n4", "target": "n9" },
+    { "source": "n8", "target": "n9" },
+    { "source": "n5", "target": "end" },
+    { "source": "n8", "target": "end" },
+    { "source": "n9", "target": "end" }
+  ]
+}
+</script>
+<!-- MAP:END -->
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+<!-- SECTION:s1:BEGIN -->
+        <h3><span class="sec-badge">11.1</span>对弧长的曲线积分</h3>
+        <p>这一节回答一个问题：一根弯成弧形的细铁丝，各处密度不一样，怎么求它的总质量？答案是把弧切成小段，用「密度乘段长」逐段累加，再让小段无限变细。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">对弧长的曲线积分（第一类曲线积分）</span><span class="mb-no">11.1</span></div>
+          <div class="mb-body">
+            设 \(L\) 是 \(xy\) 平面内一条光滑曲线弧，函数 \(f(x,y)\) 在 \(L\) 上有界。把 \(L\) 任意分成 \(n\) 个小弧段，第 \(k\) 段弧长记为 \(\Delta s_k\)，在该段上任取一点 \((\xi_k,\eta_k)\)，作和 \(\sum_{k=1}^{n}f(\xi_k,\eta_k)\,\Delta s_k\)。若当各小段长度的最大值趋于 \(0\) 时，这个和的极限存在、且与分法和取点都无关，就称这个极限为 \(f\) 在 \(L\) 上<strong class="term">对弧长的曲线积分</strong>，记作
+            $$\int_L f(x,y)\,\mathrm{d}s$$
+            其中 \(L\) 叫<strong class="term">积分弧段</strong>，\(\mathrm{d}s\) 叫<strong class="term">弧长元素</strong>。当 \(f\equiv 1\) 时，\(\int_L \mathrm{d}s\) 就是弧段 \(L\) 的长度。
+            <mark class="key">\(\Delta s_k\) 是弧长、恒取正值，所以这类积分与沿弧的行走方向无关</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">计算法与方向无关性</span><span class="mb-no">11.2</span></div>
+          <div class="mb-body">
+            若 \(L\) 由参数方程 \(x=\varphi(t),\ y=\psi(t)\ (\alpha\le t\le\beta)\) 给出，\(\varphi,\psi\) 有连续导数且不全为零，则
+            $$\mathrm{d}s=\sqrt{\varphi'(t)^2+\psi'(t)^2}\,\mathrm{d}t,\qquad \int_L f(x,y)\,\mathrm{d}s=\int_{\alpha}^{\beta}f\bigl(\varphi(t),\psi(t)\bigr)\sqrt{\varphi'(t)^2+\psi'(t)^2}\,\mathrm{d}t$$
+            这里定积分的下限 \(\alpha\) 总取较小的参数值、上限 \(\beta\) 取较大的参数值。把起点终点对调，只是换了一个参数化，根号里的平方和不变，<mark class="key">积分值不变</mark>——这就是「与方向无关」在计算上的来源。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="line-integral-arc">
+          <div class="demo-title">演示 1 · 沿线段累加质量，正反两个方向都得同一个数</div>
+          <div class="demo-caption">蓝线是直线段 \(L\)：从起点 \((0,0)\) 到终点 \((3,4)\)，红点标出已经累加到的位置，橙箭头标出遍历方向。拖动「累加比例」，读数给出部分积分 \(I(t)\)；点两个按钮切换方向，<b>盯住整条弧累加完的总和质量始终是 25</b>——第一类曲线积分与方向无关。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算一根密度不均匀细铁丝的质量</span><span class="mb-no">例 11.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">把一根细铁丝拉成直线段 \(L\)：从 \(A(0,0)\) 到 \(B(3,4)\)。已知它在点 \((x,y)\) 处的线密度为 \(f(x,y)=x^{2}+y\)，求质量 \(M=\int_L (x^{2}+y)\,\mathrm{d}s\)。再把行走方向反过来（从 \(B\) 到 \(A\)）重算一遍，比较两个结果。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先把线段写成参数方程，再算弧长元素 \(\mathrm{d}s\)；然后把被积函数里的 \(x,y\) 都换成参数，化成关于 \(t\) 的定积分。反向时只要换一组参数化，看结果变不变。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              取 \(x=3t,\ y=4t\ (0\le t\le 1)\)，则 \(x'=3,\ y'=4\)，
+              $$\mathrm{d}s=\sqrt{3^{2}+4^{2}}\,\mathrm{d}t=5\,\mathrm{d}t$$
+              又 \(f(x,y)=x^{2}+y=9t^{2}+4t\)，故
+              $$M=\int_0^1 (9t^{2}+4t)\cdot 5\,\mathrm{d}t=5\left(3t^{3}+2t^{2}\right)\Big|_0^1=5(3+2)=25$$
+              反向取 \(x=3-3t,\ y=4-4t\ (0\le t\le 1)\)。此时 \(x'=-3,\ y'=-4\)，平方和仍是 \(25\)，故 \(\mathrm{d}s=5\,\mathrm{d}t\) 不变；而 \(f=(3-3t)^{2}+(4-4t)=13-22t+9t^{2}\)，
+              $$M=\int_0^1 (13-22t+9t^{2})\cdot 5\,\mathrm{d}t=5\left(13-11+3\right)=25$$
+              两个方向都得到 \(25\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「参数化 → 算 \(\mathrm{d}s=\sqrt{x'^2+y'^2}\,\mathrm{d}t\) → 下限取参数小者 → 定积分」。凡是线段，\(\mathrm{d}s\) 是常数；反向只换参数化、不改 \(\mathrm{d}s\)，所以对弧长的曲线积分与方向无关。只有下一节的第二类曲线积分才需要盯住方向。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">把弯弧拉直来读面积</span></div>
+          <div class="mb-body">把 \(L\) 想象成一根可以拉直的软尺，拉直后长度就是 \(\int_L \mathrm{d}s\)。以弧长当横轴、把 \(f\) 当高度，\(\int_L f\,\mathrm{d}s\) 就是这条「弯曲地毯」的面积。从左往右读和从右往左读，量到的是同一块面积，所以方向不影响结果。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把 \(\mathrm{d}s\) 当成 \(\mathrm{d}x\) 直接代</span></div>
+          <div class="mb-body">线段 \(y=x\) 从 \((0,0)\) 到 \((1,1)\) 上，\(\mathrm{d}s=\sqrt{1^2+1^2}\,\mathrm{d}t=\sqrt{2}\,\mathrm{d}t\)，不是 \(\mathrm{d}t\)。<b>错误做法</b>：把 \(\int_L f\,\mathrm{d}s\) 写成 \(\int_0^1 f(t,t)\,\mathrm{d}t\)。<b>为什么错</b>：漏掉了参数化带来的伸缩因子。<b>正确做法</b>：先算 \(\sqrt{x'^2+y'^2}\)，把 \(\mathrm{d}s\) 完整写出来再积分。</div>
+        </div>
+<!-- SECTION:s1:END -->
+      </article>
+      <article class="section" id="s2">
+<!-- SECTION:s2:BEGIN -->
+        <h3><span class="sec-badge">11.2</span>对坐标的曲线积分</h3>
+        <p>这一节回答另一个问题：力沿着一条有方向的路径把质点推过去，一共做了多少功？这里不但要记大小，还要记「往哪个方向走」。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">对坐标的曲线积分（第二类曲线积分）</span><span class="mb-no">11.3</span></div>
+          <div class="mb-body">
+            设 \(L\) 是从起点 \(A\) 到终点 \(B\) 的有向光滑曲线弧，\(P(x,y),Q(x,y)\) 在 \(L\) 上有界。沿指定方向把 \(L\) 分成小段，第 \(k\) 段在 \(x,y\) 轴上的有向投影为 \(\Delta x_k,\Delta y_k\)，取点 \((\xi_k,\eta_k)\) 作和 \(\sum_{k=1}^{n}\bigl(P(\xi_k,\eta_k)\Delta x_k+Q(\xi_k,\eta_k)\Delta y_k\bigr)\)。若极限存在，称其为<strong class="term">对坐标的曲线积分</strong>，记作
+            $$\int_L P\,\mathrm{d}x+Q\,\mathrm{d}y$$
+            物理上，若力场 \(\vec{F}=(P,Q)\)，它就是 \(\vec{F}\) 沿 \(L\) 把质点从 \(A\) 移到 \(B\) 所做的功。
+            <mark class="key">\(\Delta x_k,\Delta y_k\) 是有向投影，可正可负；把路径方向反过来，二者同时变号，积分整体变号</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">两类曲线积分的关系</span><span class="mb-no">11.4</span></div>
+          <div class="mb-body">
+            设 \(L\) 取定方向，与前进方向一致的单位切向量为 \(\vec{\tau}=(\cos\alpha,\cos\beta)\)（\(\alpha,\beta\) 是它与 \(x,y\) 轴正向的夹角），则
+            $$\mathrm{d}x=\cos\alpha\,\mathrm{d}s,\qquad \mathrm{d}y=\cos\beta\,\mathrm{d}s$$
+            从而
+            $$\int_L P\,\mathrm{d}x+Q\,\mathrm{d}y=\int_L\left(P\cos\alpha+Q\cos\beta\right)\mathrm{d}s$$
+            <div class="proof-title">证明 · 把「方向」翻译成方向余弦 · 3 步（常显）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">记 \(\vec{\tau}=(\cos\alpha,\cos\beta)\) 为与 \(L\) 同向的单位切向量</span><span class="derive-note">切向量逐点变化，方向余弦也逐点变化，不是常数</span></li>
+              <li><span class="derive-eq">有向位移 \((\mathrm{d}x,\mathrm{d}y)\) 的长度是 \(\mathrm{d}s\)，方向就是 \(\vec{\tau}\)，故 \((\mathrm{d}x,\mathrm{d}y)=(\cos\alpha,\cos\beta)\,\mathrm{d}s\)</span><span class="derive-note">这就是「投影 = 长度乘方向余弦」，\(\mathrm{d}s>0\)</span></li>
+              <li><span class="derive-eq">代入 \(P\,\mathrm{d}x+Q\,\mathrm{d}y=(P\cos\alpha+Q\cos\beta)\,\mathrm{d}s\)，两边沿 \(L\) 积分</span><span class="derive-note">反向时 \(\vec{\tau}\) 变号、两方向余弦同时变号，正好解释第二类反向变号</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="line-integral-work">
+          <div class="demo-title">演示 2 · 力场沿抛物线做功，反向走结果变号</div>
+          <div class="demo-caption">蓝线是质点走的路径 \(y=x^{2}\)，红点是质点当前位置，力场为 \(\vec{F}=(y,x^{2})\)。拖动「行走位置」，读数给出累计功 \(W(t)\)；点按钮切换正反向，<b>看走完全程得到 \(\frac{5}{6}\) 与 \(-\frac{5}{6}\)</b>——第二类曲线积分依赖方向。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算力场沿抛物线做的功</span><span class="mb-no">例 11.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设力场 \(\vec{F}=(P,Q)=(y,\ x^{2})\)。质点沿抛物线 \(y=x^{2}\) 从 \(O(0,0)\) 移动到 \(B(1,1)\)，求力所做的功 \(W=\int_L y\,\mathrm{d}x+x^{2}\,\mathrm{d}y\)。若改从 \(B\) 返回 \(O\)，功又是多少？</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>把路径参数化，算出 \(\mathrm{d}x,\mathrm{d}y\)，再把 \(P,Q\) 里的 \(x,y\) 都换成参数，化成一个定积分。返回时起点终点对调，看 integrand 是否整体变号。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              取 \(x=t,\ y=t^{2}\ (0\le t\le 1)\)，则 \(\mathrm{d}x=\mathrm{d}t,\ \mathrm{d}y=2t\,\mathrm{d}t\)。又 \(P=y=t^{2},\ Q=x^{2}=t^{2}\)，
+              $$W=\int_0^1 \left(t^{2}\cdot 1+t^{2}\cdot 2t\right)\mathrm{d}t=\int_0^1\left(t^{2}+2t^{3}\right)\mathrm{d}t=\frac{1}{3}+\frac{1}{2}=\frac{5}{6}$$
+              返回时取 \(x=1-t,\ y=(1-t)^{2}\ (0\le t\le 1)\)，\(\mathrm{d}x=-\mathrm{d}t,\ \mathrm{d}y=-2(1-t)\,\mathrm{d}t\)。两个微分都变号，而被积的 \(P,Q\) 仍非负，故 integrand 整体取负，结果为 \(-\frac{5}{6}\)。直接算可核对：\(\int_0^1\bigl[-(1-t)^{2}-2(1-t)^{3}\bigr]\mathrm{d}t=-\frac{5}{6}\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「认清起终点 → 参数化并写出 \(\mathrm{d}x,\mathrm{d}y\)（注意符号）→ 化成定积分」。与第一类不同，这里方向由 \(\mathrm{d}x,\mathrm{d}y\) 的符号携带；只要把方向反过来，不必重算，直接给结果添负号即可。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">第二类积分读的是「顺着走还是顶着走」</span></div>
+          <div class="mb-body">力场 \(\vec{F}\) 与位移方向一致时做正功、相反时做负功。把整条路径调头，每一小段位移都反向，每一小段功都变号，总和自然变号。两类曲线积分的差别就在这里：第一类累加的是「弧长 \(\mathrm{d}s\) × 密度」，\(\mathrm{d}s\) 恒取正、不带方向，积分值可正可负；第二类累加的是「力 · 有向位移」，\(\mathrm{d}x,\mathrm{d}y\) 可正可负、带着方向。</div>
+        </div>
+<!-- SECTION:s2:END -->
+      </article>
+      <article class="section" id="s3">
+<!-- SECTION:s3:BEGIN -->
+        <h3><span class="sec-badge">11.3</span>格林公式及其应用</h3>
+        <p>这一节回答：绕一条闭曲线算第二类曲线积分，能不能换成在它围成的区域里算一个二重积分？格林公式说能，但条件一个都不能少。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">格林公式</span><span class="mb-no">11.5</span></div>
+          <div class="mb-body">
+            设闭区域 \(D\) 由分段光滑的<strong class="term">简单闭曲线</strong>（首尾相接、自己不相交的一圈曲线） \(L\) 围成，函数 \(P(x,y),Q(x,y)\) 在 \(D\) 上具有一阶连续偏导数，且 \(L\) 取<strong class="term">正向</strong>（沿 \(L\) 前进时区域 \(D\) 总在左手边，对单连通区域即逆时针方向），则
+            $$\oint_L P\,\mathrm{d}x+Q\,\mathrm{d}y=\iint_D\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\mathrm{d}x\,\mathrm{d}y$$
+            <mark class="key">四个条件缺一不可：闭区域、边界取正向（逆时针）、偏导连续、区域内没有使偏导不存在的奇点</mark>。若 \(L\) 取顺时针，右端要添负号。
+            <div class="proof-title">推导 · 为什么被积是 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\) · 3 步（常显）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">把 \(D\) 看成 \(c\le y\le d,\ x_1(y)\le x\le x_2(y)\) 的区域，算 \(\iint_D \frac{\partial Q}{\partial x}\,\mathrm{d}x\mathrm{d}y\)</span><span class="derive-note">先对 \(x\) 积分得 \(Q(x_2(y),y)-Q(x_1(y),y)\)：右边界上行、左边界下行，正好拼出 \(\oint_L Q\,\mathrm{d}y\)</span></li>
+              <li><span class="derive-eq">再把 \(D\) 看成 \(a\le x\le b,\ y_1(x)\le y\le y_2(x)\)，同理 \(\iint_D\left(-\frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y=\oint_L P\,\mathrm{d}x\)</span><span class="derive-note">先对 \(y\) 积分，上边界左行、下边界右行，符号自动相反；两项合并即得</span></li>
+              <li><span class="derive-eq">两式相加即得格林公式</span><span class="derive-note">一般区域用辅助线切成若干简单区域，内部辅助线上的积分来回各一次、互相抵消</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">曲线积分与路径无关的条件</span><span class="mb-no">11.6</span></div>
+          <div class="mb-body">
+            设 \(D\) 是<strong class="term">单连通</strong>区域（没有「洞」），\(P,Q\) 在 \(D\) 内有一阶连续偏导。则下面三件事等价：\(\int_L P\,\mathrm{d}x+Q\,\mathrm{d}y\) 在 \(D\) 内与路径无关；对 \(D\) 内任一条闭曲线 \(L\) 都有 \(\oint_L P\,\mathrm{d}x+Q\,\mathrm{d}y=0\)；在 \(D\) 内处处
+            $$\frac{\partial Q}{\partial x}=\frac{\partial P}{\partial y}$$
+            <mark class="key">只验 \(\frac{\partial Q}{\partial x}=\frac{\partial P}{\partial y}\) 还不够，必须同时要求 \(D\) 单连通</mark>。
+            <div class="proof-title">推导 · 单连通为什么不能省 · 3 步（常显）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">取 \(D\) 内任一闭曲线 \(L\)，设它围成的区域为 \(D_0\subset D\)。若 \(\frac{\partial Q}{\partial x}=\frac{\partial P}{\partial y}\)，则由格林公式 \(\oint_L=\iint_{D_0}0\,\mathrm{d}A=0\)</span><span class="derive-note">关键前提是 \(D_0\) 整块落在 \(D\) 内，偏导才处处有定义</span></li>
+              <li><span class="derive-eq">单连通保证 \(D\) 内任一闭曲线围出的区域仍全在 \(D\) 内</span><span class="derive-note">若 \(D\) 有洞，绕洞的闭曲线围出的区域含洞，场可能在洞内无定义，上一步失效</span></li>
+              <li><span class="derive-eq">两条同起点同终点路径 \(L_1,L_2\) 拼成一条闭曲线，闭曲线积分为 \(0\) 说明 \(\int_{L_1}=\int_{L_2}\)</span><span class="derive-note">这就是「与路径无关」，于是可定义势函数只由端点求值</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="green-theorem">
+          <div class="demo-title">演示 3 · 闭曲线积分怎样换成区域里的二重积分</div>
+          <div class="demo-caption">浅色矩形是闭区域 \(D=[0,2]\times[0,1]\)，橙箭头标出边界 \(L\) 的正向（逆时针），红点沿边界行走。场为 \(\vec{F}=(x^{2}-y,\ y^{2}+x)\)。拖动「边界行走位置」，读数给出 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}=2\) 与面积 \(2\)；点按钮切换成顺时针，<b>看结果由 \(4\) 变成 \(-4\)</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用格林公式算矩形边界上的闭曲线积分</span><span class="mb-no">例 11.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">计算 \(\oint_L (x^{2}-y)\,\mathrm{d}x+(y^{2}+x)\,\mathrm{d}y\)，其中 \(L\) 是矩形 \(D=[0,2]\times[0,1]\) 取逆时针方向的边界。若把 \(L\) 改成顺时针，结果又是多少？</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先核对条件：\(L\) 是闭曲线、逆时针（正向），\(P=x^{2}-y,\ Q=y^{2}+x\) 是多项式、偏导处处连续，矩形内没有奇点，可以直接用格林公式。再算 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\) 在矩形上的二重积分。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              记 \(P=x^{2}-y,\ Q=y^{2}+x\)，则
+              $$\frac{\partial Q}{\partial x}=1,\qquad \frac{\partial P}{\partial y}=-1,\qquad \frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}=1-(-1)=2$$
+              由格林公式
+              $$\oint_L P\,\mathrm{d}x+Q\,\mathrm{d}y=\iint_D 2\,\mathrm{d}x\mathrm{d}y$$
+              矩形面积是 \(2\times 1=2\)，所以结果 \(2\cdot 2=4\)。核对：沿四条边直接积分分别得 \(\frac{8}{3},\frac{7}{3},-\frac{2}{3},-\frac{1}{3}\)，相加也是 \(4\)，与公式一致。<br>
+              若 \(L\) 取顺时针，边界不是正向，结果为 \(-4\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先逐条核对四个条件 → 算 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\) → 在 \(D\) 上算二重积分 → 检查边界是否逆时针」。当被积式化成常数时，二重积分就等于「常数乘面积」，这是最省事的情形。若被积函数在区域内有奇点，不能直接套公式，要挖去奇点单独处理。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">把沿边的「绕圈」换成区域内部的「转量」</span></div>
+          <div class="mb-body">\(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\) 量的是力场在每一点「打旋」的强弱。格林公式说：沿整条边界绕一圈累加出来的环流量，等于把区域里每一点的打旋量全加起来。所以只要内部不打旋（处处偏导相等、又单连通），绕任何闭曲线都为零，积分就与路径无关。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">区域里有奇点还硬套格林公式</span></div>
+          <div class="mb-body"><b>错误做法</b>：场在区域内某点分母为零、偏导不存在，仍直接写 \(\oint_L=\iint_D\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\mathrm{d}A\)。<b>为什么错</b>：公式要求 \(P,Q\) 在整个 \(D\) 上有一阶连续偏导，奇点处这一条不成立，二重积分可能根本不能按原样算。<b>正确做法</b>：用一条很小的闭曲线把奇点圈起来挖掉，在剩下的复连通区域上用格林公式，再单独补算绕奇点那一小圈的贡献。</div>
+        </div>
+<!-- SECTION:s3:END -->
+      </article>
+      <article class="section" id="s4">
+<!-- SECTION:s4:BEGIN -->
+        <h3><span class="sec-badge">11.4</span>对面积的曲面积分</h3>
+        <p>这一节把上一章「沿曲线累加」搬到曲面上：一张薄薄的曲面壳，各处面密度不同，求它的总质量。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">对面积的曲面积分（第一类曲面积分）</span><span class="mb-no">11.7</span></div>
+          <div class="mb-body">
+            设 \(\Sigma\) 是一片光滑曲面，\(f(x,y,z)\) 在 \(\Sigma\) 上有界。把 \(\Sigma\) 分成 \(n\) 个小片，第 \(k\) 片面积记为 \(\Delta S_k\)，在片上取点 \((\xi_k,\eta_k,\zeta_k)\) 作和 \(\sum_{k=1}^{n}f(\xi_k,\eta_k,\zeta_k)\Delta S_k\)。若小片直径最大值趋于 \(0\) 时极限存在，称其为 \(f\) 在 \(\Sigma\) 上<strong class="term">对面积的曲面积分</strong>，记作
+            $$\iint_\Sigma f(x,y,z)\,\mathrm{d}S$$
+            \(\mathrm{d}S\) 叫<strong class="term">面积元素</strong>。当 \(f\equiv 1\) 时，\(\iint_\Sigma \mathrm{d}S\) 就是曲面 \(\Sigma\) 的面积。
+            <mark class="key">\(\Delta S_k\) 是面积、恒取正，所以第一类曲面积分不分「侧」，与曲面朝向无关</mark>。
+          </div>
+        </div>
+
+        <div class="math-block property">
+          <div class="mb-head"><span class="mb-tag">性质</span><span class="mb-title">化成投影区域上的二重积分</span><span class="mb-no">11.8</span></div>
+          <div class="mb-body">
+            若 \(\Sigma\) 由 \(z=z(x,y)\) 给出，在 \(xy\) 平面上的投影为 \(D\)，\(z\) 有连续偏导，则
+            $$\mathrm{d}S=\sqrt{1+z_x^{2}+z_y^{2}}\,\mathrm{d}x\mathrm{d}y,\qquad \iint_\Sigma f(x,y,z)\,\mathrm{d}S=\iint_D f\bigl(x,y,z(x,y)\bigr)\sqrt{1+z_x^{2}+z_y^{2}}\,\mathrm{d}x\mathrm{d}y$$
+            根号里的因子量的是「斜着的曲面片比它的投影胖多少」：曲面越陡，同样一块投影对应的曲面面积越大。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="surface-integral-area">
+          <div class="demo-title">演示 4 · 把曲面切成小格，黎曼和怎样逼近总质量</div>
+          <div class="demo-caption">图是平面 \(z=2x+2y\) 在 \(xy\) 平面上的<b>俯视投影</b>（沿 \(z\) 轴往下看），阴影小格是一块投影面积微元；第一类曲面积分不分侧，所以这里不需要选上侧或下侧。拖动「细分份数」，读数给出黎曼和 \(S_n=6-\frac{6}{n}\)，<b>看它随 \(n\) 增大逼近精确值 \(6\)</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算一块斜平面薄壳的质量</span><span class="mb-no">例 11.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\Sigma\) 是平面 \(z=2x+2y\) 被 \(0\le x\le 1,\ 0\le y\le 1\) 截出的一块，面密度为 \(f(x,y,z)=z\)。求质量 \(M=\iint_\Sigma z\,\mathrm{d}S\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>曲面已写成 \(z=z(x,y)\)，先算两个偏导得到面积元素 \(\mathrm{d}S\)，再把密度里的 \(z\) 换成 \(2x+2y\)，化成投影正方形上的二重积分。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(z_x=2,\ z_y=2\)，故
+              $$\mathrm{d}S=\sqrt{1+2^{2}+2^{2}}\,\mathrm{d}x\mathrm{d}y=\sqrt{9}\,\mathrm{d}x\mathrm{d}y=3\,\mathrm{d}x\mathrm{d}y$$
+              在曲面上 \(z=2x+2y\)，于是
+              $$M=\int_0^1\!\!\int_0^1 (2x+2y)\cdot 3\,\mathrm{d}x\mathrm{d}y=3\left(\int_0^1\!\!\int_0^1 2x\,\mathrm{d}x\mathrm{d}y+\int_0^1\!\!\int_0^1 2y\,\mathrm{d}x\mathrm{d}y\right)=3(1+1)=6$$
+              其中 \(\int_0^1\!\!\int_0^1 2x\,\mathrm{d}x\mathrm{d}y=1\)，另一项同理也等于 \(1\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「把曲面写成 \(z=z(x,y)\) → 算 \(\sqrt{1+z_x^2+z_y^2}\) → 把 \(f\) 里的 \(z\) 代掉 → 在投影 \(D\) 上算二重积分」。本题密度是线性函数，演示取每格左下角估密度，黎曼和 \(S_n=6-\dfrac{6}{n}\) 随 \(n\) 增大趋于 \(6\)；若改取每格中点，线性函数下任意细分都恰好得 \(6\)。第一类曲面积分永远不必追问「取哪一侧」。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">面积元素是「投影面积乘一个放大倍数」</span></div>
+          <div class="mb-body">把斜平面片正对着光看，它投在地面上会缩短；反过来，地面上一块 \(\mathrm{d}A\) 的影子，对应曲面上的真实面积要乘 \(\sqrt{1+z_x^2+z_y^2}\) 倍。平面 \(z=2x+2y\) 各处倾斜程度相同，倍数恒为 \(3\)，所以总质量就是「投影积分再乘 3」。</div>
+        </div>
+<!-- SECTION:s4:END -->
+      </article>
+      <article class="section" id="s5">
+<!-- SECTION:s5:BEGIN -->
+        <h3><span class="sec-badge">11.5</span>对坐标的曲面积分</h3>
+        <p>这一节问的是：流体以某个速度穿过一张曲面，单位时间流过去多少？这时「从哪一面穿过去」会改变正负，必须给曲面指定一侧。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">对坐标的曲面积分与曲面的侧（第二类曲面积分）</span><span class="mb-no">11.9</span></div>
+          <div class="mb-body">
+            设 \(\Sigma\) 是一片光滑曲面，指定了其中一侧，用该侧的单位法向量 \(\vec{n}=(\cos\alpha,\cos\beta,\cos\gamma)\) 表示，这一侧称为曲面的<strong class="term">正侧</strong>。对坐标的曲面积分记作
+            $$\iint_\Sigma P\,\mathrm{d}y\mathrm{d}z+Q\,\mathrm{d}z\mathrm{d}x+R\,\mathrm{d}x\mathrm{d}y$$
+            它表示向量场 \(\vec{F}=(P,Q,R)\) 穿过 \(\Sigma\) 正侧的通量，也等于 \(\iint_\Sigma \vec{F}\cdot\vec{n}\,\mathrm{d}S\)。<br>
+            若 \(\Sigma\) 由 \(z=z(x,y)\) 给出、投影为 \(D\)，则
+            $$\iint_\Sigma R\,\mathrm{d}x\mathrm{d}y=\pm\iint_D R\bigl(x,y,z(x,y)\bigr)\,\mathrm{d}x\mathrm{d}y$$
+            取<strong>上侧</strong>（法向量与 \(z\) 轴正向成锐角）时取正号，取<strong>下侧</strong>时取负号。同理，封闭曲面有<strong>外侧</strong>与<strong>内侧</strong>之分。
+            <mark class="key">对坐标的曲面积分依赖「侧」：换成另一侧，\(\mathrm{d}y\mathrm{d}z,\mathrm{d}z\mathrm{d}x,\mathrm{d}x\mathrm{d}y\) 同时变号，结果整体差一个负号</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="flux-surface">
+          <div class="demo-title">演示 5 · 同一片曲面，换一侧通量就变号</div>
+          <div class="demo-caption">图是平面 \(z=2-x-y\) 在 \(xy\) 平面上的<b>俯视投影</b>（沿 \(+z\) 方向朝下看）；上侧法向指向读者、下侧法向背离读者，阴影是正在累加的投影区域。拖动「积分范围」看部分通量增长，点按钮切换上侧/下侧，<b>整片结果在 \(1\) 与 \(-1\) 之间翻转</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">上侧与下侧各算一次通量</span><span class="mb-no">例 11.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\Sigma\) 是平面 \(z=2-x-y\) 被 \(0\le x\le 1,\ 0\le y\le 1\) 截出的一块。求 \(\iint_\Sigma z\,\mathrm{d}x\mathrm{d}y\)：先取<b>上侧</b>，再取<b>下侧</b>。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>曲面已写成 \(z=z(x,y)\)，被积只含 \(R=z\) 这一项，直接用投影公式。关键在于先定「侧」：上侧取正号、下侧取负号，投影区域都是那个单位正方形。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              把 \(z=2-x-y\) 代入 \(R=z\)，投影 \(D=[0,1]\times[0,1]\)。先算公共的二重积分
+              $$\iint_D (2-x-y)\,\mathrm{d}x\mathrm{d}y=2-\frac{1}{2}-\frac{1}{2}=1$$
+              取上侧时 \(\mathrm{d}x\mathrm{d}y\) 取正号：
+              $$\iint_\Sigma z\,\mathrm{d}x\mathrm{d}y=+\iint_D(2-x-y)\,\mathrm{d}x\mathrm{d}y=1$$
+              取下侧时整体添负号：
+              $$\iint_\Sigma z\,\mathrm{d}x\mathrm{d}y=-1$$
+              两次只差一个负号，正是「依赖侧」的体现。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先判定题目指定的是上侧还是下侧（封闭曲面则看外侧还是内侧）→ 定投影公式的符号 → 把 \(z=z(x,y)\) 代入被积函数 → 在 \(D\) 上算二重积分」。第一类曲面积分不问侧、第二类必须问；忘记定侧是本节最高频的失分点。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">通量是「带方向的穿过量」</span></div>
+          <div class="mb-body">把 \(\vec{n}\) 想成曲面上竖着的小箭头：流体顺着箭头穿出去记正，逆着箭头记负。把整张曲面的箭头全部反过来（换侧），每一次穿过都换了符号，总量自然变号。所以侧不是装饰，而是被积量 \(\mathrm{d}x\mathrm{d}y\) 本身的符号约定。</div>
+        </div>
+<!-- SECTION:s5:END -->
+      </article>
+      <article class="section" id="s6">
+<!-- SECTION:s6:BEGIN -->
+        <h3><span class="sec-badge">11.6</span>高斯公式、通量与散度</h3>
+        <p>这一节回答：穿过一张封闭曲面的总通量，能不能用曲面内部「源」的强弱直接算出来？高斯公式把它化成一个三重积分。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">通量与散度</span><span class="mb-no">11.10</span></div>
+          <div class="mb-body">
+            向量场 \(\vec{F}=(P,Q,R)\) 穿过有向曲面 \(\Sigma\) 指定一侧的<strong class="term">通量</strong>为 \(\iint_\Sigma \vec{F}\cdot\vec{n}\,\mathrm{d}S\)。在点 \((x,y,z)\) 处的<strong class="term">散度</strong>定义为
+            $$\nabla\cdot\vec{F}=\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z}$$
+            散度为正表示该点像「源头」往外冒，为负表示像「漏洞」往里吸，为零表示既不冒也不吸。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">高斯公式（散度定理）</span><span class="mb-no">11.11</span></div>
+          <div class="mb-body">
+            设空间闭区域 \(\Omega\) 由分片光滑的<strong class="term">封闭曲面</strong> \(\Sigma\) 围成，\(P,Q,R\) 在 \(\Omega\) 上有一阶连续偏导，\(\Sigma\) 取<strong class="term">外侧</strong>，则
+            $$\iint_\Sigma P\,\mathrm{d}y\mathrm{d}z+Q\,\mathrm{d}z\mathrm{d}x+R\,\mathrm{d}x\mathrm{d}y=\iiint_\Omega\left(\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z}\right)\mathrm{d}V=\iiint_\Omega \nabla\cdot\vec{F}\,\mathrm{d}V$$
+            <mark class="key">曲面必须封闭、且取外侧；取内侧整体变号，曲面不封闭则不能直接套用</mark>。
+            <div class="proof-title">推导 · 把区域切成小盒 · 3 步（常显）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">把 \(\Omega\) 切成许多小长方体，每个小盒外表面的通量近似为 \((\nabla\cdot\vec{F})\,\Delta V\)</span><span class="derive-note">这是散度的局部意义：单位体积里净流出的量</span></li>
+              <li><span class="derive-eq">相邻两个小盒的公共面上，法向相反，通量一正一负互相抵消</span><span class="derive-note">所以内部所有小面的贡献全部消掉</span></li>
+              <li><span class="derive-eq">把所有小盒加起来取极限，只剩最外层封闭曲面 \(\Sigma\) 的通量，右端正是 \(\iiint_\Omega \nabla\cdot\vec{F}\,\mathrm{d}V\)</span><span class="derive-note">这就得到高斯公式，外侧由「小盒外表面」自然继承</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="gauss-divergence">
+          <div class="demo-title">演示 6 · 封闭曲面的通量等于区域里散度的总和</div>
+          <div class="demo-caption">图是单位立方体沿 \(z\) 轴的<b>俯视投影</b>：四条边上的橙箭头表示封闭曲面的外法向，顶、底两面的法向分别朝外（沿 \(\pm z\)，图中未另行展开）。场为 \(\vec{F}=(x^{2}+y,\ y+z,\ z+x)\)。拖动「取样位置」看散度 \(\nabla\cdot\vec{F}=2x+2\) 逐点变化，点按钮切换外侧/内侧，<b>通量在 \(3\) 与 \(-3\) 之间翻转</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用高斯公式算立方体外表面的通量</span><span class="mb-no">例 11.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\vec{F}=(x^{2}+y,\ y+z,\ z+x)\)，\(\Sigma\) 是单位立方体 \(\Omega=[0,1]\times[0,1]\times[0,1]\) 的边界曲面，取<b>外侧</b>。求通量 \(\iint_\Sigma \vec{F}\cdot\vec{n}\,\mathrm{d}S\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>\(\Sigma\) 是封闭曲面且取外侧，\(\vec{F}\) 是多项式、偏导处处连续，完全符合高斯公式条件。于是无需逐面算六个面的曲面积分，只要把散度在立方体上做三重积分。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              $$\nabla\cdot\vec{F}=\frac{\partial}{\partial x}(x^{2}+y)+\frac{\partial}{\partial y}(y+z)+\frac{\partial}{\partial z}(z+x)=2x+1+1=2x+2$$
+              由高斯公式
+              $$\iint_\Sigma \vec{F}\cdot\vec{n}\,\mathrm{d}S=\iiint_\Omega (2x+2)\,\mathrm{d}V=\int_0^1\!\!\int_0^1\!\!\int_0^1 (2x+2)\,\mathrm{d}x\mathrm{d}y\mathrm{d}z$$
+              先对 \(x\) 积分：\(\int_0^1(2x+2)\,\mathrm{d}x=\left(x^{2}+2x\right)\big|_0^1=3\)；再乘上 \(y,z\) 方向各长 \(1\) 的因子，得
+              $$\iint_\Sigma \vec{F}\cdot\vec{n}\,\mathrm{d}S=3$$
+              若改取内侧，结果为 \(-3\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先确认曲面封闭且取外侧 → 算散度 \(\nabla\cdot\vec{F}\) → 在 \(\Omega\) 上做三重积分 → 检查侧」。当散度只依赖一个变量时，三重积分退化成「一元积分乘其余方向长度」，心算即可。若曲面不封闭，要先补一块面把它封口，再减去补面的通量。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">外面流走多少，等于里面冒出多少</span></div>
+          <div class="mb-body">把 \(\Omega\) 想成一块装满水的海绵，散度是每一点「冒水」的速率。水不会凭空消失，所以从整个外表面流出去的总量，必然等于内部所有点冒出的总量之和。高斯公式就是把这句守恒的话写成等式——正因为如此，它要求曲面把区域严严实实地包住（封闭），且法向朝外。</div>
+        </div>
+<!-- SECTION:s6:END -->
+      </article>
+      <article class="section" id="s7">
+<!-- SECTION:s7:BEGIN -->
+        <h3><span class="sec-badge">11.7</span>斯托克斯公式、环流量与旋度</h3>
+        <p>这一节是格林公式在空间里的升级：沿一条空间闭曲线的环流量，等于张在这条曲线上的曲面里「旋度」的总和。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">环流量与旋度</span><span class="mb-no">11.12</span></div>
+          <div class="mb-body">
+            向量场 \(\vec{F}=(P,Q,R)\) 沿有向闭曲线 \(\Gamma\) 的<strong class="term">环流量</strong>为 \(\oint_\Gamma P\,\mathrm{d}x+Q\,\mathrm{d}y+R\,\mathrm{d}z\)。在场中一点处的<strong class="term">旋度</strong>是一个向量：
+            $$\nabla\times\vec{F}=\left(\frac{\partial R}{\partial y}-\frac{\partial Q}{\partial z},\ \frac{\partial P}{\partial z}-\frac{\partial R}{\partial x},\ \frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)$$
+            它量的是该点附近流体「打旋」的方向与强弱。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">斯托克斯公式</span><span class="mb-no">11.13</span></div>
+          <div class="mb-body">
+            设 \(\Sigma\) 是分片光滑的有向曲面，\(\Gamma\) 是它的边界闭曲线，\(\Gamma\) 的方向与 \(\Sigma\) 的侧符合<strong class="term">右手规则</strong>（右手四指沿 \(\Gamma\) 方向弯曲、拇指指向 \(\Sigma\) 的法向 \(\vec{n}\)），\(P,Q,R\) 有一阶连续偏导，则
+            $$\oint_\Gamma P\,\mathrm{d}x+Q\,\mathrm{d}y+R\,\mathrm{d}z=\iint_\Sigma (\nabla\times\vec{F})\cdot\vec{n}\,\mathrm{d}S$$
+            <mark class="key">曲面的侧与边界方向由右手规则绑定，不能各自独立选；翻一侧就必须同时把边界方向反过来</mark>。当 \(\Sigma\) 是 \(xy\) 平面上的一片区域、\(\vec{F}=(P,Q,0)\) 时，\(\nabla\times\vec{F}=(0,0,\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y})\)，公式正好退回格林公式。
+            <div class="proof-title">推导 · 为什么只剩外边界 · 3 步（常显）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">把 \(\Sigma\) 细分成许多小片，每片近似平面，其边界环流量近似为 \((\nabla\times\vec{F})\cdot\vec{n}\,\Delta S\)</span><span class="derive-note">这是旋度的局部意义：单位面积上的环流强度</span></li>
+              <li><span class="derive-eq">相邻两片的公共边上，行进方向恰好相反，环流量一正一负互相抵消</span><span class="derive-note">所以内部所有小边全部消掉，只剩最外圈边界 \(\Gamma\)</span></li>
+              <li><span class="derive-eq">把所有小片加起来取极限，得到 \(\oint_\Gamma=\iint_\Sigma(\nabla\times\vec{F})\cdot\vec{n}\,\mathrm{d}S\)</span><span class="derive-note">方向配套关系由右手规则保证，这也是 \(\Gamma\) 与 \(\Sigma\) 必须一起定向的原因</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="stokes-curl">
+          <div class="demo-title">演示 7 · 绕三角形的环流量等于曲面上旋度的总和</div>
+          <div class="demo-caption">三角形就在 \(xy\) 平面内，所以<b>俯视图就是曲面本身</b>：取上侧时法向指向读者，边界按右手规则取逆时针（橙箭头）。场为 \(\vec{F}=(-y,\ x,\ 0)\)，旋度恒为 \((0,0,2)\)。拖动「边界行走位置」，点按钮把边界改成顺时针、曲面侧跟着翻，<b>环流量在 \(1\) 与 \(-1\) 之间翻转</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用两种方法算三角形边界的环流量</span><span class="mb-no">例 11.7</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\vec{F}=(-y,\ x,\ 0)\)，\(\Sigma\) 是 \(xy\) 平面上以 \(O(0,0),A(1,0),B(0,1)\) 为顶点的三角形，取<b>上侧</b>；\(\Gamma\) 是按右手规则配套的正向（逆时针）边界。求环流量 \(\oint_\Gamma -y\,\mathrm{d}x+x\,\mathrm{d}y\)，并用斯托克斯公式核对。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>直接法：沿三角形三条边分别参数化、逐段积分再相加。公式法：先算旋度，再算它在 \(\Sigma\) 上的面积分。两条路应当给出同一个数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              <b>直接法</b>：边 \(OA\)（\(y=0,\ \mathrm{d}y=0\)）积分 \(0\)；边 \(BO\)（\(x=0,\ \mathrm{d}x=0\)）积分 \(0\)；边 \(AB\) 取 \(x=1-t,\ y=t\ (0\le t\le 1)\)，\(\mathrm{d}x=-\mathrm{d}t,\ \mathrm{d}y=\mathrm{d}t\)，
+              $$\int_{AB} -y\,\mathrm{d}x+x\,\mathrm{d}y=\int_0^1\bigl[-t\cdot(-1)+(1-t)\cdot 1\bigr]\mathrm{d}t=\int_0^1 1\,\mathrm{d}t=1$$
+              故 \(\oint_\Gamma -y\,\mathrm{d}x+x\,\mathrm{d}y=1\)。<br>
+              <b>公式法</b>：\(\nabla\times\vec{F}=\left(0,\ 0,\ \frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)=(0,\ 0,\ 1-(-1))=(0,0,2)\)。上侧 \(\vec{n}=(0,0,1)\)，三角形面积 \(\frac{1}{2}\)，
+              $$\iint_\Sigma (\nabla\times\vec{F})\cdot\vec{n}\,\mathrm{d}S=\iint_\Sigma 2\,\mathrm{d}S=2\cdot\frac{1}{2}=1$$
+              两法一致。若把 \(\Gamma\) 改成顺时针、\(\Sigma\) 改取下侧，两者都变号，结果为 \(-1\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先按右手规则把曲面侧与边界方向配好 → 算旋度 \(\nabla\times\vec{F}\) → 算 \(\iint_\Sigma(\nabla\times\vec{F})\cdot\vec{n}\,\mathrm{d}S\)」。旋度为常向量、曲面又是平面时，面积分等于「旋度的法向分量乘面积」。若换曲面但边界不变，斯托克斯公式保证结果不变——这是它最有用的一点。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">格林公式立起来就是斯托克斯公式</span></div>
+          <div class="mb-body">把格林公式里躺在 \(xy\) 平面上的那张区域「掀起来」变成空间曲面，边界曲线跟着翘成空间闭曲线，被积量由 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\) 升级成旋度向量与法向的点积。右手规则就是保证「躺着时逆时针」与「竖起来后拇指朝哪」始终一致的那套约定。</div>
+        </div>
+<!-- SECTION:s7:END -->
+      </article>
+
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+<!-- PITFALLS:BEGIN -->
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把两类曲线积分与方向的关系搞反</span></div>
+        <div class="mb-body"><b>错误做法</b>：算 \(\int_L f\,\mathrm{d}s\) 时反向也添负号，或算 \(\int_L P\,\mathrm{d}x+Q\,\mathrm{d}y\) 时反向不变号。<b>为什么错</b>：\(\mathrm{d}s\) 是弧长、恒为正，与方向无关；而 \(\mathrm{d}x,\mathrm{d}y\) 是有向位移的投影，方向反过来二者同时变号。<b>正确做法</b>：第一类曲线积分与方向无关、正反都得同一值；第二类反向变号，用 \(\mathrm{d}x=\cos\alpha\,\mathrm{d}s\) 互换两类时也能看出方向余弦会反号。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">格林公式用在非闭曲线、顺时针边界或有奇点的区域</span></div>
+        <div class="mb-body"><b>错误做法</b>：对一段不封闭的抛物线弧直接套 \(\oint_L=\iint_D\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\mathrm{d}A\)；边界取顺时针还照抄公式；区域内有奇点也照用。<b>为什么错</b>：公式要求 \(L\) 是闭区域 \(D\) 的正向（逆时针）边界，且 \(P,Q\) 在整个 \(D\) 上有一阶连续偏导；顺时针差一个负号，奇点处偏导不存在则二重积分的被积无定义。<b>正确做法</b>：补一段辅助曲线凑成闭曲线并减去它的贡献、确认逆时针、偏导连续且区域内无奇点；有奇点时挖去它、另算绕奇点小闭曲线的一圈。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">只看偏导相等就断定与路径无关</span></div>
+        <div class="mb-body"><b>错误做法</b>：由 \(\frac{\partial Q}{\partial x}=\frac{\partial P}{\partial y}\) 直接说「处处成立，所以全场与路径无关」。<b>为什么错</b>：把闭曲线围出的整块区域放进 \(D\) 才能用格林公式；若 \(D\) 有洞（非单连通），绕洞的闭曲线围出的区域含洞，场可能在洞内无定义，路径无关会失效。<b>正确做法</b>：把「\(D\) 单连通」与「偏导相等」两条一起写上；或在每个单连通子区域内分别判断，绕洞的那一圈单独计算。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">曲面积分不管「侧」，高斯公式用在非封闭曲面</span></div>
+        <div class="mb-body"><b>错误做法</b>：算 \(\iint_\Sigma R\,\mathrm{d}x\mathrm{d}y\) 时不分上侧下侧一律取正；把一片非封闭曲面直接套进高斯公式；取了内侧还照抄公式。<b>为什么错</b>：\(\mathrm{d}y\mathrm{d}z,\mathrm{d}z\mathrm{d}x,\mathrm{d}x\mathrm{d}y\) 的符号由曲面的侧决定，换侧整体变号；高斯公式描述的是「封闭曲面往外流走的总量」，必须曲面封闭且取外侧。<b>正确做法</b>：先定侧（上侧/下侧、外侧/内侧）再定符号；用高斯公式前把曲面补面封口、确认外法向，最后减去补面上的通量。</div>
+      </div>
+<!-- PITFALLS:END -->
+    </section>
+
+    <!-- ⑥ 习题与自测 -->
+    <section id="quiz" class="block">
+      <h2>习题与自测</h2>
+      <p class="hint">题目为本站自编，不含教材原题。折叠答案适合纸笔练习，交互自测会即时判定并给出解析。</p>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">纸笔练习</span><span class="mb-no">练习 1–3</span></div>
+        <div class="mb-body">
+<!-- EXERCISES:BEGIN -->
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>设 \(L\) 是从 \((0,0)\) 到 \((3,4)\) 的直线段，求 \(\int_L xy\,\mathrm{d}s\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">取 \(x=3t,\ y=4t\ (0\le t\le 1)\)，则 \(\mathrm{d}s=\sqrt{3^{2}+4^{2}}\,\mathrm{d}t=5\,\mathrm{d}t\)，而 \(xy=12t^{2}\)。于是 \(\int_L xy\,\mathrm{d}s=\int_0^1 12t^{2}\cdot 5\,\mathrm{d}t=60\cdot\frac{1}{3}=20\)。这是对弧长的曲线积分，\(\mathrm{d}s\) 恒为正；把方向反过来重算，结果仍是 \(20\)，正好用它检验「第一类与方向无关」。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>计算 \(\int_L (2x+y)\,\mathrm{d}x+(x-2y)\,\mathrm{d}y\)，其中 \(L\) 是抛物线 \(y=x^{2}\) 上从 \((0,0)\) 到 \((1,1)\) 的一段；并说明反向走时结果是多少。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">取 \(x=t,\ y=t^{2}\ (0\le t\le 1)\)，\(\mathrm{d}x=\mathrm{d}t,\ \mathrm{d}y=2t\,\mathrm{d}t\)。于是 \(P=2t+t^{2},\ Q=t-2t^{2}\)，被积 \(P\,\mathrm{d}x+Q\,\mathrm{d}y=(2t+t^{2})+(t-2t^{2})\cdot 2t=2t+3t^{2}-4t^{3}\)。积分 \(\int_0^1(2t+3t^{2}-4t^{3})\mathrm{d}t=1+1-1=1\)。这是第二类曲线积分，方向由 \(\mathrm{d}x,\mathrm{d}y\) 携带，反向时两个微分同时变号，结果变为 \(-1\)。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>用格林公式计算 \(\oint_L (x^{2}-xy)\,\mathrm{d}x+(y^{2}+2x)\,\mathrm{d}y\)，其中 \(L\) 是正方形 \(D=[0,1]\times[0,1]\) 取逆时针方向的边界；并解释公式为什么能用、顺时针时结果如何。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">先核对条件：\(L\) 是闭曲线且逆时针（正向），\(P=x^{2}-xy,\ Q=y^{2}+2x\) 是多项式、偏导处处连续，正方形内无奇点，可以用格林公式。算 \(\frac{\partial Q}{\partial x}=2,\ \frac{\partial P}{\partial y}=-x\)，故 \(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}=2+x\)。于是 \(\oint_L=\iint_D(2+x)\,\mathrm{d}x\mathrm{d}y=\int_0^1\!\!\int_0^1(2+x)\,\mathrm{d}x\mathrm{d}y=2+\frac{1}{2}=\frac{5}{2}\)。若 \(L\) 取顺时针，边界不再是正向，结果为 \(-\frac{5}{2}\)。可见「闭区域 + 正向边界 + 偏导连续 + 无奇点」四条缺一条都不能照抄公式。</div></details>
+          </div>
+<!-- EXERCISES:END -->
+        </div>
+      </div>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">自测</span><span class="mb-title">交互选择题（即时判定）</span></div>
+        <div class="mb-body">
+          <div data-mount="quiz">
+            <!-- QUIZ:BEGIN -->
+<script type="application/json">
+[
+  { "q": "设 \\(L\\) 是从 \\(A\\) 到 \\(B\\) 的光滑曲线弧，\\(L^-\\) 是同一弧段但方向相反。下列正确的是？",
+    "options": ["\\(\\int_L f\\,\\mathrm{d}s=-\\int_{L^-} f\\,\\mathrm{d}s\\)", "\\(\\int_L f\\,\\mathrm{d}s=\\int_{L^-} f\\,\\mathrm{d}s\\)，但 \\(\\int_L P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=-\\int_{L^-}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y\\)", "\\(\\int_L P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\int_{L^-}P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y\\)", "两类曲线积分都与方向无关"],
+    "answer": 1,
+    "explain": "\\(f\\,\\mathrm{d}s\\) 里的 \\(\\mathrm{d}s\\) 是弧长、恒为正，与往哪边走无关，所以 B 前半句对；\\(\\mathrm{d}x,\\mathrm{d}y\\) 是有向位移的投影，反向时二者同时变号，第二类曲线积分随之变号，B 后半句也对。A 错在第一类反向添了负号；C 错在第二类反向没变号；D 把第二类也说成与方向无关，同样错。" },
+  { "q": "两类曲线积分的关系 \\(\\int_L P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\int_L(P\\cos\\alpha+Q\\cos\\beta)\\,\\mathrm{d}s\\) 中，\\(\\cos\\alpha,\\cos\\beta\\) 是什么？",
+    "options": ["曲线在起点处法向量的方向余弦", "与曲线行进方向一致的单位切向量的方向余弦（\\(\\mathrm{d}x=\\cos\\alpha\\,\\mathrm{d}s\\)）", "被积函数 \\(P,Q\\) 的偏导数", "两坐标轴正向之间固定夹角的余弦"],
+    "answer": 1,
+    "explain": "把弧长微元看成有向位移的长度：\\(\\mathrm{d}x,\\mathrm{d}y\\) 是 \\(\\mathrm{d}s\\) 在两轴上的投影，比例恰是单位切向量 \\((\\cos\\alpha,\\cos\\beta)\\) 的两个分量，故 B 对；\\(\\mathrm{d}x=\\cos\\alpha\\,\\mathrm{d}s\\) 正是两类积分互换的桥梁。A 错在用了法向量还绑定起点，方向余弦应取切向量且逐点变化；C 把方向余弦与偏导数混为一谈；D 取的是坐标轴间固定的夹角，与具体曲线无关，不能随曲线改变。" },
+  { "q": "用格林公式 \\(\\oint_L P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y=\\iint_D\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)\\mathrm{d}x\\mathrm{d}y\\) 计算时，下列哪一组条件是必须的？",
+    "options": ["\\(L\\) 是闭区域 \\(D\\) 的正向（逆时针）边界，\\(P,Q\\) 在 \\(D\\) 上有一阶连续偏导，且 \\(D\\) 内无奇点", "\\(L\\) 可以任取一段不闭合的曲线弧", "边界取顺时针方向，结果与二重积分完全相同", "只要 \\(P,Q\\) 连续，区域内有奇点也不影响"],
+    "answer": 0,
+    "explain": "格林公式把闭曲线积分换成区域内的二重积分，必须同时满足：\\(L\\) 是闭区域 \\(D\\) 的边界并取正向（逆时针）、\\(P,Q\\) 在 \\(D\\) 上有一阶连续偏导、区域内没有使偏导不存在的奇点，A 全对。B 错在不闭合的弧没有围出区域，不能套公式；C 错在顺时针时右端要添负号；D 错在奇点处偏导不连续，须先挖去奇点另作处理。" },
+  { "q": "在平面区域 \\(D\\) 内，曲线积分 \\(\\int_L P\\,\\mathrm{d}x+Q\\,\\mathrm{d}y\\) 与路径无关的充要条件是？",
+    "options": ["\\(D\\) 单连通，且处处 \\(\\frac{\\partial Q}{\\partial x}=\\frac{\\partial P}{\\partial y}\\)", "只要处处 \\(\\frac{\\partial Q}{\\partial x}=\\frac{\\partial P}{\\partial y}\\)，区域有没有洞都无所谓", "只要积分路径 \\(L\\) 是闭曲线", "只要 \\(P,Q\\) 在 \\(D\\) 内连续"],
+    "answer": 0,
+    "explain": "两条同端点路径之差是一条闭曲线，用格林公式可知闭曲线积分为零当且仅当被积 \\(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}=0\\)；但这要求闭曲线围出的整块区域都落在 \\(D\\) 内、场处处有定义，因此还要 \\(D\\) 单连通，A 对。B 漏掉单连通：有洞时绕洞的闭曲线围出的区域含洞，场可能在洞内无定义，路径无关会失效；C 把「路径是闭曲线」当成条件，只涉及这一条曲线，与任意路径无关无关；D 只连续不足以保证偏导相等，条件太弱。" },
+  { "q": "关于对坐标的曲面积分与高斯、斯托克斯公式，下列说法正确的是？",
+    "options": ["用高斯公式时曲面必须封闭且取外侧；对坐标的曲面积分依赖曲面的侧", "对坐标的曲面积分与曲面的侧（上侧/下侧、外侧/内侧）无关", "高斯公式对任意一片非封闭的光滑曲面都成立", "斯托克斯公式中曲面的侧与边界方向可以各自独立选取"],
+    "answer": 0,
+    "explain": "对坐标的曲面积分本质是向量场穿过指定一侧的通量，换侧则 \\(\\mathrm{d}y\\mathrm{d}z,\\mathrm{d}z\\mathrm{d}x,\\mathrm{d}x\\mathrm{d}y\\) 同时变号，故依赖侧；高斯公式把通量化成三重积分，需要曲面封闭并取外侧，A 全对。B 错在换侧会整体变号，并非无关；C 错在高斯公式要求封闭曲面，非封闭曲面须先补面封口才能用；D 错在斯托克斯公式里曲面侧与边界方向由右手规则绑定，翻一侧就必须同时反转边界方向，不能各自独立选。" }
+]
+</script>
+<!-- QUIZ:END -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+<!-- SUMMARY:BEGIN -->
+      <p>这一章把「累加」从区间、平面区域、空间区域推广到曲线与曲面这两类新载体：先分两类曲线积分——对弧长的与方向无关、对坐标的依赖方向并用 \(\mathrm{d}x=\cos\alpha\,\mathrm{d}s\) 互换；再用格林公式把闭曲线积分换成二重积分，并由此得到「单连通 + 偏导相等」时与路径无关。把同样的思路抬到三维，得到两类曲面积分（对面积的不分侧、对坐标的依赖侧），以及把通量、环流量分别同散度、旋度连起来的高斯公式与斯托克斯公式。</p>
+      <p>到现在，微积分里「连续量的累加」已经覆盖了直线、平面、空间、曲线、曲面各种载体，三个公式的共同骨架都是「内部某种密度积分 = 边界上的总量」。下一章转向无穷级数，研究把无穷多个数或函数加起来何时收敛、能否用来表示函数；从有限段积分到无限项求和，「取极限」这条主线会再次出现。</p>
+<!-- SUMMARY:END -->
+      <div data-chapter-nav></div>
+    </section>
+    <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a> ·
+         <a href="../../style-guide.html">视觉规范</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

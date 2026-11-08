@@ -117,8 +117,9 @@ function epsilonN(el) {
     p.clear();
     p.rect(0, L - st.eps, MAXN, L + st.eps, { fill: PLOT_COLORS.ok, alpha: .12, stroke: PLOT_COLORS.ok, dash: true });
     p.line(0, L, MAXN, L, { color: PLOT_COLORS.ok, dash: true, width: 1.5 });
-    p.text(1, L + st.eps + .12, '上边界', { color: PLOT_COLORS.ok, size: 11 });
-    p.text(1, L - st.eps - .18, '下边界', { color: PLOT_COLORS.ok, size: 11 });
+    // 边界文字放右端：左端是纵轴刻度数字的位置，挤在一起会看不清
+    p.text(MAXN - .8, L + st.eps + .14, '上边界', { color: PLOT_COLORS.ok, size: 11, align: 'right' });
+    p.text(MAXN - .8, L - st.eps - .2, '下边界', { color: PLOT_COLORS.ok, size: 11, align: 'right' });
     for (let n = 1; n <= Math.min(st.n, MAXN); n++) {
       const v = a(n);
       p.dot(n, v, { r: 3.4, color: Math.abs(v - L) < st.eps ? PLOT_COLORS.ok : PLOT_COLORS.warn });
@@ -157,8 +158,7 @@ function epsilonN(el) {
 function epsilonDelta(el) {
   const f = x => 2 * x + 1, X0 = 1, LIM = 3;
   // 直线 y=2x+1 的斜率与误差带都是几何对象，必须等比；y 跨度大所以给足高度
-  // 上界收到 x=3（此时 y=7），保证整条直线都在画布内，不会被裁掉
-  // ε 最大 2.4，误差带上界 = 3+2.4 = 5.4，所以 y 到 5.6 就够，无需到 7
+  // 上界收到 y=5.6 就够：误差 ε 最大 2.4，带上界 = 3+2.4 = 5.4
   const p = new Plot(el, { xmin: -1.6, xmax: 2.8, ymin: -1, ymax: 5.6, grid: true, boxH: 440 });
   const c = controls(el, `
     <label>误差 ε <input type="range" data-eps min="0.2" max="2.4" step="0.1" value="1.2"><output data-epsv>1.20</output></label>
@@ -191,7 +191,7 @@ function epsilonDelta(el) {
   /* 分步动画改成「逐步收窄 ε」：每一步都保留完整图形，避免关键内容被藏起来 */
   const epsSeq = [1.2, 0.8, 0.4, 0.2];
   const steps = epsSeq.map(e => ({
-    label: `ε 收窄到 ${e}`,
+    label: `误差带收窄到 ${e}`,
     run: () => {
       st.eps = e;
       c.querySelector('[data-eps]').value = String(e);
@@ -231,11 +231,11 @@ function sinxOverX(el) {
     <text data-tp x="0" y="0" class="lbl" fill="#d97706">T</text>
     <text data-pp x="0" y="0" class="lbl" fill="#4f46e5">P</text>
     <text x="300" y="40">三个面积（半径取 1）：</text>
-    <text data-a1 x="300" y="62" fill="#059669">△OAP = sin x / 2</text>
-    <text data-a2 x="300" y="84" fill="#0891b2">扇形 OAP = x / 2</text>
-    <text data-a3 x="300" y="106" fill="#d97706">△OAT = tan x / 2</text>
-    <text data-ineq x="300" y="138" class="lbl">sin x &lt; x &lt; tan x</text>
-    <text data-clamp x="300" y="164">cos x &lt; sin x / x &lt; 1</text>
+    <text data-a1 x="300" y="62" fill="#059669">小三角形面积</text>
+    <text data-a2 x="300" y="84" fill="#0891b2">扇形面积</text>
+    <text data-a3 x="300" y="106" fill="#d97706">大三角形面积</text>
+    <text data-ineq x="300" y="138" class="lbl">小三角形 &lt; 扇形 &lt; 大三角形</text>
+    <text data-clamp x="300" y="164">下界 &lt; 比值 &lt; 上界</text>
   </svg>`;
   el.appendChild(svg.firstChild);
   const root = el.querySelector('svg');
@@ -259,15 +259,15 @@ function sinxOverX(el) {
     root.querySelector('[data-p]').setAttribute('cx', P[0]); root.querySelector('[data-p]').setAttribute('cy', P[1]);
     root.querySelector('[data-tp]').setAttribute('x', T[0] + 8); root.querySelector('[data-tp]').setAttribute('y', T[1] - 4);
     root.querySelector('[data-pp]').setAttribute('x', P[0] + 8); root.querySelector('[data-pp]').setAttribute('y', P[1] - 6);
-    root.querySelector('[data-a1]').textContent = `△OAP  = ${f4(Math.sin(x) / 2)}`;
-    root.querySelector('[data-a2]').textContent = `扇形   = ${f4(x / 2)}`;
-    root.querySelector('[data-a3]').textContent = `△OAT  = ${f4(Math.tan(x) / 2)}`;
-    root.querySelector('[data-clamp]').textContent = `${f4(Math.cos(x))} < sin x/x < 1`;
+    root.querySelector('[data-a1]').textContent = `小三角形 = ${f4(Math.sin(x) / 2)}`;
+    root.querySelector('[data-a2]').textContent = `扇形     = ${f4(x / 2)}`;
+    root.querySelector('[data-a3]').textContent = `大三角形 = ${f4(Math.tan(x) / 2)}`;
+    root.querySelector('[data-clamp]').textContent = `下界 ${f4(Math.cos(x))} < 比值 < 上界 1`;
     c.querySelector('[data-xv]').textContent = f4(x);
     const ratio = Math.sin(x) / x;
-    out.innerHTML = `x = <b>${f4(x)}</b>　sin x = <b>${f4(Math.sin(x))}</b>　x = <b>${f4(x)}</b>　tan x = <b>${f4(Math.tan(x))}</b><br>` +
-      `sin x / x = <b>${f4(ratio)}</b>，被夹在 cos x = <b>${f4(Math.cos(x))}</b> 与 1 之间。` +
-      `把 x 拖到接近 0，两侧都挤向 1，于是极限为 1。`;
+    out.innerHTML = `角度 ${texHTML('x=' + f4(x))}：${texHTML('\\sin x=' + f4(Math.sin(x)))}　${texHTML('\\tan x=' + f4(Math.tan(x)))}<br>` +
+      `比值 ${texHTML('\\dfrac{\\sin x}{x}=' + f4(ratio))}，被夹在 ${texHTML('\\cos x=' + f4(Math.cos(x)))} 与 1 之间；` +
+      `把 x 拖到接近 0，两侧都挤向 1，于是 ${texHTML('\\lim\\limits_{x\\to 0}\\dfrac{\\sin x}{x}=1')}。`;
   };
   bindRange(c, '[data-x]', draw);
   draw(0.5);
@@ -299,7 +299,7 @@ function limitE(el) {
     p.dot(marked, fn(marked), { r: 5, color: PLOT_COLORS.cyan });
     const v = fn(st.x);
     out.innerHTML = `${texHTML('x=' + st.x)}　${texHTML('\\left(1+\\dfrac{1}{x}\\right)^{x}=' + v.toFixed(6))}　${texHTML('\\mathrm{e}=' + E.toFixed(6))}　差距 <b>${Math.abs(E - v).toExponential(2)}</b><br>` +
-      `x 越大，每次增量越小、次数越多，总量稳稳停在 e；这就是「连续复利」。`;
+      `x 越大，每次增量越小、次数越多，总量稳稳停在 ${texHTML('\\mathrm{e}')}；这就是「连续复利」。`;
   };
   p.onResize = draw;
   bindRange(c, '[data-x]', v => { st.x = Math.round(v); c.querySelector('[data-xv]').textContent = st.x; draw(); });
@@ -326,10 +326,15 @@ function squeezeDemo(el) {
   const st = { r: .6 };
   const f = x => x === 0 ? 0 : x * x * Math.sin(1 / x);
 
-  const draw = () => {
-    const r = st.r, top = Math.max(.35, r * r * 1.15);
-    // 用 setRange 而不是直接改 o：等比例下画布尺寸要跟着范围一起变
+  /* frame 只改取景，draw 只画。
+     分开之后，用户自己缩放/平移过的视图不会在每次重绘时被覆盖；
+     只有拖动 r 滑块（确实要换观察窗口）才重新取景。 */
+  const frame = () => {
+    const r = st.r, top = 1.15 * r * r;
     p.setRange({ xmin: -r, xmax: r, ymin: -top, ymax: top });
+  };
+  const draw = () => {
+    const r = st.r, top = 1.15 * r * r;
     p.clear();
     p.curve(x => x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
     p.curve(x => -x * x, { from: -r, to: r, color: PLOT_COLORS.warn, width: 2, dash: true });
@@ -342,7 +347,8 @@ function squeezeDemo(el) {
       `无论中间那条曲线抖得多厉害，它始终满足 ${texHTML('-x^{2}\\le x^{2}\\sin\\dfrac{1}{x}\\le x^{2}')}；两侧都趋于 0，故 ${texHTML('f(x)\\to 0')}。`;
   };
   p.onResize = draw;
-  bindRange(c, '[data-r]', v => { st.r = v; c.querySelector('[data-rv]').textContent = f4(v); draw(); });
+  bindRange(c, '[data-r]', v => { st.r = v; c.querySelector('[data-rv]').textContent = f4(v); frame(); draw(); });
+  frame();
   draw();
 }
 
@@ -363,9 +369,9 @@ function infinitesimalOrder(el) {
     p.text(.62, Math.pow(.62, st.p) + .09, '幂次 p', { color: PLOT_COLORS.accent, size: 11 });
     p.text(.62, Math.pow(.62, st.q) + .09, '幂次 q', { color: PLOT_COLORS.cyan, size: 11 });
     const ratio = Math.pow(0.001, st.p - st.q);
-    const kind = st.p > st.q + 1e-9 ? 'xᵖ 是比 xᵘ 高阶的无穷小（更快贴近 0）'
-      : Math.abs(st.p - st.q) < 1e-9 ? '两者同阶且等价（曲线重合）'
-      : 'xᵖ 是比 xᵘ 低阶的无穷小（更慢贴近 0）';
+    const kind = st.p > st.q + 1e-9 ? 'p 对应的幂更高，是更高阶无穷小（更快贴近 0）'
+      : Math.abs(st.p - st.q) < 1e-9 ? 'p 与 q 相等，同阶且等价（曲线重合）'
+      : 'p 对应的幂更低，是低阶无穷小（更慢贴近 0）';
     out.innerHTML = `${texHTML('p=' + f4(st.p))}，${texHTML('q=' + f4(st.q))}　比值 ${texHTML('\\dfrac{x^{p}}{x^{q}}=x^{p-q}')}，在 ${texHTML('x=0.001')} 处约为 <b>${ratio.toExponential(2)}</b><br>${kind}。`;
   };
   p.onResize = draw;
@@ -390,8 +396,8 @@ function discontinuity(el) {
         q.dot(1, 2, { r: 6, fill: bg, color: PLOT_COLORS.ok, stroke: PLOT_COLORS.ok });   // 空心：极限值处该点未被取到
         q.dot(1, .5, { r: 5, color: PLOT_COLORS.danger });                       // 实心：函数实际取值
       },
-      note: '左右极限都存在且相等（都是 2），但 f(1) 被单独定义成 0.5。把红点挪到空心点处就连续了。',
-      lr: '左极限 = 右极限 = 2 ≠ f(1) = 0.5'
+      note: '左右极限都存在且相等（都是 2），但 ' + texHTML('f(1)') + ' 被单独定义成 0.5。把红点挪到空心点处就连续了。',
+      lr: '左极限与右极限都等于 2，但 ' + texHTML('f(1)=0.5') + '，两者不相等'
     },
     {
       name: '跳跃间断', color: PLOT_COLORS.warn,
@@ -402,20 +408,20 @@ function discontinuity(el) {
         q.dot(1, 2, { r: 5, color: PLOT_COLORS.warn });
       },
       note: '左右极限各自存在但不相等，图像出现一道台阶，怎么补点都接不上。',
-      lr: '左极限 ≈ 0.6，右极限 ≈ 2.0'
+      lr: '左极限约 0.6，右极限约 2.0，两者不相等'
     },
     {
       name: '无穷间断', color: PLOT_COLORS.danger,
       parts: [[-1, 1 - EPS, x => 1 / (x - 1)], [1 + EPS, 3, x => 1 / (x - 1)]],
       extra: q => q.line(1, -4, 1, 4, { color: PLOT_COLORS.danger, dash: true, width: 1.5 }),
-      note: '至少一侧趋于无穷，x = 1 是竖直渐近线，极限不存在。',
-      lr: '左极限 → −∞，右极限 → +∞'
+      note: '至少一侧趋于无穷，' + texHTML('x=1') + ' 是竖直渐近线，极限不存在。',
+      lr: '左极限趋于负无穷，右极限趋于正无穷'
     },
     {
       name: '振荡间断', color: PLOT_COLORS.accent,
       parts: [[-1, 1 - EPS, x => 1.6 * Math.sin(1 / (x - 1))], [1 + EPS, 3, x => 1.6 * Math.sin(1 / (x - 1))]],
       extra: q => {},
-      note: '越靠近 1 摆得越密，函数值在 −1.6 与 1.6 之间无限次往返，极限根本不存在。',
+      note: '越靠近 1 摆得越密，函数值在 -1.6 与 1.6 之间无限次往返，极限根本不存在。',
       lr: '左右极限都不存在（无限振荡）'
     }
   ];
@@ -426,7 +432,7 @@ function discontinuity(el) {
     t.parts.forEach(([a, b, fn]) => p.curve(fn, { from: a, to: b, color: t.color, width: 2.4, samples: 1400 }));
     t.extra(p);
     p.line(1, -4, 1, 4, { color: PLOT_COLORS.axis, dash: true, width: 1 });
-    p.text(1.05, 3.6, '间断点位置', { color: PLOT_COLORS.text, size: 11 });
+    p.text(1.12, 2.62, '间断点位置', { color: PLOT_COLORS.text, size: 11 });
     out.innerHTML = `<b>${t.name}</b>　${t.lr}<br>${t.note}`;
   };
   p.onResize = draw;
@@ -445,7 +451,8 @@ function ivtDemo(el) {
     if (y < min) { min = y; xmin = x; }
     if (y > max) { max = y; xmax = x; }
   }
-  const p = new Plot(el, { xmin: -.2, xmax: 3.2, ymin: min - .45, ymax: max + .45, grid: true });
+  // 右侧留出半个单位，给"最大值 1.6395"这类标注用，否则会被画布边缘切掉
+  const p = new Plot(el, { xmin: -.2, xmax: 3.6, ymin: min - .45, ymax: max + .45, grid: true });
   const c = controls(el, `
     <label>水平线 c <input type="range" data-c min="${min.toFixed(3)}" max="${max.toFixed(3)}" step="0.01" value="${((min + max) / 2).toFixed(3)}"><output data-cv></output></label>`);
   const out = readout(el);
@@ -489,7 +496,7 @@ function secantToTangent(el) {
   const p = new Plot(el, { xmin: -.4, xmax: 2.4, ymin: -.5, ymax: 5.2, grid: true, boxH: 440 });
   const c = controls(el, `
     <label>h <input type="range" data-h min="0.02" max="1.2" step="0.01" value="1.0"><output data-hv>1.00</output></label>
-    <button class="btn primary" data-play>▶ 让 h → 0</button>`);
+    <button class="btn primary" data-play>▶ 把间距收小</button>`);
   const out = readout(el);
   const st = { h: 1.0 };
 
@@ -543,9 +550,9 @@ function functionGallery(el) {
 
   const draw = () => {
     const F = FUNCS[cur];
-    p.o.xmin = -3; p.o.xmax = 5; p.o.ymin = -3; p.o.ymax = 5;
+    // 取景固定在 -3..5：不要在这里改 p.o，那会把用户缩放/平移的位置冲掉
     p.clear();
-    if (F.from > -2.99) p.rect(-3, -3, F.from, 5, { fill: PLOT_COLORS.danger, alpha: .06 });
+    if (F.dom === '(0,+\\infty)' || F.dom === '[0,+\\infty)') p.rect(-3, -3, F.from, 5, { fill: PLOT_COLORS.danger, alpha: .06 });
     if (F.split) {
       p.curve(F.fn, { from: -3, to: -0.06, color: PLOT_COLORS.accent, width: 2.8 });
       p.curve(F.fn, { from: 0.06, to: 3, color: PLOT_COLORS.accent, width: 2.8 });
@@ -582,19 +589,22 @@ function infinitesimalVsInfinity(el) {
     <span class="hint">把窗口推向 0，看谁先贴近横轴</span>`);
   const out = readout(el);
   let r = 1;
+  // 同样把「换取景」和「画」拆开：用户缩放平移后的视图不该被重绘覆盖
+  const frame = () => { p.setRange({ xmin: 0, xmax: 1.2, ymin: -.2, ymax: 3.2 }); };
   const draw = () => {
-    p.o.xmin = 0; p.o.xmax = r; p.o.ymin = -.2; p.o.ymax = 3.2;
     p.clear();
-    p.curve(x => 1 / x, { from: Math.min(.34, r), to: r, color: PLOT_COLORS.danger, width: 2.2, dash: true, samples: 700 });
-    p.curve(Math.sqrt, { from: 0, to: r, color: PLOT_COLORS.warn, width: 2.4 });
-    p.curve(x => x, { from: 0, to: r, color: PLOT_COLORS.accent, width: 2.4 });
-    p.curve(x => x * x, { from: 0, to: r, color: PLOT_COLORS.ok, width: 2.4 });
-    p.text(r * .5, 2.9, '这条冲向无穷', { color: PLOT_COLORS.danger, size: 11 });
+    p.curve(x => 1 / x, { from: .34, to: 1.2, color: PLOT_COLORS.danger, width: 2.2, dash: true, samples: 700 });
+    p.curve(Math.sqrt, { from: 0, to: 1.2, color: PLOT_COLORS.warn, width: 2.4 });
+    p.curve(x => x, { from: 0, to: 1.2, color: PLOT_COLORS.accent, width: 2.4 });
+    p.curve(x => x * x, { from: 0, to: 1.2, color: PLOT_COLORS.ok, width: 2.4 });
+    p.line(r, -.2, r, 3.2, { color: PLOT_COLORS.cyan, dash: true, width: 1.4 });
+    p.text(r + .03, 2.9, '观察位置', { color: PLOT_COLORS.cyan, size: 11 });
     out.innerHTML = `在 ${texHTML('x=' + f4(r))} 处：${texHTML('\\dfrac{1}{x}=' + f4(1 / r))}　${texHTML('\\sqrt{x}=' + f4(Math.sqrt(r)))}　${texHTML('x=' + f4(r))}　${texHTML('x^{2}=' + f4(r * r))}<br>` +
-      `红色虚线冲向无穷（<b>无穷大</b>），另外三条都趋于 0（<b>无穷小</b>）但速度不同：幂次越高越快。注意 ∞ 不是数，只是趋势。`;
+      `拖动竖线往 0 推，四个读数一起变化：红色虚线冲向无穷（<b>无穷大</b>），另外三条都趋于 0（<b>无穷小</b>）但速度不同，幂次越高越快。注意 ${texHTML('\\infty')} 不是数，只是趋势。`;
   };
   p.onResize = draw;
-  bindRange(c, '[data-r]', v => { r = v; c.querySelector('[data-rv]').textContent = f4(v); draw(); });
+  bindRange(c, '[data-r]', v => { r = v; c.querySelector('[data-rv]').textContent = f4(v); frame(); draw(); });
+  frame();
   draw();
 }
 
@@ -641,7 +651,7 @@ function continuityOperations(el) {
     {
       name: '分段跳跃（不连续）', color: PLOT_COLORS.danger,
       parts: [[-3, -0.001, () => -0.8], [0.001, 3, () => 0.8]],
-      note: '左右极限一个是 −0.8、一个是 0.8，不相等，分段点是跳跃间断点。', ok: false
+      note: '左右极限一个是 -0.8、一个是 0.8，不相等，分段点是跳跃间断点。', ok: false
     },
     {
       name: '可去间断（可修补）', color: PLOT_COLORS.warn,

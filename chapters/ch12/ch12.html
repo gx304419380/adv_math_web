@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 12 章 · 无穷级数 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：无穷级数 的原创讲解、函数图像、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/design-system.css">
+<link rel="stylesheet" href="../../assets/css/demos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js"></script>
+<script defer src="../../assets/js/chapters.js"></script>
+<script defer src="../../assets/js/cdn.js"></script>
+<script defer src="../../assets/js/math.js"></script>
+<script defer src="../../assets/js/graph.js"></script>
+<script defer src="../../assets/js/plot.js"></script>
+<script defer src="../../assets/js/steps.js"></script>
+<script defer src="../../assets/js/mindmap.js"></script>
+<script defer src="../../assets/js/quiz.js"></script>
+<script defer src="../../assets/js/theme.js"></script>
+<script defer src="../../assets/js/nav.js"></script>
+<script defer src="../../assets/js/polish.js"></script>
+<script defer src="../../assets/js/boot.js"></script>
+<script defer src="../../assets/js/demo-kit.js"></script>
+<script defer src="../../assets/js/demo-presets.js"></script>
+<script defer src="demo.js"></script>
+</head>
+<body data-chapter="ch12">
+
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="../../index.html">首页</a>
+    <a href="#" data-chapter-menu>章节目录 ▾</a>
+    <a href="../../DISCLAIMER.md">免责声明</a>
+  </nav>
+  <span class="tb-hint">同济第七版 · 内容原创</span>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
+<header class="chapter-hero">
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">12</span> 章 · <span data-slot="volume">下册</span></div>
+    <h1 data-slot="title">无穷级数</h1>
+    <p class="hero-sub" data-slot="subtitle">把函数拆成无穷多项相加</p>
+    <div class="hero-meta">
+      <span>约 <span data-slot="estMinutes">100</span> 分钟</span><span>·</span>
+      <span>8 节</span><span>·</span><span>8 个交互演示</span><span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+    <div class="btn-row hero-actions">
+      <a class="btn primary" href="#s1">从第 1 节开始 ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <!-- 侧栏由 assets/js/nav.js 依 chapters.json 自动生成，只显示本章小节 -->
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <p class="hint">本章按教材的节序展开，知识点名称与术语保持规范一致；定义与定理的表述、例题与图形均为本站原创。文中编号是本站自用编号，不是教材原编号。</p>
+      <ul class="goal-list" data-goal-list>
+<!-- GOALS:BEGIN -->
+        <li><label><input type="checkbox">写出一个级数的部分和并取极限，据此判断常数项级数是否收敛、会求它收敛时的和</label></li>
+        <li><label><input type="checkbox">对正项级数选用比较、比值、根值判别法，对交错级数用莱布尼茨判别法，并分清绝对收敛与条件收敛</label></li>
+        <li><label><input type="checkbox">求幂级数的收敛半径，逐一检查两个端点写出收敛域，并说明逐项求导、逐项积分后半径不变</label></li>
+        <li><label><input type="checkbox">用已知展开式把函数展开成幂级数，拿它做近似计算、估计误差、求极限，并核对余项是否趋于 0</label></li>
+        <li><label><input type="checkbox">用优级数判别法判断函数项级数一致收敛并逐项求积，计算周期函数的傅里叶系数、说出间断点处的收敛值</label></li>
+<!-- GOALS:END -->
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">先看清这一章的知识点怎么长出来，再逐节往下读。点节点可高亮相连链路。</p>
+      <div class="mermaid-box" data-mount="mindmap">
+        <!-- MAP:BEGIN -->
+<script type="application/json">
+{
+  "nodes": [
+    { "id": "n0", "label": "常数项级数与部分和", "kind": "root" },
+    { "id": "n1", "label": "收敛定义与通项必要条件", "kind": "core" },
+    { "id": "n2", "label": "正项级数审敛法", "kind": "core" },
+    { "id": "n3", "label": "交错级数与绝对条件收敛", "kind": "branch" },
+    { "id": "n4", "label": "幂级数与收敛半径", "kind": "core" },
+    { "id": "n5", "label": "端点判别与逐项求导积分", "kind": "branch" },
+    { "id": "n6", "label": "泰勒级数与余项条件", "kind": "core" },
+    { "id": "n7", "label": "近似计算与求极限", "kind": "branch" },
+    { "id": "n8", "label": "一致收敛与优级数判别", "kind": "core" },
+    { "id": "n9", "label": "傅里叶级数（标准周期）", "kind": "core" },
+    { "id": "n10", "label": "一般周期 2l 与换元", "kind": "core" },
+    { "id": "end", "label": "全书收束：极限主线", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n2", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n5", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n6", "target": "n8" },
+    { "source": "n8", "target": "n9" },
+    { "source": "n9", "target": "n10" },
+    { "source": "n7", "target": "end" },
+    { "source": "n10", "target": "end" }
+  ]
+}
+</script>
+<!-- MAP:END -->
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+<!-- SECTION:s1:BEGIN -->
+        <h3><span class="sec-badge">12.1</span>常数项级数的概念和性质</h3>
+        <p>把一根 1 米长的绳子，第一天剪掉一半、第二天再剪掉剩下的一半，如此一直剪下去，一共剪掉了多少？「把无穷多个数加起来」不能真的加完，数学上的办法是：先算「加到第 \(N\) 项时一共是多少」，再让 \(N\) 越来越大，看这个累计数停不停得下来。这一节把这句话写成精确定义。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">常数项级数、部分和与收敛</span><span class="mb-no">12.1</span></div>
+          <div class="mb-body">
+            设 \(u_1,u_2,\cdots,u_n,\cdots\) 是一列常数，顺次相加的式子
+            $$\sum_{n=1}^{\infty}u_n=u_1+u_2+\cdots+u_n+\cdots$$
+            称为<strong class="term">常数项级数</strong>（简称级数），\(u_n\) 叫它的<strong class="term">通项</strong>。称前 \(N\) 项的和
+            $$S_N=\sum_{n=1}^{N}u_n=u_1+u_2+\cdots+u_N$$
+            为级数的<strong class="term">部分和</strong>。若数列 \(\{S_N\}\) 收敛于有限数 \(S\)，即 \(\lim\limits_{N\to\infty}S_N=S\)，则称级数<strong class="term">收敛</strong>，并记 \(\sum_{n=1}^{\infty}u_n=S\)；若 \(\{S_N\}\) 没有有限极限，则称级数<strong class="term">发散</strong>。
+            <mark class="key">收敛与发散只由部分和数列的极限决定</mark>；级数的和是部分和的极限，不是把无穷多项真的加完。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">级数收敛的必要条件</span><span class="mb-no">12.2</span></div>
+          <div class="mb-body">
+            若级数 \(\sum_{n=1}^{\infty}u_n\) 收敛，则 \(\lim\limits_{n\to\infty}u_n=0\)。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">记部分和 \(S_n=\sum_{k=1}^{n}u_k\)，由收敛定义设 \(\lim\limits_{n\to\infty}S_n=S\)</span><span class="derive-note">「收敛」的意思就是这个极限存在且有限</span></li>
+              <li><span class="derive-eq">对 \(n\ge 2\)，有 \(u_n=S_n-S_{n-1}\)</span><span class="derive-note">前 n 项和减去前 n-1 项和，只剩第 n 项</span></li>
+              <li><span class="derive-eq">\(\lim\limits_{n\to\infty}u_n=\lim\limits_{n\to\infty}S_n-\lim\limits_{n\to\infty}S_{n-1}=S-S=0\)</span><span class="derive-note">两个都趋于 S 的数列相减，证毕</span></li>
+            </ol>
+            <mark class="key">这个条件只是必要的：通项趋于 0 不能反过来推出收敛</mark>，反例见下面的直观理解。
+          </div>
+        </div>
+
+        <div class="math-block property">
+          <div class="mb-head"><span class="mb-tag">性质</span><span class="mb-title">收敛级数的基本性质</span><span class="mb-no">12.3</span></div>
+          <div class="mb-body">
+            设 \(\sum u_n=S\)、\(\sum v_n=T\) 都收敛，\(\alpha,\beta\) 为常数，则 \(\sum(\alpha u_n+\beta v_n)=\alpha S+\beta T\)。又：去掉、添加或改动有限多项，不改变级数的敛散性（但收敛时和一般会变）。收敛的级数任意加括号后得到的新级数仍收敛且和不变；反过来，加括号后收敛并不能保证原级数收敛。
+            <mark class="key">「有限项」不影响敛散，「去掉无穷多项」没有这个保证</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="partial-sums">
+          <div class="demo-title">演示 1 · 部分和数列停在哪里</div>
+          <div class="demo-caption">拖动项数 \(N\)，浅色柱是每一项 \(u_n=\dfrac{3}{4n^{2}-1}\) 的大小，绿色折线是累加出的部分和 \(S_N\)，橙色虚线是 \(\dfrac{3}{2}\)。<b>盯住读数</b>：柱子越来越矮、几乎贴着横轴，但部分和一路挤到 \(\dfrac{3}{2}\) 就停住了。读数还会提醒你：通项趋于 0 只是必要条件，<strong class="term">调和级数</strong>（\(\sum\dfrac{1}{n}\)，就是把 \(1,\dfrac{1}{2},\dfrac{1}{3},\cdots\) 一路加起来）通项也趋于 0，部分和却无限增长。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">由部分和反求通项，再用定义判敛散</span><span class="mb-no">例 12.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">已知某级数 \(\sum_{n=1}^{\infty}u_n\) 的前 \(n\) 项和为 \(S_n=\dfrac{3n}{2n+1}\)。(1) 求通项 \(u_n\)；(2) 判断级数是否收敛，若收敛求它的和；(3) 验证 \(\lim\limits_{n\to\infty}u_n=0\)，并说明这个事实能否反过来保证收敛。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问用「\(u_1=S_1\)，\(n\ge2\) 时 \(u_n=S_n-S_{n-1}\)」把通项算出来。第 (2) 问根本不必另找方法：定义 12.1 把敛散完全交给 \(S_n\) 的极限，直接取极限即可。第 (3) 问用调和级数当反例。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 先算 \(u_1=S_1=\dfrac{3}{3}=1\)。对 \(n\ge 2\)：
+              $$u_n=S_n-S_{n-1}=\frac{3n}{2n+1}-\frac{3(n-1)}{2n-1}$$
+              通分，分母是 \((2n+1)(2n-1)=4n^{2}-1\)；分子为
+              $$3n(2n-1)-3(n-1)(2n+1)=(6n^{2}-3n)-(6n^{2}-3n-3)=3$$
+              故 \(u_n=\dfrac{3}{4n^{2}-1}\)。把 \(n=1\) 代入也给出 \(\dfrac{3}{3}=1\)，所以这个式子对一切 \(n\ge1\) 都成立。<br>
+              (2) \(\lim\limits_{n\to\infty}S_n=\lim\limits_{n\to\infty}\dfrac{3n}{2n+1}=\dfrac{3}{2}\) 是有限数。由定义 12.1，级数收敛，且
+              $$\sum_{n=1}^{\infty}\frac{3}{4n^{2}-1}=\frac{3}{2}$$<br>
+              (3) \(\lim\limits_{n\to\infty}u_n=\lim\limits_{n\to\infty}\dfrac{3}{4n^{2}-1}=0\)，与定理 12.2 一致。但它不能反过来保证收敛：调和级数 \(\sum\dfrac{1}{n}\) 的通项也趋于 0，把从第 2 项起的项按长度 1、2、4、8 分组，每组的和都不小于 \(\dfrac{1}{2}\)，部分和就能超过任何给定的数，因此它发散。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「写出 \(S_n\) → 取极限」；只有 \(S_n\) 难求时才转去用审敛法。先检验 \(\lim u_n\neq 0\) 可以一步判发散，但 \(\lim u_n=0\) 时绝不能停手，还要继续判。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">通项趋于 0 只是「加得越来越少」，不等于「加得完」</span></div>
+          <div class="mb-body">收敛要求的是部分和 \(S_N\) 能稳定到一个数。每项越来越小，只保证「后来添的那一点」越来越轻，却没保证这些微量加起来有限。演示里绿色折线趋于 \(\dfrac{3}{2}\)，是「加得完」；调和级数的部分和像 \(\ln N\) 一样一直长，是「加不完」。两者的通项都趋于 0，结局却相反。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">看到通项趋于 0 就说收敛</span></div>
+          <div class="mb-body">\(\sum\dfrac{1}{n}\) 与 \(\sum\dfrac{3}{4n^{2}-1}\) 的通项都趋于 0，但前者发散、后者收敛。定理 12.2 只给了一个方向的必然关系，反过来必须再算部分和或用审敛法确认。</div>
+        </div>
+<!-- SECTION:s1:END -->
+      </article>
+      <article class="section" id="s2">
+<!-- SECTION:s2:BEGIN -->
+        <h3><span class="sec-badge">12.2</span>常数项级数的审敛法</h3>
+        <p>每次都去算部分和的极限太慢了。能不能只看通项长什么样，就判断级数收不收敛？这一节给出几把「尺子」：把要判的级数和一把已知敛散的级数比一比，或者看相邻两项之比、看通项开 \(n\) 次方，往往不用求和就能下结论。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">正项级数的比较、比值与根值判别法</span><span class="mb-no">12.4</span></div>
+          <div class="mb-body">
+            设 \(\sum u_n\) 是<strong class="term">正项级数</strong>，即对每个 \(n\) 都有 \(u_n>0\)。<br>
+            <strong>比较判别法</strong>：若从某项起 \(0\le u_n\le v_n\) 且正项级数 \(\sum v_n\) 收敛，则 \(\sum u_n\) 收敛；若从某项起 \(0\le w_n\le u_n\) 且 \(\sum w_n\) 发散，则 \(\sum u_n\) 发散。常拿来当尺子的是 <strong class="term">\(p\)-级数</strong> \(\sum_{n=1}^{\infty}\dfrac{1}{n^{p}}\)：它在 \(p>1\) 时收敛、在 \(p\le 1\) 时发散。<br>
+            <strong>比值判别法</strong>：若 \(\rho=\lim\limits_{n\to\infty}\dfrac{u_{n+1}}{u_n}\) 存在，则 \(\rho&lt;1\) 时收敛、\(\rho>1\) 时发散、\(\rho=1\) 时本法失效，须另换方法。<br>
+            <strong>根值判别法</strong>：若 \(\rho=\lim\limits_{n\to\infty}\sqrt[n]{u_n}\) 存在，结论相同（\(\rho&lt;1\) 收敛、\(\rho>1\) 发散、\(\rho=1\) 失效）。
+            <div class="proof-title">推导 · 尺子 \(\sum\dfrac{1}{n^{2}}\) 为什么收敛（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">对 \(n\ge 2\)，有 \(\dfrac{1}{n^{2}}&lt;\dfrac{1}{n(n-1)}=\dfrac{1}{n-1}-\dfrac{1}{n}\)</span><span class="derive-note">把分母缩小，分式就放大；右边裂成两项之差</span></li>
+              <li><span class="derive-eq">\(\sum_{n=2}^{N}\left(\dfrac{1}{n-1}-\dfrac{1}{n}\right)=1-\dfrac{1}{N}&lt;1\)</span><span class="derive-note">中间项全部抵消，只剩首尾两项</span></li>
+              <li><span class="derive-eq">故 \(\sum\dfrac{1}{n^{2}}\) 的部分和有上界且递增，极限存在，收敛</span><span class="derive-note">递增有界数列必收敛，证毕</span></li>
+            </ol>
+            <mark class="key">三条方法都要求正项；\(\rho=1\) 时一律不能下结论</mark>。
+          </div>
+        </div>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">绝对收敛与条件收敛</span><span class="mb-no">12.5</span></div>
+          <div class="mb-body">
+            若把各项取绝对值后的正项级数 \(\sum|u_n|\) 收敛，则称 \(\sum u_n\) <strong class="term">绝对收敛</strong>；若 \(\sum u_n\) 收敛但 \(\sum|u_n|\) 发散，则称 \(\sum u_n\) <strong class="term">条件收敛</strong>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">绝对收敛必收敛；莱布尼茨判别法</span><span class="mb-no">12.6</span></div>
+          <div class="mb-body">
+            <strong>(一) 绝对收敛 \(\Rightarrow\) 收敛</strong>。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">对每项有 \(0\le u_n+|u_n|\le 2|u_n|\)</span><span class="derive-note">\(u_n\ge0\) 时左边是 \(2u_n\)，\(u_n&lt;0\) 时是 0</span></li>
+              <li><span class="derive-eq">由 \(\sum|u_n|\) 收敛及比较判别法，\(\sum\bigl(u_n+|u_n|\bigr)\) 收敛</span><span class="derive-note">被收敛的正项级数压住</span></li>
+              <li><span class="derive-eq">\(\sum u_n=\sum\bigl(u_n+|u_n|\bigr)-\sum|u_n|\) 是两个收敛级数之差，故收敛</span><span class="derive-note">用性质 12.3 的线性运算，证毕</span></li>
+            </ol>
+            <strong>(二) 莱布尼茨判别法</strong>：设交错级数 \(\sum_{n=1}^{\infty}(-1)^{n-1}b_n\) 满足 (i) \(b_n>0\)；(ii) \(\{b_n\}\) 单调不增，即 \(b_{n+1}\le b_n\)；(iii) \(\lim\limits_{n\to\infty}b_n=0\)。则该级数收敛，且余项满足 \(|S-S_n|\le b_{n+1}\)。
+            <mark class="key">判出「收敛」后还要再看 \(\sum|u_n|\)，才能分清绝对收敛还是条件收敛</mark>；比较判别法只对正项级数可用，所以先取了绝对值才能拿它比较。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="convergence-tests">
+          <div class="demo-title">演示 2 · 五条部分和折线，五种结局</div>
+          <div class="demo-caption">用按钮切换五个级数，拖动项数看部分和折线：比较、比值、根值三条尺子各自压住一条收敛的折线，交错级数收敛到 \(2-\dfrac{\pi}{2}\)，而调和级数的折线一路往上不回头、比值与根值极限都等于 1 时判别法失效。<b>读数把「方法名 + 条件 + 算式 + 结论」四件写齐</b>，这正是答题时要写全的四件。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">三条判别法各练一次，并分清绝对与条件收敛</span><span class="mb-no">例 12.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">判断下列级数的敛散性，每题写出所用判别法及其条件：(1) \(\sum_{n=1}^{\infty}\dfrac{n+2}{n^{3}+1}\)；(2) \(\sum_{n=1}^{\infty}\dfrac{5n+1}{2^{n}}\)；(3) \(\sum_{n=1}^{\infty}(-1)^{n-1}\dfrac{2}{2n+1}\)，并说明它是绝对收敛还是条件收敛。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>(1) 各项为正、分母是 \(n^{3}\)，适合和收敛的 \(\sum\dfrac{1}{n^{2}}\) 比较。(2) 含 \(2^{n}\)，相邻两项之比会很简单，用比值法。(3) 正负交替，用莱布尼茨判别法；再单独看绝对值级数 \(\sum\dfrac{2}{2n+1}\) 判绝对还是条件。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 用<strong>比较判别法</strong>。条件：正项级数，且通项不超过某个收敛级数的通项。对 \(n\ge 1\) 有 \(n+2\le 3n\)、\(n^{3}+1>n^{3}\)，故
+              $$0&lt;\frac{n+2}{n^{3}+1}&lt;\frac{3n}{n^{3}}=\frac{3}{n^{2}}$$
+              而 \(\sum\dfrac{3}{n^{2}}\) 收敛（定理 12.4 附带的推导），故原级数收敛。<br>
+              (2) 用<strong>比值判别法</strong>。条件：正项级数，且比值极限存在。这里 \(u_n=\dfrac{5n+1}{2^{n}}>0\)，
+              $$\rho=\lim_{n\to\infty}\frac{u_{n+1}}{u_n}=\lim_{n\to\infty}\frac{(5n+6)/2^{n+1}}{(5n+1)/2^{n}}=\lim_{n\to\infty}\frac{5n+6}{2(5n+1)}=\frac{1}{2}$$
+              因为 \(\dfrac{1}{2}&lt;1\)，由比值判别法知级数收敛。<br>
+              (3) 用<strong>莱布尼茨判别法</strong>。写成 \((-1)^{n-1}b_n\) 且 \(b_n=\dfrac{2}{2n+1}>0\)；逐条核对：\(b_{n+1}=\dfrac{2}{2n+3}&lt;\dfrac{2}{2n+1}=b_n\)，单调不增；又 \(\lim\limits_{n\to\infty}\dfrac{2}{2n+1}=0\)。三条都满足，故该交错级数收敛。<br>
+              再看绝对值级数 \(\sum\dfrac{2}{2n+1}\)：因为 \(\dfrac{2}{2n+1}>\dfrac{1}{n+1}\)（交叉相乘得 \(2n+2>2n+1\)），而 \(\sum\dfrac{1}{n+1}\) 是调和级数去掉首项，发散；由比较判别法 \(\sum|u_n|\) 发散。所以原级数是<strong>条件收敛</strong>，不是绝对收敛。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先看通项是否趋于 0（不趋于 0 直接判发散）；再看是否正项——正项按「含 \(a^{n}\) 或 \(n!\) 用比值、通项整体是 \(n\) 次幂用根值、其余找 \(p\)-级数当尺子比较」来选；若正负交替，用莱布尼茨核对单调与趋于 0，最后补查 \(\sum|u_n|\)。写答案把「方法名 + 条件 + 算式 + 结论」四件写齐。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">审敛法就是「找一个已知收敛的级数把它压住」</span></div>
+          <div class="mb-body">比值法与根值法本质上都在说：从某一项起，\(\dfrac{u_{n+1}}{u_n}\) 或 \(\sqrt[n]{u_n}\) 小于某个固定的 \(r&lt;1\)，于是后面的项被一个公比 \(r\) 的几何级数压住，加起来自然有限；比较法则直接借 \(\sum\dfrac{1}{n^{p}}\) 当尺子。演示里四条收敛折线最后都趋于平稳，正是「被压住」的样子；只有调和级数压不住，因为它的比值极限恰好是失效的 1。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">对变号级数直接套比较判别</span></div>
+          <div class="mb-body">比较判别法要求正项，\(\sum(-1)^{n-1}\dfrac{2}{2n+1}\) 通项时正时负，不能拿它和 \(\dfrac{1}{n^{2}}\) 直接比。固定动作是先把各项取绝对值，对 \(\sum|u_n|\) 用正项的判别法，再结合莱布尼茨判断原级数。</div>
+        </div>
+<!-- SECTION:s2:END -->
+      </article>
+      <article class="section" id="s3">
+<!-- SECTION:s3:BEGIN -->
+        <h3><span class="sec-badge">12.3</span>幂级数</h3>
+        <p>把级数里的常数换成 \(x\) 的幂，就得到一个「会随 \(x\) 变」的函数：\(\sum a_n x^{n}\)。有的 \(x\) 代进去收敛，有的发散。这一节要找出那条分界线——收敛半径，把两个端点一个一个查清楚，并看看逐项求导、逐项积分之后这条分界线会不会移动。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">幂级数、收敛半径与收敛域</span><span class="mb-no">12.7</span></div>
+          <div class="mb-body">
+            形如
+            $$\sum_{n=0}^{\infty}a_n x^{n}=a_0+a_1x+a_2x^{2}+\cdots$$
+            的级数称为<strong class="term">幂级数</strong>（更一般地可写成 \(\sum a_n(x-x_0)^{n}\)）。使它在 \(x\) 处收敛的所有 \(x\) 组成的集合叫<strong class="term">收敛域</strong>。若存在 \(R\ge 0\)，使 \(|x|&lt;R\) 时级数绝对收敛、\(|x|>R\) 时级数发散，则称 \(R\) 为<strong class="term">收敛半径</strong>。
+            <mark class="key">\(R\) 只保证开区间 \((-R,R)\) 内收敛，两个端点 \(x=\pm R\) 必须单独判断</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">阿贝尔定理与收敛半径的求法</span><span class="mb-no">12.8</span></div>
+          <div class="mb-body">
+            <strong>阿贝尔定理</strong>：若幂级数 \(\sum a_n x^{n}\) 在 \(x=x_1\neq 0\) 处收敛，则对满足 \(|x|&lt;|x_1|\) 的一切 \(x\) 它绝对收敛；若它在 \(x=x_2\) 处发散，则对满足 \(|x|>|x_2|\) 的一切 \(x\) 它发散。于是收敛的点连成一段以 0 为中心的区间，只需一个半径 \(R\) 就能刻画。<br>
+            <strong>求半径</strong>：设 \(\rho=\lim\limits_{n\to\infty}\left|\dfrac{a_{n+1}}{a_n}\right|\) 或 \(\rho=\lim\limits_{n\to\infty}\sqrt[n]{|a_n|}\) 存在，则 \(R=\dfrac{1}{\rho}\)（约定 \(\rho=0\) 时 \(R=+\infty\)，\(\rho=+\infty\) 时 \(R=0\)）。
+            <div class="proof-title">推导 · 半径公式（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">把 \(x\) 固定，对正项级数 \(\sum|a_n x^{n}|\) 用比值判别法</span><span class="derive-note">取了绝对值，才能用正项审敛法</span></li>
+              <li><span class="derive-eq">\(\lim\limits_{n\to\infty}\left|\dfrac{a_{n+1}x^{n+1}}{a_n x^{n}}\right|=\rho\,|x|\)</span><span class="derive-note">含 \(x\) 的部分被单独留出来</span></li>
+              <li><span class="derive-eq">\(\rho|x|&lt;1\) 即 \(|x|&lt;\dfrac{1}{\rho}\) 时收敛，故 \(R=\dfrac{1}{\rho}\)</span><span class="derive-note">等于 1 时正是端点，判别法失效，须单独判断，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">逐项求导与逐项积分不改变收敛半径</span><span class="mb-no">12.9</span></div>
+          <div class="mb-body">
+            设 \(\sum a_n x^{n}\) 的收敛半径为 \(R>0\)，和函数为 \(S(x)\)。在 \((-R,R)\) 内可逐项求导与逐项积分：
+            $$S'(x)=\sum_{n=1}^{\infty}n a_n x^{n-1},\qquad \int_0^x S(t)\,\mathrm{d}t=\sum_{n=0}^{\infty}\frac{a_n}{n+1}x^{n+1}$$
+            所得两个新幂级数的收敛半径<strong>仍是 \(R\)</strong>，但端点处的敛散可能与原级数不同，必须重新判断。
+            <div class="proof-title">推导 · 半径为什么不变（3 步，以逐项求导为例）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">求导后系数为 \(n a_n\)，比值极限 \(\lim\limits_{n\to\infty}\left|\dfrac{(n+1)a_{n+1}}{n a_n}\right|=\lim\limits_{n\to\infty}\dfrac{n+1}{n}\left|\dfrac{a_{n+1}}{a_n}\right|=\rho\)</span><span class="derive-note">\(\dfrac{n+1}{n}\to 1\)，不改变系数的衰减率</span></li>
+              <li><span class="derive-eq">积分后系数为 \(\dfrac{a_{n-1}}{n}\)，比值极限同样趋于 \(\rho\)</span><span class="derive-note">除以 \(n\) 也只差一个趋于 1 的因子</span></li>
+              <li><span class="derive-eq">两者半径都是 \(\dfrac{1}{\rho}=R\)，与原来相同</span><span class="derive-note">端点不在比值判别法的覆盖范围内，故要单独查，证毕</span></li>
+            </ol>
+            <mark class="key">半径不变，端点可变</mark>：这是「逐项求导」和「查端点」两件事最容易混在一起的地方。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="power-series">
+          <div class="demo-title">演示 3 · 收敛区间内贴合，端点之外甩开</div>
+          <div class="demo-caption">蓝线是 \(\sum_{n=1}^{\infty}\dfrac{(x-2)^{n}}{n\cdot 3^{n}}\) 的和函数，橙线是取前 \(N\) 项的部分和多项式，两条红色竖线是端点 \(-1\) 与 \(5\)。拖动观察点、切换项数，看橙线在区间内一点点贴住蓝线；<b>读数会分别交代两个端点</b>：\(x=5\) 代入得调和级数发散，\(x=-1\) 代入得交错调和级数收敛，所以收敛域是 \([-1,5)\)。逐项求导后半径仍是 \(3\)，端点却要重新判断。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">求半径、查两个端点，再看逐项求导后端点怎么变</span><span class="mb-no">例 12.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">对幂级数 \(\sum_{n=1}^{\infty}\dfrac{(x-2)^{n}}{n\cdot 3^{n}}\)：(1) 求收敛半径与收敛域；(2) 把它逐项求导得到新级数，求新级数的收敛半径与收敛域，并比较两者。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问把 \(x\) 看作固定的数，对 \(u_n=\dfrac{(x-2)^{n}}{n3^{n}}\) 取绝对值后用比值判别法，解出 \(|x-2|\) 的范围得到 \(R\)；再把两个端点代回原级数各判一次。第 (2) 问先逐项求导写出新级数，用定理 12.9 判断半径，再把端点重新代入新级数判断——不能照搬第 (1) 问的答案。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 对固定的 \(x\neq 2\)，取绝对值用比值判别法：
+              $$\lim_{n\to\infty}\left|\frac{u_{n+1}}{u_n}\right|=\lim_{n\to\infty}\frac{n\,3^{n}\,|x-2|^{n+1}}{(n+1)\,3^{n+1}\,|x-2|^{n}}=\lim_{n\to\infty}\frac{n}{3(n+1)}|x-2|=\frac{|x-2|}{3}$$
+              令它小于 1 得 \(|x-2|&lt;3\)，即 \(-1&lt;x&lt;5\)；大于 1 时发散。故收敛半径 \(R=3\)。<br>
+              端点 \(x=5\)：通项成为 \(\dfrac{3^{n}}{n\cdot 3^{n}}=\dfrac{1}{n}\)，是调和级数，发散。<br>
+              端点 \(x=-1\)：通项成为 \(\dfrac{(-3)^{n}}{n\cdot 3^{n}}=\dfrac{(-1)^{n}}{n}\)，是交错调和级数；\(\dfrac{1}{n}\) 单调不增且趋于 0，由莱布尼茨判别法收敛。<br>
+              合起来，原级数的收敛域是 \([-1,5)\)。<br>
+              (2) 逐项求导：\(\dfrac{\mathrm{d}}{\mathrm{d}x}\dfrac{(x-2)^{n}}{n\cdot 3^{n}}=\dfrac{(x-2)^{n-1}}{3^{n}}\)，新级数为
+              $$\sum_{n=1}^{\infty}\frac{(x-2)^{n-1}}{3^{n}}=\frac{1}{3}\sum_{m=0}^{\infty}\left(\frac{x-2}{3}\right)^{m}$$
+              这是公比 \(\dfrac{x-2}{3}\) 的几何级数，收敛当 \(|x-2|&lt;3\)，故收敛半径仍是 \(R=3\)（与定理 12.9 一致）。<br>
+              端点 \(x=5\)：公比为 1，通项恒为 \(\dfrac{1}{3}\) 不趋于 0，发散；端点 \(x=-1\)：公比为 \(-1\)，通项在 \(\pm\dfrac{1}{3}\) 间摆动、不趋于 0，发散。故新级数的收敛域是 \((-1,5)\)，两个端点都丢了。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先对 \(\left|u_{n+1}/u_n\right|\) 取极限、把含 \(x\) 的部分留下并令它小于 1 解出半径；接着务必把两个端点代回原级数各用一次常数项审敛法；最后拼出收敛域。遇到「逐项求导 / 积分」，记住半径不变，但端点一律重新判断，不能沿用上一次的结论。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">半径是「系数衰减」与「\(x^{n}\) 增长」的拔河</span></div>
+          <div class="mb-body">\((x-2)^{n}\) 随 \(n\) 增长还是衰减，取决于 \(|x-2|\) 比 3 大还是小；系数 \(\dfrac{1}{n3^{n}}\) 把每一项又压小一点。两者相抵后留下一条以 2 为中心、半径 3 的硬边界。阿贝尔定理保证收敛点连成一段，所以只需一个半径刻画开区间，边界上两点再单独交代；逐项求导只改系数里一个趋于 1 的因子，拔河的胜负点不变。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">求出半径就收工，或把原端点照搬到求导后的级数</span></div>
+          <div class="mb-body">\(\sum\dfrac{(x-2)^{n}}{n3^{n}}\) 的 \(R=3\)，但 \(x=5\) 发散、\(x=-1\) 收敛，收敛域是 \([-1,5)\) 而不是 \((-1,5)\)。逐项求导后半径仍是 3，两个端点却都发散，收敛域变成 \((-1,5)\)。半径只管开区间，端点必须代回「当前这个级数」重新判断。</div>
+        </div>
+<!-- SECTION:s3:END -->
+      </article>
+      <article class="section" id="s4">
+<!-- SECTION:s4:BEGIN -->
+        <h3><span class="sec-badge">12.4</span>函数展开成幂级数</h3>
+        <p>上一节是「由级数认出函数」，这一节反过来：给一个函数，能不能把它写成一个幂级数？能的话，算函数值、求导、积分就都化成了对多项式动手。但「写出一个泰勒级数」和「这个级数真的等于原来的函数」是两件事，中间差着一个余项条件。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">泰勒级数与麦克劳林级数</span><span class="mb-no">12.10</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \(x_0\) 的某邻域内具有各阶导数，称
+            $$\sum_{n=0}^{\infty}\frac{f^{(n)}(x_0)}{n!}(x-x_0)^{n}$$
+            为 \(f\) 在 \(x_0\) 处的<strong class="term">泰勒级数</strong>；取 \(x_0=0\) 时称为<strong class="term">麦克劳林级数</strong>。系数由 \(a_n=\dfrac{f^{(n)}(x_0)}{n!}\) 给出。
+            <div class="proof-title">推导 · 系数为什么只能是这一组（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">设 \(f(x)=\sum_{m=0}^{\infty}a_m x^{m}\)，在收敛区间内可逐项求导（定理 12.9）</span><span class="derive-note">先假设能展开，再反推系数</span></li>
+              <li><span class="derive-eq">求 \(k\) 阶导数后令 \(x=0\)：低于 \(k\) 次的项被导成 0，高于 \(k\) 次的项仍含 \(x\) 也为 0，只剩 \(k!\,a_k\)</span><span class="derive-note">只有 \(a_kx^{k}\) 这一项活下来</span></li>
+              <li><span class="derive-eq">\(f^{(k)}(0)=k!\,a_k\)，即 \(a_k=\dfrac{f^{(k)}(0)}{k!}\)</span><span class="derive-note">展开式唯一，证毕</span></li>
+            </ol>
+            <mark class="key">一旦能展开成幂级数，系数只能是这一组，没有第二套</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">可展开的充要条件是余项趋于 0</span><span class="mb-no">12.11</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \((x_0-R,x_0+R)\) 内具有各阶导数，把泰勒公式写成 \(f(x)=P_n(x)+R_n(x)\)，其中 \(P_n(x)\) 是 \(n\) 次泰勒多项式、\(R_n(x)\) 是余项。则 \(f\) 在该区间内<strong class="term">可展开</strong>成泰勒级数的充要条件是：对每个 \(x\) 都有 \(\lim\limits_{n\to\infty}R_n(x)=0\)。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">泰勒级数的前 \(n\) 项部分和恰好是 \(S_n(x)=P_n(x)\)</span><span class="derive-note">由系数公式，两者逐项相同</span></li>
+              <li><span class="derive-eq">级数收敛于 \(f(x)\) 即 \(\lim\limits_{n\to\infty}S_n(x)=f(x)\)，等价于 \(\lim\limits_{n\to\infty}\bigl(f(x)-P_n(x)\bigr)=0\)</span><span class="derive-note">把「收敛到谁」翻译成极限等式</span></li>
+              <li><span class="derive-eq">而 \(f(x)-P_n(x)=R_n(x)\)，故条件正是 \(\lim\limits_{n\to\infty}R_n(x)=0\)</span><span class="derive-note">证毕；用间接法展开时，成立范围由所用已知展开式的收敛范围经换元解出，本质就是余项趋于 0 的范围</span></li>
+            </ol>
+            <mark class="key">「有各阶导数」只保证能写出泰勒级数，不保证它等于 \(f\)</mark>；反例：\(f(x)=\mathrm{e}^{-1/x^{2}}\)（\(x\neq 0\)）、\(f(0)=0\) 在 0 处各阶导数全为 0，泰勒级数恒等于 0，却只在 \(x=0\) 处等于 \(f\)。
+          </div>
+        </div>
+
+        <div class="math-block property">
+          <div class="mb-head"><span class="mb-tag">性质</span><span class="mb-title">五个常用麦克劳林展开式</span><span class="mb-no">12.12</span></div>
+          <div class="mb-body">
+            $$\mathrm{e}^{x}=\sum_{n=0}^{\infty}\frac{x^{n}}{n!},\qquad \sin x=\sum_{n=0}^{\infty}\frac{(-1)^{n}x^{2n+1}}{(2n+1)!},\qquad \cos x=\sum_{n=0}^{\infty}\frac{(-1)^{n}x^{2n}}{(2n)!}$$
+            $$\frac{1}{1-x}=\sum_{n=0}^{\infty}x^{n}\ (|x|&lt;1),\qquad \ln(1+x)=\sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n}x^{n}\ (-1&lt;x\le 1)$$
+            把已知函数凑成这些形状再做换元，就是<strong class="term">间接展开法</strong>；成立范围由对应的收敛条件解出。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="taylor-series">
+          <div class="demo-title">演示 4 · 余项趋于 0，橙线才等于蓝线</div>
+          <div class="demo-caption">蓝线是 \(f(x)=\dfrac{x}{4+x^{2}}\)，橙线是它展开式 \(\sum\dfrac{(-1)^{n}x^{2n+1}}{4^{n+1}}\) 的前若干项，两条红色竖线是端点 \(\pm 2\)。拖动阶数，读数给出 \(x=1.5\) 处部分和与真值 \(f(1.5)=0.24\) 的差，以及余项随阶数变小的趋势：<b>项数加大时余项趋于 0，橙线才在区间内贴住蓝线</b>。收敛半径是 \(2\)，窗口只画到端点 \(\pm2\) 处为止：越靠近端点，同样阶数下橙线偏离蓝线越明显，因为那里离奇点 \(x=\pm 2\mathrm{i}\) 最近；走出 \(|x|&lt;2\) 级数发散，橙线再也不可能贴住蓝线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用间接法展开，并把成立范围写清楚</span><span class="mb-no">例 12.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">把 \(f(x)=\dfrac{x}{4+x^{2}}\) 展开成 \(x\) 的幂级数并指出成立范围；再说明为什么不能用这个展开式去算 \(f(3)\)，尽管 \(f(3)\) 本身有定义。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>用性质 12.12 里的几何级数 \(\dfrac{1}{1-t}=\sum t^{n}\)（\(|t|&lt;1\)）。先把 \(\dfrac{1}{4+x^{2}}\) 凑成「常数 \(\times\dfrac{1}{1-t}\)」，令 \(t=-\dfrac{x^{2}}{4}\)，再乘回 \(x\)，最后把 \(|t|&lt;1\) 翻译成 \(x\) 的范围。第二问看 \(x=3\) 时余项还趋不趋于 0。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              先凑形状：\(\dfrac{1}{4+x^{2}}=\dfrac{1}{4}\cdot\dfrac{1}{1+\frac{x^{2}}{4}}\)。验证：\(\dfrac{1}{4}\cdot\dfrac{1}{1+\frac{x^{2}}{4}}=\dfrac{1}{4}\cdot\dfrac{4}{4+x^{2}}=\dfrac{1}{4+x^{2}}\)，成立。<br>
+              令 \(t=-\dfrac{x^{2}}{4}\)，套用几何级数（要求 \(|t|&lt;1\)）：
+              $$\frac{1}{4+x^{2}}=\frac{1}{4}\sum_{n=0}^{\infty}\left(-\frac{x^{2}}{4}\right)^{n}=\sum_{n=0}^{\infty}\frac{(-1)^{n}x^{2n}}{4^{n+1}}$$
+              两边乘 \(x\)：
+              $$f(x)=\frac{x}{4+x^{2}}=\sum_{n=0}^{\infty}\frac{(-1)^{n}x^{2n+1}}{4^{n+1}}=\frac{x}{4}-\frac{x^{3}}{16}+\frac{x^{5}}{64}-\cdots$$
+              成立条件是 \(\left|-\dfrac{x^{2}}{4}\right|&lt;1\)，即 \(x^{2}&lt;4\)，也就是 \(-2&lt;x&lt;2\)。在 \(x=\pm 2\) 处通项成为 \(\pm\dfrac{1}{2}\) 不趋于 0，级数发散，故收敛域恰为 \((-2,2)\)。<br>
+              再看 \(x=3\)：\(f(3)=\dfrac{3}{4+9}=\dfrac{3}{13}\) 确实有定义，但此时 \(\left|-\dfrac{x^{2}}{4}\right|=\dfrac{9}{4}>1\)，几何级数发散，部分和 \(S_n(3)\) 没有极限，余项 \(R_n(3)=f(3)-S_n(3)\) 不趋于 0。由定理 12.11，展开式在 \(x=3\) 处不等于 \(f(3)\)，不能用它计算。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先把函数凑成已知展开式的形状，做一次换元，再解出「已知展开式收敛条件」对应的 \(x\) 范围并写进答案。记住「写出级数」只是第一步，还要用余项趋于 0（这里表现为换元后的收敛范围）确认它真的等于函数。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">展开就是「用无穷次多项式把函数描出来」</span></div>
+          <div class="mb-body">每一项 \(a_nx^{n}\) 负责刻画函数在原点附近某一阶的弯曲程度：常数项对上函数值，一次项对上斜率，二次项对上弯曲，依次下去。加的项越多，多项式与函数贴合的范围越宽；演示里橙线就是这样一点点长成蓝线的，而贴合的范围被端点 \(\pm 2\) 卡死。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把展开式当成对一切 \(x\) 都成立</span></div>
+          <div class="mb-body">由 \(\dfrac{x}{4+x^{2}}=\sum\dfrac{(-1)^{n}x^{2n+1}}{4^{n+1}}\) 就往 \(x=3\) 代入求值是错的：这个展开式来自 \(|t|&lt;1\) 的几何级数，换元后只在 \(|x|&lt;2\) 成立。更一般地，「有各阶导数、写出了泰勒级数」不等于「级数等于函数」，还要核对余项 \(R_n(x)\to 0\)。</div>
+        </div>
+<!-- SECTION:s4:END -->
+      </article>
+      <article class="section" id="s5">
+<!-- SECTION:s5:BEGIN -->
+        <h3><span class="sec-badge">12.5</span>函数的幂级数展开式的应用</h3>
+        <p>展开式不是摆着看的。把函数换成一串多项式后，两件难事会变简单：算一个算不出来的数（近似计算并估误差），以及算一个 \(\dfrac{0}{0}\) 型的极限。这一节两样都练一遍，每一步都交代「取了几项、误差多大」。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">近似计算与求极限的依据</span><span class="mb-no">12.13</span></div>
+          <div class="mb-body">
+            设 \(f(x)=\sum_{n=0}^{\infty}a_nx^{n}\) 在 \(|x|&lt;R\) 内成立，部分和 \(S_N(x)=\sum_{n=0}^{N}a_nx^{n}\)，余项 \(r_N(x)=f(x)-S_N(x)\)。则对收敛区间内任一点 \(x_0\)，
+            $$f(x_0)=S_N(x_0)+r_N(x_0),\qquad \lim_{N\to\infty}r_N(x_0)=0$$
+            于是可用 \(S_N(x_0)\) 近似 \(f(x_0)\)，误差由 \(|r_N(x_0)|\) 控制；若级数还是交错且通项绝对值单调递减，误差不超过首个未取项的绝对值。又因 \(f\) 在收敛区间内连续，把函数换成展开式后逐项取极限是合法的。
+            <mark class="key">近似计算要交代「取了几项」与「误差有多大」，求极限要保留够用的最低次项</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="series-application">
+          <div class="demo-title">演示 5 · 逐项积分算一块面积，顺手估出误差</div>
+          <div class="demo-caption">蓝线是 \(\dfrac{1}{1+x^{3}}\)，浅色填充是 \([0,b]\) 上的积分。拖动积分上限 \(b\)、切换项数 \(N\)，读数把 \(\int_0^{b}\dfrac{\mathrm{d}x}{1+x^{3}}=\sum\dfrac{(-1)^{n}b^{3n+1}}{3n+1}\) 的部分和、数值积分核对值与首个未取项给出的误差上界一起列出来。<b>把 \(b\) 拖到 \(\dfrac{1}{2}\)、取 3 项</b>，就得到例题里的近似值。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">近似计算估误差，再用展开式求一个极限</span><span class="mb-no">例 12.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 利用 \(\dfrac{1}{1+x^{3}}=\sum_{n=0}^{\infty}(-1)^{n}x^{3n}\) 取前 3 项近似计算 \(\displaystyle\int_0^{1/2}\dfrac{\mathrm{d}x}{1+x^{3}}\)，并估计误差。(2) 用 \(\mathrm{e}^{x}\) 的展开式求 \(\lim\limits_{x\to 0}\dfrac{\mathrm{e}^{x^{2}}-1-x^{2}}{x^{4}}\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>(1) 先逐项积分把定积分写成一个交错数项级数，取前 3 项相加，再用「交错级数余项不超过首个未取项」给出误差上界。(2) 把 \(\mathrm{e}^{x^{2}}\) 写成 \(1+x^{2}+\dfrac{x^{4}}{2}+\cdots\)，分子里 \(1\) 与 \(x^{2}\) 抵消，剩下的最低次幂除以 \(x^{4}\) 就是极限。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 在 \(|x|&lt;1\) 内 \(\dfrac{1}{1+x^{3}}=\sum_{n=0}^{\infty}(-1)^{n}x^{3n}\)，逐项积分（定理 12.13）得
+              $$\int_0^{1/2}\frac{\mathrm{d}x}{1+x^{3}}=\sum_{n=0}^{\infty}\frac{(-1)^{n}}{3n+1}\left(\frac{1}{2}\right)^{3n+1}$$
+              取 \(n=0,1,2\) 三项：
+              $$\frac{1}{2}-\frac{1}{4\cdot 16}+\frac{1}{7\cdot 128}=\frac{1}{2}-\frac{1}{64}+\frac{1}{896}\approx 0.485491$$
+              各项绝对值 \(\dfrac{1}{(3n+1)2^{3n+1}}\) 单调递减且趋于 0，故由交错级数余项结论，误差不超过首个未取项（\(n=3\)）：
+              $$|r|&lt;\frac{1}{10\cdot 2^{10}}=\frac{1}{10240}\approx 9.8\times 10^{-5}$$
+              数值积分核对精确值约 \(0.485402\)，实际误差约 \(8.9\times 10^{-5}\)，确实小于上界。<br>
+              (2) 由 \(\mathrm{e}^{t}=\sum\dfrac{t^{n}}{n!}\) 令 \(t=x^{2}\)：\(\mathrm{e}^{x^{2}}=1+x^{2}+\dfrac{x^{4}}{2}+\dfrac{x^{6}}{6}+\cdots\)，于是
+              $$\mathrm{e}^{x^{2}}-1-x^{2}=\frac{x^{4}}{2}+\frac{x^{6}}{6}+\cdots$$
+              两边除以 \(x^{4}\)（\(x\neq 0\)）：\(\dfrac{\mathrm{e}^{x^{2}}-1-x^{2}}{x^{4}}=\dfrac{1}{2}+\dfrac{x^{2}}{6}+\cdots\)。令 \(x\to 0\)，含 \(x\) 的项都趋于 0，故极限为 \(\dfrac{1}{2}\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：近似计算是「把函数换成级数 → 逐项积分或代入 → 取前几项 → 用余项（或首个未取项）给出误差上界」；求极限是「把函数换成展开式 → 让最低次幂相消 → 剩下的常数项就是极限」。两处都要交代展开式成立的范围。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">把「难算的函数」换成「好算的多项式」</span></div>
+          <div class="mb-body">\(\dfrac{1}{1+x^{3}}\) 的不定积分要拆部分分式、带对数与反正切，手算很繁；换成级数后每项只是一次幂函数的积分。取有限项就是用一个多项式顶替原函数，丢掉的尾巴用首个未取项估住；求极限时只看最低次幂，因为 \(x\to 0\) 时高次项消失得更快。</div>
+        </div>
+<!-- SECTION:s5:END -->
+      </article>
+      <article class="section" id="s6">
+<!-- SECTION:s6:BEGIN -->
+        <h3><span class="sec-badge">12.6</span>函数项级数的一致收敛性</h3>
+        <p>前面把 \(x\) 当固定的数逐点讨论。可若要问「和函数连不连续、能不能逐项积分」，光每一点都收敛还不够。这一节引入一种更强的收敛：要求整条曲线「齐步」逼近，而不只是每个点各自逼近。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">函数项级数与一致收敛</span><span class="mb-no">12.14</span></div>
+          <div class="mb-body">
+            设 \(\sum_{n=1}^{\infty}u_n(x)\) 的各项都在区间 \(I\) 上有定义，部分和 \(S_n(x)=\sum_{k=1}^{n}u_k(x)\)。若存在函数 \(S(x)\)，使对任意给定的 \(\varepsilon>0\)，都存在一个<strong class="term">只依赖 \(\varepsilon\)、与 \(x\) 无关</strong>的正整数 \(N\)，使得当 \(n>N\) 时对一切 \(x\in I\) 都有 \(|S_n(x)-S(x)|&lt;\varepsilon\)，则称该级数在 \(I\) 上<strong class="term">一致收敛</strong>于 \(S(x)\)。
+            <mark class="key">逐点收敛时 \(N\) 可以随 \(x\) 变；一致收敛要求同一个 \(N\) 对整段 \(I\) 通吃</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">优级数判别法（Weierstrass 判别法）</span><span class="mb-no">12.15</span></div>
+          <div class="mb-body">
+            若对一切 \(x\in I\) 与一切 \(n\) 都有 \(|u_n(x)|\le M_n\)，且正项级数 \(\sum M_n\) 收敛，则 \(\sum u_n(x)\) 在 \(I\) 上一致收敛（\(\sum M_n\) 称为<strong class="term">优级数</strong>）。
+            <div class="proof-title">推导 · 为什么「与 \(x\) 无关」是关键（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">余项 \(R_n(x)=\sum_{k=n+1}^{\infty}u_k(x)\)，由三角不等式把绝对值放进求和号内</span><span class="derive-note">和的绝对值不超过绝对值之和</span></li>
+              <li><span class="derive-eq">\(|R_n(x)|\le\sum_{k=n+1}^{\infty}|u_k(x)|\le\sum_{k=n+1}^{\infty}M_k\)</span><span class="derive-note">关键：每个 \(|u_k(x)|\) 都被与 \(x\) 无关的 \(M_k\) 压住</span></li>
+              <li><span class="derive-eq">\(\sum M_k\) 收敛使右端可任意小，且所用的 \(n\) 对一切 \(x\) 通用</span><span class="derive-note">这正是一致收敛定义里「同一个 \(N\)」，证毕</span></li>
+            </ol>
+            <mark class="key">放缩出来的 \(M_n\) 必须完全不含 \(x\)</mark>，否则这条判别法不能用。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">一致收敛级数的性质</span><span class="mb-no">12.16</span></div>
+          <div class="mb-body">
+            若 \(\sum u_n(x)\) 在 \([a,b]\) 上一致收敛于 \(S(x)\)，且各项 \(u_n(x)\) 都连续，则：(i) 和函数 \(S(x)\) 连续；(ii) 可逐项求积，\(\displaystyle\int_a^b S(x)\,\mathrm{d}x=\sum_{n=1}^{\infty}\int_a^b u_n(x)\,\mathrm{d}x\)。若再加上 \(\sum u_n'(x)\) 一致收敛且各项可导，则 (iii) 可逐项求导，\(S'(x)=\sum u_n'(x)\)。
+            <mark class="key">逐项求积只要求本身一致收敛；逐项求导还要求导函数级数也一致收敛</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="uniform-convergence">
+          <div class="demo-title">演示 6 · 齐步逼近与一个永远压不下去的小峰</div>
+          <div class="demo-caption">切换两组级数，橙线都是第 \(n\) 个部分和，蓝线是它的极限函数。第一组 \(\sum\dfrac{\sin kx}{2^{k}}\) 的极限是 \(\sum_{k=1}^{\infty}\dfrac{\sin kx}{2^{k}}\)（图中蓝线，取前 240 项近似），对全体 \(x\) 用同一个 \(n\) 就能一起贴近——一致收敛，可用优级数判别、可逐项求积。第二组 \(T_n(x)=\dfrac{nx}{1+n^{2}x^{2}}\) 的极限是 \(0\)（蓝线就是横轴），固定每个 \(x\) 都趋于 0，却总在 \(x=\dfrac{1}{n}\) 处留一个高 \(\dfrac{1}{2}\) 的小峰，找不到通用的 \(n\)。<b>拖动项数盯住那个小峰</b>：它永远不随 \(n\) 变矮。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用优级数判别证一致收敛，再逐项求积算出一个值</span><span class="mb-no">例 12.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 证明函数项级数 \(\sum_{n=1}^{\infty}\dfrac{\sin(nx)}{2^{n}}\) 在 \(\mathbb{R}\) 上一致收敛；(2) 用逐项求积计算 \(I=\displaystyle\int_0^{\pi}\left(\sum_{n=1}^{\infty}\dfrac{\sin(nx)}{2^{n}}\right)\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问用优级数判别法：先找一个不含 \(x\) 的 \(M_n\) 把 \(|u_n(x)|\) 压住，再验证 \(\sum M_n\) 收敛。第 (2) 问先由一致收敛与各项连续取得逐项求积的合法性，再把每一项单独积分、把结果化成一个能认出的数项级数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 记 \(u_n(x)=\dfrac{\sin(nx)}{2^{n}}\)。对任意实数 \(x\) 都有 \(|\sin(nx)|\le 1\)，故
+              $$|u_n(x)|\le\frac{1}{2^{n}}=M_n$$
+              这里 \(M_n\) 只依赖 \(n\)、完全不含 \(x\)。又 \(\sum_{n=1}^{\infty}M_n=\sum\dfrac{1}{2^{n}}=1\) 收敛（公比 \(\dfrac{1}{2}\) 的几何级数）。两条都满足，由优级数判别法，原级数在 \(\mathbb{R}\) 上一致收敛。<br>
+              (2) 各项 \(\dfrac{\sin(nx)}{2^{n}}\) 连续，且级数一致收敛，由定理 12.16 的 (ii) 可逐项求积：
+              $$I=\sum_{n=1}^{\infty}\frac{1}{2^{n}}\int_0^{\pi}\sin(nx)\,\mathrm{d}x=\sum_{n=1}^{\infty}\frac{1}{2^{n}}\cdot\frac{1-\cos(n\pi)}{n}=\sum_{n=1}^{\infty}\frac{1-(-1)^{n}}{n\,2^{n}}$$
+              偶数 \(n\) 的项为 0，只剩奇数 \(n=2k+1\)：\(I=\sum_{k=0}^{\infty}\dfrac{2}{(2k+1)2^{2k+1}}=\sum_{k=0}^{\infty}\dfrac{1}{(2k+1)4^{k}}\)。<br>
+              由性质 12.12 的对数展开式，把 \(\ln(1+t)\) 与 \(\ln(1-t)\) 的级数相减得 \(\ln\dfrac{1+t}{1-t}=2\sum_{k=0}^{\infty}\dfrac{t^{2k+1}}{2k+1}\)。取 \(t=\dfrac{1}{2}\)：
+              $$\ln 3=2\sum_{k=0}^{\infty}\frac{(1/2)^{2k+1}}{2k+1}=\sum_{k=0}^{\infty}\frac{1}{(2k+1)4^{k}}$$
+              故 \(I=\ln 3\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：对通项取绝对值，用 \(|\sin|\le 1\)、\(|\cos|\le 1\) 这类与 \(x\) 无关的界放缩到 \(M_n\)（关键：\(M_n\) 里绝不能残留 \(x\)）；再证 \(\sum M_n\) 收敛；最后按定理 12.16 把「一致收敛」翻译成逐项求积（或连续、逐项求导）。逐项求积前必须先证一致收敛，不能只凭逐点收敛就交换积分与求和。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">逐点收敛是「各点各就位」，一致收敛是「整队一起到位」</span></div>
+          <div class="mb-body">演示里第一组级数的余项有一个与 \(x\) 无关的上界 \(2^{-n}\)，整条橙线被一起收窄；第二组 \(T_n(x)=\dfrac{nx}{1+n^{2}x^{2}}\) 在每个固定 \(x\) 都趋于 0，可总在 \(x=\dfrac{1}{n}\) 处拱起一个高 \(\dfrac{1}{2}\) 的峰，峰只是越挪越靠左、从不消失，故不存在对全体 \(x\) 通用的 \(n\)。只有一致收敛才保证和函数连续、可以逐项求积。</div>
+        </div>
+<!-- SECTION:s6:END -->
+      </article>
+      <article class="section" id="s7">
+<!-- SECTION:s7:BEGIN -->
+        <h3><span class="sec-badge">12.7</span>傅里叶级数</h3>
+        <p>前面用幂级数拆函数，拆出来的零件是 \(x^{n}\)。若函数本身是周期的（比如方波、脉冲），用正弦、余弦当零件更合适。这一节处理周期为 \(2\pi\) 的情形：先算出每个频率该配多少分量，再说清级数在间断点到底收敛到谁。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">傅里叶系数与傅里叶级数</span><span class="mb-no">12.17</span></div>
+          <div class="mb-body">
+            设 \(f\) 以 \(2\pi\) 为周期，在 \([-\pi,\pi]\) 上可积。称
+            $$a_n=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\cos(nx)\,\mathrm{d}x\quad(n=0,1,2,\cdots),\qquad b_n=\frac{1}{\pi}\int_{-\pi}^{\pi}f(x)\sin(nx)\,\mathrm{d}x\quad(n=1,2,\cdots)$$
+            为 \(f\) 的<strong class="term">傅里叶系数</strong>，称
+            $$\frac{a_0}{2}+\sum_{n=1}^{\infty}\bigl(a_n\cos(nx)+b_n\sin(nx)\bigr)$$
+            为 \(f\) 的<strong class="term">傅里叶级数</strong>。
+            <div class="proof-title">推导 · \(a_n\) 公式从哪来（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">设 \(f(x)=\dfrac{a_0}{2}+\sum_{m=1}^{\infty}\bigl(a_m\cos(mx)+b_m\sin(mx)\bigr)\)，两边同乘 \(\cos(nx)\) 后在 \([-\pi,\pi]\) 上积分</span><span class="derive-note">利用三角函数族的正交性</span></li>
+              <li><span class="derive-eq">除 \(m=n\) 那一项外，\(\int_{-\pi}^{\pi}\cos(mx)\cos(nx)\,\mathrm{d}x\) 与所有含 \(\sin\) 的积分全为 0</span><span class="derive-note">不同频率的三角函数在一个周期上互相抵消</span></li>
+              <li><span class="derive-eq">剩下 \(\int_{-\pi}^{\pi}\cos^{2}(nx)\,\mathrm{d}x=\pi\)，故 \(a_n=\dfrac{1}{\pi}\int_{-\pi}^{\pi}f(x)\cos(nx)\,\mathrm{d}x\)</span><span class="derive-note">同乘 \(\sin(nx)\) 同理可得 \(b_n\)，证毕</span></li>
+            </ol>
+            <mark class="key">\(f\) 为偶函数时 \(b_n=0\)；\(f\) 为奇函数时 \(a_n=0\)</mark>，对称区间上的积分可借此折半化简。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">傅里叶级数的收敛定理（狄利克雷条件）</span><span class="mb-no">12.18</span></div>
+          <div class="mb-body">
+            这里的三条要求就叫<strong class="term">狄利克雷条件</strong>：函数一个周期内不能有无穷多次振荡，也不能有第二类间断点。具体是：设 \(f\) 以 \(2\pi\) 为周期，在一个周期内连续或只有有限个第一类间断点，且只有有限个极值点。满足这三条时，\(f\) 的傅里叶级数处处收敛，且：在 \(f\) 的连续点 \(x\) 处收敛于 \(f(x)\)；在间断点 \(x_0\) 处收敛于 \(\dfrac{f(x_0^{-})+f(x_0^{+})}{2}\)，即左右极限的平均值。
+            <mark class="key">间断点处级数的和一般不是该点的函数值，而是左右极限的平均</mark>；间断点附近还会出现 Gibbs 过冲，项数再多过冲高度也不消失。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="fourier-square-wave">
+          <div class="demo-title">演示 7 · 只用奇次正弦描一个不对称方波</div>
+          <div class="demo-caption">蓝线是周期 \(2\pi\) 的方波（在 \((0,\pi)\) 上取 \(1\)、在 \((-\pi,0)\) 上取 \(-2\)），橙线是它的傅里叶部分和。拖动谐波个数，<b>平顶越来越平、跳变处却始终留一小段 Gibbs 过冲</b>。读数明确说明：在间断点 \(x=0\) 处部分和恒为 \(-\dfrac{1}{2}\)，等于左右极限 \(1\) 与 \(-2\) 的平均值，而不是「收敛到函数值」；过冲宽度变窄、高度不消失。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算一个不对称方波的系数，并核对间断点的收敛值</span><span class="mb-no">例 12.7</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f\) 以 \(2\pi\) 为周期，在 \((-\pi,0)\) 上 \(f(x)=-2\)、在 \((0,\pi)\) 上 \(f(x)=1\)（端点处取值任意）。(1) 求它的傅里叶系数并写出傅里叶级数；(2) 说明级数在 \(x=0\) 与 \(x=\dfrac{\pi}{2}\) 处分别收敛到什么值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问按系数公式把 \([-\pi,\pi]\) 的积分按两段拆开，逐段算 \(\cos\) 与 \(\sin\) 的积分；注意 \(\sin(n\pi)=0\) 会消掉所有 \(a_n\)。第 (2) 问先分清 \(x=0\) 是间断点、\(x=\dfrac{\pi}{2}\) 是连续点，再分别用定理 12.18 取值。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 先算 \(a_0\)：
+              $$a_0=\frac{1}{\pi}\left(\int_{-\pi}^{0}(-2)\,\mathrm{d}x+\int_{0}^{\pi}1\,\mathrm{d}x\right)=\frac{1}{\pi}\bigl(-2\pi+\pi\bigr)=-1$$
+              故 \(\dfrac{a_0}{2}=-\dfrac{1}{2}\)。<br>
+              算 \(a_n\)（\(n\ge 1\)）：\(\int\cos(nx)\,\mathrm{d}x=\dfrac{\sin(nx)}{n}\)，在 \(0\) 与 \(\pm\pi\) 处 \(\sin(n\pi)=0\)，两段积分都是 0，故 \(a_n=0\)。<br>
+              算 \(b_n\)：用 \(\int_{-\pi}^{0}\sin(nx)\,\mathrm{d}x=-\dfrac{1-(-1)^{n}}{n}\)、\(\int_{0}^{\pi}\sin(nx)\,\mathrm{d}x=\dfrac{1-(-1)^{n}}{n}\)，于是
+              $$b_n=\frac{1}{\pi}\left(-2\cdot\left(-\frac{1-(-1)^{n}}{n}\right)+\frac{1-(-1)^{n}}{n}\right)=\frac{3\bigl(1-(-1)^{n}\bigr)}{n\pi}$$
+              偶数 \(n\) 时 \(b_n=0\)，奇数 \(n=2k+1\) 时 \(b_n=\dfrac{6}{(2k+1)\pi}\)。故傅里叶级数为
+              $$f(x)\sim -\frac{1}{2}+\frac{6}{\pi}\sum_{k=0}^{\infty}\frac{\sin\bigl((2k+1)x\bigr)}{2k+1}$$<br>
+              (2) \(x=0\) 是跳跃间断点：左极限 \(f(0^{-})=-2\)、右极限 \(f(0^{+})=1\)，由定理 12.18 级数收敛于 \(\dfrac{-2+1}{2}=-\dfrac{1}{2}\)，并不是该点标注的函数值。直接核对：把 \(x=0\) 代入级数，每个 \(\sin\) 都是 0，和恰为 \(-\dfrac{1}{2}\)，一致。<br>
+              \(x=\dfrac{\pi}{2}\) 是连续点，级数收敛于 \(f\left(\dfrac{\pi}{2}\right)=1\)。也可由级数核对：\(-\dfrac{1}{2}+\dfrac{6}{\pi}\left(1-\dfrac{1}{3}+\dfrac{1}{5}-\cdots\right)=-\dfrac{1}{2}+\dfrac{6}{\pi}\cdot\dfrac{\pi}{4}=1\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先判奇偶性简化系数，把对称区间的积分按分段拆开逐段算；写出级数后，用狄利克雷收敛定理区分连续点（收敛到 \(f(x)\)）与间断点（收敛到左右极限的平均）。间断点附近的 Gibbs 过冲不会因项数增多而消失，不要把它说成「收敛到函数值」。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">傅里叶级数是把周期信号拆成不同频率的正弦波</span></div>
+          <div class="mb-body">\(a_n,b_n\) 就是各频率分量的「音量」。演示里方波只含奇次正弦：项数越多，叠加出的平顶越平；但跳变附近无论加多少项都有一小段过冲（Gibbs 现象），过冲宽度越来越窄而高度不消失。收敛定理告诉我们跳变点最终落在左右极限的中点 \(-\dfrac{1}{2}\)。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">在间断点把级数的和当成 \(f(x_0)\)</span></div>
+          <div class="mb-body">本题 \(x=0\) 处级数收敛到 \(\dfrac{1+(-2)}{2}=-\dfrac{1}{2}\)，既不是左极限 \(-2\) 也不是右极限 \(1\)，更不是该点任意标注的函数值。写收敛结论前先分清「这一点连续还是间断」，再决定用 \(f(x)\) 还是用左右极限的平均。</div>
+        </div>
+<!-- SECTION:s7:END -->
+      </article>
+      <article class="section" id="s8">
+<!-- SECTION:s8:BEGIN -->
+        <h3><span class="sec-badge">12.8</span>一般周期函数的傅里叶级数</h3>
+        <p>上一节只处理周期恰为 \(2\pi\) 的函数。若周期是 \(2\)、是 \(4\)、是任意 \(2l\) 呢？不必重新推一遍系数：做一次换元，把区间压回 \((-\pi,\pi)\)，套上一节的公式再换回来就行。注意三角函数里会多出一个因子 \(\dfrac{n\pi}{l}\)。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">周期为 \(2l\) 的傅里叶级数与换元</span><span class="mb-no">12.19</span></div>
+          <div class="mb-body">
+            设 \(f\) 以 \(2l\) 为周期，在 \([-l,l]\) 上满足收敛定理的条件。令 \(t=\dfrac{\pi x}{l}\)，则 \(g(t)=f\left(\dfrac{lt}{\pi}\right)\) 以 \(2\pi\) 为周期；对 \(g\) 用第 7 节公式再把 \(t\) 换回 \(x\)，得
+            $$f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}\left(a_n\cos\frac{n\pi x}{l}+b_n\sin\frac{n\pi x}{l}\right)$$
+            其中
+            $$a_n=\frac{1}{l}\int_{-l}^{l}f(x)\cos\frac{n\pi x}{l}\,\mathrm{d}x\quad(n=0,1,2,\cdots),\qquad b_n=\frac{1}{l}\int_{-l}^{l}f(x)\sin\frac{n\pi x}{l}\,\mathrm{d}x\quad(n=1,2,\cdots)$$
+            在连续点收敛于 \(f(x)\)，在间断点收敛于左右极限的平均。
+            <mark class="key">与 \(2\pi\) 情形相比：三角函数里多出 \(\dfrac{n\pi}{l}\)，系数前由 \(\dfrac{1}{\pi}\) 改成 \(\dfrac{1}{l}\)</mark>；奇偶性化简与收敛定理的结论完全照搬。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="general-period-fourier">
+          <div class="demo-title">演示 8 · 半周期一变，正弦波的「刻度」跟着变</div>
+          <div class="demo-caption">蓝线是周期 \(2l\) 的矩形脉冲（在 \(|x|&lt;\dfrac{l}{2}\) 上取 \(1\)、其余取 \(0\)），橙线是按 \(\cos\dfrac{n\pi x}{l}\) 写出的部分和，两条红色竖线是间断点 \(\pm\dfrac{l}{2}\)。分别拖动半周期与谐波个数，看改 \(l\) 怎样整体拉伸波形、加项数怎样让橙线更贴住蓝线。<b>读数把系数里的 \(\dfrac{n\pi}{l}\) 与间断点的收敛值一起给出</b>：在间断点处级数收敛到左右极限 \(1\) 与 \(0\) 的平均值 \(\dfrac{1}{2}\)，不取单侧的函数值。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">换元到周期 4，展开一个矩形脉冲</span><span class="mb-no">例 12.8</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f\) 以 \(4\) 为周期（即 \(l=2\)），在 \((-2,2)\) 上：\(|x|&lt;1\) 时 \(f(x)=1\)，\(1\le |x|&lt;2\) 时 \(f(x)=0\)。(1) 把 \(f\) 展开成傅里叶级数；(2) 说明级数在 \(x=1\) 处收敛到什么值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>半周期 \(l=2\)，用定理 12.19：换元 \(t=\dfrac{\pi x}{2}\) 把 \((-2,2)\) 压成 \((-\pi,\pi)\)，公式里三角函数自动带上 \(\dfrac{n\pi}{2}\)、系数前是 \(\dfrac{1}{2}\)。再判奇偶性：\(f\) 只依赖 \(|x|\)，是偶函数，故 \(b_n=0\)，积分折半。第 (2) 问 \(x=1\) 是间断点，用收敛定理取左右极限的平均。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 奇偶性：\(f(-x)=f(x)\)，是偶函数；于是 \(f(x)\sin\dfrac{n\pi x}{2}\) 为奇函数，在 \([-2,2]\) 上积分为 0，故 \(b_n=0\)（省去一半计算）。又 \(f(x)\cos\dfrac{n\pi x}{2}\) 为偶函数，\(\int_{-2}^{2}=2\int_{0}^{2}\)。<br>
+              算 \(a_0\)：
+              $$a_0=\frac{1}{2}\int_{-2}^{2}f(x)\,\mathrm{d}x=\frac{1}{2}\cdot 2=1$$
+              故 \(\dfrac{a_0}{2}=\dfrac{1}{2}\)。<br>
+              算 \(a_n\)（\(n\ge 1\)），注意 \(f(x)=1\) 只在 \(0\le x&lt;1\) 上非零：
+              $$a_n=\frac{1}{2}\int_{-1}^{1}\cos\frac{n\pi x}{2}\,\mathrm{d}x=\int_{0}^{1}\cos\frac{n\pi x}{2}\,\mathrm{d}x=\frac{2}{n\pi}\sin\frac{n\pi}{2}$$
+              偶数 \(n\) 时 \(\sin\dfrac{n\pi}{2}=0\)；奇数 \(n=2k+1\) 时 \(\sin\dfrac{(2k+1)\pi}{2}=(-1)^{k}\)，故 \(a_{2k+1}=\dfrac{2(-1)^{k}}{(2k+1)\pi}\)。代入一般周期公式：
+              $$f(x)=\frac{1}{2}+\frac{2}{\pi}\sum_{k=0}^{\infty}\frac{(-1)^{k}}{2k+1}\cos\frac{(2k+1)\pi x}{2}$$<br>
+              (2) \(x=1\) 是跳跃间断点：左极限 \(f(1^{-})=1\)、右极限 \(f(1^{+})=0\)，由收敛定理级数收敛于 \(\dfrac{1+0}{2}=\dfrac{1}{2}\)。直接核对：把 \(x=1\) 代入级数，每个 \(\cos\dfrac{(2k+1)\pi}{2}=0\)，和恰为 \(\dfrac{1}{2}\)，一致。<br>
+              顺带看连续点 \(x=0\)：\(\dfrac{1}{2}+\dfrac{2}{\pi}\left(1-\dfrac{1}{3}+\dfrac{1}{5}-\cdots\right)=\dfrac{1}{2}+\dfrac{2}{\pi}\cdot\dfrac{\pi}{4}=1=f(0)\)，与定理相符。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先认清半周期 \(l\) → 用换元 \(t=\dfrac{\pi x}{l}\) 把区间压回 \((-\pi,\pi)\)，把 \(\cos(nt)\) 换成 \(\cos\dfrac{n\pi x}{l}\)、系数前的 \(\dfrac{1}{\pi}\) 换成 \(\dfrac{1}{l}\) → 查奇偶性化简积分 → 算系数 → 用收敛定理交代间断点取左右极限的平均。别忘了答案里那一项 \(\dfrac{n\pi}{l}\)。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">换元只是给横轴换一把尺子</span></div>
+          <div class="mb-body">周期从 \(2\pi\) 变成 \(2l\)，相当于把横轴按比例 \(\dfrac{\pi}{l}\) 拉伸或压缩，正弦波的频率刻度随之改变，但「拆成各频率分量」的做法一字不改。演示里拖动半周期，看到的就是整张图沿横轴被拉伸或压缩，而系数公式里的 \(\dfrac{1}{l}\) 与 \(\dfrac{n\pi}{l}\) 正是这把新尺子的刻度。</div>
+        </div>
+<!-- SECTION:s8:END -->
+      </article>
+
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+<!-- PITFALLS:BEGIN -->
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">看到通项趋于 0 就断定级数收敛</span></div>
+        <div class="mb-body"><b>错误做法</b>：由 \(\dfrac{1}{n}\to 0\) 就说 \(\sum\dfrac{1}{n}\) 收敛。<b>为什么错</b>：定理 12.2 只保证「收敛 \(\Rightarrow\) 通项趋于 0」，反过来不成立；把调和级数按长度 1、2、4、8 分组，每组和都不小于 \(\dfrac{1}{2}\)，部分和无界，故调和级数发散。<b>正确做法</b>：要么算出部分和的极限，要么用比较、比值、根值等审敛法确认，通项趋于 0 时绝不能停手。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">审敛法的使用条件没核对</span></div>
+        <div class="mb-body"><b>错误做法</b>：对 \(\sum\dfrac{(-1)^{n-1}}{\sqrt{n}}\) 直接拿 \(\dfrac{1}{n^{2}}\) 比较判发散；或对 \(\sum\dfrac{1}{n}\) 算比值极限得 \(1\) 就判收敛；或把条件收敛写成绝对收敛。<b>为什么错</b>：比较判别法只适用于正项级数，必须先把各项取绝对值；比值、根值判别在 \(\rho=1\) 时失效（\(\sum\dfrac{1}{n}\) 与 \(\sum\dfrac{1}{n^{2}}\) 都给出 1，结局却相反）；「收敛」还要再查 \(\sum|u_n|\) 才能分清绝对还是条件收敛。<b>正确做法</b>：先看正项与否，\(\rho=1\) 时换用比较或莱布尼茨，判完收敛再补查绝对值级数。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">求出收敛半径就收工，或把原端点照搬到求导后的级数</span></div>
+        <div class="mb-body"><b>错误做法</b>：\(\sum\dfrac{(x-2)^{n}}{n3^{n}}\) 算出 \(R=3\) 就写收敛域 \((-1,5)\)；逐项求导后仍沿用 \([-1,5)\)。<b>为什么错</b>：端点必须代回当前级数各判一次——原级数在 \(x=5\) 发散、在 \(x=-1\) 收敛，收敛域是 \([-1,5)\)；逐项求导后半径虽仍是 \(3\)，两个端点却都发散，收敛域变成 \((-1,5)\)。<b>正确做法</b>：半径只管开区间，逐项求导、逐项积分都不改变半径，但端点一律重新代入新级数判断。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">在傅里叶级数的间断点把它说成「收敛到函数值」</span></div>
+        <div class="mb-body"><b>错误做法</b>：说例 12.7 的方波在 \(x=0\) 处级数收敛到 \(f(0)\)，或把跳变附近的 Gibbs 过冲解释成「还没收敛到函数值」。<b>为什么错</b>：狄利克雷收敛定理规定间断点收敛到左右极限的平均值 \(\dfrac{1+(-2)}{2}=-\dfrac{1}{2}\)；Gibbs 过冲的宽度随项数变窄、高度却不消失，是部分和的固有行为，与「函数值」无关。<b>正确做法</b>：先分清连续点与间断点，连续点取 \(f(x)\)、间断点取左右极限平均，并说明过冲不会消失。</div>
+      </div>
+<!-- PITFALLS:END -->
+    </section>
+
+    <!-- ⑥ 习题与自测 -->
+    <section id="quiz" class="block">
+      <h2>习题与自测</h2>
+      <p class="hint">题目为本站自编，不含教材原题。折叠答案适合纸笔练习，交互自测会即时判定并给出解析。</p>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">纸笔练习</span><span class="mb-no">练习 1–3</span></div>
+        <div class="mb-body">
+<!-- EXERCISES:BEGIN -->
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>判断级数 \(\sum_{n=1}^{\infty}\dfrac{3n+1}{n^{3}+n}\) 的敛散性；并回答：由 \(\lim\limits_{n\to\infty}u_n=0\) 能否直接断定一个级数收敛？</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">各项为正，用比较判别法。对 \(n\ge 1\) 有 \(3n+1\le 4n\)、\(n^{3}+n>n^{3}\)，故 \(0&lt;\dfrac{3n+1}{n^{3}+n}&lt;\dfrac{4n}{n^{3}}=\dfrac{4}{n^{2}}\)，而 \(\sum\dfrac{4}{n^{2}}\) 收敛，故原级数收敛。第二问：不能。定理 12.2 只给「收敛 \(\Rightarrow\) 通项趋于 0」这一个方向；调和级数 \(\sum\dfrac{1}{n}\) 通项趋于 0 却发散（按 1、2、4、8 分组，每组和都不小于 \(\dfrac{1}{2}\)），说明这只是必要非充分条件。思路要点：先判正项，再找一把收敛的尺子把它压住；「通项趋于 0」之后必须继续判。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>把 \(f(x)=\ln(2+x)\) 展开成 \(x\) 的幂级数，并写出展开式成立的范围。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">先凑成已知展开式：\(\ln(2+x)=\ln 2+\ln\left(1+\dfrac{x}{2}\right)\)。由性质 12.12 的 \(\ln(1+t)=\sum_{n=1}^{\infty}\dfrac{(-1)^{n-1}}{n}t^{n}\)（\(-1&lt;t\le 1\)），令 \(t=\dfrac{x}{2}\) 得
+              $$\ln(2+x)=\ln 2+\sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n\,2^{n}}x^{n}=\ln 2+\frac{x}{2}-\frac{x^{2}}{8}+\frac{x^{3}}{24}-\cdots$$
+              成立条件由 \(-1&lt;\dfrac{x}{2}\le 1\) 解得 \(-2&lt;x\le 2\)：\(x=2\) 时 \(t=1\) 得交错调和级数收敛，\(x=-2\) 时 \(t=-1\) 对数无定义。思路要点：凑形状 → 换元 → 把已知展开式的收敛条件翻译成 \(x\) 的范围，并把这个范围写进答案。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>(1) 利用 \(\mathrm{e}^{x}=\sum_{n=0}^{\infty}\dfrac{x^{n}}{n!}\) 求数项级数 \(\sum_{n=0}^{\infty}\dfrac{n+1}{n!}\) 的和；(2) 已知某周期为 4 的函数的傅里叶级数为 \(\dfrac{1}{2}+\dfrac{2}{\pi}\sum_{k=0}^{\infty}\dfrac{(-1)^{k}}{2k+1}\cos\dfrac{(2k+1)\pi x}{2}\)，令 \(x=0\) 代入，可导出哪个数项级数的和？</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">(1) 拆成两个收敛级数：\(\sum\dfrac{n+1}{n!}=\sum\limits_{n\ge 1}\dfrac{n}{n!}+\sum\dfrac{1}{n!}=\sum\limits_{n\ge 1}\dfrac{1}{(n-1)!}+\mathrm{e}=\mathrm{e}+\mathrm{e}=2\mathrm{e}\)。每一步都用到了 \(\mathrm{e}^{x}\) 展开式在 \(x=1\) 处成立与性质 12.3 的线性运算。<br>
+              (2) 令 \(x=0\)，每个 \(\cos 0=1\)，而 \(f(0)=1\)（连续点），于是 \(1=\dfrac{1}{2}+\dfrac{2}{\pi}\sum_{k=0}^{\infty}\dfrac{(-1)^{k}}{2k+1}\)，移项得 \(\sum_{k=0}^{\infty}\dfrac{(-1)^{k}}{2k+1}=\dfrac{\pi}{4}\)，即莱布尼茨级数的值。思路要点：幂级数展开式可以反过来「认出」一个难算的数项级数；傅里叶级数在连续点等于函数值，代入特殊点同样能把三角级数变成数项级数——这是第 4、5、8 节工具的一次合用。</div></details>
+          </div>
+<!-- EXERCISES:END -->
+        </div>
+      </div>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">自测</span><span class="mb-title">交互选择题（即时判定）</span></div>
+        <div class="mb-body">
+          <div data-mount="quiz">
+            <!-- QUIZ:BEGIN -->
+<script type="application/json">
+[
+  { "q": "关于级数 \\(\\sum_{n=1}^{\\infty}u_n\\) 的收敛，下列说法正确的是？",
+    "options": ["若 \\(\\lim\\limits_{n\\to\\infty}u_n=0\\)，则级数收敛", "部分和数列 \\(\\{S_n\\}\\) 收敛于有限数", "通项 \\(u_n\\) 单调递减时级数一定收敛", "任意加括号后得到的新级数收敛，则原级数收敛"], "answer": 1,
+    "explain": "收敛的定义就是部分和数列 \\(S_N=\\sum_{n=1}^{N}u_n\\) 有有限极限，B 正确。A 只是必要非充分：调和级数 \\(\\sum 1/n\\) 通项趋于 0 却发散；C 既不必要也不充分，\\(\\sum 1/n\\) 通项单调递减仍发散；D 把收敛级数具有的性质当成了定义，而且加括号收敛推不出原级数收敛，例如 \\(\\sum(-1)^{n}\\) 两两加括号后和为 0，原级数却在 0 与 1 间摆动而发散。" },
+  { "q": "关于比值判别法与根值判别法，下列说法正确的是？",
+    "options": ["极限 \\(\\rho=1\\) 时级数一定发散", "极限 \\(\\rho=1\\) 时级数一定收敛", "极限 \\(\\rho=1\\) 时判别法失效，必须换别的办法", "极限 \\(\\rho=1\\) 时级数一定条件收敛"], "answer": 2,
+    "explain": "两条判别法只在 \\(\\rho<1\\) 判收敛、\\(\\rho>1\\) 判发散，\\(\\rho=1\\) 时不提供任何信息，C 正确。A、B 都把失效情形硬下了结论：\\(\\sum 1/n\\) 与 \\(\\sum 1/n^{2}\\) 的比值、根值极限都等于 1，却一个发散一个收敛；D 把「失效」错说成固定的条件收敛，而条件收敛是变号级数区分绝对收敛时才用的概念，且这里两条判别法本就要求正项。" },
+  { "q": "级数 \\(\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{\\sqrt{n}}\\) 属于哪种情形？",
+    "options": ["绝对收敛", "条件收敛", "发散", "无法判断"], "answer": 1,
+    "explain": "记 \\(b_n=1/\\sqrt{n}\\)，它单调不增且趋于 0，由莱布尼茨判别法这个交错级数收敛，B 正确；但取绝对值后是 \\(p=\\frac12\\) 的 \\(p\\)-级数 \\(\\sum 1/\\sqrt{n}\\)，发散，所以是条件收敛。A 错在把「收敛」直接当成「绝对收敛」；C 错在忽略正负相消仍可能收敛；D 错在条件齐备、完全可以判定。注意比较判别法只用于正项级数，判 \\(\\sum|u_n|\\) 时才能拿它和 \\(p\\)-级数比较。" },
+  { "q": "关于幂级数与泰勒级数，下列说法正确的是？",
+    "options": ["求出收敛半径 \\(R\\) 后，收敛域就是 \\((-R,R)\\)，端点不必再判断", "把幂级数逐项求导后，收敛半径会变小", "函数 \\(f\\) 在 \\(x_0\\) 有任意阶导数，就一定能展开成泰勒级数", "逐项积分不改变收敛半径，但端点处的敛散可能改变"], "answer": 3,
+    "explain": "逐项求导、逐项积分都不改变收敛半径，端点必须重新代入判断，故 D 正确。A 错：端点要各判一次，例如 \\(\\sum x^{n}/n\\) 在 \\(x=-1\\) 收敛、\\(x=1\\) 发散；B 错：半径不变，只是系数里多乘一个趋于 1 的因子；C 错：还需泰勒公式余项 \\(R_n(x)\\to 0\\)，仅有各阶导数不够，反例 \\(f(x)=\\mathrm{e}^{-1/x^{2}}\\)（\\(x\\neq0\\)）、\\(f(0)=0\\) 在 0 处各阶导数全为 0，泰勒级数恒为 0 却不等于 \\(f\\)。" },
+  { "q": "设 \\(f\\) 以 \\(2l\\) 为周期，它的傅里叶级数中余弦项应写成哪种形式？",
+    "options": ["\\(\\cos(nx)\\)", "\\(\\cos\\frac{n\\pi x}{l}\\)", "\\(\\cos\\frac{2n\\pi x}{l}\\)", "\\(\\cos\\frac{nx}{2l}\\)"], "answer": 1,
+    "explain": "作换元 \\(t=\\frac{\\pi x}{l}\\) 把 \\([-l,l]\\) 映到 \\([-\\pi,\\pi]\\)，再把 \\(\\cos(nt)\\) 换回 \\(x\\) 即得 \\(\\cos\\frac{n\\pi x}{l}\\)，B 正确。A 是 \\(l=\\pi\\) 时的特例；C 对应周期 \\(l\\) 而不是 \\(2l\\)，频率多了一倍；D 把代换系数写反，周期会变成 \\(4\\pi l\\)。同时系数公式里的 \\(\\frac{1}{\\pi}\\) 也要相应换成 \\(\\frac{1}{l}\\)。" }
+]
+</script>
+<!-- QUIZ:END -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+<!-- SUMMARY:BEGIN -->
+      <p>全书从「极限」起步：用它定义了导数，又用分割、求和、取极限定义了定积分。这一章把同一个动作搬到「无穷多项相加」上——级数收敛就是部分和数列收敛，审敛法给这个极限找判据，幂级数把函数拆成多项式，傅里叶级数把周期函数拆成正弦波，一致收敛则说清这些「无限相加」什么时候能放心地逐项求积、逐项求导。展开式还能反过来把难算的数项级数认成具体的值。</p>
+      <p>到这里，极限 → 微分 → 积分 → 级数 这条主线首尾相接：你手里已经攒齐一整套「用有限逼近无限」的工具，而每一次逼近是否合法，最后都要回到最初那个极限。全书到此收束。</p>
+<!-- SUMMARY:END -->
+      <div data-chapter-nav></div>
+    </section>
+    <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a> ·
+         <a href="../../style-guide.html">视觉规范</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

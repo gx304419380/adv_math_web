@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 3 章 · 微分中值定理与导数的应用 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：微分中值定理与导数的应用 的原创讲解、函数图像、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/design-system.css">
+<link rel="stylesheet" href="../../assets/css/demos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js"></script>
+<script defer src="../../assets/js/chapters.js"></script>
+<script defer src="../../assets/js/cdn.js"></script>
+<script defer src="../../assets/js/math.js"></script>
+<script defer src="../../assets/js/graph.js"></script>
+<script defer src="../../assets/js/plot.js"></script>
+<script defer src="../../assets/js/steps.js"></script>
+<script defer src="../../assets/js/mindmap.js"></script>
+<script defer src="../../assets/js/quiz.js"></script>
+<script defer src="../../assets/js/theme.js"></script>
+<script defer src="../../assets/js/nav.js"></script>
+<script defer src="../../assets/js/polish.js"></script>
+<script defer src="../../assets/js/boot.js"></script>
+<script defer src="../../assets/js/demo-kit.js"></script>
+<script defer src="../../assets/js/demo-presets.js"></script>
+<script defer src="demo.js"></script>
+</head>
+<body data-chapter="ch03">
+
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="../../index.html">首页</a>
+    <a href="#" data-chapter-menu>章节目录 ▾</a>
+    <a href="../../DISCLAIMER.md">免责声明</a>
+  </nav>
+  <span class="tb-hint">同济第七版 · 内容原创</span>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
+<header class="chapter-hero">
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">3</span> 章 · <span data-slot="volume">上册</span></div>
+    <h1 data-slot="title">微分中值定理与导数的应用</h1>
+    <p class="hero-sub" data-slot="subtitle">从局部斜率到整体形状</p>
+    <div class="hero-meta">
+      <span>约 <span data-slot="estMinutes">95</span> 分钟</span><span>·</span>
+      <span>8 节</span><span>·</span><span>8 个交互演示</span><span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+    <div class="btn-row hero-actions">
+      <a class="btn primary" href="#s1">从第 1 节开始 ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <!-- 侧栏由 assets/js/nav.js 依 chapters.json 自动生成，只显示本章小节 -->
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <p class="hint">本章按教材的节序展开，知识点名称与术语保持规范一致；定义与定理的表述、例题与图形均为本站原创。文中编号是本站自用编号，不是教材原编号。</p>
+      <ul class="goal-list" data-goal-list>
+<!-- GOALS:BEGIN -->
+        <li><label><input type="checkbox">逐条核对罗尔与拉格朗日定理的「闭区间连续、开区间可导」，判断一个函数能不能用定理并求出定理保证存在的那个点</label></li>
+        <li><label><input type="checkbox">用洛必达法则处理分子分母都趋于零或都趋于无穷的未定式极限，每一步都先重新判断类型</label></li>
+        <li><label><input type="checkbox">写出泰勒多项式与余项，用一阶、二阶导数的符号划出单调区间与凹凸区间，找全极值和最值的可疑点</label></li>
+        <li><label><input type="checkbox">综合渐近线、极值与拐点描绘函数图形，计算曲率与曲率半径，用牛顿迭代求方程的近似根</label></li>
+<!-- GOALS:END -->
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">先看清这一章的知识点怎么长出来，再逐节往下读。点节点可高亮相连链路。</p>
+      <div class="mermaid-box" data-mount="mindmap">
+        <!-- MAP:BEGIN -->
+<script type="application/json">
+{
+  "nodes": [
+    { "id": "n0", "label": "微分中值定理", "kind": "root" },
+    { "id": "n1", "label": "罗尔定理", "kind": "core" },
+    { "id": "n2", "label": "拉格朗日中值定理", "kind": "core" },
+    { "id": "n3", "label": "柯西中值定理", "kind": "branch" },
+    { "id": "n4", "label": "洛必达法则", "kind": "core" },
+    { "id": "n5", "label": "泰勒公式", "kind": "core" },
+    { "id": "n6", "label": "函数的单调性与凹凸性", "kind": "core" },
+    { "id": "n7", "label": "极值与最大值最小值", "kind": "core" },
+    { "id": "n8", "label": "函数图形的描绘", "kind": "branch" },
+    { "id": "n9", "label": "曲率", "kind": "branch" },
+    { "id": "n10", "label": "方程的近似解", "kind": "branch" },
+    { "id": "end", "label": "下一章：不定积分", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n0", "target": "n2" },
+    { "source": "n0", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n2", "target": "n5" },
+    { "source": "n2", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n8", "target": "n9" },
+    { "source": "n5", "target": "n10" },
+    { "source": "n10", "target": "end" },
+    { "source": "n9", "target": "end" }
+  ]
+}
+</script>
+<!-- MAP:END -->
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+<!-- SECTION:s1:BEGIN -->
+        <h3><span class="sec-badge">3.1</span>微分中值定理</h3>
+        <p>开车走完一段路，仪表盘上的平均速度是一个数，可这一路里总有某一刻，速度表的读数正好等于它。把「整段的平均变化率」和「某一点的瞬时变化率」联系起来的，就是这一节的中值定理——它也是后面所有结论的地基。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">罗尔定理</span><span class="mb-no">3.1</span></div>
+          <div class="mb-body">
+            若 \(f\) 在闭区间 \([a,b]\) 上<strong class="term">连续</strong>（图像一笔画到底、没有断开或跳跃），在开区间 \((a,b)\) 内<strong class="term">可导</strong>（每一点都有不竖直的切线），且两端函数值相等 \(f(a)=f(b)\)，那么至少存在一点 \(\xi\in(a,b)\) 使 \(f'(\xi)=0\)。
+            <mark class="key">闭区间连续、开区间可导、端点值相等，三条缺一不可</mark>；定理只保证这样的点存在，并不告诉你它具体在哪。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">拉格朗日中值定理</span><span class="mb-no">3.2</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \([a,b]\) 连续、在 \((a,b)\) 可导，则至少存在一点 \(\xi\in(a,b)\) 使
+            $$f'(\xi)=\frac{f(b)-f(a)}{b-a}$$
+            右边是连接两端点的割线斜率，左边是某一点的切线斜率。罗尔定理正是它在 \(f(a)=f(b)\)（割线水平）时的特例。
+            <div class="proof-title">证明 · 造一个辅助函数，把问题化回罗尔定理（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">记割线斜率 \(k=\dfrac{f(b)-f(a)}{b-a}\)，令 \(F(x)=f(x)-f(a)-k(x-a)\)</span><span class="derive-note">F 就是「f 减去那条割线」，把倾斜的割线压成了一条水平线</span></li>
+              <li><span class="derive-eq">\(F(a)=0\)，且 \(F(b)=f(b)-f(a)-k(b-a)=0\)；F 与 f 一样连续、可导</span><span class="derive-note">代入 k 的定义，两项正好抵消，于是 F 满足罗尔定理的三条前提</span></li>
+              <li><span class="derive-eq">由罗尔定理得 \(F'(\xi)=0\)，而 \(F'=f'-k\)，故 \(f'(\xi)=k\)</span><span class="derive-note">把导数代进去、移项，就得到要证的等式，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="mvt-parallel">
+          <div class="demo-title">演示 1 · 平移割线，找出那条平行切线</div>
+          <div class="demo-caption">蓝线是 \(f(x)=x^{2}-2x\)，橙色直线连接 \((0,0)\) 与 \((3,3)\)，斜率是 1。拖动平移量 \(t\)，把一条与割线平行的直线 \(y=x-t\) 慢慢往下推；<b>盯住读数里的判别式</b>：当 \(t=\dfrac{9}{4}\) 时它变成 0，绿线恰好在 \(x=\dfrac{3}{2}\) 处与曲线相切，这点切线斜率正是 1。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">先核对条件，再去找那条平行切线</span><span class="mb-no">例 3.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 设 \(f(x)=x^{2}-2x\)，验证它在 \([0,3]\) 上满足拉格朗日中值定理的条件，并求出 \(\xi\)。(2) 另设 \(h(x)=x^{2}\) 当 \(0\le x&lt;2\)，却单独规定 \(h(2)=0\)。此时 \(h(0)=h(2)=0\)，能不能断言存在 \(\xi\in(0,2)\) 使 \(h'(\xi)=0\)？</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问先把定理的三条前提逐条对上，再算割线斜率、解 \(f'(\xi)=k\)。第 (2) 问不要急着算，先检查「闭区间连续」这一条有没有被悄悄破坏。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(f\) 是多项式，在 \([0,3]\) 连续、在 \((0,3)\) 可导，条件满足。\(f(0)=0\)、\(f(3)=9-6=3\)，割线斜率 \(k=\dfrac{3-0}{3-0}=1\)。由 \(f'(x)=2x-2\)，令 \(2\xi-2=1\) 得 \(\xi=\dfrac{3}{2}\)，确实落在 \((0,3)\) 内。<br>
+              (2) 在右端点处 \(\lim\limits_{x\to 2^{-}}h(x)=4\)，而 \(h(2)=0\)，两者不等，故 \(h\) 在 \([0,2]\) 上不连续，罗尔定理的「闭区间连续」被破坏。事实上当 \(0&lt;x&lt;2\) 时 \(h'(x)=2x>0\)，根本没有使 \(h'(\xi)=0\) 的点，所以不能断言。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先逐条核对前提，再用结论」。条件缺一条，结论可能整个失效；像第 (2) 问这样自己造一个反例，比多算十道正面题更能记住条件为什么不能省。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">水平割线一定有一条水平切线与它作伴</span></div>
+          <div class="mb-body">罗尔定理说的是：一段连续光滑的曲线，若两头一样高，中间必有一个「走平」的点。拉格朗日定理把割线扶正成任意斜率：把整条曲线连同割线一起「转平」，就回到罗尔的情形。演示里把割线平行下移，直到它第一次贴住曲线，那一瞬间的位置就是定理保证的 \(\xi\)。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">看见端点值相等就用罗尔定理</span></div>
+          <div class="mb-body">只检查 \(f(a)=f(b)\) 就往下套，容易漏掉「闭区间连续、开区间可导」。固定动作是三条前提依次打勾，尤其留意区间内部有没有尖点、断点或分母为零的点。</div>
+        </div>
+<!-- SECTION:s1:END -->
+      </article>
+      <article class="section" id="s2">
+<!-- SECTION:s2:BEGIN -->
+        <h3><span class="sec-badge">3.2</span>洛必达法则</h3>
+        <p>上一章求极限时，分子分母同时趋于 0 的情形最让人头疼：直接代入得 \(\frac{0}{0}\)，什么也看不出来。既然导数擅长刻画「趋于 0 有多快」，能不能用分子、分母各自的变化速度之比，来决定整个分式的极限？</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">洛必达法则</span><span class="mb-no">3.3</span></div>
+          <div class="mb-body">
+            设当 \(x\to a\) 时 \(f(x)\to 0\) 且 \(g(x)\to 0\)（或两者都趋于 \(\infty\)），\(f,g\) 在 \(a\) 附近（不含 \(a\) 本身）可导且 \(g'(x)\neq 0\)。若 \(\lim\limits_{x\to a}\dfrac{f'(x)}{g'(x)}\) 存在（或为 \(\infty\)），则
+            $$\lim_{x\to a}\frac{f(x)}{g(x)}=\lim_{x\to a}\frac{f'(x)}{g'(x)}$$
+            <mark class="key">只适用于 \(\frac{0}{0}\) 与 \(\frac{\infty}{\infty}\) 两种未定式</mark>；每用一次都要重新判断类型，非未定式直接代入即可，硬套法则反而算错。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="lhopital-comparison">
+          <div class="demo-title">演示 2 · 原比值与导数比，什么时候才趋于同一个数</div>
+          <div class="demo-caption">蓝线是原比值 \(R(x)=\dfrac{f(x)}{g(x)}\)，橙色虚线是导数比 \(D(x)=\dfrac{f'(x)}{g'(x)}\)。先用按钮切到「零比零型」，拖动观察点向 0 靠近，<b>两条线一起趋向同一个数</b>；再切到「非未定式」，它们立刻分道扬镳——这正是法则不能乱用的原因。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一题练会「先判类型，再求导」</span><span class="mb-no">例 3.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 求 \(\lim\limits_{x\to 0}\dfrac{\mathrm{e}^{2x}-1}{3x}\)。(2) 求 \(\lim\limits_{x\to 2}\dfrac{x^{2}+1}{x+2}\)，并说明这里能不能用洛必达法则。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>两问都先把 \(x\) 的趋向值代进分子、分母，看得到的是不是 \(\frac{0}{0}\) 或 \(\frac{\infty}{\infty}\)。是，才分别对分子、分母求导；不是，就直接代入。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 代入得分子 \(\mathrm{e}^{0}-1=0\)、分母 \(0\)，是 \(\frac{0}{0}\) 型。分子导数 \(2\mathrm{e}^{2x}\)、分母导数 \(3\)，于是
+              $$\lim_{x\to 0}\frac{\mathrm{e}^{2x}-1}{3x}=\lim_{x\to 0}\frac{2\mathrm{e}^{2x}}{3}=\frac{2}{3}$$
+              (2) 代入得分子 \(2^{2}+1=5\)、分母 \(4\)，都不是 0，也不是 \(\infty\)，不是未定式，直接得 \(\dfrac{5}{4}\)。若误用洛必达，会写成 \(\lim\limits_{x\to 2}\dfrac{2x}{1}=4\)，与正确答案 \(\dfrac{5}{4}\) 不符——因为一开始就不满足法则的前提。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「代入判类型 → 只有未定式才求导之比 → 求导后再判一次类型，必要时连用」。分子求导别漏链式法则的系数（这里 \(\mathrm{e}^{2x}\) 的导数是 \(2\mathrm{e}^{2x}\)），这是最常见的失分点。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">比的是「谁趋近得更快」</span></div>
+          <div class="mb-body">\(\frac{0}{0}\) 之所以没定论，是因为分子、分母都在往 0 跑，谁快谁慢决定结果。导数恰好量出「往 0 跑的速度」，所以导数之比能替原分式定出极限。演示里 \(R(x)\) 与 \(D(x)\) 在零比零型时一起收敛，就是这句话的图像版；非未定式时两者无关，硬套自然会错。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">对非未定式也「习惯性」求导</span></div>
+          <div class="mb-body">看到分式极限就分子分母各求一次导，是典型的套公式。法则的前提是 \(\frac{0}{0}\) 或 \(\frac{\infty}{\infty}\)，前提不成立时结论没有保证；先代入判类型这一步永远不能省。</div>
+        </div>
+<!-- SECTION:s2:END -->
+      </article>
+      <article class="section" id="s3">
+<!-- SECTION:s3:BEGIN -->
+        <h3><span class="sec-badge">3.3</span>泰勒公式</h3>
+        <p>多项式是最好算的函数：加减乘除、求导代入都不会出错。能不能用「在某一个点附近和原函数长得很像」的多项式，去顶替一个难算的函数？泰勒公式把这个想法写成精确等式，还附上「差多少」的余项。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">泰勒公式与两种余项</span><span class="mb-no">3.4</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \(x_0\) 附近有直到 \(n+1\) 阶的导数。称
+            $$P_n(x)=f(x_0)+f'(x_0)(x-x_0)+\frac{f''(x_0)}{2!}(x-x_0)^{2}+\cdots+\frac{f^{(n)}(x_0)}{n!}(x-x_0)^{n}$$
+            为 \(f\) 在 \(x_0\) 的 \(n\) 阶<strong class="term">泰勒多项式</strong>。            带<strong class="term">皮亚诺余项</strong>的写法是 \(f(x)=P_n(x)+o\bigl((x-x_0)^{n}\bigr)\)，它只说「误差比 \(n\) 次方更小」，用于求极限；带<strong class="term">拉格朗日余项</strong>的写法是
+            $$R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$$
+            其中 \(\xi\) 是介于 \(x_0\) 与 \(x\) 之间的某个点，这个余项给出误差的具体上界，用于近似计算。取 \(x_0=0\) 时也叫麦克劳林公式。
+            <mark class="key">系数是「导数值除以阶乘」，余项的阶数比多项式高一阶</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="taylor-approx">
+          <div class="demo-title">演示 3 · 阶数越高，橙线越贴蓝线</div>
+          <div class="demo-caption">蓝线是 \(f(x)=x\mathrm{e}^{x}\)，橙线是它在 \(0\) 点的 \(n\) 阶泰勒多项式。拖动阶数 \(n\)，<b>盯住读数里 \(P_n(1)\) 与真值之间的误差</b>：从 \(n=1\) 到 \(n=7\)，橙线在展开点附近一步步咬住蓝线，误差迅速缩小。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">写展开式，再用余项估计误差</span><span class="mb-no">例 3.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x)=x\mathrm{e}^{x}\)。(1) 写出它在 \(x_0=0\) 处带皮亚诺余项的三阶泰勒公式。(2) 用三阶多项式算 \(P_3(1)\)，并已知 \(f^{(4)}(x)=(x+4)\mathrm{e}^{x}\) 与 \(\mathrm{e}&lt;2.72\)，用拉格朗日余项给出「用 \(P_3(1)\) 代替 \(f(1)\)」的误差上界。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问逐阶求导、代入 0、把系数写成「导数值除以阶乘」。第 (2) 问先算 \(P_3(1)\)，再把 \(f^{(4)}\) 在 0 与 1 之间取一个上界，除以 \(4!\) 就是误差上界。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 由 \(f^{(n)}(x)=(x+n)\mathrm{e}^{x}\) 得 \(f(0)=0\)、\(f'(0)=1\)、\(f''(0)=2\)、\(f'''(0)=3\)。于是三个系数依次为 \(\dfrac{1}{1!}=1\)、\(\dfrac{2}{2!}=1\)、\(\dfrac{3}{3!}=\dfrac{1}{2}\)，故
+              $$f(x)=x+x^{2}+\frac{1}{2}x^{3}+o(x^{3})$$
+              (2) \(P_3(1)=1+1+\dfrac{1}{2}=\dfrac{5}{2}=2.5\)，真值 \(f(1)=\mathrm{e}\)。三阶公式的拉格朗日余项为 \(R_3=\dfrac{f^{(4)}(\xi)}{4!}\cdot 1^{4}\)，其中 \(0&lt;\xi&lt;1\)。此时 \(\xi+4&lt;5\)、\(\mathrm{e}^{\xi}&lt;\mathrm{e}&lt;2.72\)，故
+              $$|R_3|&lt;\frac{5\times 2.72}{24}=\frac{13.6}{24}\approx 0.57$$
+              即误差不超过约 \(0.57\)；实际误差 \(\mathrm{e}-2.5\approx 0.22\) 确实落在界内。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「逐阶求导代展开点 → 系数用 \(f^{(k)}(x_0)/k!\) → 按需要挑皮亚诺或拉格朗日余项」。估误差时把 \(f^{(n+1)}\) 在两点之间放成一个常数上界再除以 \((n+1)!\)；阶数越高，多出来的那次幂让误差缩得越快。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">让多项式在一点「对齐」到高阶</span></div>
+          <div class="mb-body">\(P_n\) 的每一项都在补一项「对齐」：常数项对齐函数值，一次项对齐斜率，二次项对齐弯的方向……对齐到 \(n\) 阶后，两者在 \(x_0\) 附近已经难分彼此，剩下的差别就被挤进更高阶的余项。演示里蓝橙两线在 \(x=0\) 处从同一高度、同一斜率出发，阶数越高贴合的区间越宽。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把系数记成单纯的阶乘倒数</span></div>
+          <div class="mb-body">以为 \(x\mathrm{e}^{x}\) 的展开就是 \(\mathrm{e}^{x}\) 那套系数，会漏乘 \(f^{(k)}(0)=k\)。系数永远是「该阶导数值」除以「阶乘」，两个因子一个都不能少；写完最好把 \(P_n(0)\) 与 \(f(0)\) 对一下。</div>
+        </div>
+<!-- SECTION:s3:END -->
+      </article>
+      <article class="section" id="s4">
+<!-- SECTION:s4:BEGIN -->
+        <h3><span class="sec-badge">3.4</span>函数的单调性与曲线的凹凸性</h3>
+        <p>导数的正负本来只是「这一点往哪边走」，可有了拉格朗日中值定理，它就能管住一整段区间的增减。再把导数本身求一次导，连曲线往哪边弯都能判断。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">用导数判定单调与凹凸</span><span class="mb-no">3.5</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \([a,b]\) 连续、在 \((a,b)\) 可导。若在 \((a,b)\) 内 \(f'(x)>0\)，则 \(f\) 在 \([a,b]\) 严格单调递增；若 \(f'(x)&lt;0\)，则严格单调递减。又若 \(f''\) 存在：\(f''(x)>0\) 的区间上曲线是<strong class="term">凹</strong>的（开口向上，像一只碗），\(f''(x)&lt;0\) 的区间上曲线是<strong class="term">凸</strong>的（开口向下），凹凸性改变的点叫<strong class="term">拐点</strong>。
+            <div class="proof-title">证明 · 单调性为什么由 f 一阶导数的符号决定（2 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">任取 \(a\le x_1&lt;x_2\le b\)，在 \([x_1,x_2]\) 上用拉格朗日中值定理：\(f(x_2)-f(x_1)=f'(\xi)(x_2-x_1)\)</span><span class="derive-note">这一步把「一点的导数」和「一段的增量」接了起来，\(\xi\) 在两点之间</span></li>
+              <li><span class="derive-eq">由 \(f'(\xi)>0\) 与 \(x_2-x_1>0\) 得 \(f(x_2)-f(x_1)>0\)，即 \(f(x_2)>f(x_1)\)</span><span class="derive-note">两点任取，故整段严格递增；\(f'&lt;0\) 时不等号反向，同理得递减，证毕</span></li>
+            </ol>
+            <mark class="key">增减看 \(f'\) 的符号，凹凸看 \(f''\) 的符号，两者别混</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="monotonicity-convexity">
+          <div class="demo-title">演示 4 · 两条竖线分增减，一条竖线分凹凸</div>
+          <div class="demo-caption">蓝线是 \(f(x)=x^{3}+3x^{2}\)。两条橙色竖线标在 \(x=-2\) 与 \(x=0\)（\(f'=0\) 处），青色竖线标在 \(x=-1\)（\(f''=0\) 处）。拖动观察点，<b>读数直接告诉你这一点在上升还是下降、开口朝上还是朝下</b>，红短线是该点切线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一题划出全部单调区间与凹凸区间</span><span class="mb-no">例 3.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(f(x)=x^{3}+3x^{2}\) 的单调区间、凹凸区间，并写出拐点。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>分别求 \(f'\) 与 \(f''\)，解出它们为零的点，用这些点把数轴切成几段，每段取一个简单的数代入判符号，最后分别下结论。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(f'(x)=3x^{2}+6x=3x(x+2)\)，零点 \(x=-2\) 与 \(x=0\)。取 \(x=-3\) 代入得 \(f'(-3)=9>0\)，取 \(x=-1\) 得 \(f'(-1)=-3&lt;0\)，取 \(x=1\) 得 \(f'(1)=9>0\)。故 \(f\) 在 \((-\infty,-2]\) 与 \([0,+\infty)\) 单调递增，在 \([-2,0]\) 单调递减。<br>
+              \(f''(x)=6x+6=6(x+1)\)，零点 \(x=-1\)。当 \(x&lt;-1\) 时 \(f''&lt;0\)，曲线是凸的；当 \(x>-1\) 时 \(f''>0\)，曲线是凹的。凹凸性在 \(x=-1\) 处改变，且 \(f(-1)=-1+3=2\)，故拐点为 \((-1,2)\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「求 \(f'\) 和 \(f''\) → 解零点 → 列表分段判符号 → 分别写增减与凹凸」。判断符号时每段只代一个好算的数即可；拐点必须写成坐标，还要确认该点确实在曲线上、凹凸性真的改变。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">f 一阶导数是速度，二阶导数是速度的变化</span></div>
+          <div class="mb-body">把 \(f'\) 当成速度表读数：读数为正就往高处走、为负就往下走，这就是单调性；把 \(f''\) 当成速度表读数变化得有多快：它为正说明曲线越走越陡、开口向上，为负说明越走越平、开口向下。演示里三条竖线对应的正是「速度为 0」与「速度变化为 0」这几个转折时刻。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">用 f 一阶导数的符号去判凹凸</span></div>
+          <div class="mb-body">\(f'>0\) 只说明函数递增，与开口方向无关；凹凸要看 \(f''\)。固定动作是先把两个导数分别算出来、各归各用，别看到「正」就顺手写下「凹」。</div>
+        </div>
+<!-- SECTION:s4:END -->
+      </article>
+      <article class="section" id="s5">
+<!-- SECTION:s5:BEGIN -->
+        <h3><span class="sec-badge">3.5</span>函数的极值与最大值最小值</h3>
+        <p>「这一带我最高」和「全程我最高」是两句话：前者叫极值，后者叫最值。把范围缩到很小，极值只看局部；要在整个闭区间上找最值，还得把端点和那些「导数不存在」的点一起请来比较。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">极值、最值与可疑点</span><span class="mb-no">3.6</span></div>
+          <div class="mb-body">
+            若 \(f(x_0)\) 比 \(x_0\) 附近所有点的函数值都大（或都小），称 \(f(x_0)\) 为<strong class="term">极大值</strong>（或<strong class="term">极小值</strong>），这是局部概念；在闭区间 \([a,b]\) 上最大（或最小）的那个函数值叫<strong class="term">最大值</strong>（或<strong class="term">最小值</strong>），是整体概念。
+            <mark class="key">极值可疑点 = 驻点（\(f'=0\)）+ 不可导点；求闭区间最值还要再加上两个端点</mark>。把所有可疑点逐一代入比较，最大的就是最大值、最小的就是最小值。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="extrema-and-maxmin">
+          <div class="demo-title">演示 5 · 五类点一起比，谁才是真正的最值</div>
+          <div class="demo-caption">蓝线是 \(f(x)=|x^{2}-2x|\) 在 \([-1,3]\) 上。橙点是两个端点、红点是两个尖点（不可导）、绿点是唯一驻点。拖动观察点，<b>读数把五个可疑点的函数值一次列出</b>：最大值出在端点、最小值出在不可导点，而驻点那个「局部最高」并不是全场最高。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">分清局部极值与整体最值，找齐三类可疑点</span><span class="mb-no">例 3.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x)=|x^{2}-2x|\)。(1) 找出 \(f\) 在 \((-1,3)\) 内所有可能的极值点，说明每个是驻点还是不可导点。(2) 求 \(f\) 在闭区间 \([-1,3]\) 上的最大值与最小值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先按 \(x^{2}-2x=x(x-2)\) 的正负拆掉绝对值：正负交界处正是绝对值容易冒出尖点的地方。再在光滑的每一段里解 \(f'(x)=0\)。最后把可疑点与两个端点一起代入比大小。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 当 \(x\le 0\) 或 \(x\ge 2\) 时 \(x^{2}-2x\ge 0\)，故 \(f(x)=x^{2}-2x\)；当 \(0&lt;x&lt;2\) 时 \(f(x)=2x-x^{2}\)。在 \(x=0\) 处左导数 \(-2\)、右导数 \(2\)，在 \(x=2\) 处左导数 \(-2\)、右导数 \(2\)，左右不相等，故这两点<strong>不可导</strong>；在 \(0&lt;x&lt;2\) 内 \(f'(x)=2-2x\)，令其为 0 得 \(x=1\)，这是<strong>驻点</strong>。所以可能的极值点是 \(x=0,1,2\)：两个不可导点加一个驻点。<br>
+              (2) 把可疑点与端点全代入：\(f(-1)=3\)、\(f(0)=0\)、\(f(1)=1\)、\(f(2)=0\)、\(f(3)=3\)。故最大值为 \(3\)，在端点 \(x=-1\) 与 \(x=3\) 取得；最小值为 \(0\)，在两个不可导点 \(x=0,2\) 取得。驻点处的 \(f(1)=1\) 只是局部极大，并不是最大值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「驻点 + 不可导点 + 端点，三类点一个不漏，全部代入比较」。极值是局部冠军、最值是全场冠军；端点可以取到最值却不算极值点，而绝对值、根号、分段的交界处最容易藏不可导点。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">局部第一不等于全场第一</span></div>
+          <div class="mb-body">站在 \(x=1\) 那个小山包上，往左右看一小段，它确实是最高点；可把视线拉到整段 \([-1,3]\)，两端的 \(3\) 比它高得多。演示里绿点、红点、橙点各有身份，把它们排成一行数一比，谁是最值一目了然——「找齐候选」比「会算导数」更关键。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">只解 f 一阶导数等于零就宣布找到最值</span></div>
+          <div class="mb-body">\(f'(x)=0\) 只给出驻点，漏掉不可导点与端点，最值常常正好落在被漏掉的点上（本题的最小值就在尖点）。固定动作是三类可疑点列成一张表，逐个代入再比较，一个都不能少。</div>
+        </div>
+<!-- SECTION:s5:END -->
+      </article>
+      <article class="section" id="s6">
+<!-- SECTION:s6:BEGIN -->
+        <h3><span class="sec-badge">3.6</span>函数图形的描绘</h3>
+        <p>前面几节各给了你一件工具：定义域、渐近线、单调、凹凸、极值。现在把它们按顺序用一遍，即使从没见过这个函数，也能把它的图形相当准确地画出来。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">渐近线与描绘步骤</span><span class="mb-no">3.7</span></div>
+          <div class="mb-body">
+            若 \(x\to a\) 时 \(f(x)\to\infty\)，直线 \(x=a\) 叫<strong class="term">竖直渐近线</strong>（常来自分母为零）；若 \(x\to\infty\) 时 \(f(x)\to L\)，直线 \(y=L\) 叫<strong class="term">水平渐近线</strong>；若 \(f(x)-(kx+b)\to 0\)，直线 \(y=kx+b\) 叫<strong class="term">斜渐近线</strong>（常来自多项式除法）。
+            描绘图形的固定顺序：<strong>① 定定义域与对称性 → ② 求三条渐近线搭骨架 → ③ 用 \(f'\)、\(f''\) 的零点与不可导点列表分段 → ④ 标出极值点与拐点 → ⑤ 顺着渐近线把各段连起来</strong>。
+            <mark class="key">渐近线不是曲线的一部分，只是它在远处越来越贴近的直线</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="curve-sketching">
+          <div class="demo-title">演示 6 · 四步叠加，一条曲线被「算」出来</div>
+          <div class="demo-caption">以 \(f(x)=x+\dfrac{4}{x}\) 为例。按四个按钮依次叠加信息：<b>先画两条渐近线，再点出两个极值点，接着用底色分出凹凸区间，最后才画出曲线</b>。拖动观察点，读数始终给出该点的 \(f\)、\(f'\)、\(f''\)，说明每一步为什么这样画。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">书面走一遍完整的描绘流程</span><span class="mb-no">例 3.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">描绘 \(f(x)=\dfrac{x^{2}}{x+1}\) 的图形：先写出定义域与所有渐近线，再找出单调区间、极值、凹凸区间与拐点。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>分母 \(x+1\) 为零处先留个记号，那里可能有竖直渐近线；再做一次多项式除法看有没有斜渐近线。之后求 \(f'\)、\(f''\)，用它们的零点（连同 \(x=-1\) 这个不在定义域的分界点）把数轴分段。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              定义域为 \((-\infty,-1)\cup(-1,+\infty)\)。当 \(x\to -1\) 时分子趋于 \(1\)、分母趋于 \(0\)，故 \(f(x)\to\infty\)，有竖直渐近线 \(x=-1\)。又由除法 \(\dfrac{x^{2}}{x+1}=x-1+\dfrac{1}{x+1}\)，得斜渐近线 \(y=x-1\)，无水平渐近线。<br>
+              \(f'(x)=\dfrac{x(x+2)}{(x+1)^{2}}\)，零点为 \(x=0\) 与 \(x=-2\)；结合 \(x=-1\) 分段判符号：在 \((-\infty,-2)\) 为正、\((-2,-1)\) 为负、\((-1,0)\) 为负、\((0,+\infty)\) 为正。故极大值 \(f(-2)=-4\)，极小值 \(f(0)=0\)。<br>
+              \(f''(x)=\dfrac{2}{(x+1)^{3}}\)：当 \(x&lt;-1\) 为负（凸），当 \(x>-1\) 为正（凹）。但 \(x=-1\) 不在定义域内，曲线在那里并没有点，所以<strong>没有拐点</strong>。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先搭骨架（定义域 + 渐近线）→ 再列表分段（\(f'\)、\(f''\) 的零点与不可导点）→ 标点连线」。斜渐近线靠多项式除法得到；竖直渐近线两侧的凹凸可以不同，但分界点若不在定义域内就不能叫拐点。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">先画框，再填肉</span></div>
+          <div class="mb-body">渐近线像画框，先告诉你曲线两头往哪里跑、哪里不能碰；极值点和凹凸区间像骨架，定出中间怎么起伏；最后连线只是把这些约束顺起来。演示里第四步才出现曲线，正因为它是前三步「算」出来的，而不是随手描的。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把渐近线上的点当成曲线的拐点</span></div>
+          <div class="mb-body">\(x=-1\) 处 \(f''\) 变号，但函数在那儿根本没有定义，谈不上「曲线上的点」，自然不是拐点。固定动作是判拐点前先确认该点在定义域内、曲线确实经过它。</div>
+        </div>
+<!-- SECTION:s6:END -->
+      </article>
+      <article class="section" id="s7">
+<!-- SECTION:s7:BEGIN -->
+        <h3><span class="sec-badge">3.7</span>曲率</h3>
+        <p>同样是弯，缓弯和急弯不一样。这一节给「弯得有多急」一个可算的数：曲率。它还顺带给出一个和曲线贴得最紧的圆，叫曲率圆。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">曲率、曲率半径与曲率圆</span><span class="mb-no">3.8</span></div>
+          <div class="mb-body">
+            曲线弯曲的程度用切线方向角 \(\alpha\) 随弧长 \(s\) 转动的快慢来衡量：\(K=\left|\dfrac{\mathrm{d}\alpha}{\mathrm{d}s}\right|\)，其中 \(\mathrm{d}s=\sqrt{1+y'^{2}}\,\mathrm{d}x\)。对写成 \(y=f(x)\) 的曲线，化成
+            $$K=\frac{|y''|}{\left(1+y'^{2}\right)^{3/2}},\qquad R=\frac{1}{K}$$
+            \(K\) 叫<strong class="term">曲率</strong>，\(R\) 叫<strong class="term">曲率半径</strong>。在切点处沿凹侧法线走 \(R\) 得到的圆叫<strong class="term">曲率圆</strong>，它与曲线在该点贴得最紧。
+            <mark class="key">公式同时用到 \(y'\) 与 \(y''\)，分母里的 \(y'\) 不能漏</mark>；\(K\) 越大弯得越急，直线处处 \(K=0\)。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="curvature-circle">
+          <div class="demo-title">演示 7 · 拖动切点，看曲率圆怎样变大变松</div>
+          <div class="demo-caption">蓝线是抛物线 \(y=\dfrac{x^{2}}{2}\)，绿圆是红点处的曲率圆。拖动切点横坐标，<b>盯住读数里的曲率 \(K\) 与半径 \(R\)</b>：顶点处 \(K=1\)、圆最小最贴合；把切点往两边拖，\(K\) 迅速变小、圆越张越大。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">换一个系数重算，看弯曲由谁决定</span><span class="mb-no">例 3.7</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 求抛物线 \(y=2x^{2}+1\) 在顶点 \(x=0\) 处的曲率 \(K\)、曲率半径 \(R\)，并写出曲率圆圆心。(2) 若把曲线换成 \(y=\dfrac{x^{2}}{2}\)，同样在顶点求 \(K\) 与 \(R\)，比较两次结果，说明二次项系数怎样影响顶点处的弯曲。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>曲率公式只用到 \(y'\) 与 \(y''\)。两问都先把它们代进顶点算；顶点处切线水平，分母变成 1，正好方便比较。第 (1) 问再沿竖直法线从切点往上走 \(R\) 得圆心。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(y'=4x\)、\(y''=4\)，在 \(x=0\) 处 \(y'=0\)、\(y''=4\)，切点为 \((0,1)\)。于是
+              $$K=\frac{|4|}{\left(1+0^{2}\right)^{3/2}}=4,\qquad R=\frac{1}{K}=\frac{1}{4}$$
+              此处切线水平、曲线开口向上，法线竖直向上，故圆心在切点正上方 \(\dfrac{1}{4}\) 处，即 \(\left(0,\dfrac{5}{4}\right)\)，半径 \(\dfrac{1}{4}\)。<br>
+              (2) 对 \(y=\dfrac{x^{2}}{2}\) 有 \(y'=x\)、\(y''=1\)，顶点 \(x=0\) 处 \(y'=0\)、\(y''=1\)，故
+              $$K=\frac{1}{1^{3/2}}=1,\qquad R=1$$
+              圆心在 \((0,1)\)、半径 1。两次都是水平切线，分母都等于 1，曲率就等于 \(\left|y''\right|\)；而 \(y''\) 恰是二次项系数的 2 倍（\(4=2\times 2\)、\(1=2\times\dfrac{1}{2}\)），所以二次项系数越大，顶点处弯得越急、曲率圆越小。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「求 \(y'\) 与 \(y''\) 并代入该点 → 套 \(\left(1+y'^{2}\right)^{3/2}\) 作分母 → 取 \(\left|y''\right|\)」。水平切线（\(y'=0\)）时分母恰为 1，是检验公式记没记全的好情形；改一下系数重算一遍，就能看出曲率由二阶导数决定，而不是由函数值决定。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">用一小段圆弧去贴曲线</span></div>
+          <div class="mb-body">在切点附近，曲率圆是「最像这条曲线」的那个圆：它们同一点、同切线、同弯曲程度。弯得越急，半径越小、圆越紧；越平缓，半径越大、圆越松，弯到极致（直线）半径就无穷大。演示里把切点从顶点拖开，绿圆肉眼可见地膨胀，正是 \(R=1/K\) 在起作用。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把曲率半径当成曲率，或把水平切线当成曲率为零</span></div>
+          <div class="mb-body">\(R=1/K\) 与 \(K\) 互为倒数，别写反；\(y'=0\) 只说明切线水平，曲率由 \(y''\) 决定，顶点恰恰是最弯的地方（本题 \(K=4\)）。固定动作是分清代的是 \(y'\) 还是 \(y''\)，算完再问一句「这个数该大还是该小」。</div>
+        </div>
+<!-- SECTION:s7:END -->
+      </article>
+      <article class="section" id="s8">
+<!-- SECTION:s8:BEGIN -->
+        <h3><span class="sec-badge">3.8</span>方程的近似解</h3>
+        <p>大多数方程求不出精确的根。换个思路：先猜一个近似值，再想办法把它一次次修得更准。牛顿迭代法用「切线代替曲线」做到这一点，而它的每一步都依赖导数不为零。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">牛顿迭代法</span><span class="mb-no">3.9</span></div>
+          <div class="mb-body">
+            设要求 \(f(x)=0\) 的根。取一个靠近根的初值 \(x_0\)，在点 \(\bigl(x_n,f(x_n)\bigr)\) 处作曲线的切线，把切线与横轴的交点当作下一个近似值，得迭代公式
+            $$x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$$
+            重复直到 \(\left|f(x_n)\right|&lt;\varepsilon\) 或相邻两次近似值相差足够小为止。
+            <mark class="key">每一步都要求 \(f'(x_n)\neq 0\)，初值还要选在目标根附近</mark>：\(f'(x_n)=0\) 时切线水平、与横轴平行，没有交点，公式分母为零，迭代做不下去；初值选得不好还可能收敛到别的根或发散。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="newton-method">
+          <div class="demo-title">演示 8 · 切线一步步把近似值推向根</div>
+          <div class="demo-caption">蓝线是 \(f(x)=x^{2}-4x+1\)。拖动迭代步数，橙色短线是每一步的切线，它与横轴的交点就是下一个近似值；切到「初值 2」按钮，会看到分母为零、迭代停在原地的失效情形。<b>盯住读数里 \(f(x_n)\) 怎样一步步逼近 0</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">手算第一步迭代，并说清初值的门槛</span><span class="mb-no">例 3.8</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x)=x^{3}+2x-4\)。(1) 取初值 \(x_0=1\)，用牛顿迭代公式求 \(x_1\)。(2) 说明迭代公式对初值有什么要求，若某一步遇到 \(f'(x_n)=0\) 会怎样。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问把 \(f(x_0)\) 与 \(f'(x_0)\) 分别算出来代入公式；算完用 \(f(x_1)\) 比 \(f(x_0)\) 更接近 0 来检验。第 (2) 问盯住公式的分母 \(f'(x_n)\)。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(f'(x)=3x^{2}+2\)。\(f(1)=1+2-4=-1\)，\(f'(1)=3+2=5\)，故
+              $$x_1=1-\frac{f(1)}{f'(1)}=1-\frac{-1}{5}=\frac{6}{5}=1.2$$
+              核对：\(f(1.2)=1.728+2.4-4=0.128\)，绝对值比 \(\left|f(1)\right|=1\) 小得多，说明 \(x_1\) 确实更靠近根。<br>
+              (2) 公式分母是 \(f'(x_n)\)，所以每步都要 \(f'(x_n)\neq 0\)；几何上 \(f'(x_n)=0\) 表示该点切线水平，与横轴平行而没有交点，「用切线交点当下一个近似值」这一步做不下去。初值还应尽量靠近想求的那个根，否则可能收敛到别的根或来回跳动。本题 \(f'(x)=3x^{2}+2\ge 2\) 恒不为零，分母这一关始终安全。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「算 \(f(x_n)\) 与 \(f'(x_n)\) → 代入 \(x_{n+1}=x_n-f(x_n)/f'(x_n)\) → 用 \(f(x_n)\) 是否变小检验收敛」。每步先确认 \(f'(x_n)\neq 0\)，再谈收敛；初值越靠近根，通常收敛越快。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">用直线交点代替曲线零点</span></div>
+          <div class="mb-body">曲线与横轴的交点不好求，但切线是一条直线，它与横轴的交点一解就出来。若当前点离根很近，曲线在这一小段几乎就是切线，于是直线交点比当前点更靠近真正的根；重复这个动作，近似值就一步步被推过去。演示里橙色短线每画一段，读数里的 \(f(x_n)\) 就小一截。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">忽略 f 一阶导数不能为零，初值随便取</span></div>
+          <div class="mb-body">\(f'(x_n)=0\) 时公式分母为零，切线水平没有交点，迭代直接卡住；初值离根太远也可能不收敛。固定动作是每次迭代前先看一眼 \(f'(x_n)\)，并把初值选在根附近、用 \(f(x_n)\) 的绝对值是否下降来检验。</div>
+        </div>
+<!-- SECTION:s8:END -->
+      </article>
+
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+<!-- PITFALLS:BEGIN -->
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">用中值定理时不核对前提</span></div>
+        <div class="mb-body"><b>错误做法</b>：看到 \(f(a)=f(b)\) 就断言存在 \(\xi\) 使 \(f'(\xi)=0\)。<b>为什么错</b>：罗尔定理要求「闭区间连续、开区间可导、端点值相等」三条同时成立，像 \(h(x)=x^{2}\ (0\le x&lt;2)\)、\(h(2)=0\) 在右端点不连续，结论就不成立（此时 \(h'(x)=2x>0\) 无零点）。<b>正确做法</b>：先逐条打勾，特别检查区间内部有没有尖点、断点与分母为零的点，再引用结论。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">对非未定式硬套洛必达，或用完不重判类型</span></div>
+        <div class="mb-body"><b>错误做法</b>：求 \(\lim\limits_{x\to 2}\dfrac{x^{2}+1}{x+2}\) 时分子分母各求一次导，得 \(\lim\limits_{x\to 2}2x=4\)。<b>为什么错</b>：把 \(x=2\) 代入得分子 \(2^{2}+1=5\)、分母 \(2+2=4\)，原式是 \(\dfrac{5}{4}\)，根本不是 \(\frac{0}{0}\) 或 \(\frac{\infty}{\infty}\)，法则前提不成立，硬套得到的 \(4\) 是错的。<b>正确做法</b>：先代入判类型，只有未定式才求导之比；每用一次后重新判类型，仍是未定式才可连用。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">求闭区间最值只找驻点</span></div>
+        <div class="mb-body"><b>错误做法</b>：只解 \(f'(x)=0\)，把驻点的函数值当成最大值与最小值。<b>为什么错</b>：极值是局部概念，最值是整体概念；不可导点与区间端点都可能取到最值，例如 \(f(x)=|x^{2}-2x|\) 在 \([-1,3]\) 上的最小值 \(0\) 恰在不可导点 \(x=0,2\) 取得、最大值 \(3\) 在端点取得。<b>正确做法</b>：把驻点、不可导点、端点三类可疑点列全，逐一代入比较大小。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把曲率半径当曲率，或漏掉分母里的 y 一阶导数</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(K=\dfrac{|y''|}{(1+y'^{2})^{3/2}}\) 记成 \(K=|y''|\)，或把算出的 \(\dfrac{1}{4}\) 当成曲率。<b>为什么错</b>：分母 \(\left(1+y'^{2}\right)^{3/2}\) 来自弧长与横坐标的换算，除了 \(y'=0\) 的地方都不能省；而 \(R=\dfrac{1}{K}\) 与 \(K\) 互为倒数，写反就全错。<b>正确做法</b>：先求 \(y'\)、\(y''\) 一起代入，再明确回答的是 \(K\) 还是 \(R\)，并用「弯得急则 \(K\) 大、\(R\) 小」自检。</div>
+      </div>
+<!-- PITFALLS:END -->
+    </section>
+
+    <!-- ⑥ 习题与自测 -->
+    <section id="quiz" class="block">
+      <h2>习题与自测</h2>
+      <p class="hint">题目为本站自编，不含教材原题。折叠答案适合纸笔练习，交互自测会即时判定并给出解析。</p>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">纸笔练习</span><span class="mb-no">练习 1–3</span></div>
+        <div class="mb-body">
+<!-- EXERCISES:BEGIN -->
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>设 \(f(x)=2x^{2}+x\)。验证它在 \([0,2]\) 上满足拉格朗日中值定理的条件，并求出 \(\xi\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">\(f\) 是多项式，在 \([0,2]\) 连续、在 \((0,2)\) 可导，条件满足。\(f(0)=0\)、\(f(2)=8+2=10\)，割线斜率 \(k=\dfrac{10-0}{2}=5\)。由 \(f'(x)=4x+1\)，令 \(4\xi+1=5\) 得 \(\xi=1\)，确实落在 \((0,2)\) 内。核对 \(f'(1)=5=k\)。注意顺序一定是「先核对条件 → 算割线斜率 → 解 \(f'(\xi)=k\)」，最后还要检查 \(\xi\) 在开区间里。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>求 \(\lim\limits_{x\to 0}\dfrac{\mathrm{e}^{3x}-1-3x}{x^{2}}\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">代入得分子 \(1-1-0=0\)、分母 \(0\)，是 \(\frac{0}{0}\) 型，可用洛必达。第一次对分子分母分别求导：\(\dfrac{3\mathrm{e}^{3x}-3}{2x}\)，代入仍是 \(\frac{0}{0}\)，<b>必须再判一次类型</b>才能连用。第二次求导：\(\dfrac{9\mathrm{e}^{3x}}{2}\)，令 \(x\to 0\) 得 \(\dfrac{9}{2}\)。故极限为 \(\dfrac{9}{2}\)。常见错误是第一次求导后不再检查类型就停手，或把 \(\left(\mathrm{e}^{3x}-1-3x\right)'\) 漏掉链式法则的系数 3。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>设 \(f(x)=x^{2}-4x+1\)。(1) 取初值 \(x_0=4\)，用牛顿迭代公式求 \(x_1\)；(2) 若改取 \(x_0=2\)，说明迭代为什么做不下去，并指出公式对初值的要求。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">(1) \(f'(x)=2x-4\)。\(f(4)=16-16+1=1\)、\(f'(4)=4\)，故 \(x_1=4-\dfrac{1}{4}=\dfrac{15}{4}=3.75\)。核对 \(f(3.75)=14.0625-15+1=0.0625\)，比 \(f(4)=1\) 更接近 0，说明迭代在向根靠近。(2) \(f'(2)=2\times 2-4=0\)，迭代公式 \(x_{n+1}=x_n-\dfrac{f(x_n)}{f'(x_n)}\) 分母为零；几何上 \((2,f(2))=(2,-3)\) 是抛物线顶点，切线水平 \(y=-3\)，与横轴平行、没有交点，「用切线交点当下一个近似值」无法进行。因此每步都要求 \(f'(x_n)\neq 0\)，初值还要选在目标根附近；本题方程的较大根约为 \(2+\sqrt{3}\approx 3.732\)，初值 4 正好在它旁边。</div></details>
+          </div>
+<!-- EXERCISES:END -->
+        </div>
+      </div>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">自测</span><span class="mb-title">交互选择题（即时判定）</span></div>
+        <div class="mb-body">
+          <div data-mount="quiz">
+            <!-- QUIZ:BEGIN -->
+<script type="application/json">
+[
+  { "q": "下列函数中，在区间 \\([-1,1]\\) 上满足罗尔定理全部条件的是？",
+    "options": ["\\(f(x)=|x|\\)", "\\(f(x)=x^{2}-1\\)", "\\(f(x)=\\frac{1}{x}\\)", "\\(f(x)=x\\)"], "answer": 1,
+    "explain": "\\(f(x)=x^{2}-1\\) 是多项式，在 \\([-1,1]\\) 连续、在 \\((-1,1)\\) 可导，且 \\(f(-1)=f(1)=0\\)，三条前提全满足，故存在 \\(\\xi=0\\) 使 \\(f'(\\xi)=0\\)，B 正确。A 在 \\(x=0\\) 有尖点不可导，而 0 落在开区间内，违反可导条件；C 在 \\(x=0\\) 无定义，连闭区间连续都做不到；D 虽连续可导，但 \\(f(-1)=-1\\) 不等于 \\(f(1)=1\\)，不满足端点值相等。" },
+  { "q": "求 \\(\\lim\\limits_{x\\to 0}\\dfrac{\\mathrm{e}^{2x}-1}{3x}\\)，结果是？",
+    "options": ["\\(0\\)", "\\(\\frac{1}{3}\\)", "\\(\\frac{2}{3}\\)", "\\(\\frac{3}{2}\\)"], "answer": 2,
+    "explain": "这是 \\(\\frac{0}{0}\\) 型，分子导数为 \\(2\\mathrm{e}^{2x}\\)、分母导数为 3，故极限是 \\(\\frac{2\\mathrm{e}^{0}}{3}=\\frac{2}{3}\\)，C 正确。A 把分子趋于 0 当成整个分式趋于 0，忘了分母也趋于 0；B 把 \\((\\mathrm{e}^{2x}-1)'\\) 错写成 \\(\\mathrm{e}^{2x}\\)，漏掉链式法则的系数 2，才得到 \\(\\frac{1}{3}\\)；D 把导数之比上下写反成 \\(\\frac{3}{2\\mathrm{e}^{0}}\\)，得到 \\(\\frac{3}{2}\\)。" },
+  { "q": "\\(f(x)=x\\mathrm{e}^{x}\\) 在 \\(x_0=0\\) 处带皮亚诺余项的三阶泰勒公式是？",
+    "options": ["\\(x+x^{2}+\\frac{1}{2}x^{3}+o(x^{3})\\)", "\\(x+x^{2}+x^{3}+o(x^{3})\\)", "\\(1+x+\\frac{x^{2}}{2}+o(x^{3})\\)", "\\(x+\\frac{x^{2}}{2}+\\frac{x^{3}}{6}+o(x^{3})\\)"], "answer": 0,
+    "explain": "由 \\(f^{(n)}(x)=(x+n)\\mathrm{e}^{x}\\) 得 \\(f(0)=0,f'(0)=1,f''(0)=2,f'''(0)=3\\)，系数依次是 \\(0,\\frac{1}{1!},\\frac{2}{2!}=1,\\frac{3}{3!}=\\frac{1}{2}\\)，故为 \\(x+x^{2}+\\frac{1}{2}x^{3}+o(x^{3})\\)，A 正确。B 把三阶系数写成 1，忘了用 \\(f'''(0)=3\\) 再除以 \\(3!\\)；C 照搬了 \\(\\mathrm{e}^{x}\\) 的展开且常数项错，本题 \\(f(0)=0\\)；D 把系数当成 \\(\\frac{1}{k!}\\)，漏乘各阶导数值 \\(f^{(k)}(0)=k\\)。" },
+  { "q": "关于 \\(f(x)=|x^{2}-2x|\\) 在 \\([-1,3]\\) 上的最小值，下列说法正确的是？",
+    "options": ["最小值为 \\(1\\)，在驻点 \\(x=1\\) 取得", "最小值只可能在驻点找，先解 \\(f'(x)=0\\) 即可", "最小值为 \\(3\\)，在端点 \\(x=-1,3\\) 取得", "最小值为 \\(0\\)，在不可导点 \\(x=0,2\\) 取得"], "answer": 3,
+    "explain": "把可疑点全部代入：\\(f(-1)=3,f(0)=0,f(1)=1,f(2)=0,f(3)=3\\)，最小值 \\(0\\) 出现在 \\(x=0,2\\)，正是绝对值造成尖点、不可导的地方，D 正确。A 把局部极大值 \\(f(1)=1\\) 误当成最小值；B 漏掉不可导点，极值可疑点必须驻点与不可导点一起查；C 把端点值 \\(3\\) 当成最小值，它其实是最大值。" },
+  { "q": "曲线 \\(y=2x^{2}+1\\) 在 \\(x=0\\) 处的曲率 \\(K\\) 是？",
+    "options": ["\\(2\\)", "\\(0\\)", "\\(4\\)", "\\(\\frac{1}{4}\\)"], "answer": 2,
+    "explain": "曲率公式 \\(K=\\frac{|y''|}{(1+y'^{2})^{3/2}}\\)。这里 \\(y'=4x,y''=4\\)，在 \\(x=0\\) 处 \\(y'=0,y''=4\\)，故 \\(K=\\frac{4}{1^{3/2}}=4\\)，C 正确。A 把二阶导数错记成 2；B 误以为水平切线处曲率为 0，其实弯曲程度由 \\(y''\\) 决定，顶点反而最弯；D 给的是曲率半径 \\(R=\\frac{1}{K}=\\frac{1}{4}\\)，与曲率互为倒数。" }
+]
+</script>
+<!-- QUIZ:END -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+<!-- SUMMARY:BEGIN -->
+      <p>这一章把上一章「某一点的斜率」变成「一整段区间的行为」：中值定理先搭起导数与增量的桥，洛必达与泰勒把极限、近似计算统一到导数上，再用 \(f'\) 与 \(f''\) 的符号读出单调、凹凸、极值与最值，最后用渐近线、曲率与牛顿迭代把函数彻底看透、把方程的根逼近出来。贯穿始终的只有一句话——先看条件，再用结论。</p>
+      <p>至此「给出一个函数、怎样研究它」已经有了一整套办法。下一章要把方向反过来：已知导数或微分关系，怎样把原来的函数找回来——这就是不定积分，也是后面定积分与微分方程的起点。</p>
+<!-- SUMMARY:END -->
+      <div data-chapter-nav></div>
+    </section>
+    <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a> ·
+         <a href="../../style-guide.html">视觉规范</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 7 章 · 微分方程 | 高等数学互动学习站</title>
+<meta name="description" content="非官方学习辅助：微分方程 的原创讲解、函数图像、交互示意图与动画">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/design-system.css">
+<link rel="stylesheet" href="../../assets/css/demos.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraph.css">
+<script>try{var t=localStorage.getItem('am-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jsxgraph@1.8.0/distrib/jsxgraphcore.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@antv/g6@4.8.24/dist/g6.min.js"></script>
+<script defer src="../../assets/js/chapters.js"></script>
+<script defer src="../../assets/js/cdn.js"></script>
+<script defer src="../../assets/js/math.js"></script>
+<script defer src="../../assets/js/graph.js"></script>
+<script defer src="../../assets/js/plot.js"></script>
+<script defer src="../../assets/js/steps.js"></script>
+<script defer src="../../assets/js/mindmap.js"></script>
+<script defer src="../../assets/js/quiz.js"></script>
+<script defer src="../../assets/js/theme.js"></script>
+<script defer src="../../assets/js/nav.js"></script>
+<script defer src="../../assets/js/polish.js"></script>
+<script defer src="../../assets/js/boot.js"></script>
+<script defer src="../../assets/js/demo-kit.js"></script>
+<script defer src="../../assets/js/demo-presets.js"></script>
+<script defer src="demo.js"></script>
+</head>
+<body data-chapter="ch07">
+
+<div class="topbar">
+  <div class="brand"><b>∫</b> 高等数学 · 互动学习站</div>
+  <nav class="tb-nav">
+    <a href="../../index.html">首页</a>
+    <a href="#" data-chapter-menu>章节目录 ▾</a>
+    <a href="../../DISCLAIMER.md">免责声明</a>
+  </nav>
+  <span class="tb-hint">同济第七版 · 内容原创</span>
+</div>
+<div class="reading-progress" data-reading-progress></div>
+
+<header class="chapter-hero">
+  <div class="hero-inner">
+    <div class="hero-index">第 <span data-slot="index">7</span> 章 · <span data-slot="volume">上册</span></div>
+    <h1 data-slot="title">微分方程</h1>
+    <p class="hero-sub" data-slot="subtitle">已知变化规律，反求函数本身</p>
+    <div class="hero-meta">
+      <span>约 <span data-slot="estMinutes">100</span> 分钟</span><span>·</span>
+      <span>10 节</span><span>·</span><span>10 个交互演示</span><span>·</span>
+      <span data-status-badge>进度</span>
+    </div>
+    <div class="btn-row hero-actions">
+      <a class="btn primary" href="#s1">从第 1 节开始 ↓</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <!-- 侧栏由 assets/js/nav.js 依 chapters.json 自动生成，只显示本章小节 -->
+  <aside class="sidebar" data-nav-sidebar></aside>
+
+  <main class="content">
+    <!-- ② 学习目标 -->
+    <section id="goals" class="block">
+      <h2>这一章你会学到什么</h2>
+      <p class="hint">本章按教材的节序展开，知识点名称与术语保持规范一致；定义与定理的表述、例题与图形均为本站原创。文中编号是本站自用编号，不是教材原编号。</p>
+      <ul class="goal-list" data-goal-list>
+<!-- GOALS:BEGIN -->
+        <li><label><input type="checkbox">把一个函数代回微分方程，判断它是不是解，并说出方程的阶数与通解里任意常数的个数</label></li>
+        <li><label><input type="checkbox">对可分离变量、齐次、一阶线性三类方程，各按固定步骤写出通解，再用初值条件定出特解并代回验证</label></li>
+        <li><label><input type="checkbox">用降阶代换处理三类可降阶高阶方程，用特征方程与待定系数法解常系数线性方程</label></li>
+        <li><label><input type="checkbox">用变量代换解欧拉方程，用消元法解简单的常系数线性微分方程组，并核对解是否满足原方程组</label></li>
+<!-- GOALS:END -->
+      </ul>
+    </section>
+
+    <!-- ③ 知识结构图 -->
+    <section id="map" class="block">
+      <h2>知识结构图</h2>
+      <p class="hint">先看清这一章的知识点怎么长出来，再逐节往下读。点节点可高亮相连链路。</p>
+      <div class="mermaid-box" data-mount="mindmap">
+        <!-- MAP:BEGIN -->
+<script type="application/json">
+{
+  "nodes": [
+    { "id": "n0", "label": "微分方程基本概念", "kind": "root" },
+    { "id": "n1", "label": "可分离变量方程", "kind": "core" },
+    { "id": "n2", "label": "齐次方程", "kind": "branch" },
+    { "id": "n3", "label": "一阶线性方程", "kind": "core" },
+    { "id": "n4", "label": "可降阶高阶方程", "kind": "branch" },
+    { "id": "n5", "label": "高阶线性方程解的结构", "kind": "core" },
+    { "id": "n6", "label": "常系数齐次：特征方程", "kind": "core" },
+    { "id": "n7", "label": "常系数非齐次：待定系数", "kind": "branch" },
+    { "id": "n8", "label": "欧拉方程", "kind": "branch" },
+    { "id": "n9", "label": "常系数线性方程组", "kind": "branch" },
+    { "id": "end", "label": "下一章：向量代数与空间解析几何", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n1", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n5", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n6", "target": "n8" },
+    { "source": "n5", "target": "n9" },
+    { "source": "n9", "target": "end" },
+    { "source": "n8", "target": "end" },
+    { "source": "n7", "target": "end" }
+  ]
+}
+</script>
+<!-- MAP:END -->
+      </div>
+    </section>
+
+    <!-- ④ 逐节讲解 -->
+    <section id="sections" class="block">
+      <h2>逐节讲解</h2>
+
+      <article class="section" id="s1">
+<!-- SECTION:s1:BEGIN -->
+        <h3><span class="sec-badge">7.1</span>微分方程的基本概念</h3>
+        <p>前面几章里，函数都是已知的那个：给你 \(y=f(x)\)，让你去算它的导数、积分。这一章要把问题反过来——只知道「函数应该怎么变」，要把函数本身找出来。比如「每一处的切线斜率都等于 \(2x+1\)」写成式子就是 \(y'=2x+1\)，它没告诉你 \(y\) 是谁，只告诉你 \(y\) 要满足的关系。这种带着导数的等式，就是本章的主角。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">微分方程、阶、解、通解与特解</span><span class="mb-no">7.1</span></div>
+          <div class="mb-body">
+            含有未知函数的导数（或微分）的等式叫<strong class="term">微分方程</strong>；未知函数只有一个自变量时叫<strong class="term">常微分方程</strong>。方程里出现的未知函数导数的<strong>最高阶数</strong>叫这个方程的<strong class="term">阶</strong>。<br>
+            设函数 \(y=\varphi(x)\) 在某区间上有到方程所需阶数的导数。把它和它的各阶导数代入方程后，若等式对该区间上<strong>每一个</strong> \(x\) 都成立，就称 \(y=\varphi(x)\) 是方程的一个<strong class="term">解</strong>，它的图像叫积分曲线。<br>
+            含有任意常数、且其中<strong>相互独立的任意常数个数恰好等于方程的阶数</strong>的解叫<strong class="term">通解</strong>；把通解里每个任意常数都取定一个数值后得到的解叫<strong class="term">特解</strong>。用来定出这些常数的条件叫<strong class="term">初值条件</strong>，对 \(n\) 阶方程通常给 \(y(x_0)=y_0,\ y'(x_0)=y_1,\ \ldots,\ y^{(n-1)}(x_0)=y_{n-1}\)。<br>
+            <mark class="key">解完顺手数一遍：一阶方程的通解含 1 个独立任意常数，二阶含 2 个，\(n\) 阶含 \(n\) 个；个数对不上，多半是漏了解</mark>。本章只讨论常微分方程，未知函数取实数值，即取值于 \(\mathbb{R}\)。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="slope-field">
+          <div class="demo-title">演示 1 · 斜率场里藏着一整族解</div>
+          <div class="demo-caption">方程 \(y'=2x+1\) 在平面每一点都规定了一个斜率，灰色短线把它画出来。蓝线是通解 \(y=x^{2}+x+C\) 里的一条，红点是初值 \(y(0)=C\) 定住的位置。<b>拖动常数 \(C\)</b>：整族抛物线一起上下平移，却始终贴着那些短线走——这就是「解」的几何意思。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">认阶数、代回验证、由初值定特解</span><span class="mb-no">例 7.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">对等式 \(y'=2x+1\)：(1) 指出它是几阶微分方程；(2) 验证对任意常数 \(C\)，函数 \(y=x^{2}+x+C\) 都是它的解；(3) 加上初值条件 \(y(0)=3\) 求特解；(4) 说明通解里任意常数的个数与阶数的关系。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>这一节不学任何求解方法，只练「什么是解」：把候选函数直接代回等式，看两边是否相等。阶数看最高阶导数，特解用初值把常数算出来，最后数常数个数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 等式里出现的导数只有 \(y'\)，是一阶导数，故这是<strong>一阶</strong>微分方程。<br>
+              (2) 把 \(y=x^{2}+x+C\) 求导：\(y'=2x+1+0=2x+1\)，这里常数 \(C\) 的导数是 \(0\)。代回原等式，左边 \(y'=2x+1\)，右边也是 \(2x+1\)，对每个 \(x\) 都相等，所以 \(y=x^{2}+x+C\) 是解。注意我们并没有「解方程」，只是把一个函数代进去核对——这正是「解」的定义。<br>
+              (3) 它含 1 个任意常数 \(C\)，与阶数 1 相同，因此是通解。把 \(x=0\) 代入：\(y(0)=0+0+C=C\)。初值要求 \(y(0)=3\)，故 \(C=3\)，特解为 \(y=x^{2}+x+3\)。代回核对：\(y'=2x+1\) 满足方程，且 \(y(0)=3\) 满足初值。<br>
+              (4) 一阶对应 1 个任意常数；一般地 \(n\) 阶方程通解含 \(n\) 个独立任意常数，本题 \(1=1\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作四步：看最高阶导数定阶数 → 把候选函数求导后代入原等式核对 → 有初值就把初值点代入通解解出常数 → 数一数常数个数是否等于阶数。以后每解完一个方程都要把结果代回原式验证，这是最便宜的验错手段。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">通解是一族曲线，初值是点名</span></div>
+          <div class="mb-body">演示里那些短线像一片「风向」：每一点都指定了曲线该往哪个方向走。顺着风向能画出无数条曲线，彼此只差一个上下平移，这一整族就是通解；给一个初值点，等于从族里点名指定经过该点的那一条，就得到特解。阶数越高，需要自由调节的量越多，任意常数的个数也就越多。</div>
+        </div>
+<!-- SECTION:s1:END -->
+      </article>
+      <article class="section" id="s2">
+<!-- SECTION:s2:BEGIN -->
+        <h3><span class="sec-badge">7.2</span>可分离变量的微分方程</h3>
+        <p>上一节我们只会「验证」别人给的解。这一节开始自己动手解第一类：如果一阶方程的右端能拆成「只含 \(x\) 的部分」乘「只含 \(y\) 的部分」，就能把两边各自搬到等式一侧，分别积分。这是所有求解方法里最朴素、也最该先练熟的一种。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">可分离变量的微分方程与分离变量法</span><span class="mb-no">7.2</span></div>
+          <div class="mb-body">
+            若一阶方程能写成
+            $$\frac{\mathrm{d}y}{\mathrm{d}x}=f(x)\,g(y)$$
+            其中 \(f\) 在含 \(x_0\) 的区间上连续、\(g\) 连续，就称它为<strong class="term">可分离变量的微分方程</strong>。当 \(g(y)\neq 0\) 时，把含 \(y\) 的因子移到左边、含 \(x\) 的留在右边：
+            $$\frac{1}{g(y)}\,\mathrm{d}y=f(x)\,\mathrm{d}x$$
+            再对两边同时求原函数，并<strong>只在其中一边加上一个任意常数</strong> \(C\)：
+            $$\int\frac{1}{g(y)}\,\mathrm{d}y=\int f(x)\,\mathrm{d}x+C$$
+            由这个关系式解出 \(y\)（能显式解出时）即得通解。<br>
+            <mark class="key">两边积分时常数只写一次：若各写一个 \(C_1,C_2\)，移项后会合并成一个 \(C=C_2-C_1\)，写两次等于白写</mark>。另外，使 \(g(y)=0\) 的常数函数要单独代回检查，它可能是分离时被除掉而漏掉的解。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="separable-equations">
+          <div class="demo-title">演示 2 · 分离、积分，得到一整族双曲线</div>
+          <div class="demo-caption">对 \(y'=\dfrac{x}{y}\)，把 \(y\) 移到左边得 \(y\,\mathrm{d}y=x\,\mathrm{d}x\)，两边积分得 \(y^{2}=x^{2}+K\)。灰色短线是方程在每一点规定的方向，蓝色双曲线处处与它相切。<b>拖动常数 \(K\)</b>，看解族怎样张开；读数里会提醒你两边积分只写了一次常数。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">分离、积分、选分支、代回验证</span><span class="mb-no">例 7.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=\dfrac{x}{y}\)（\(y>0\)）满足初值条件 \(y(0)=2\) 的特解，并把结果代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>右端 \(x/y\) 可以拆成 \(f(x)=x\) 与 \(g(y)=1/y\) 相乘，是可分离变量方程。先把 \(y\) 搬到左边、\(x\) 留右边，两边各积一次分（只加一个常数），用初值定常数，最后求导代回核对。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              题设 \(y>0\)，故可除以 \(y\)。把等式写成 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=x\cdot\dfrac{1}{y}\)，两边同乘 \(y\,\mathrm{d}x\) 得
+              $$y\,\mathrm{d}y=x\,\mathrm{d}x$$
+              这就是「含 \(y\) 的在一边、含 \(x\) 的在另一边」。两边求原函数，只在右边写一个任意常数 \(C\)：
+              $$\int y\,\mathrm{d}y=\int x\,\mathrm{d}x+C\ \Longrightarrow\ \frac{y^{2}}{2}=\frac{x^{2}}{2}+C$$
+              这里 \(\dfrac{y^{2}}{2}\) 是 \(y\) 的一个原函数，\(\dfrac{x^{2}}{2}\) 是 \(x\) 的一个原函数。两边乘 \(2\) 并记 \(K=2C\)（仍是任意常数）：
+              $$y^{2}=x^{2}+K$$
+              这就是隐式通解，含 1 个任意常数 \(K\)，与一阶方程的阶数 1 相同。因 \(y>0\)，取正根 \(y=\sqrt{x^{2}+K}\)。<br>
+              代入初值 \(y(0)=2\)：\(\sqrt{0+K}=2\)，故 \(K=4\)，特解为 \(y=\sqrt{x^{2}+4}\)。<br>
+              代回验证：由复合函数求导，\(y'=\dfrac{1}{2\sqrt{x^{2}+4}}\cdot 2x=\dfrac{x}{\sqrt{x^{2}+4}}=\dfrac{x}{y}\)，与原方程右端一致；又 \(y(0)=\sqrt{4}=2\) 满足初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：拆成 \(f(x)g(y)\) → 写成 \(h(y)\,\mathrm{d}y=f(x)\,\mathrm{d}x\) → 两边积分且只加一个 \(C\) → 用初值定 \(C\) → 若开方要结合初值符号选分支 → 求导代回原方程核对。最容易漏的是积分常数，以及除以 \(y\) 时没先确认 \(y\neq 0\)。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">为什么可以两边分别积分</span></div>
+          <div class="mb-body">把 \(\mathrm{d}y\) 与 \(\mathrm{d}x\) 想成「各自那一侧的小变化量」：等式 \(y\,\mathrm{d}y=x\,\mathrm{d}x\) 是说，左边关于 \(y\) 的累积与右边关于 \(x\) 的累积始终同步。既然同步，它们就只差一个固定数值，这正是那个任意常数 \(C\)。演示里常数越大，双曲线的两支离原点越远，但每一条都满足同样的变化规律。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">除以含 \(y\) 的因子前不检查它是不是零</span></div>
+          <div class="mb-body">分离 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=f(x)g(y)\) 时要除以 \(g(y)\)，这一步只在 \(g(y)\neq 0\) 时才合法。若某个常数 \(y=y_0\) 使 \(g(y_0)=0\)，则 \(y\equiv y_0\) 本身往往是方程的一个常数解，会在除法里被悄悄丢掉。固定动作：先解 \(g(y)=0\) 把这些常数解单独记下，再在 \(g(y)\neq 0\) 的区域里分离变量，最后把两部分答案合起来。</div>
+        </div>
+<!-- SECTION:s2:END -->
+      </article>
+      <article class="section" id="s3">
+<!-- SECTION:s3:BEGIN -->
+        <h3><span class="sec-badge">7.3</span>齐次方程</h3>
+        <p>有些一阶方程右端既不是纯 \(x\) 也不是纯 \(y\)，但 \(x,y\) 只以比值 \(\dfrac{y}{x}\) 的形式出现，比如 \(x\,\dfrac{\mathrm{d}y}{\mathrm{d}x}=y+x\)。这类式子看着没法分离，其实把比值本身当成新的未知函数就能救：令 \(u=\dfrac{y}{x}\)，方程立刻变成可分离变量的。这一节就练这一个换元动作。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">齐次方程的代换解法</span><span class="mb-no">7.3</span></div>
+          <div class="mb-body">
+            若一阶方程可写成
+            $$\frac{\mathrm{d}y}{\mathrm{d}x}=\varphi\!\left(\frac{y}{x}\right)$$
+            （\(x\neq 0\)，\(\varphi\) 连续），右端只通过比值 \(\dfrac{y}{x}\) 依赖 \(x,y\)，就称它为<strong class="term">齐次方程</strong>。令 \(u=\dfrac{y}{x}\)，则 \(y=ux\) 且 \(y'=u+xu'\)，代入后得
+            $$x\frac{\mathrm{d}u}{\mathrm{d}x}=\varphi(u)-u$$
+            当 \(\varphi(u)-u\neq 0\) 时，这是关于 \(u\) 的可分离变量方程 \(\dfrac{\mathrm{d}u}{\varphi(u)-u}=\dfrac{\mathrm{d}x}{x}\)，解出 \(u\) 再用 \(y=ux\) 回代即得通解。<br>
+            <mark class="key">「齐次」在这里指右端是 \(\dfrac{y}{x}\) 的函数；它和第 6 节起说的「齐次线性方程」不是一回事，别混用方法</mark>。若 \(\varphi(u)=u\)，则 \(y=Cx\) 本身就是通解。
+            <div class="proof-title">推导 · 代换为什么能降阶（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">令 \(u=\dfrac{y}{x}\)，即 \(y=ux\)</span><span class="derive-note">把新未知函数 \(u\) 看成 \(x\) 的函数</span></li>
+              <li><span class="derive-eq">用乘积法则求导：\(y'=u+xu'\)</span><span class="derive-note">\(u\) 不是常数，不能只抄一个 \(u\)</span></li>
+              <li><span class="derive-eq">代入 \(y'=\varphi(u)\) 得 \(u+xu'=\varphi(u)\)，即 \(x\dfrac{\mathrm{d}u}{\mathrm{d}x}=\varphi(u)-u\)</span><span class="derive-note">右端只含 \(u\)，于是可分离变量</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="homogeneous-ode">
+          <div class="demo-title">演示 3 · 沿射线斜率不变，换元后方程可分离</div>
+          <div class="demo-caption">方程 \(x\,y'=y+x\) 的右端只依赖纵坐标与横坐标的比值，所以同一条过原点的射线上斜率处处相同（橙色虚线）。灰色短线是方向场，蓝线是通解 \(y=x(\ln x+C)\) 里的一条。<b>拖动常数 \(C\)</b>，读数会带你把 \(u=\dfrac{y}{x}\) 的每一步写出来。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">认出齐次结构、换元、回代、验证</span><span class="mb-no">例 7.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程 \(x\,\dfrac{\mathrm{d}y}{\mathrm{d}x}=y+x\)（\(x>0\)）满足 \(y(1)=2\) 的解，并代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先两边除以 \(x\)（题设 \(x>0\)，可除），得 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=\dfrac{y}{x}+1\)，右端是 \(\dfrac{y}{x}\) 的函数，属于齐次方程。令 \(u=\dfrac{y}{x}\)、\(y=ux\)，把方程降成可分离变量的一阶方程，解出 \(u\) 再乘回 \(x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              除以 \(x\)：\(\dfrac{\mathrm{d}y}{\mathrm{d}x}=\dfrac{y}{x}+1\)。令 \(u=\dfrac{y}{x}\)，即 \(y=ux\)。因 \(u\) 随 \(x\) 变，用乘积法则求导得 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=u+x\dfrac{\mathrm{d}u}{\mathrm{d}x}\)。<br>
+              代入方程：\(u+x\dfrac{\mathrm{d}u}{\mathrm{d}x}=u+1\)，两边同时减去 \(u\) 得 \(x\dfrac{\mathrm{d}u}{\mathrm{d}x}=1\)，即 \(\mathrm{d}u=\dfrac{\mathrm{d}x}{x}\)。这一步里 \(u\) 恰好抵消，正是换元奏效的原因。<br>
+              两边积分：\(u=\ln x+C\)（\(x>0\) 时 \(\int\dfrac{\mathrm{d}x}{x}=\ln x\)），只加一个任意常数 \(C\)。回代 \(y=ux\) 得通解
+              $$y=x(\ln x+C)$$
+              它含 1 个任意常数 \(C\)，与一阶方程的阶数 1 相同。<br>
+              代入初值 \(y(1)=2\)：\(2=1\cdot(\ln 1+C)=C\)，故 \(C=2\)，特解 \(y=x(\ln x+2)\)。<br>
+              代回验证：\(y'=(\ln x+2)+x\cdot\dfrac{1}{x}=\ln x+3\)；原方程左边 \(x\,y'=x(\ln x+3)\)，右边 \(y+x=x(\ln x+2)+x=x(\ln x+3)\)，两边相等；且 \(y(1)=1\cdot(0+2)=2\) 满足初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先把右端整理成只含 \(\dfrac{y}{x}\) 的样子 → 令 \(u=\dfrac{y}{x}\) 并写出 \(y'=u+xu'\) → 代入后通常有 \(u\) 项抵消，化成可分离变量方程 → 解出 \(u\) 再乘回 \(x\) → 代回原方程核对。注意 \(x\neq 0\)（本题取 \(x>0\)），以及 \(\ln x\) 来自 \(\int\dfrac{\mathrm{d}x}{x}\)。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">「齐次」说的是沿射线不变</span></div>
+          <div class="mb-body">把 \(x,y\) 同时放大 \(\lambda\) 倍，比值 \(\dfrac{\lambda y}{\lambda x}=\dfrac{y}{x}\) 不变，所以右端 \(\varphi(y/x)\) 不变——方程在整条过原点的射线上给出同一个斜率，演示里那些橙色虚线就是这样的射线。正因为「方向只认方向、不认远近」，把方向本身 \(u=\dfrac{y}{x}\) 取作新变量才格外顺手。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">解出 \(u\) 后忘记乘回 \(x\)</span></div>
+          <div class="mb-body">换元解出的是 \(u=u(x)\)，而题目要的是 \(y\)。固定动作是最后一步一定写 \(y=ux\) 回代，并把得到的 \(y\) 代回原方程验证；只报 \(u=\ln x+C\) 不算解完这道题。</div>
+        </div>
+<!-- SECTION:s3:END -->
+      </article>
+      <article class="section" id="s4">
+<!-- SECTION:s4:BEGIN -->
+        <h3><span class="sec-badge">7.4</span>一阶线性微分方程</h3>
+        <p>可分离变量和齐次方程都靠「把两边拆开凑」，可有一大类一阶方程拆不开：\(y'+P(x)y=Q(x)\)，未知函数 \(y\) 和它的导数 \(y'\) 各出现一次、还各带系数。它的解法不是硬拆，而是给等式两边同乘一个精心挑的函数，让左边自动变成某个乘积的导数。这个「乘一下就凑齐」的函数叫积分因子。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">一阶线性方程的积分因子法与通解公式</span><span class="mb-no">7.4</span></div>
+          <div class="mb-body">
+            设 \(P(x),Q(x)\) 在区间 \(I\) 上连续，方程
+            $$\frac{\mathrm{d}y}{\mathrm{d}x}+P(x)\,y=Q(x)$$
+            叫<strong class="term">一阶线性微分方程</strong>；当 \(Q(x)\equiv 0\) 时叫齐次的，否则叫非齐次的。取<strong class="term">积分因子</strong> \(\mu(x)=\mathrm{e}^{\int P(x)\,\mathrm{d}x}\)（恒大于 \(0\)），两边同乘 \(\mu\) 后左边成为 \((\mu y)'=\mu Q\)，积分即得通解公式
+            $$y=\mathrm{e}^{-\int P(x)\,\mathrm{d}x}\left(\int Q(x)\,\mathrm{e}^{\int P(x)\,\mathrm{d}x}\,\mathrm{d}x+C\right)$$
+            <mark class="key">公式里被积的是 \(Q(x)\,\mathrm{e}^{\int P\,\mathrm{d}x}\)，不是单独的 \(Q(x)\)；积完只加一个任意常数 \(C\)</mark>。
+            <div class="proof-title">推导 · 积分因子与通解公式（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">取 \(\mu(x)=\mathrm{e}^{\int P(x)\,\mathrm{d}x}\)，则 \(\mu'=P\mu\)</span><span class="derive-note">指数函数求导带出一个因子 \(P\)</span></li>
+              <li><span class="derive-eq">两边乘 \(\mu\)：\(\mu y'+\mu' y=\mu Q\)，即 \((\mu y)'=\mu Q\)</span><span class="derive-note">左边正好凑成乘积的导数</span></li>
+              <li><span class="derive-eq">积分得 \(\mu y=\displaystyle\int\mu Q\,\mathrm{d}x+C\)，除以 \(\mu\neq 0\) 即得公式</span><span class="derive-note">\(\mu\) 恒正，可安全作除数</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="linear-first-order">
+          <div class="demo-title">演示 4 · 积分因子把通解拧成「特解 + 衰减项」</div>
+          <div class="demo-caption">对 \(y'+y=x\)，积分因子是 \(\mathrm{e}^{x}\)，通解为 \(y=x-1+C\mathrm{e}^{-x}\)。橙色虚线是特解 \(y=x-1\)，蓝线是通解里的一条。<b>拖动常数 \(C\)</b>：那条指数衰减的差项随 \(x\) 增大消失，所有蓝线最终都贴向橙色直线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算积分因子、套公式、分部积分、验证</span><span class="mb-no">例 7.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}+y=x\) 满足 \(y(0)=1\) 的特解，并代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>这是 \(y'+P(x)y=Q(x)\) 的标准形，其中 \(P(x)=1\)、\(Q(x)=x\) 都在整个实轴上连续。先算积分因子 \(\mu=\mathrm{e}^{\int 1\,\mathrm{d}x}=\mathrm{e}^{x}\)，乘上去把左边凑成 \((\mathrm{e}^{x}y)'\)，再对右边积分（\(\int x\mathrm{e}^{x}\mathrm{d}x\) 用一次分部积分），最后用初值定常数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              积分因子 \(\mu(x)=\mathrm{e}^{x}\)。两边同乘 \(\mathrm{e}^{x}\)：\(\mathrm{e}^{x}y'+\mathrm{e}^{x}y=x\mathrm{e}^{x}\)，左边正是乘积的导数，故
+              $$(\mathrm{e}^{x}y)'=x\mathrm{e}^{x}$$
+              对右边积分，用分部积分 \(\int u\,\mathrm{d}v=uv-\int v\,\mathrm{d}u\)，取 \(u=x\)、\(\mathrm{d}v=\mathrm{e}^{x}\mathrm{d}x\)，得 \(\int x\mathrm{e}^{x}\mathrm{d}x=x\mathrm{e}^{x}-\int \mathrm{e}^{x}\mathrm{d}x=(x-1)\mathrm{e}^{x}\)。于是
+              $$\mathrm{e}^{x}y=(x-1)\mathrm{e}^{x}+C$$
+              两边除以 \(\mathrm{e}^{x}\) 得通解 \(y=x-1+C\mathrm{e}^{-x}\)，含 1 个任意常数 \(C\)，与一阶方程的阶数 1 相同。<br>
+              代入初值 \(y(0)=1\)：\(1=0-1+C\)，故 \(C=2\)，特解 \(y=x-1+2\mathrm{e}^{-x}\)。<br>
+              代回验证：\(y'=1-2\mathrm{e}^{-x}\)，于是 \(y'+y=(1-2\mathrm{e}^{-x})+(x-1+2\mathrm{e}^{-x})=x\)，与原方程右端一致；且 \(y(0)=-1+2=1\) 满足初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：化成标准形 \(y'+P(x)y=Q(x)\) → 算积分因子 \(\mu=\mathrm{e}^{\int P\,\mathrm{d}x}\) → 两边乘 \(\mu\) 使左边成为 \((\mu y)'\) → 对 \(\mu Q\) 积分且只加一个 \(C\) → 除以 \(\mu\) 得通解 → 用初值定 \(C\) → 代回核对。演示里 \(C\mathrm{e}^{-x}\) 会衰减，说明「通解 = 一个特解 + 齐次解」。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">积分因子不是猜的，是「凑」出来的</span></div>
+          <div class="mb-body">想让乘了 \(\mu\) 之后的左边等于 \((\mu y)'=\mu y'+\mu' y\)，与 \(\mu(y'+Py)\) 一比就知道必须满足 \(\mu'=P\mu\)，解出来正是指数函数。演示里通解比那条直线多出的一项 \(C\mathrm{e}^{-x}\) 随 \(x\) 增大趋于 \(0\)，所以无论初值怎么给，曲线最终都贴向同一个特解——这就是「暂态加稳态」的雏形。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把 \(Q\) 的系数漏在积分因子外面</span></div>
+          <div class="mb-body">用公式时写成 \(y=\mathrm{e}^{-\int P}\left(\int Q\,\mathrm{d}x+C\right)\) 是常见错误。正确做法是先乘 \(\mu\) 再积分，被积函数必须是 \(Q\,\mathrm{e}^{\int P}\)。固定动作：把 \((\mu y)'=\mu Q\) 这一行完整写出来，再对 \(\mu Q\) 动手，就不会漏。</div>
+        </div>
+<!-- SECTION:s4:END -->
+      </article>
+      <article class="section" id="s5">
+<!-- SECTION:s5:BEGIN -->
+        <h3><span class="sec-badge">7.5</span>可降阶的高阶微分方程</h3>
+        <p>二阶方程比一阶难，是因为要多积一次、多一个任意常数。但有一类二阶方程其实「缺了点东西」：右端要么只含 \(x\)，要么不含 \(y\)，要么不含 \(x\)。缺哪个字母，就用 \(p=y'\) 这个代换把它降成一阶方程，解完再积一次回去。这一节把三类降阶套路一次讲清。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">三类可降阶的二阶方程</span><span class="mb-no">7.5</span></div>
+          <div class="mb-body">
+            设右端函数连续，以下三类二阶方程都能降为一阶方程：<br>
+            <strong>第一类 \(y''=f(x)\)</strong>：右端只含 \(x\)，连续积分两次，\(y'=\displaystyle\int f(x)\,\mathrm{d}x+C_1\)，\(y=\displaystyle\int\Big(\int f\,\mathrm{d}x\Big)\mathrm{d}x+C_1x+C_2\)。<br>
+            <strong>第二类 \(y''=f(x,y')\)</strong>：右端不含 \(y\)。令 \(p=y'\)，则 \(y''=p'\)，方程降为 \(p'=f(x,p)\)，解出 \(p=\varphi(x,C_1)\) 后再积一次 \(y=\displaystyle\int\varphi\,\mathrm{d}x+C_2\)。<br>
+            <strong>第三类 \(y''=f(y,y')\)</strong>：右端不含 \(x\)。仍令 \(p=y'\)，但把 \(y''\) 写成 \(p\dfrac{\mathrm{d}p}{\mathrm{d}y}\)，方程降为关于 \(p(y)\) 的一阶方程 \(p\dfrac{\mathrm{d}p}{\mathrm{d}y}=f(y,p)\)。<br>
+            <mark class="key">每解一次一阶方程、每积一次分，各带出一个任意常数；二阶方程的通解总共含 2 个，与阶数相等</mark>。第三类要求把 \(p\) 看作 \(y\) 的函数，需 \(y'\neq 0\) 的局部条件。
+            <div class="proof-title">推导 · 第三类为什么能降阶（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">令 \(p=y'\)，并把 \(p\) 看作 \(y\) 的函数</span><span class="derive-note">右端不含 \(x\)，适合把自变量换成 \(y\)</span></li>
+              <li><span class="derive-eq">链式法则：\(y''=\dfrac{\mathrm{d}p}{\mathrm{d}x}=\dfrac{\mathrm{d}p}{\mathrm{d}y}\cdot\dfrac{\mathrm{d}y}{\mathrm{d}x}=p\dfrac{\mathrm{d}p}{\mathrm{d}y}\)</span><span class="derive-note">把对 \(x\) 的导数换成对 \(y\) 的导数</span></li>
+              <li><span class="derive-eq">代入 \(y''=f(y,y')\) 得 \(p\dfrac{\mathrm{d}p}{\mathrm{d}y}=f(y,p)\)</span><span class="derive-note">这是关于 \(p(y)\) 的一阶方程，降了一阶</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="reducible-ode">
+          <div class="demo-title">演示 5 · 积分两次，冒出两个任意常数</div>
+          <div class="demo-caption">对 \(y''=2x\)，积分一次得 \(y'=x^{2}+C_1\)，再积一次得 \(y=\dfrac{x^{3}}{3}+C_1x+C_2\)。橙色虚线是固定的三次曲线，蓝线是加上一条直线 \(C_1x+C_2\) 后的通解。<b>拖动两个滑块</b>，看两个常数各自怎么平移、倾斜这条曲线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">第二类降阶：令 \(p=y'\) 解一阶再积回去</span><span class="mb-no">例 7.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程 \(y''=y'+1\) 满足 \(y(0)=1\)、\(y'(0)=0\) 的特解，并代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>右端 \(y'+1\) 不含 \(y\)，是第二类 \(y''=f(x,y')\)。令 \(p=y'\)，则 \(y''=p'\)，方程变成关于 \(p\) 的一阶方程 \(p'=p+1\)，解出 \(p\) 后再对 \(x\) 积一次得 \(y\)。两个初值正好用来定两个常数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              令 \(p=y'\)，则 \(y''=p'\)。代入方程得 \(p'=p+1\)，即 \(\dfrac{\mathrm{d}p}{\mathrm{d}x}=p+1\)。当 \(p+1\neq 0\) 时分离变量：\(\dfrac{\mathrm{d}p}{p+1}=\mathrm{d}x\)，两边积分得 \(\ln\left|p+1\right|=x+C_0\)，即 \(p+1=C_1\mathrm{e}^{x}\)（把 \(\pm\mathrm{e}^{C_0}\) 记成新的任意常数 \(C_1\)，\(p\equiv-1\) 也含在 \(C_1=0\) 里），故
+              $$p=C_1\mathrm{e}^{x}-1$$
+              再积一次（\(y'=p\)）：\(y=C_1\mathrm{e}^{x}-x+C_2\)。这就是通解，含 2 个任意常数 \(C_1,C_2\)，与二阶方程的阶数 2 相同。<br>
+              代入初值：\(y'(0)=C_1-1=0\) 得 \(C_1=1\)；\(y(0)=C_1+C_2=1+C_2=1\) 得 \(C_2=0\)。故特解 \(y=\mathrm{e}^{x}-x\)。<br>
+              代回验证：\(y'=\mathrm{e}^{x}-1\)，\(y''=\mathrm{e}^{x}\)；原方程右端 \(y'+1=(\mathrm{e}^{x}-1)+1=\mathrm{e}^{x}=y''\)，成立；且 \(y(0)=1-0=1\)、\(y'(0)=1-1=0\) 满足两个初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先看右端缺哪个字母 → 缺 \(y\) 就令 \(p=y'\)、缺 \(x\) 就令 \(p=y'\) 并把 \(y''\) 写成 \(p\,\dfrac{\mathrm{d}p}{\mathrm{d}y}\) → 把二阶降成一阶 → 解出 \(p\) → 再积一次得 \(y\) → 每步各带一个常数，二阶共 2 个 → 代回原方程核对。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">降阶就是把二阶翻译成两个一阶</span></div>
+          <div class="mb-body">先解出 \(p=y'\)，再积一次得 \(y\)，等于把「求 \(y\)」拆成「先求斜率、再求高度」两步。每解一个一阶方程就带出一个任意常数，两次一共 2 个，正好是二阶方程的阶数。演示里那两个滑块就是这两个常数：它们合起来给固定的三次曲线叠加一条可平移、可倾斜的直线。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">三类方程用错降阶写法</span></div>
+          <div class="mb-body">对 \(y''=f(y,y')\)（缺 \(x\)）若仍写 \(y''=p'\)，会把对 \(x\) 的导数留在一个已不含 \(x\) 的方程里，解不下去。固定动作是先看缺谁：缺 \(y\) 用 \(y''=p'\)，缺 \(x\) 用 \(y''=p\dfrac{\mathrm{d}p}{\mathrm{d}y}\)。写完代回验证一次，就能发现用错没有。</div>
+        </div>
+<!-- SECTION:s5:END -->
+      </article>
+      <article class="section" id="s6">
+<!-- SECTION:s6:BEGIN -->
+        <h3><span class="sec-badge">7.6</span>高阶线性微分方程</h3>
+        <p>从这一节起进入「线性」方程：未知函数 \(y\) 和它的各阶导数都只以一次方出现，没有 \(y^{2}\)、\(yy'\) 这类项。线性带来一个极好的性质——解的任意线性组合还是解。于是不必把每个解都从头算一遍，只要找够几个「互不相同」的解，就能拼出全部解。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">线性方程解的结构</span><span class="mb-no">7.6</span></div>
+          <div class="mb-body">
+            设 \(a_1(x),\ldots,a_n(x),f(x)\) 在区间 \(I\) 上连续，方程
+            $$y^{(n)}+a_1(x)y^{(n-1)}+\cdots+a_n(x)y=f(x)$$
+            叫 <strong class="term">\(n\) 阶线性微分方程</strong>；\(f(x)\equiv 0\) 时叫<strong class="term">齐次线性方程</strong>，否则叫非齐次的。<br>
+            <strong>叠加原理</strong>：若 \(y_1,y_2\) 是齐次方程的解，则 \(C_1y_1+C_2y_2\) 也是解。<strong class="term">线性无关</strong>指不存在不全为零的常数使 \(C_1y_1+\cdots+C_ny_n\equiv 0\)；对两个函数，二者之比不是常数即线性无关。<br>
+            若 \(y_1,\ldots,y_n\) 是齐次方程的 \(n\) 个线性无关解，则齐次通解为 \(Y=C_1y_1+\cdots+C_ny_n\)；非齐次方程的通解为 \(y=Y+y_p\)，其中 \(y_p\) 是任意一个特解。<br>
+            <mark class="key">齐次通解含 \(n\) 个独立任意常数，个数等于阶数；非齐次通解只是把这一族整体平移，常数个数不变</mark>。
+            <div class="proof-title">推导 · 叠加原理（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">记 \(L[y]=y^{(n)}+a_1(x)y^{(n-1)}+\cdots+a_n(x)y\)</span><span class="derive-note">求导是线性的，\(L\) 把函数映成函数</span></li>
+              <li><span class="derive-eq">\(L[C_1y_1+C_2y_2]=C_1L[y_1]+C_2L[y_2]\)</span><span class="derive-note">常数可提出、和的导数等于导数的和</span></li>
+              <li><span class="derive-eq">若 \(L[y_1]=L[y_2]=0\)，则 \(L[C_1y_1+C_2y_2]=0\)</span><span class="derive-note">齐次解的线性组合仍是解，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="second-order-structure">
+          <div class="demo-title">演示 6 · 两个线性无关解张成整族解</div>
+          <div class="demo-caption">对 \(y''=0\)，\(y_1=1\) 与 \(y_2=x\) 都是解，且比值 \(\dfrac{y_2}{y_1}=x\) 不是常数，故线性无关。橙色与绿色虚线是这两个基本解，蓝线是叠加结果 \(y=a+bx\)。<b>拖动两个系数</b>，看叠加原理怎样生成整族直线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">验证两个解、判线性无关、拼齐次与非齐次通解</span><span class="mb-no">例 7.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">对方程 \(y''-y=0\)：(1) 验证 \(y_1=\mathrm{e}^{x}\)、\(y_2=\mathrm{e}^{-x}\) 都是解；(2) 说明二者线性无关；(3) 写出齐次通解并验证它仍是解；(4) 对非齐次方程 \(y''-y=2\)，验证 \(y_p=-2\) 是特解并写出通解、代回验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>「验证是解」就是把函数求导两次代进去看是否为 \(0\)；「线性无关」对两个函数看比值是不是常数；齐次通解用叠加原理把两个解线性组合；非齐次通解再加一个特解。每一步都用代回作核对。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(y_1=\mathrm{e}^{x}\) 时 \(y_1''=\mathrm{e}^{x}=y_1\)，故 \(y_1''-y_1=0\)；\(y_2=\mathrm{e}^{-x}\) 时 \(y_2'=-\mathrm{e}^{-x}\)、\(y_2''=\mathrm{e}^{-x}=y_2\)，故 \(y_2''-y_2=0\)。二者都是解。<br>
+              (2) 比值 \(\dfrac{y_1}{y_2}=\dfrac{\mathrm{e}^{x}}{\mathrm{e}^{-x}}=\mathrm{e}^{2x}\) 随 \(x\) 变，不是常数，故 \(y_1,y_2\) 线性无关（若 \(y_1=Cy_2\) 才会线性相关）。<br>
+              (3) 由叠加原理，齐次通解 \(Y=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}\)。验证：\(Y''=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}=Y\)，故 \(Y''-Y=0\)。它含 2 个任意常数，与二阶方程的阶数 2 相同。<br>
+              (4) 对 \(y''-y=2\)：取 \(y_p=-2\)，则 \(y_p''=0\)，代入 \(y_p''-y_p=0-(-2)=2\)，确是特解。由结构定理，非齐次通解 \(y=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}-2\)。代回验证：\(y''=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}\)，故 \(y''-y=(C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x})-(C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}-2)=2\)，成立；仍是 2 个任意常数。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先找齐次方程的 \(n\) 个线性无关解（二阶找 2 个，比值不是常数即可）→ 用叠加原理写出齐次通解（\(n\) 个常数）→ 非齐次时再找任意一个特解加上去 → 每一步把候选解代回方程核对。常数个数永远等于阶数。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">解集是一个「平面」</span></div>
+          <div class="mb-body">把齐次方程的全部解想成一个平面：两个线性无关的解 \(y_1,y_2\) 就是两根坐标轴，任意解都能写成 \(C_1y_1+C_2y_2\)，坐标就是那两个任意常数。非齐次方程则把这个平面整体平移到一个特解上，形状不变。演示里 \(y''=0\) 的解集是所有直线 \(a+bx\)，两个滑块正是这组坐标。</div>
+        </div>
+<!-- SECTION:s6:END -->
+      </article>
+      <article class="section" id="s7">
+<!-- SECTION:s7:BEGIN -->
+        <h3><span class="sec-badge">7.7</span>常系数齐次线性微分方程</h3>
+        <p>线性方程里最好算的是系数全为常数的那一类 \(y''+py'+qy=0\)。因为指数函数 \(\mathrm{e}^{rx}\) 求导只多乘一个 \(r\)，把它代进去，微分方程就变成一个一元二次代数方程——特征方程。解这个二次方程，按根是「两个不同实数」「一个重根」「一对复数」三种情形，通解的形状随之确定。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">二阶常系数齐次方程与特征方程</span><span class="mb-no">7.7</span></div>
+          <div class="mb-body">
+            设 \(p,q\) 为实常数，方程 \(y''+py'+qy=0\) 叫<strong class="term">二阶常系数齐次线性微分方程</strong>。把 \(y^{(k)}\) 换成 \(r^{k}\) 得到<strong class="term">特征方程</strong>
+            $$r^{2}+pr+q=0$$
+            记判别式 \(\Delta=p^{2}-4q\)，按根的情形分三类（\(C_1,C_2\) 为任意常数）：<br>
+            （一）\(\Delta>0\)，两个不相等实根 \(r_1\neq r_2\)：\(y=C_1\mathrm{e}^{r_1 x}+C_2\mathrm{e}^{r_2 x}\)。<br>
+            （二）\(\Delta=0\)，二重实根 \(r=-\dfrac{p}{2}\)：\(y=(C_1+C_2x)\mathrm{e}^{rx}\)。<br>
+            （三）\(\Delta&lt;0\)，一对共轭复根 \(r=\alpha\pm\beta\mathrm{i}\)（\(\alpha=-\dfrac{p}{2}\)、\(\beta=\dfrac{\sqrt{-\Delta}}{2}>0\)）：\(y=\mathrm{e}^{\alpha x}\left(C_1\cos\beta x+C_2\sin\beta x\right)\)。<br>
+            <mark class="key">三种情形的通解都含 2 个独立任意常数，与二阶方程的阶数一致；重根时第二个解多出一个因子 \(x\)</mark>。
+            <div class="proof-title">推导 · 特征方程从哪来（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">试取 \(y=\mathrm{e}^{rx}\)，则 \(y'=r\mathrm{e}^{rx}\)、\(y''=r^{2}\mathrm{e}^{rx}\)</span><span class="derive-note">指数函数求导只多一个因子 \(r\)</span></li>
+              <li><span class="derive-eq">代入 \(y''+py'+qy=0\) 得 \((r^{2}+pr+q)\mathrm{e}^{rx}=0\)</span><span class="derive-note">提出公因子 \(\mathrm{e}^{rx}\)</span></li>
+              <li><span class="derive-eq">因 \(\mathrm{e}^{rx}>0\)，必有 \(r^{2}+pr+q=0\)</span><span class="derive-note">微分方程变成代数方程，求根即可</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="characteristic-roots">
+          <div class="demo-title">演示 7 · 拖动系数，看三种特征根各长什么样</div>
+          <div class="demo-caption">固定常数项为 \(1\)，考察 \(y''+k\,y'+y=0\)，特征方程 \(r^{2}+kr+1=0\) 的判别式为 \(k^{2}-4\)。<b>拖动 \(k\)</b> 或点三个预设按钮：判别式为负时蓝线衰减振荡，为零时临界衰减，为正时单调衰减。读数给出当前根与对应通解形状。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">相异实根情形：写特征方程、定常数、验证</span><span class="mb-no">例 7.7</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程 \(y''-5y'+6y=0\) 满足 \(y(0)=1\)、\(y'(0)=0\) 的特解，并代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>系数是常数、右端为 \(0\)，用特征方程法。把 \(y''\) 换 \(r^{2}\)、\(y'\) 换 \(r\)、\(y\) 换 \(1\)，解出两个实根，按相异实根公式写通解，再用两个初值解一次二元一次方程组，最后求导代回核对。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              特征方程 \(r^{2}-5r+6=0\)，因式分解 \((r-2)(r-3)=0\)，得两个不相等实根 \(r_1=2\)、\(r_2=3\)。由定理（一），通解为
+              $$y=C_1\mathrm{e}^{2x}+C_2\mathrm{e}^{3x}$$
+              它含 2 个任意常数 \(C_1,C_2\)，与二阶方程的阶数 2 相同。<br>
+              求导 \(y'=2C_1\mathrm{e}^{2x}+3C_2\mathrm{e}^{3x}\)。代入初值：\(y(0)=C_1+C_2=1\)，\(y'(0)=2C_1+3C_2=0\)。由第一式 \(C_1=1-C_2\)，代入第二式 \(2(1-C_2)+3C_2=2+C_2=0\)，得 \(C_2=-2\)、\(C_1=3\)。故特解 \(y=3\mathrm{e}^{2x}-2\mathrm{e}^{3x}\)。<br>
+              代回验证：\(y'=6\mathrm{e}^{2x}-6\mathrm{e}^{3x}\)，\(y''=12\mathrm{e}^{2x}-18\mathrm{e}^{3x}\)。于是 \(y''-5y'+6y=(12\mathrm{e}^{2x}-18\mathrm{e}^{3x})-5(6\mathrm{e}^{2x}-6\mathrm{e}^{3x})+6(3\mathrm{e}^{2x}-2\mathrm{e}^{3x})=(12-30+18)\mathrm{e}^{2x}+(-18+30-12)\mathrm{e}^{3x}=0\)，成立；且 \(y(0)=3-2=1\)、\(y'(0)=6-6=0\) 满足初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：写出特征方程 → 求根并认清属于三种情形中的哪一种 → 按对应公式写通解（二阶含 2 个常数）→ 有初值就解一次二元一次方程组 → 把解代回原方程核对。把「微分方程」换成「代数方程」是这一节最值钱的一步。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">判别式是一根开关</span></div>
+          <div class="mb-body">判别式大于零给出两条单调衰减的指数曲线，等于零是临界状态（多出一个 \(x\) 因子），小于零则出现来回摆动。演示里拖动系数，蓝线会从一路下滑变成振荡。复数根并不可怕：\(\mathrm{e}^{\alpha x}\cos\beta x\) 只是把「衰减」和「周期摆动」乘在了一起。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">重根时第二个解漏掉因子 \(x\)</span></div>
+          <div class="mb-body">特征方程有二重根 \(r\) 时写成 \(y=C_1\mathrm{e}^{rx}+C_2\mathrm{e}^{rx}=(C_1+C_2)\mathrm{e}^{rx}\)，实际只有 1 个独立常数，漏了一半解。正确做法是 \(y=(C_1+C_2x)\mathrm{e}^{rx}\)。固定动作：算完常数个数，确认恰好等于阶数 2。</div>
+        </div>
+<!-- SECTION:s7:END -->
+      </article>
+      <article class="section" id="s8">
+<!-- SECTION:s8:BEGIN -->
+        <h3><span class="sec-badge">7.8</span>常系数非齐次线性微分方程</h3>
+        <p>上一节解方程右端是 \(0\)。这一节右端换成了一个给定函数 \(f(x)\)，叫非齐次方程。好消息是第 6 节的结构定理已经告诉我们答案长什么样：齐次通解 + 任意一个特解。剩下的问题只有一个——特解怎么找。当 \(f(x)\) 是多项式、指数或正余弦的组合时，可以「照着形状设一个带未知系数的函数」，代进去把系数定出来，这就是待定系数法。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">待定系数法与叠加原理</span><span class="mb-no">7.8</span></div>
+          <div class="mb-body">
+            设 \(p,q\) 为常数、\(f(x)\) 连续，方程 \(y''+py'+qy=f(x)\) 的通解为 \(y=Y+y_p\)，其中 \(Y\) 是对应齐次方程 \(y''+py'+qy=0\) 的通解，\(y_p\) 是任意一个特解。<br>
+            当 \(f(x)=P_m(x)\mathrm{e}^{\lambda x}\)（\(P_m\) 为 \(m\) 次多项式）时，设 \(y_p=x^{k}Q_m(x)\mathrm{e}^{\lambda x}\)，\(Q_m\) 是系数待定的 \(m\) 次多项式，\(k\) 取 \(\lambda\) 作为特征方程 \(r^{2}+pr+q=0\) 的根的重数（不是根取 \(0\)，单根取 \(1\)，重根取 \(2\)）。<br>
+            当 \(f(x)=\mathrm{e}^{\alpha x}\left(A\cos\beta x+B\sin\beta x\right)\) 时，设 \(y_p=x^{k}\mathrm{e}^{\alpha x}\left(M\cos\beta x+N\sin\beta x\right)\)，\(k\) 由 \(\alpha+\beta\mathrm{i}\) 是否为特征根决定（二阶取 \(0\) 或 \(1\)）。代入方程、比较两边同类项的系数，即可解出待定系数。<br>
+            <mark class="key">若 \(f=f_1+f_2\)，由叠加原理可分别求特解 \(y_{p1},y_{p2}\)，再取 \(y_p=y_{p1}+y_{p2}\)；通解仍含 2 个任意常数，等于阶数</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="particular-solution">
+          <div class="demo-title">演示 8 · 特解 + 齐次解 = 通解</div>
+          <div class="demo-caption">对 \(y''+y=x\)，设特解 \(y_p=Ax+B\) 比较系数得 \(y_p=x\)（橙色虚线）；齐次通解是 \(C_1\cos x+C_2\sin x\)。图中取 \(C_2=0\)，蓝线为 \(y=x+C\cos x\)。<b>拖动振幅 \(C\)</b>，看叠加到特解上的振荡怎样保持仍是方程的解。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">待定系数法求特解，并用叠加原理处理右端之和</span><span class="mb-no">例 7.8</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">对方程 \(y''-y=x\) 求满足 \(y(0)=1\)、\(y'(0)=0\) 的解；再用叠加原理求 \(y''-y=x+3\mathrm{e}^{2x}\) 的一个特解。两处都代回验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先解齐次方程 \(y''-y=0\) 得通解 \(Y\)。右端 \(x\) 是一次多项式乘 \(\mathrm{e}^{0x}\)，而 \(\lambda=0\) 不是特征根，故设 \(y_p=Ax+B\) 代入比较系数。第二问把右端拆成 \(x\) 与 \(3\mathrm{e}^{2x}\) 两项，分别求特解再相加。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              齐次方程特征方程 \(r^{2}-1=0\)，根 \(r=\pm 1\)，故 \(Y=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}\)。<br>
+              第一问：右端 \(x=P_1(x)\mathrm{e}^{0x}\)，\(\lambda=0\) 不是特征根，取 \(k=0\)，设 \(y_p=Ax+B\)。则 \(y_p''=0\)，代入 \(y''-y=x\) 得 \(0-(Ax+B)=x\)，即 \(-A=1\)、\(-B=0\)，故 \(A=-1\)、\(B=0\)，\(y_p=-x\)。验证：\((-x)''-(-x)=0+x=x\) ✓。于是通解 \(y=C_1\mathrm{e}^{x}+C_2\mathrm{e}^{-x}-x\)，含 2 个任意常数，与二阶方程阶数 2 相同。<br>
+              代入初值：\(y(0)=C_1+C_2=1\)；\(y'=C_1\mathrm{e}^{x}-C_2\mathrm{e}^{-x}-1\)，\(y'(0)=C_1-C_2-1=0\)，即 \(C_1-C_2=1\)。联立得 \(C_1=1\)、\(C_2=0\)，特解 \(y=\mathrm{e}^{x}-x\)。代回：\(y''=\mathrm{e}^{x}\)，\(y''-y=\mathrm{e}^{x}-(\mathrm{e}^{x}-x)=x\) ✓；且 \(y(0)=1\)、\(y'(0)=1-1=0\) ✓。<br>
+              第二问：由叠加原理，分别求两项的特解。\(x\) 的那项已得 \(y_{p1}=-x\)。对 \(3\mathrm{e}^{2x}\)，\(\lambda=2\) 不是特征根（特征根是 \(\pm 1\)），设 \(y_{p2}=A\mathrm{e}^{2x}\)，则 \(y_{p2}''=4A\mathrm{e}^{2x}\)，代入得 \(4A\mathrm{e}^{2x}-A\mathrm{e}^{2x}=3A\mathrm{e}^{2x}=3\mathrm{e}^{2x}\)，故 \(A=1\)、\(y_{p2}=\mathrm{e}^{2x}\)。相加得 \(y_p=-x+\mathrm{e}^{2x}\)。代回验证：\(y_p''=4\mathrm{e}^{2x}\)，\(y_p''-y_p=4\mathrm{e}^{2x}-(-x+\mathrm{e}^{2x})=x+3\mathrm{e}^{2x}\) ✓，正是右端。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：先解齐次方程得 \(Y\)（含 2 个常数）→ 看右端属哪类形状 → 按规则设带待定系数的特解，若 \(\lambda\) 撞上特征根就乘 \(x^{k}\) → 代入比较系数定出系数 → 右端是几项之和就分别求特解再相加 → 通解 \(=Y+y_p\) → 代回核对。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">形状不会跑出圈</span></div>
+          <div class="mb-body">待定系数法的全部依据，是「求导不会把这类函数的形状变出圈」：多项式求导还是多项式，\(\mathrm{e}^{\lambda x}\) 求导还是 \(\mathrm{e}^{\lambda x}\) 乘常数，\(\sin\) 与 \(\cos\) 求导只在彼此之间打转。所以设一个同形状的特解、比较系数就能定出来。唯一要小心的是「撞车」：所设特解已是齐次解时，得先乘上 \(x\) 的幂把它挪开。</div>
+        </div>
+<!-- SECTION:s8:END -->
+      </article>
+      <article class="section" id="s9">
+<!-- SECTION:s9:BEGIN -->
+        <h3><span class="sec-badge">7.9</span>欧拉方程</h3>
+        <p>欧拉方程长得像常系数方程，但每个导数前面都压着 \(x\) 的幂：\(x^{2}y''+pxy'+qy=0\)。系数随 \(x\) 变，第 7 节的特征方程法直接用不了。转机来自对数：令 \(x=\mathrm{e}^{t}\)，这些 \(x\) 的幂会恰好被链式法则吸收干净，方程变成常系数，于是又能用特征方程了。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">欧拉方程的变量代换</span><span class="mb-no">7.9</span></div>
+          <div class="mb-body">
+            设 \(p,q\) 为常数、\(f(x)\) 连续，方程
+            $$x^{2}y''+p\,x\,y'+q\,y=f(x)\qquad (x>0)$$
+            叫<strong class="term">欧拉方程</strong>。令 \(x=\mathrm{e}^{t}\)（即 \(t=\ln x\)），记 \(Y(t)=y(\mathrm{e}^{t})\)，则
+            $$x\,y'=\frac{\mathrm{d}Y}{\mathrm{d}t},\qquad x^{2}y''=\frac{\mathrm{d}^{2}Y}{\mathrm{d}t^{2}}-\frac{\mathrm{d}Y}{\mathrm{d}t}$$
+            代入原方程得 \(Y''+(p-1)Y'+qY=f(\mathrm{e}^{t})\)，这是关于 \(t\) 的<strong>常系数</strong>线性方程，用第 7、8 节的方法解出 \(Y(t)\) 后，以 \(t=\ln x\) 回代即得 \(y(x)\)。<br>
+            <mark class="key">\(\mathrm{e}^{rt}\) 回代后是 \(x^{r}\)，所以欧拉方程的解是幂函数而非指数函数；通解含 2 个任意常数，等于阶数</mark>。当 \(x&lt;0\) 时改令 \(x=-\mathrm{e}^{t}\)，结构不变。
+            <div class="proof-title">推导 · 代换公式（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">令 \(x=\mathrm{e}^{t}\)，记 \(Y(t)=y(\mathrm{e}^{t})\)，则 \(\dfrac{\mathrm{d}x}{\mathrm{d}t}=x\)</span><span class="derive-note">把自变量从 \(x\) 换成 \(t\)</span></li>
+              <li><span class="derive-eq">链式法则：\(\dfrac{\mathrm{d}Y}{\mathrm{d}t}=y'\cdot x\)，故 \(x\,y'=\dfrac{\mathrm{d}Y}{\mathrm{d}t}\)</span><span class="derive-note">一阶项换成 \(Y'\)</span></li>
+              <li><span class="derive-eq">再求一次导：\(\dfrac{\mathrm{d}^{2}Y}{\mathrm{d}t^{2}}=x y'+x^{2}y''\)，故 \(x^{2}y''=Y''-Y'\)</span><span class="derive-note">二阶项换成 \(Y''-Y'\)</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="euler-equation">
+          <div class="demo-title">演示 9 · 变量代换把变系数变成常系数</div>
+          <div class="demo-caption">对欧拉方程 \(x^{2}y''+xy'-y=0\)，令 \(x=\mathrm{e}^{t}\) 后化为 \(Y''-Y=0\)，解为 \(y=C_1x+\dfrac{C_2}{x}\)。橙色虚线是基本解 \(x\)、绿色虚线是 \(\dfrac{1}{x}\)，蓝线是它们的线性组合。<b>拖动第二个常数</b>，看曲线在 \(x>0\) 上怎样变形。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用 \(x=\mathrm{e}^{t}\) 化常系数、回代幂函数、验证</span><span class="mb-no">例 7.9</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求欧拉方程 \(x^{2}y''+xy'-y=0\)（\(x>0\)）满足 \(y(1)=2\)、\(y'(1)=1\) 的特解，并代回原方程验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>系数是 \(x^{2},x,1\) 的形式，判为欧拉方程。这里 \(p=1\)、\(q=-1\)，令 \(x=\mathrm{e}^{t}\) 后按定理得 \(Y''+(1-1)Y'-Y=Y''-Y=0\)，用特征方程解出 \(Y\)，再以 \(\mathrm{e}^{t}=x\) 回代，最后用两个初值定常数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              令 \(x=\mathrm{e}^{t}\)（\(x>0\)），由定理 \(xy'=Y'\)、\(x^{2}y''=Y''-Y'\)。代入原方程：
+              $$(Y''-Y')+Y'-Y=Y''-Y=0$$
+              两个 \(Y'\) 正好抵消。特征方程 \(r^{2}-1=0\)，根 \(r=\pm 1\)，故 \(Y=C_1\mathrm{e}^{t}+C_2\mathrm{e}^{-t}\)。回代 \(\mathrm{e}^{t}=x\) 得通解
+              $$y=C_1x+\frac{C_2}{x}$$
+              它含 2 个任意常数 \(C_1,C_2\)，与二阶方程的阶数 2 相同。<br>
+              求导 \(y'=C_1-\dfrac{C_2}{x^{2}}\)。代入初值：\(y(1)=C_1+C_2=2\)，\(y'(1)=C_1-C_2=1\)。相加得 \(2C_1=3\)，故 \(C_1=\dfrac{3}{2}\)、\(C_2=\dfrac{1}{2}\)，特解 \(y=\dfrac{3}{2}x+\dfrac{1}{2x}\)。<br>
+              代回验证：\(y'=\dfrac{3}{2}-\dfrac{1}{2x^{2}}\)，\(y''=\dfrac{1}{x^{3}}\)，于是 \(x^{2}y''+xy'-y=\dfrac{1}{x}+\left(\dfrac{3}{2}x-\dfrac{1}{2x}\right)-\left(\dfrac{3}{2}x+\dfrac{1}{2x}\right)=\dfrac{1}{x}-\dfrac{1}{x}=0\)，成立；且 \(y(1)=\dfrac{3}{2}+\dfrac{1}{2}=2\)、\(y'(1)=\dfrac{3}{2}-\dfrac{1}{2}=1\) 满足初值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：认出 \(x^{k}y^{(k)}\) 的欧拉结构 → 令 \(x=\mathrm{e}^{t}\)（\(x>0\)）→ 用 \(xy'=Y'\)、\(x^{2}y''=Y''-Y'\) 换成常系数方程 → 按第 7 节特征方程法解出 \(Y(t)\) → 用 \(\mathrm{e}^{t}=x\) 回代 → 代回原方程核对。注意只在 \(x>0\) 时直接可用。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">乘 \(x\) 的幂，就是对 \(t\) 求导</span></div>
+          <div class="mb-body">代换 \(x=\mathrm{e}^{t}\) 把「乘 \(x\) 的幂」翻译成了「对 \(t\) 求导」：\(xy'\) 变成 \(Y'\)，\(x^{2}y''\) 变成 \(Y''-Y'\)。指数函数 \(\mathrm{e}^{rt}\) 回代后就是幂函数 \(x^{r}\)，所以欧拉方程的解是幂函数而不是指数函数，演示里橙色与绿色两条虚线正是 \(x\) 与 \(\dfrac{1}{x}\)。</div>
+        </div>
+<!-- SECTION:s9:END -->
+      </article>
+      <article class="section" id="s10">
+<!-- SECTION:s10:BEGIN -->
+        <h3><span class="sec-badge">7.10</span>常系数线性微分方程组解法举例</h3>
+        <p>最后一节把「一个未知函数」换成「几个未知函数互相牵着变」：\(x\) 的变化率由 \(y\) 决定，\(y\) 的变化率又由 \(x\) 决定，这就成了微分方程组。处理办法和第 5 节的降阶一脉相承——挑一个函数，把其余的消掉，化成单个高阶方程，解出来再回代。这里只举最干净的常系数例子。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">用消元法解常系数线性微分方程组</span><span class="mb-no">7.10</span></div>
+          <div class="mb-body">
+            对两个未知函数 \(x(t),y(t)\) 的常系数线性方程组
+            $$\begin{cases} \dfrac{\mathrm{d}x}{\mathrm{d}t}=a_{11}x+a_{12}y+f_1(t) \\ \dfrac{\mathrm{d}y}{\mathrm{d}t}=a_{21}x+a_{22}y+f_2(t) \end{cases}$$
+            （\(a_{ij}\) 为常数，\(f_1,f_2\) 连续），当 \(a_{12}\neq 0\) 时可用<strong class="term">消元法</strong>：由第一式解出 \(y=\dfrac{1}{a_{12}}\left(x'-a_{11}x-f_1\right)\)，对第一式再求一次导并把第二式代入，消去 \(y\) 与 \(y'\)，得到只含 \(x\) 的二阶常系数线性方程，用第 7 节的方法解出 \(x(t)\)，再回代第一式得 \(y(t)\)。<br>
+            <mark class="key">两个一阶方程合成的方程组，通解里恰有 2 个独立任意常数，等于「方程个数 × 阶数」；解完要逐个代回两式核对</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="ode-system">
+          <div class="demo-title">演示 10 · 方程组的解是一条相轨迹</div>
+          <div class="demo-caption">对方程组 \(x'=y\)、\(y'=-x\)，消元得 \(x''+x=0\)，解为 \(x=R\cos t\)、\(y=-R\sin t\)，故 \(x^{2}+y^{2}=R^{2}\)。短线段是方程组在每一点规定的运动方向，蓝线是半径 \(R\) 的圆形轨道，红点是初值位置。<b>拖动 \(R\)</b>，看轨道半径与读数里的守恒量怎样同步变化。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">消元成二阶方程、回代、逐个验证</span><span class="mb-no">例 7.10</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求方程组 \(\begin{cases}\dfrac{\mathrm{d}x}{\mathrm{d}t}=y\\ \dfrac{\mathrm{d}y}{\mathrm{d}t}=-x\end{cases}\) 满足 \(x(0)=2\)、\(y(0)=0\) 的解，并逐个代回两式验证。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第一式已把 \(y\) 写成 \(x'\)，最省事：对第一式两边再对 \(t\) 求导，把第二式 \(y'=-x\) 代进去，就得到只含 \(x\) 的二阶常系数方程。解出 \(x\) 后用 \(y=x'\) 回代得 \(y\)，再用两个初值定常数，最后代回两式核对。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              第一式给出 \(y=x'\)。两边对 \(t\) 求导：\(y'=x''\)。由第二式 \(y'=-x\)，故 \(x''=-x\)，即
+              $$x''+x=0$$
+              这是二阶常系数齐次方程，特征方程 \(r^{2}+1=0\)，根 \(r=\pm\mathrm{i}\)（\(\alpha=0\)、\(\beta=1\)），由第 7 节定理（三）得 \(x=C_1\cos t+C_2\sin t\)。再由 \(y=x'\) 得 \(y=-C_1\sin t+C_2\cos t\)。这组解含 2 个任意常数 \(C_1,C_2\)，与「两个一阶方程」应有的常数个数 2 相同。<br>
+              代入初值：\(x(0)=C_1=2\)；\(y(0)=C_2=0\)。故 \(x=2\cos t\)、\(y=-2\sin t\)。<br>
+              代回验证：\(x'=-2\sin t=y\) ✓ 满足第一式；\(y'=-2\cos t=-x\) ✓ 满足第二式；且 \(x(0)=2\)、\(y(0)=0\) 满足初值。顺带可见 \(x^{2}+y^{2}=4\cos^{2}t+4\sin^{2}t=4\) 恒定，对应演示里的圆形轨道。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作：挑一个未知函数（本题挑 \(x\)）→ 从方程组里读出它与其余未知函数的关系 → 对其中一式再求导、把另一式代进去消元 → 得到单个高阶常系数方程，用特征方程法解出 → 回代求其余未知函数 → 用初值定出全部常数 → 逐个代回原方程组核对。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">两个一阶方程，等价于一个二阶方程</span></div>
+          <div class="mb-body">两个一阶方程绑在一起，等价于一个二阶方程，通解里自然有 2 个任意常数。演示里把解画成平面上的轨迹：方程组在每一点规定了运动方向，初值选定后轨迹就唯一确定；这里 \(x^{2}+y^{2}\) 始终不变，所以轨迹是一个圆——解的结构常常就藏在这种「守恒量」里。往后第 8 章进入三维空间，向量与坐标会成为描述这类轨迹的天然语言。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">消元解出 \(x\) 后忘记回代求 \(y\)</span></div>
+          <div class="mb-body">只报 \(x(t)\) 不算解完方程组，题目要求的是两个未知函数。固定动作：解出 \(x\) 后一定用第一式 \(y=x'\)（或原来的代数关系）把 \(y\) 补出来，再逐个代回两式验证；两个式子里少验证一个都不算核对完毕。</div>
+        </div>
+<!-- SECTION:s10:END -->
+      </article>
+
+    </section>
+
+    <!-- ⑤ 常见误区 -->
+    <section id="pitfalls" class="block">
+      <h2>常见误区</h2>
+<!-- PITFALLS:BEGIN -->
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">分离变量时漏掉或重复写积分常数</span></div>
+        <div class="mb-body"><b>错误做法</b>：由 \(y\,\mathrm{d}y=x\,\mathrm{d}x\) 直接写 \(\dfrac{y^{2}}{2}=\dfrac{x^{2}}{2}\)，或在两边各写一个 \(C_1,C_2\) 却都留在答案里。<b>为什么错</b>：不定积分自带任意常数，丢掉它只得到一个特解而不是通解；写两个常数时它们会合并成 \(C=C_2-C_1\)，真正自由的只有一个数。<b>正确做法</b>：只在一边加一个 \(C\)，写成 \(\dfrac{y^{2}}{2}=\dfrac{x^{2}}{2}+C\)，再化简成 \(y^{2}=x^{2}+K\)，并数一遍常数个数是否等于阶数。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把「齐次方程」和「齐次线性方程」当成一回事</span></div>
+        <div class="mb-body"><b>错误做法</b>：见到 \(y'=\dfrac{y}{x}+1\) 就套第 7 节的特征方程 \(r^{2}+pr+q=0\)。<b>为什么错</b>：两个「齐次」含义不同——第 3 节的齐次指右端是 \(\dfrac{y}{x}\) 的函数，是一般一阶方程；第 6 节起的齐次线性指线性方程右端为 \(0\)。前者用 \(u=\dfrac{y}{x}\) 换元，后者才用特征方程。<b>正确做法</b>：先判方程是不是线性、右端是不是 \(0\)，再选方法；对 \(y'=\varphi(y/x)\) 老实用 \(u=y/x\)。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">一阶线性方程的通解公式漏乘积分因子</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(y'+P(x)y=Q(x)\) 的通解写成 \(y=\mathrm{e}^{-\int P\,\mathrm{d}x}\left(\int Q(x)\,\mathrm{d}x+C\right)\)。<b>为什么错</b>：积分前应先把两边同乘 \(\mu=\mathrm{e}^{\int P\,\mathrm{d}x}\)，被积的是 \(Q\mu\) 而不是 \(Q\)；漏乘相当于没把左边凑成 \((\mu y)'\)。<b>正确做法</b>：写成 \(y=\mathrm{e}^{-\int P\,\mathrm{d}x}\left(\int Q(x)\,\mathrm{e}^{\int P\,\mathrm{d}x}\,\mathrm{d}x+C\right)\)，并把 \((\mu y)'=\mu Q\) 这一行完整写出来再动手。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">待定系数法撞上齐次解时不乘 \(x\) 的幂</span></div>
+        <div class="mb-body"><b>错误做法</b>：解 \(y''-y=\mathrm{e}^{x}\) 时设特解 \(y_p=A\mathrm{e}^{x}\)，代入左端得 \(0=\mathrm{e}^{x}\)，于是认为无解。<b>为什么错</b>：\(\mathrm{e}^{x}\) 本身已是齐次方程的解，代进左端恒为 \(0\)，永远凑不出右端；这是 \(\lambda=1\) 恰为特征根造成的「共振」。<b>正确做法</b>：把所设特解乘上 \(x^{k}\)，\(k\) 是 \(\lambda\) 作为特征根的重数；本题 \(k=1\)，改设 \(y_p=Ax\mathrm{e}^{x}\) 即可定出 \(A=\dfrac{1}{2}\)。</div>
+      </div>
+<!-- PITFALLS:END -->
+    </section>
+
+    <!-- ⑥ 习题与自测 -->
+    <section id="quiz" class="block">
+      <h2>习题与自测</h2>
+      <p class="hint">题目为本站自编，不含教材原题。折叠答案适合纸笔练习，交互自测会即时判定并给出解析。</p>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">习题</span><span class="mb-title">纸笔练习</span><span class="mb-no">练习 1–3</span></div>
+        <div class="mb-body">
+<!-- EXERCISES:BEGIN -->
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>用分离变量法求 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=2xy\) 满足 \(y(0)=3\) 的特解，并代回验证。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">方程右端是 \(x\) 与 \(y\) 的乘积，可分离。先确认初值 \(y(0)=3>0\)，故在 \(x=0\) 附近 \(y\neq0\)，可除以 \(y\)：\(\dfrac{\mathrm{d}y}{y}=2x\,\mathrm{d}x\)。两边积分且只加一个常数：\(\ln y=x^{2}+C\)（\(y>0\) 时可去掉绝对值），于是 \(y=\mathrm{e}^{C}\mathrm{e}^{x^{2}}=A\mathrm{e}^{x^{2}}\)，其中 \(A=\mathrm{e}^{C}>0\) 是新的任意常数。代入 \(y(0)=A=3\) 得 \(y=3\mathrm{e}^{x^{2}}\)。验证：\(y'=3\mathrm{e}^{x^{2}}\cdot 2x=2x\cdot y\)，与方程一致；\(y(0)=3\) 也满足。一阶方程，通解含 1 个任意常数。思路要点：先拆成 \(f(x)g(y)\)，分离后两边积分，最后一定求导代回核对。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>求 \(y''+4y=0\) 满足 \(y(0)=1\)、\(y'(0)=2\) 的解，并代回验证。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">这是二阶常系数齐次方程。写特征方程 \(r^{2}+4=0\)，根为 \(r=\pm 2\mathrm{i}\)，属共轭复根情形（\(\alpha=0\)、\(\beta=2\)），故通解 \(y=C_1\cos 2x+C_2\sin 2x\)。代入初值：\(y(0)=C_1=1\)；求导 \(y'=-2C_1\sin 2x+2C_2\cos 2x\)，故 \(y'(0)=2C_2=2\)，得 \(C_2=1\)。于是 \(y=\cos 2x+\sin 2x\)。验证：\(y''=-4\cos 2x-4\sin 2x=-4y\)，故 \(y''+4y=0\)；且 \(y(0)=1\)、\(y'(0)=2\)。二阶方程，通解含 2 个任意常数。思路要点：先按判别式认清是复根情形，套对通解形式，再用两个初值解二元一次方程组。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>求欧拉方程 \(x^{2}y''-2xy'+2y=0\)（\(x>0\)）的通解，并代回验证。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">系数是 \(x^{2},x\) 的形式，判为欧拉方程。令 \(x=\mathrm{e}^{t}\)、\(t=\ln x\)，用 \(xy'=Y'\)、\(x^{2}y''=Y''-Y'\) 代入：\((Y''-Y')-2Y'+2Y=0\)，即 \(Y''-3Y'+2Y=0\)。这是常系数方程，特征方程 \(r^{2}-3r+2=(r-1)(r-2)=0\)，根 \(1,2\)，故 \(Y=C_1\mathrm{e}^{t}+C_2\mathrm{e}^{2t}\)。回代 \(\mathrm{e}^{t}=x\) 得 \(y=C_1x+C_2x^{2}\)。验证：\(y'=C_1+2C_2x\)、\(y''=2C_2\)，代入左端 \(x^{2}(2C_2)-2x(C_1+2C_2x)+2(C_1x+C_2x^{2})=2C_2x^{2}-2C_1x-4C_2x^{2}+2C_1x+2C_2x^{2}=0\)，成立。二阶方程，通解含 2 个任意常数。思路要点：认出欧拉结构 → 换元成常系数 → 特征方程求解 → 用 \(t=\ln x\) 回代 → 逐项代入核对。</div></details>
+          </div>
+<!-- EXERCISES:END -->
+        </div>
+      </div>
+
+      <div class="math-block exercise">
+        <div class="mb-head"><span class="mb-tag">自测</span><span class="mb-title">交互选择题（即时判定）</span></div>
+        <div class="mb-body">
+          <div data-mount="quiz">
+            <!-- QUIZ:BEGIN -->
+<script type="application/json">
+[
+  { "q": "方程 \\(y''-3y'+2y=0\\) 是几阶微分方程？它的通解应含几个相互独立的任意常数？",
+    "options": ["一阶、\\(1\\) 个", "二阶、\\(1\\) 个", "二阶、\\(2\\) 个", "三阶、\\(3\\) 个"], "answer": 2,
+    "explain": "方程里出现的最高阶导数是 \\(y''\\)，是二阶导数，故为二阶；\\(n\\) 阶方程的通解含 \\(n\\) 个相互独立的任意常数，所以是 \\(2\\) 个，C 正确。A 把阶数错认成一阶；B 的常数个数比阶数少了一个，那样只能覆盖部分解；D 把 \\(y''\\) 误当成三阶，阶数与常数个数都多算了一层。" },
+  { "q": "对 \\(\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}=x^{2}y\\)（\\(y>0\\)），分离变量后正确的是？",
+    "options": ["\\(\\dfrac{\\mathrm{d}y}{y}=x^{2}\\,\\mathrm{d}x\\)", "\\(y\\,\\mathrm{d}y=x^{2}\\,\\mathrm{d}x\\)", "\\(\\dfrac{\\mathrm{d}y}{x^{2}}=y\\,\\mathrm{d}x\\)", "\\(\\mathrm{d}y=x^{2}y\\,\\mathrm{d}x\\)"], "answer": 0,
+    "explain": "把含 \\(y\\) 的因子移到左边（除以 \\(y\\)）、含 \\(x\\) 的留在右边，得 \\(\\dfrac{\\mathrm{d}y}{y}=x^{2}\\,\\mathrm{d}x\\)，A 正确。B 把 \\(y\\) 乘到左边而不是除过去，对应的是另一种方程；C 把 \\(x^{2}\\) 与 \\(y\\) 的位置放反；D 根本没有分离，只是把原式乘了 \\(\\mathrm{d}x\\)。" },
+  { "q": "方程 \\(y'+2y=0\\) 的通解是？",
+    "options": ["\\(y=C\\mathrm{e}^{2x}\\)", "\\(y=C\\mathrm{e}^{-2x}\\)", "\\(y=C\\mathrm{e}^{x}\\)", "\\(y=Cx\\)"], "answer": 1,
+    "explain": "把 \\(y=C\\mathrm{e}^{-2x}\\) 求导得 \\(y'=-2C\\mathrm{e}^{-2x}=-2y\\)，代回 \\(y'+2y=0\\) 成立，B 正确。A 的指数符号反了，代入得 \\(y'=2y\\)，不满足方程；C 漏了系数 \\(2\\)；D 代入得 \\(y'=C\\)，与 \\(-2y=-2Cx\\) 不相等。" },
+  { "q": "方程 \\(y''-5y'+6y=0\\) 的特征方程与它的根是？",
+    "options": ["\\(r^{2}-5r+6=0\\)，根 \\(2,3\\)", "\\(r^{2}+5r+6=0\\)，根 \\(-2,-3\\)", "\\(r^{2}-5r-6=0\\)，根 \\(6,-1\\)", "\\(r^{2}-6r+5=0\\)，根 \\(1,5\\)"], "answer": 0,
+    "explain": "把 \\(y''\\) 换成 \\(r^{2}\\)、\\(y'\\) 换成 \\(r\\)、\\(y\\) 换成 \\(1\\)，得特征方程 \\(r^{2}-5r+6=(r-2)(r-3)=0\\)，根为 \\(2\\) 与 \\(3\\)，A 正确。B 把一次项系数 \\(-5\\) 抄成 \\(+5\\)；C 把常数项 \\(+6\\) 抄成 \\(-6\\)；D 把系数 \\(5\\) 与 \\(6\\) 的位置对调了。" },
+  { "q": "欧拉方程 \\(x^{2}y''+xy'-y=0\\) 作代换 \\(x=\\mathrm{e}^{t}\\) 后化为？",
+    "options": ["\\(Y''-Y=0\\)", "\\(Y''+Y=0\\)", "\\(Y''+Y'-Y=0\\)", "\\(Y'-Y=0\\)"], "answer": 0,
+    "explain": "由 \\(xy'=Y'\\)、\\(x^{2}y''=Y''-Y'\\)，代入得 \\((Y''-Y')+Y'-Y=Y''-Y=0\\)，A 正确。B 把常数项符号弄反；C 没有把两个 \\(Y'\\) 合并抵消，多留了一项；D 把二阶方程降成了一阶，阶数对不上，不可能与原方程等价。" }
+]
+</script>
+<!-- QUIZ:END -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ 小结 -->
+    <section id="summary" class="block">
+      <h2>小结</h2>
+<!-- SUMMARY:BEGIN -->
+      <p>这一章把「已知变化规律、反求函数本身」变成了几条可照做的固定动作：先认清方程的阶与类型，再选分离变量、齐次代换、积分因子、降阶、特征方程、待定系数、变量代换或消元，解完一定把结果代回原方程核对，并数清通解里任意常数的个数是否等于阶数。贯穿全章的是线性方程解的结构：齐次通解由几个线性无关解叠加而成，非齐次通解再加一个特解。</p>
+      <p>下一章把视角从「一个自变量的函数」搬到三维空间：向量代数与空间解析几何会用向量与坐标描述点、线、面。那里「用几个独立方向拼出整个空间」的想法，和这一章「用几个线性无关解拼出整个解集」正好遥相呼应。</p>
+<!-- SUMMARY:END -->
+      <div data-chapter-nav></div>
+    </section>
+    <!-- ⑧ 全站页脚：每页显著可见，勿删 -->
+    <footer class="site-footer">
+      <p><strong>非官方学习辅助</strong> · 参考：同济大学《高等数学》第七版，高等教育出版社</p>
+      <p>本站不含教材原文、例题、习题或原图，所有讲解与图形均为原创；文中编号为本站自用 ·
+         <a href="../../DISCLAIMER.md">免责声明</a> ·
+         <a href="../../README.md">关于本站</a> ·
+         <a href="../../style-guide.html">视觉规范</a></p>
+      <p class="copyright">原创内容采用 CC BY-NC-SA 4.0 许可</p>
+    </footer>
+
+  </main>
+</div>
+</body>
+</html>
