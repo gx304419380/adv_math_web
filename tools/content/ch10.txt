@@ -1,0 +1,571 @@
+=== GOALS ===
+        <li><label><input type="checkbox">把有界区域上方由非负函数围成的曲顶柱体体积写成二重积分，并说清它什么时候存在</label></li>
+        <li><label><input type="checkbox">先投影再穿线，把二重积分化成二次积分，必要时交换次序并重新定出上下限</label></li>
+        <li><label><input type="checkbox">在圆域或扇形域上改用极坐标，解释面积元素里为什么必须多出一个雅可比因子</label></li>
+        <li><label><input type="checkbox">用投影法或截面法把三重积分化成三次积分，并在柱面、球面坐标里补上雅可比因子</label></li>
+        <li><label><input type="checkbox">算曲面面积与薄片质心，并对含参变量的积分（上下限也含参数时）按莱布尼茨公式求导</label></li>
+=== MAP ===
+{
+  "nodes": [
+    { "id": "n0", "label": "二重积分的概念与性质", "kind": "root" },
+    { "id": "n1", "label": "黎曼和与可积条件", "kind": "core" },
+    { "id": "n2", "label": "曲顶柱体体积与性质", "kind": "branch" },
+    { "id": "n3", "label": "二重积分的计算法", "kind": "core" },
+    { "id": "n4", "label": "化二次积分·投影穿线", "kind": "branch" },
+    { "id": "n5", "label": "交换积分次序", "kind": "branch" },
+    { "id": "n6", "label": "极坐标与因子 r", "kind": "branch" },
+    { "id": "n7", "label": "三重积分", "kind": "core" },
+    { "id": "n8", "label": "投影法与截面法", "kind": "branch" },
+    { "id": "n9", "label": "柱面与球面坐标", "kind": "branch" },
+    { "id": "n10", "label": "重积分的应用", "kind": "core" },
+    { "id": "n11", "label": "含参变量的积分", "kind": "core" },
+    { "id": "n12", "label": "莱布尼茨公式", "kind": "branch" },
+    { "id": "end", "label": "下一章：曲线积分与曲面积分", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n0", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n3", "target": "n6" },
+    { "source": "n0", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n7", "target": "n9" },
+    { "source": "n6", "target": "n9" },
+    { "source": "n7", "target": "n10" },
+    { "source": "n3", "target": "n10" },
+    { "source": "n0", "target": "n11" },
+    { "source": "n11", "target": "n12" },
+    { "source": "n12", "target": "end" },
+    { "source": "n10", "target": "end" }
+  ]
+}
+=== SECTION:s1 ===
+        <h3><span class="sec-badge">10.1</span>二重积分的概念与性质</h3>
+        <p>一块形状不规则的薄板，每个点的面密度都不一样，怎么求总质量？把它切成许多小片，每片上密度近似不变，把「密度乘面积」逐个加起来，再让小片无限变细。这和上一册学定积分时「切区间、作矩形、取极限」是同一个动作，只是把一维的区间换成了二维的平面区域。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">二重积分</span><span class="mb-no">10.1</span></div>
+          <div class="mb-body">
+            设 \(D\) 是 <strong class="term">有界闭区域</strong>（由曲线围成、连边界一并计入、面积有限的一块平面），函数 \(f(x,y)\) 在 \(D\) 上有界。把 \(D\) 任意分成 \(n\) 个小区域，第 \(i\) 块的面积记作 \(\Delta\sigma_i\)，在其中任取一点 \((\xi_i,\eta_i)\)，作和 \(\sum_{i=1}^{n} f(\xi_i,\eta_i)\,\Delta\sigma_i\)。记 \(\lambda\) 为这些小区域直径里最大的那个；若当 \(\lambda\to 0\)（分得无限细，此时块数 \(n\) 必然趋于无穷）时这个和的极限存在，且与怎么分、怎么取点都无关，就称 \(f\) 在 \(D\) 上<strong class="term">可积</strong>，这个极限叫 \(f\) 在 \(D\) 上的<strong class="term">二重积分</strong>：
+            $$\iint_D f(x,y)\,\mathrm{d}\sigma=\lim_{\lambda\to 0}\sum_{i=1}^{n} f(\xi_i,\eta_i)\,\Delta\sigma_i$$
+            其中 \(\mathrm{d}\sigma\) 是面积元素。
+            <mark class="key">区域有界、函数可积，二重积分才存在</mark>；\(f\) 在有界闭区域上连续时一定可积。若还有 \(f(x,y)\ge 0\)，那么 \(\iint_D f\,\mathrm{d}\sigma\) 恰好等于以 \(D\) 为底、以曲面 \(z=f(x,y)\) 为顶的<strong class="term">曲顶柱体</strong>的体积。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">二重积分的四条常用性质</span><span class="mb-no">10.2</span></div>
+          <div class="mb-body">
+            设下面各积分都存在，\(k\) 为常数：
+            $$\iint_D k f\,\mathrm{d}\sigma=k\iint_D f\,\mathrm{d}\sigma,\qquad \iint_D (f+g)\,\mathrm{d}\sigma=\iint_D f\,\mathrm{d}\sigma+\iint_D g\,\mathrm{d}\sigma$$
+            把 \(D\) 分成互不重叠的两块 \(D_1,D_2\)，则 \(\iint_D f\,\mathrm{d}\sigma=\iint_{D_1} f\,\mathrm{d}\sigma+\iint_{D_2} f\,\mathrm{d}\sigma\)，这叫<strong class="term">区域可加性</strong>。若 \(f\ge g\)，则 \(\iint_D f\,\mathrm{d}\sigma\ge \iint_D g\,\mathrm{d}\sigma\)，这叫<strong class="term">比较性质</strong>（特别地 \(f\ge 0\) 时积分非负）。特别地 \(\iint_D 1\,\mathrm{d}\sigma\) 等于 \(D\) 的面积。又若 \(m\le f(x,y)\le M\)，记 \(|D|\) 为 \(D\) 的面积，则
+            $$m\,|D|\le \iint_D f\,\mathrm{d}\sigma\le M\,|D|$$
+            这条叫<strong class="term">估值性质</strong>。<mark class="key">被积函数恒为 1 时，二重积分的值就是区域面积——这条最常用</mark>；一般常函数则满足 \(\iint_D k\,\mathrm{d}\sigma=k\,|D|\)。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="double-integral-volume">
+          <div class="demo-title">演示 1 · 把曲顶柱体切成细柱，累加出体积</div>
+          <div class="demo-caption">取底面 \(D=[0,1]\times[0,1]\)、顶面 \(z=4-x^{2}-y^{2}\)（在 \(D\) 上恒有 \(z\ge 2>0\)，所以体积就是二重积分）。这里画的是三维曲顶柱体的<b>俯视投影</b>：把 \(D\) 分成 \(n\times n\) 个小格，每格代表一根竖立的细柱，底色越深表示这根柱越高；真实的三维体积没有画出来，读数里的 \(V_n\) 是所有细柱体积之和。柱高取每格中心处的函数值，中心点的 \(f\) 略小于整格平均，所以 \(V_n\) 从下方逼近精确值 \(\frac{10}{3}\)；等分数越大，差距越小。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用可加性与线性，不靠计算就能拼出积分</span><span class="mb-no">例 10.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">把矩形 \(D=[0,2]\times[0,2]\) 沿 \(x=1\) 切成左右两块 \(D_1=[0,1]\times[0,2]\)、\(D_2=[1,2]\times[0,2]\)。已知 \(\iint_{D_1}(x+y)\,\mathrm{d}\sigma=3\)、\(\iint_{D_2}(x+y)\,\mathrm{d}\sigma=5\)，求 \(\iint_D (2x+2y+1)\,\mathrm{d}\sigma\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>题目要的不是把积分算出来，而是把被积函数拆成已经知道积分值的那部分，再加一个常数。用线性把 \(2x+2y+1\) 写成 \(2(x+y)+1\)，用区域可加性把整块 \(D\) 上的积分拆成 \(D_1\)、\(D_2\) 两块，常数那一项用「常函数的积分等于面积」。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              先由线性与区域可加性：
+              $$\iint_D 2(x+y)\,\mathrm{d}\sigma=2\left(\iint_{D_1}(x+y)\,\mathrm{d}\sigma+\iint_{D_2}(x+y)\,\mathrm{d}\sigma\right)=2\times(3+5)=16$$
+              再看常数项：\(D\) 是边长 \(2\) 的正方形，面积 \(|D|=4\)，故 \(\iint_D 1\,\mathrm{d}\sigma=4\)。<br>
+              两项相加：\(\iint_D (2x+2y+1)\,\mathrm{d}\sigma=16+4=20\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">这类题的固定动作是「先拆被积函数、再拆区域、最后处理常数」。题目给出的两个小区域积分值不必自己去算（算它们要等下一节的二次积分），这里练的正是性质本身。顺便核对：\(x+y\) 在 \(D\) 上非负，所以这些积分也可理解成曲顶柱体的体积，量纲一致。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">二重积分就是「很多根细柱」</span></div>
+          <div class="mb-body">把 \(D\) 切成小格，每格上竖起一根高为 \(f(\xi_i,\eta_i)\) 的细柱，所有细柱体积之和就是黎曼和。当格子细到直径 \(\lambda &lt; \delta\)（\(\delta\) 可以任意小）时，这些细柱就填满了曲顶柱体，和式的极限自然就是体积。所以「可积」在几何上的意思是：<strong>不管怎么切，细柱总和都挤向同一个数</strong>。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把二重积分当成「底面积乘一个高度」</span></div>
+          <div class="mb-body">只有当 \(f\) 是常数 \(c\) 时才有 \(\iint_D c\,\mathrm{d}\sigma=c\,|D|\)。若 \(f\) 随点变化，就得真去累加或积分；用「面积乘最大值」只能得到估值性质里的上界，不是精确值。</div>
+        </div>
+=== SECTION:s2 ===
+        <h3><span class="sec-badge">10.2</span>二重积分的计算法</h3>
+        <p>定义只会「切碎再取极限」，真要算出一个数，得把它变成两次单积分。关键动作只有两个：先把区域投影到一条坐标轴上定出外层变量的范围，再用一条平行于另一坐标轴的直线去「穿」区域，定出内层变量从哪条曲线进、从哪条曲线出。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">化二重积分为二次积分</span><span class="mb-no">10.3</span></div>
+          <div class="mb-body">
+            设 \(D\) 可以写成 \(a\le x\le b\)、\(\varphi_1(x)\le y\le \varphi_2(x)\)：先把它投影到 \(x\) 轴上得到区间 \([a,b]\)，再让一条竖直线去穿区域，它总是从下曲线 \(y=\varphi_1(x)\) 进入、从上曲线 \(y=\varphi_2(x)\) 离开。这样的区域叫 <strong class="term">X 型区域</strong>（竖着穿）。若 \(f\) 在 \(D\) 上连续，则
+            $$\iint_D f(x,y)\,\mathrm{d}\sigma=\int_a^b \mathrm{d}x\int_{\varphi_1(x)}^{\varphi_2(x)} f(x,y)\,\mathrm{d}y$$
+            右边是「先对 \(y\) 积分（把 \(x\) 暂时看成常数），再对 \(x\) 积分」，叫<strong class="term">先 \(y\) 后 \(x\)</strong> 的二次积分。同理，若 \(D\) 能写成 \(c\le y\le d\)、\(\psi_1(y)\le x\le \psi_2(y)\)，就用一条水平线去穿，得到<strong class="term">先 \(x\) 后 \(y\)</strong> 的次序：
+            $$\iint_D f(x,y)\,\mathrm{d}\sigma=\int_c^d \mathrm{d}y\int_{\psi_1(y)}^{\psi_2(y)} f(x,y)\,\mathrm{d}x$$
+            <mark class="key">先投影定外层限，再穿线定内层限；内层上下限一般是外层变量的函数</mark>。两种次序算出的值必须相等，这就是<strong class="term">交换积分次序</strong>的依据。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">极坐标下的二重积分</span><span class="mb-no">10.4</span></div>
+          <div class="mb-body">
+            当 \(D\) 是圆、圆环或扇形，用极坐标 \(x=r\cos\theta\)、\(y=r\sin\theta\) 更简单。此时面积元素不是 \(\mathrm{d}r\,\mathrm{d}\theta\)，而是
+            $$\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta,\qquad \iint_D f(x,y)\,\mathrm{d}\sigma=\iint_{D'} f(r\cos\theta,r\sin\theta)\,r\,\mathrm{d}r\,\mathrm{d}\theta$$
+            其中 \(D'\) 是 \(D\) 在 \((r,\theta)\) 平面上的对应范围。
+            <div class="proof-title">推导 · 因子 \(r\) 从哪来（3 步，直接展开）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">取半径 \(r\) 与 \(r+\Delta r\)、张角 \(\theta\) 与 \(\theta+\Delta\theta\) 之间的一小块</span><span class="derive-note">它是极坐标下的「小矩形」，不是普通矩形</span></li>
+              <li><span class="derive-eq">这一块近似是长为 \(r\,\Delta\theta\)（内弧长）、宽为 \(\Delta r\) 的矩形，面积约 \(r\,\Delta r\,\Delta\theta\)</span><span class="derive-note">弧长随半径 \(r\) 变，离原点越远同样张角对应的弧越长</span></li>
+              <li><span class="derive-eq">令 \(\Delta r\to 0\)、\(\Delta\theta\to 0\) 取极限，得 \(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\)</span><span class="derive-note">所以换到极坐标必须多乘一个 \(r\)，忘掉它结果必错</span></li>
+            </ol>
+            <mark class="key">极坐标下 \(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\)，那个 \(r\) 不能丢</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="order-switch">
+          <div class="demo-title">演示 2 · 同一块区域，竖着穿还是横着穿</div>
+          <div class="demo-caption">区域 \(D\) 由 \(y=x^{3}\)、\(y=1\) 与 \(x=0\) 围成（\(0\le x\le 1\)），被积函数取 \(f=3x^{2}\)（在 \(D\) 上非负）。点「竖向穿线」：竖直线固定 \(x\)，从下边界 \(y=x^{3}\) 穿入、从上边界 \(y=1\) 穿出，对应先 \(y\) 后 \(x\)；点「横向穿线」：水平线固定 \(y\)，从 \(x=0\) 穿入、从 \(x=\sqrt[3]{y}\) 穿出，对应先 \(x\) 后 \(y\)。拖动扫描位置，读数给出两种次序的内层上下限与内层积分；两种次序算出的总值都是 \(\frac{1}{2}\)。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">交换次序后重定上下限，两种写法各算一遍</span><span class="mb-no">例 10.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(D\) 由曲线 \(y=x^{3}\)、直线 \(y=1\) 与 \(x=0\) 围成，\(f(x,y)=3x^{2}\)。(1) 按先 \(y\) 后 \(x\) 写出二次积分并求值；(2) 交换成先 \(x\) 后 \(y\) 再求一次，核对两者相等。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先在脑中画出 \(D\)：\(x\) 从 \(0\) 到 \(1\)，下边界是 \(y=x^{3}\)、上边界是 \(y=1\)，因为 \(0\le x\le 1\) 时 \(x^{3}\le 1\)。第 (1) 问直接照「先投影后穿线」写限。第 (2) 问要把 \(D\) 投影到 \(y\) 轴：\(y\) 从 \(0\) 到 \(1\)，水平线从左边界 \(x=0\) 进入、从右边界 \(x=\sqrt[3]{y}\) 离开，注意右边界是把 \(y=x^{3}\) 反解出来的。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 先投影得 \(0\le x\le 1\)，竖线穿入于 \(y=x^{3}\)、穿出于 \(y=1\)：
+              $$I=\int_0^1 \mathrm{d}x\int_{x^{3}}^{1} 3x^{2}\,\mathrm{d}y=\int_0^1 3x^{2}\bigl(1-x^{3}\bigr)\,\mathrm{d}x=\int_0^1 (3x^{2}-3x^{5})\,\mathrm{d}x=\left[x^{3}-\frac{x^{6}}{2}\right]_0^1=1-\frac{1}{2}=\frac{1}{2}$$
+              (2) 改投影到 \(y\) 轴：\(0\le y\le 1\)，水平线从 \(x=0\) 到 \(x=\sqrt[3]{y}\)：
+              $$I=\int_0^1 \mathrm{d}y\int_0^{\sqrt[3]{y}} 3x^{2}\,\mathrm{d}x=\int_0^1 \left[x^{3}\right]_0^{\sqrt[3]{y}}\,\mathrm{d}y=\int_0^1 y\,\mathrm{d}y=\left[\frac{y^{2}}{2}\right]_0^1=\frac{1}{2}$$
+              两种次序都得到 \(\frac{1}{2}\)，一致。整个过程中 \(D\) 有界、\(f=3x^{2}\ge 0\)，所以这个积分也可看成对应曲顶柱体的体积。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">交换次序的固定动作是「重画区域 → 换一条轴投影 → 重新用平行于另一轴的线穿一遍」，绝不是把原来的上下限对调抄一遍。本题右边界 \(x=\sqrt[3]{y}\) 是把下曲线反解出来的，这一步最容易漏。凡是两种次序都好算的题，都值得各算一遍当作验算。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">次序只是「先数哪一行」</span></div>
+          <div class="mb-body">把 \(D\) 想成一片格子纸：先 \(y\) 后 \(x\) 是「一根一根竖着数」，先 \(x\) 后 \(y\) 是「一行一行横着数」，数的是同一片格子，总数当然相等。演示里那条扫描线就是正在数的那一根或那一行；它从哪条边界进、从哪条边界出，决定了内层的上下限。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">交换次序时照抄原来的上下限</span></div>
+          <div class="mb-body">把 \(\int_0^1 \mathrm{d}x\int_{x^{3}}^{1} f\,\mathrm{d}y\) 直接改成 \(\int_0^1 \mathrm{d}y\int_{x^{3}}^{1} f\,\mathrm{d}x\) 是错的：新内层里还留着 \(x\)，而且 \(x^{3}\) 与 \(1\) 是 \(y\) 的边界、不是 \(x\) 的边界。正确做法是先画出 \(D\)，重新投影、重新穿线，把上下限都写成外层变量的函数。</div>
+        </div>
+=== SECTION:s3 ===
+        <h3><span class="sec-badge">10.3</span>三重积分</h3>
+        <p>二重积分在平面区域上累加，三重积分则在一块空间立体上累加：比如一个密度不均匀的铸件，总质量就是把每一点附近的「密度乘体积」加遍整个立体。算法和二重积分一脉相承，只是多了一层。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">三重积分</span><span class="mb-no">10.5</span></div>
+          <div class="mb-body">
+            设 \(\Omega\) 是<strong class="term">有界闭区域</strong>（空间里一块体积有限的立体，连边界面一起算），\(f(x,y,z)\) 在 \(\Omega\) 上有界。把 \(\Omega\) 切成小块、作和 \(\sum_i f(\xi_i,\eta_i,\zeta_i)\,\Delta V_i\)，若小块直径的最大值趋于 \(0\) 时极限存在，就称 \(f\) 在 \(\Omega\) 上<strong class="term">可积</strong>，极限记作
+            $$\iiint_\Omega f(x,y,z)\,\mathrm{d}V$$
+            \(\mathrm{d}V\) 是体积元素。\(f\) 在有界闭区域上连续时一定可积；当 \(f\equiv 1\) 时，\(\iiint_\Omega 1\,\mathrm{d}V\) 就是 \(\Omega\) 的体积。<mark class="key">区域有界、函数可积，三重积分才存在</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">投影法、截面法与柱面/球面坐标</span><span class="mb-no">10.6</span></div>
+          <div class="mb-body">
+            <strong>投影法（先一后二）</strong>：把 \(\Omega\) 投影到 \(xy\) 平面得区域 \(D\)，再对 \(D\) 内每一点用一条竖直线去穿，从下曲面 \(z=z_1(x,y)\) 进、从上曲面 \(z=z_2(x,y)\) 出：
+            $$\iiint_\Omega f\,\mathrm{d}V=\iint_D \mathrm{d}\sigma\int_{z_1(x,y)}^{z_2(x,y)} f(x,y,z)\,\mathrm{d}z$$
+            <strong>截面法（先二后一）</strong>：用高度 \(z\) 的水平面去截 \(\Omega\)，截面记作 \(D_z\)，先在每个截面上做二重积分，再沿 \(z\) 累加：
+            $$\iiint_\Omega f\,\mathrm{d}V=\int_{c}^{d} \mathrm{d}z\iint_{D_z} f(x,y,z)\,\mathrm{d}\sigma$$
+            <strong>柱面坐标</strong> \(x=r\cos\theta\)、\(y=r\sin\theta\)、\(z=z\)：底面用极坐标，体积元素多出因子 \(r\)：
+            $$\mathrm{d}V=r\,\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z$$
+            <strong>球面坐标</strong> \(x=\rho\sin\varphi\cos\theta\)、\(y=\rho\sin\varphi\sin\theta\)、\(z=\rho\cos\varphi\)：体积元素为
+            $$\mathrm{d}V=\rho^{2}\sin\varphi\,\mathrm{d}\rho\,\mathrm{d}\varphi\,\mathrm{d}\theta$$
+            这些多出来的因子统称<strong class="term">雅可比因子</strong>，来自「换坐标后一小块体积被拉伸了多少倍」。例如 \(0 &lt; \varphi &lt; \pi\) 时 \(\sin\varphi>0\)，故球面坐标的因子非负。
+            <div class="proof-title">推导 · 柱面坐标为什么多一个 \(r\)（3 步，直接展开）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">柱面坐标只是把 \(xy\) 平面换成极坐标，\(z\) 原样保留</span><span class="derive-note">所以底面那一小片的面积要按极坐标算</span></li>
+              <li><span class="derive-eq">底面小片面积 \(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\)，再乘上高度微元 \(\mathrm{d}z\)</span><span class="derive-note">这一步用到了上一节的极坐标面积元素</span></li>
+              <li><span class="derive-eq">于是 \(\mathrm{d}V=\mathrm{d}\sigma\,\mathrm{d}z=r\,\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\)</span><span class="derive-note">漏掉 \(r\) 就等于把底面当成了普通矩形，体积必然算错</span></li>
+            </ol>
+            <mark class="key">柱面补 \(r\)，球面补 \(\rho^{2}\sin\varphi\)，都是不能省的雅可比因子</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="polar-jacobian">
+          <div class="demo-title">演示 3 · 极坐标下那一小块，为什么面积是 \(r\,\mathrm{d}r\,\mathrm{d}\theta\)</div>
+          <div class="demo-caption">彩色扇环就是极坐标网格里的一「格」：内半径 \(r\)、外半径 \(r+\Delta r\)、张角固定。拖动「半径」看它离原点越远、同样张角下弧越长；拖动「径向厚度」让 \(\Delta r\) 变小，读数里精确面积 \(\frac{1}{2}\bigl[(r+\Delta r)^{2}-r^{2}\bigr]\Delta\theta\) 会越来越贴近拉直后的矩形面积 \(r\,\Delta r\,\Delta\theta\)。这正是 \(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\) 中因子 \(r\) 的几何来源；下一节算圆域上的面积、质心，以及本节的柱面坐标 \(\mathrm{d}V=r\,\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\)，靠的都是它。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">投影法与截面法各算一次</span><span class="mb-no">例 10.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 设立体 \(\Omega_1\) 由 \(0\le x\le 1\)、\(0\le y\le 1\)、\(0\le z\le x+y\) 限定，用投影法求 \(\iiint_{\Omega_1} z\,\mathrm{d}V\)。(2) 设立体 \(\Omega_2\) 夹在曲面 \(z=2x^{2}+2y^{2}\) 与平面 \(z=8\) 之间，用截面法求 \(\iiint_{\Omega_2} z\,\mathrm{d}V\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问：\(\Omega_1\) 在 \(xy\) 平面上的投影是正方形 \([0,1]\times[0,1]\)，竖直线从 \(z=0\) 进入、从斜顶面 \(z=x+y\) 离开，于是先对 \(z\) 积分、再在正方形上做二重积分。第 (2) 问：改用高度 \(z\) 的水平面去截，\(z\) 处截面是圆盘 \(x^{2}+y^{2}\le z/2\)，面积 \(\pi z/2\)，被积函数 \(z\) 在该截面上为常数，直接乘出来再沿 \(z\) 从 \(0\) 积到 \(8\)。两问里被积函数都非负：\(z\ge 0\)。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) 先对 \(z\) 积分（\(x,y\) 看作常数）：\(\int_0^{x+y} z\,\mathrm{d}z=\frac{(x+y)^{2}}{2}\)。
+              $$\iiint_{\Omega_1} z\,\mathrm{d}V=\int_0^1 \mathrm{d}x\int_0^1 \frac{(x+y)^{2}}{2}\,\mathrm{d}y=\int_0^1 \frac{(x+1)^{3}-x^{3}}{6}\,\mathrm{d}x=\left[\frac{(x+1)^{4}-x^{4}}{24}\right]_0^1=\frac{15}{24}-\frac{1}{24}=\frac{7}{12}$$
+              (2) 高度 \(z\) 的截面是半径 \(\sqrt{z/2}\) 的圆盘，面积 \(A(z)=\dfrac{\pi z}{2}\)（\(0\le z\le 8\)）；被积函数 \(z\) 在该截面上是常数，故：
+              $$\iiint_{\Omega_2} z\,\mathrm{d}V=\int_0^8 z\cdot A(z)\,\mathrm{d}z=\int_0^8 \frac{\pi z^{2}}{2}\,\mathrm{d}z=\left[\frac{\pi z^{3}}{6}\right]_0^8=\frac{512\pi}{6}=\frac{256\pi}{3}$$
+              核对：\(\Omega_1\)、\(\Omega_2\) 都含于有限范围内，体积有限，符合「有界」这一前提。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">投影法的固定动作是「先投到坐标面得二维区域，再用竖线定出 \(z\) 的上下曲面」；截面法的固定动作是「先固定一个坐标，算出该处截面积 \(A(z)\)，再沿这个坐标积分」。用哪个，看哪种切法让截面或上下曲面写起来更简单：本题 \(\Omega_2\) 的截面恰是圆盘，用截面法一步就完。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">柱面坐标就是「极坐标再摞一层」</span></div>
+          <div class="mb-body">把 \(xy\) 平面换成极坐标 \((r,\theta)\)、再让 \(z\) 照旧，就得到柱面坐标。所以柱面坐标里那一个 \(r\)，和极坐标面积元素里的 \(r\) 是同一个东西——演示里那块扇环被拉直成矩形，正是它的来历。球面坐标则把「离原点多远」也换成 \(\rho\)，两个方向一起拉伸，因子就变成 \(\rho^{2}\sin\varphi\)。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">柱面、球面坐标漏写雅可比因子</span></div>
+          <div class="mb-body">把 \(\mathrm{d}V\) 写成 \(\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\) 或 \(\mathrm{d}\rho\,\mathrm{d}\varphi\,\mathrm{d}\theta\) 都少了拉伸倍数。固定动作：换坐标时先问「那一小片被放大了多少倍」，把 \(r\) 或 \(\rho^{2}\sin\varphi\) 显式乘进被积式，再定上下限。</div>
+        </div>
+=== SECTION:s4 ===
+        <h3><span class="sec-badge">10.4</span>重积分的应用</h3>
+        <p>会算二重、三重积分之后，很多「总量」都能用元素法一口气管到底：曲面的面积、薄片或立体的质心、转动惯量。这里说的<strong class="term">重积分</strong>，是二重积分与三重积分的统称——「重」指积几重，二重积在平面区域上、三重积在空间立体上。套路和上册定积分的应用一样——写出一小份，再积起来。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">曲面面积与质心公式</span><span class="mb-no">10.7</span></div>
+          <div class="mb-body">
+            设曲面由 \(z=f(x,y)\) 给出，\(f\) 在 \(D\) 上有连续偏导数。把曲面切成小片，每小片在 \(xy\) 平面上的投影面积是 \(\mathrm{d}\sigma\)，而小片本身的面积被「倾斜」放大了 \(\sqrt{1+f_x^{2}+f_y^{2}}\) 倍，故<strong class="term">曲面面积</strong>为
+            $$A=\iint_D \sqrt{1+f_x^{2}+f_y^{2}}\,\mathrm{d}\sigma$$
+            这里的<strong class="term">质心</strong>就是「质量的重心」：把薄片上每一点的坐标按该点的质量加权平均，得到的点能让薄片恰好在那一点被支住。若把 \(\sqrt{1+f_x^{2}+f_y^{2}}\,\mathrm{d}\sigma\) 当作曲面小片的面积（新的「面积元素」），则曲面薄壳的质心横坐标为
+            $$\bar{x}=\frac{\iint_D x\sqrt{1+f_x^{2}+f_y^{2}}\,\mathrm{d}\sigma}{\iint_D \sqrt{1+f_x^{2}+f_y^{2}}\,\mathrm{d}\sigma}$$
+            对平面薄片（不是曲面），取面密度 \(\rho(x,y)\ge 0\)，质量 \(M=\iint_D \rho\,\mathrm{d}\sigma\)，质心为 \(\bar{x}=\dfrac{\iint_D x\rho\,\mathrm{d}\sigma}{M}\)、\(\bar{y}=\dfrac{\iint_D y\rho\,\mathrm{d}\sigma}{M}\)。
+            <div class="proof-title">推导 · 根号 \(1+\cdots\) 从哪来（3 步，直接展开）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">曲面上一点处切平面与水平面的夹角记为 \(\gamma\)</span><span class="derive-note">切平面越陡，同样投影对应的真实面积越大</span></li>
+              <li><span class="derive-eq">投影关系：\(\mathrm{d}\sigma=\mathrm{d}S\cos\gamma\)，而 \(\cos\gamma=\dfrac{1}{\sqrt{1+f_x^{2}+f_y^{2}}}\)</span><span class="derive-note">这是法向量与竖直方向夹角余弦的写法</span></li>
+              <li><span class="derive-eq">反解 \(\mathrm{d}S=\sqrt{1+f_x^{2}+f_y^{2}}\,\mathrm{d}\sigma\)，再对 \(D\) 积分即得公式</span><span class="derive-note">根号里那个 \(1+\cdots\) 就是倾斜带来的放大倍数，永远不小于 \(1\)</span></li>
+            </ol>
+            <mark class="key">曲面面积、曲面质心的被积式里都带 \(\sqrt{1+f_x^{2}+f_y^{2}}\)，那个根号不能漏</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="triple-integral">
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">球面被截出的那一顶，面积是多少</span><span class="mb-no">例 10.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求球面 \(x^{2}+y^{2}+z^{2}=4\) 被平面 \(z=1\) 截出的球冠（\(z\ge 1\) 那一顶）的面积。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>球冠是一张曲面，直接用曲面面积公式。它在 \(xy\) 平面上的投影是圆盘 \(x^{2}+y^{2}\le 4-1=3\)。上半球面写成 \(z=f(x,y)=\sqrt{4-x^{2}-y^{2}}\)，求出 \(f_x,f_y\) 代入 \(\sqrt{1+f_x^{2}+f_y^{2}}\)，再在圆盘上做二重积分，最后换极坐标。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              由 \(z=\sqrt{4-x^{2}-y^{2}}\) 得 \(f_x=-\dfrac{x}{z}\)、\(f_y=-\dfrac{y}{z}\)（\(z\neq 0\)），于是
+              $$1+f_x^{2}+f_y^{2}=1+\frac{x^{2}+y^{2}}{z^{2}}=\frac{z^{2}+x^{2}+y^{2}}{z^{2}}=\frac{4}{4-x^{2}-y^{2}}$$
+              这里用了球面方程 \(x^{2}+y^{2}+z^{2}=4\)。故
+              $$A=\iint_D \frac{2}{\sqrt{4-x^{2}-y^{2}}}\,\mathrm{d}\sigma\overset{\text{极坐标}}{=}\int_0^{2\pi}\mathrm{d}\theta\int_0^{\sqrt{3}}\frac{2r}{\sqrt{4-r^{2}}}\,\mathrm{d}r$$
+              内层积分：\(\displaystyle\int_0^{\sqrt{3}}\frac{2r}{\sqrt{4-r^{2}}}\,\mathrm{d}r=\Bigl[-2\sqrt{4-r^{2}}\Bigr]_0^{\sqrt{3}}=-2(1)+2(2)=2\)。故 \(A=2\pi\cdot 2=4\pi\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">两个动作最容易漏：一是化简 \(1+f_x^{2}+f_y^{2}\) 时把球面方程代进去，否则根号里会留下一个很难积的形状；二是换极坐标时面积元素要补上那个 \(r\)——本题分子里恰好有一个 \(r\)，正好凑成 \(r\,\mathrm{d}r\) 的换元。球冠面积是 \(2\pi R h\)（\(R=2\)、高 \(h=2-1=1\)），得 \(4\pi\)，与积分结果一致，可用来验算。</span></div>
+          </div>
+        </div>
+
+          <div class="demo-title">演示 4 · 用截面法把一座方锥的体积切成薄片累加</div>
+          <div class="demo-caption">取一座高 \(2\)、底面边长 \(2\) 的正四棱锥：高度 \(z\) 处的水平截面是边长 \(2-z\) 的正方形，截面积 \(A(z)=(2-z)^{2}\)（非负）。这里画的是<b>截面法的一维投影</b>：横轴是高度 \(z\)，纵轴是该处的截面积 \(A(z)\)，每个矩形代表那一层薄片的体积 \(A(z)\,\mathrm{d}z\)；三维的锥体本身没有画出来。拖动等分数，看矩形面积和 \(V_n\) 从下方逼近 \(\int_0^{2}(2-z)^{2}\,\mathrm{d}z=\frac{8}{3}\)，这正是 \(\iiint_\Omega 1\,\mathrm{d}V\) 的体积。横轴是长度、纵轴是面积，量纲不同，图里已按非等比例标注。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一块密度不均的矩形薄片，质量与质心</span><span class="mb-no">例 10.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设平面薄片占矩形 \(D=[0,1]\times[0,2]\)，面密度 \(\rho(x,y)=x+1\)（在 \(D\) 上非负）。求薄片的质量 \(M\) 与质心 \((\bar{x},\bar{y})\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>质量就是密度在区域上的二重积分；质心是「坐标乘密度」的二重积分再除以质量。密度只与 \(x\) 有关，先对 \(y\) 积分时可以把它当常数提出去，计算最省事。注意 \(\rho\) 不恒为常数，所以质心不会正好落在几何中心。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              质量：
+              $$M=\iint_D (x+1)\,\mathrm{d}\sigma=\int_0^1 \mathrm{d}x\int_0^2 (x+1)\,\mathrm{d}y=\int_0^1 2(x+1)\,\mathrm{d}x=\left[x^{2}+2x\right]_0^1=3$$
+              对 \(y\) 轴的矩（用来求 \(\bar{x}\)）：
+              $$M_y=\iint_D x(x+1)\,\mathrm{d}\sigma=\int_0^1 2x(x+1)\,\mathrm{d}x=\int_0^1 (2x^{2}+2x)\,\mathrm{d}x=\frac{2}{3}+1=\frac{5}{3}$$
+              故 \(\bar{x}=\dfrac{M_y}{M}=\dfrac{5/3}{3}=\dfrac{5}{9}\)。<br>
+              对 \(x\) 轴的矩：\(M_x=\iint_D y(x+1)\,\mathrm{d}\sigma=\left(\int_0^1 (x+1)\,\mathrm{d}x\right)\left(\int_0^2 y\,\mathrm{d}y\right)=\dfrac{3}{2}\times 2=3\)，故 \(\bar{y}=\dfrac{M_x}{M}=1\)。<br>
+              结论：\(M=3\)，质心 \(\left(\dfrac{5}{9},\,1\right)\)。因为 \(\rho\) 不随 \(y\) 变，\(\bar{y}=1\) 正好是矩形在 \(y\) 方向的中点，与直觉一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">这类题的固定动作是「先算质量，再算两个矩，最后各除以质量」。写矩时想清楚要求哪个坐标：求 \(\bar{x}\) 用 \(x\rho\)、求 \(\bar{y}\) 用 \(y\rho\)，别乘反。若密度关于某条中线对称，那条方向上的质心坐标可直接读出中点，省掉一次积分。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">质心就是「密度加权的平均位置」</span></div>
+          <div class="mb-body">把薄片想成一堆小砝码，每块质量 \(\rho\,\mathrm{d}\sigma\) 放在位置 \((x,y)\)。质心横坐标就是所有 \(x\) 按质量加权平均：\(\bar{x}=\)（\(x\) 乘质量的总和）除以（总质量）。本题 \(\bar{x}=\frac{5}{9}>\frac{1}{2}\)（几何中心的横坐标），因为右侧 \(x\) 大、密度 \(\rho=x+1\) 也大，质心被拉向右边，与加权平均的解释一致。若薄片是圆盘或扇形，把 \(\mathrm{d}\sigma\) 换成 \(r\,\mathrm{d}r\,\mathrm{d}\theta\) 再算，正是上一节那个因子的用武之地。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">算曲面面积漏掉 \(\sqrt{1+\cdots}\)</span></div>
+          <div class="mb-body">把曲面 \(z=f(x,y)\) 的面积写成 \(\iint_D 1\,\mathrm{d}\sigma\)（即投影区域面积）是错的，那只是把曲面压平后的面积。真实小片被倾斜放大，必须乘 \(\sqrt{1+f_x^{2}+f_y^{2}}\)。平面情形 \(f_x=f_y=0\) 时根号才等于 \(1\)，两种算法才碰巧一致。</div>
+        </div>
+=== SECTION:s5 ===
+        <h3><span class="sec-badge">10.5</span>含参变量的积分</h3>
+        <p>前面被积函数里只有积分变量。若函数里还带着一个「旁观」的参数，积分的结果就变成这个参数的函数。比如一张滤网的透过率随位置 \(x\) 和厚度参数 \(t\) 变，总透过量就依赖那个参数。我们想知道：这个新函数连续吗？能求导吗？</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">含参变量的积分</span><span class="mb-no">10.8</span></div>
+          <div class="mb-body">
+            设 \(f(x,t)\) 在矩形 \(a\le x\le b\)、\(c\le t\le d\) 上连续，把 \(t\) 看作固定参数，对 \(x\) 积分得到
+            $$F(t)=\int_a^b f(x,t)\,\mathrm{d}x$$
+            这是定义在 \([c,d]\) 上的一个关于 \(t\) 的函数，叫<strong class="term">含参变量的积分</strong>。由 \(f\) 连续可知 \(F\) 也连续；以后遇到 \(\mathrm{e}^{tx}\)、\(\sin(tx)\) 这类函数，处理办法完全一样。
+            <mark class="key">积分变量是 \(x\)，参数 \(t\) 在积分过程中当成常数</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">积分号下求导与莱布尼茨公式</span><span class="mb-no">10.9</span></div>
+          <div class="mb-body">
+            若 \(f(x,t)\) 与偏导数 \(\dfrac{\partial f}{\partial t}\) 在 \(a\le x\le b\)、\(c\le t\le d\) 上都连续，则 \(F(t)=\int_a^b f(x,t)\,\mathrm{d}x\) 可导，且求导可以「钻进」积分号：
+            $$F'(t)=\int_a^b \frac{\partial f}{\partial t}(x,t)\,\mathrm{d}x$$
+            <mark class="key">被积函数与它对参数的偏导都连续，才允许把求导搬进积分号</mark>。
+            若上下限也含参数：\(\Phi(t)=\int_{u(t)}^{v(t)} f(x,t)\,\mathrm{d}x\)，其中 \(u,v\) 可导、\(f\) 与 \(\frac{\partial f}{\partial t}\) 连续，则要用<strong class="term">莱布尼茨公式</strong>
+            $$\Phi'(t)=\int_{u(t)}^{v(t)} \frac{\partial f}{\partial t}(x,t)\,\mathrm{d}x+f\bigl(v(t),t\bigr)\,v'(t)-f\bigl(u(t),t\bigr)\,u'(t)$$
+            右边三项分别来自「被积函数自己随 \(t\) 变」「上限在移动」「下限在移动」，一个都不能少。
+            <div class="proof-title">推导 · 为什么多出两个边界项（3 步，直接展开）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">记 \(G(t,u,v)=\int_{u}^{v} f(x,t)\,\mathrm{d}x\)，则 \(\Phi(t)=G\bigl(t,u(t),v(t)\bigr)\)</span><span class="derive-note">三个量都依赖 \(t\)，用多元链式法则逐条算</span></li>
+              <li><span class="derive-eq">\(\dfrac{\partial G}{\partial t}=\int_{u}^{v}\dfrac{\partial f}{\partial t}\,\mathrm{d}x\)，\(\dfrac{\partial G}{\partial v}=f(v,t)\)，\(\dfrac{\partial G}{\partial u}=-f(u,t)\)</span><span class="derive-note">后两条来自「变动上限 / 下限」对积分值的影响</span></li>
+              <li><span class="derive-eq">链式法则相加即得莱布尼茨公式</span><span class="derive-note">所以漏掉上下限项，等于假装积分区间不动</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="parametric-integral">
+          <div class="demo-title">演示 5 · 上下限也在动：莱布尼茨公式的三项贡献</div>
+          <div class="demo-caption">取 \(G(t)=\int_{t}^{2t}(x+t)\,\mathrm{d}x\)，被积函数 \(x+t\) 与上下限 \(t\)、\(2t\) 都随参数 \(t\) 变（\(t\ge 0\) 时被积函数非负）。蓝线是被积函数 \(x+t\)，浅色填充是当前积分区间 \([t,2t]\) 下方的面积，两条橙色虚线是随 \(t\) 移动的上下限。拖动参数 \(t\)，读数把莱布尼茨公式拆成三项：积分号内求导得 \(t\)、上限贡献 \(6t\)、下限贡献 \(-2t\)，合计 \(G'(t)=5t\)；漏掉后两项就只剩 \(t\)，明显对不上。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">固定上下限与活动上下限，各求一次导</span><span class="mb-no">例 10.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 设 \(F(t)=\int_0^1 (x^{2}+2tx)\,\mathrm{d}x\)，用「积分号下求导」求 \(F'(t)\)，再直接积分核对。(2) 设 \(G(t)=\int_t^{2t}(x+t)\,\mathrm{d}x\)，用莱布尼茨公式求 \(G'(t)\)，也用直接积分核对。两问都要先说明求导条件是否满足。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问上下限是常数，只需把 \(\partial f/\partial t\) 算出来再积分。第 (2) 问上下限含 \(t\)，必须把「被积函数求导、上限、下限」三项全写上。两问的 \(f=x^{2}+2tx\) 与 \(f=x+t\) 都是多项式，它们与对 \(t\) 的偏导处处连续；\(u(t)=t\)、\(v(t)=2t\) 也可导，条件都满足。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(f=x^{2}+2tx\)，\(\dfrac{\partial f}{\partial t}=2x\)，连续。由定理：
+              $$F'(t)=\int_0^1 2x\,\mathrm{d}x=\left[x^{2}\right]_0^1=1$$
+              核对：直接积分 \(F(t)=\int_0^1 (x^{2}+2tx)\,\mathrm{d}x=\frac{1}{3}+t\)，故 \(F'(t)=1\)，一致。注意这个导数与 \(t\) 无关。<br>
+              (2) \(f=x+t\)，\(\dfrac{\partial f}{\partial t}=1\)；\(u(t)=t\)、\(v(t)=2t\)，\(u'=1\)、\(v'=2\)。代入莱布尼茨公式：
+              $$G'(t)=\int_t^{2t} 1\,\mathrm{d}x+f(2t,t)\cdot 2-f(t,t)\cdot 1=(2t-t)+(2t+t)\cdot 2-(t+t)\cdot 1=t+6t-2t=5t$$
+              核对：直接积分 \(G(t)=\left[\frac{x^{2}}{2}+tx\right]_t^{2t}=(2t^{2}+2t^{2})-\left(\frac{t^{2}}{2}+t^{2}\right)=4t^{2}-\frac{3t^{2}}{2}=\frac{5t^{2}}{2}\)，故 \(G'(t)=5t\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先看上下限含不含参数」：不含就只钻进积分号求一次偏导；含就必须写满三项，尤其别漏掉减号开头的下限项。算完用直接积分回代核对，能立刻抓出漏项。凡是用定理前，都先口头核对一次「\(f\) 与 \(\partial f/\partial t\) 连续、上下限可导」。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">三处都在变，导数就有三项</span></div>
+          <div class="mb-body">把 \(G(t)\) 想成「一块面积」：\(t\) 一变，被积函数整条曲线抬高了一点（第一项）、右边界向右挪走一条窄条（第二项，加上去）、左边界也向右挪走一条窄条（第三项，减掉）。三项合起来才是整块面积的变化率。演示里把参数拖大，能同时看到这三种变化。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">上下限含参数时只钻进积分号求导</span></div>
+          <div class="mb-body">对 \(G(t)=\int_t^{2t}(x+t)\,\mathrm{d}x\) 只写 \(G'(t)=\int_t^{2t}1\,\mathrm{d}x=t\) 就漏了两条边界项，比正确答案 \(5t\) 少了 \(4t\)。固定动作：先扫一眼上下限，只要含参数就启动莱布尼茨公式，把三项按「积分项加上限项减下限项」写齐。</div>
+        </div>
+=== PITFALLS ===
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">极坐标下漏乘因子 \(r\)</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(\iint_D (x^{2}+y^{2})\,\mathrm{d}\sigma\) 直接写成 \(\int_0^{2\pi}\mathrm{d}\theta\int_0^1 r^{2}\,\mathrm{d}r\)。<b>为什么错</b>：极坐标的面积元素是 \(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\)，换了坐标就必须乘上这个拉伸倍数 \(r\)；漏掉它等于把扇环当成了普通矩形。<b>正确做法</b>：被积式变成 \(r^{2}\cdot r=r^{3}\)，即 \(\int_0^{2\pi}\mathrm{d}\theta\int_0^1 r^{3}\,\mathrm{d}r=\frac{\pi}{2}\)。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">交换积分次序时照抄原上下限</span></div>
+        <div class="mb-body"><b>错误做法</b>：把先 \(y\) 后 \(x\) 的上下限原封不动换到先 \(x\) 后 \(y\) 里。<b>为什么错</b>：上下限描述的是「穿线从哪条边界进、出」，换一条轴投影后，边界曲线要用新外层变量重新反解，绝大多数不会保持原样。<b>正确做法</b>：重画区域、重新投影、重新穿线；把内层上下限都写成外层变量的函数，再用两种次序各算一遍核对。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">柱面、球面坐标漏写雅可比因子</span></div>
+        <div class="mb-body"><b>错误做法</b>：把柱面坐标体积元素写成 \(\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\)，或把球面坐标写成 \(\mathrm{d}\rho\,\mathrm{d}\varphi\,\mathrm{d}\theta\)。<b>为什么错</b>：换坐标时一小块体积被拉伸了，柱面拉伸 \(r\) 倍、球面拉伸 \(\rho^{2}\sin\varphi\) 倍，这个倍数不补回去体积必然算小。<b>正确做法</b>：柱面用 \(\mathrm{d}V=r\,\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\)、球面用 \(\mathrm{d}V=\rho^{2}\sin\varphi\,\mathrm{d}\rho\,\mathrm{d}\varphi\,\mathrm{d}\theta\)，先把因子写进被积式再定限。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">含参变量积分漏掉上下限的边界项</span></div>
+        <div class="mb-body"><b>错误做法</b>：对 \(G(t)=\int_t^{2t}(x+t)\,\mathrm{d}x\) 只写 \(G'(t)=\int_t^{2t}1\,\mathrm{d}x=t\)。<b>为什么错</b>：上下限本身随 \(t\) 移动，面积还从两端各增减一条窄条，这两条由莱布尼茨公式的后两项给出，缺一不可。<b>正确做法</b>：写满 \(G'(t)=\int_t^{2t}1\,\mathrm{d}x+(3t)\cdot 2-(2t)\cdot 1=5t\)，并用直接积分 \(G(t)=\frac{5t^{2}}{2}\) 回代核对。</div>
+      </div>
+=== EXERCISES ===
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>设 \(D=[0,2]\times[0,1]\)（矩形），用两种次序各算一遍 \(\iint_D (x+2y)\,\mathrm{d}\sigma\)，并说明为什么二重积分可以拆成两次单积分。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">先 \(y\) 后 \(x\)：\(\int_0^2 \mathrm{d}x\int_0^1 (x+2y)\,\mathrm{d}y=\int_0^2 (x+1)\,\mathrm{d}x=\bigl[\frac{x^{2}}{2}+x\bigr]_0^2=4\)。先 \(x\) 后 \(y\)：\(\int_0^1 \mathrm{d}y\int_0^2 (x+2y)\,\mathrm{d}x=\int_0^1 (2+4y)\,\mathrm{d}y=4\)，两种次序一致。区域 \(D\) 有界、被积函数连续且非负，所以二重积分存在，且可以化成先固定一个变量、再对另一个变量积分的二次积分；结果 \(4\) 也可看成对应曲顶柱体的体积。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>用极坐标计算 \(\iint_D (x^{2}+y^{2})\,\mathrm{d}\sigma\)，其中 \(D\) 是圆环 \(1\le x^{2}+y^{2}\le 4\) 落在第一象限的部分。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">在极坐标下 \(x^{2}+y^{2}=r^{2}\)、\(\mathrm{d}\sigma=r\,\mathrm{d}r\,\mathrm{d}\theta\)，故被积式是 \(r^{3}\)。第一象限的圆环对应 \(1\le r\le 2\)、\(0\le\theta\le\frac{\pi}{2}\)，被积函数非负。于是 \(\iint_D (x^{2}+y^{2})\,\mathrm{d}\sigma=\int_0^{\pi/2}\mathrm{d}\theta\int_1^2 r^{3}\,\mathrm{d}r=\frac{\pi}{2}\cdot\bigl[\frac{r^{4}}{4}\bigr]_1^2=\frac{\pi}{2}\cdot\frac{16-1}{4}=\frac{15\pi}{8}\)。最容易漏的一步就是把 \(r^{2}\) 再乘一个 \(r\) 变成 \(r^{3}\)。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>设立体 \(\Omega\) 夹在曲面 \(z=x^{2}+y^{2}\) 与平面 \(z=4\) 之间。用柱面坐标与投影法求 \(\iiint_\Omega (x^{2}+y^{2})\,\mathrm{d}V\)，并说明若漏写雅可比因子会差多少。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">把 \(\Omega\) 投影到 \(xy\) 平面是圆盘 \(r\le 2\)，竖线从下曲面 \(z=r^{2}\) 穿入、从上平面 \(z=4\) 穿出；柱面坐标下 \(x^{2}+y^{2}=r^{2}\)、\(\mathrm{d}V=r\,\mathrm{d}r\,\mathrm{d}\theta\,\mathrm{d}z\)，被积函数非负。故 \(\iiint_\Omega (x^{2}+y^{2})\,\mathrm{d}V=\int_0^{2\pi}\mathrm{d}\theta\int_0^2 r^{3}\,\mathrm{d}r\int_{r^{2}}^{4}\mathrm{d}z=2\pi\int_0^2 r^{3}(4-r^{2})\,\mathrm{d}r=2\pi\bigl[r^{4}-\frac{r^{6}}{6}\bigr]_0^2=2\pi\left(16-\frac{64}{6}\right)=\frac{32\pi}{3}\)。若漏掉因子 \(r\)，被积式只剩 \(r^{2}\)，结果变成 \(\int_0^{2\pi}\mathrm{d}\theta\int_0^2 r^{2}(4-r^{2})\,\mathrm{d}r=2\pi\bigl[\frac{4r^{3}}{3}-\frac{r^{5}}{5}\bigr]_0^2=2\pi\left(\frac{32}{3}-\frac{32}{5}\right)=\frac{128\pi}{15}\)，与正确值不同——可见换坐标时那个 \(r\) 绝不能省。</div></details>
+          </div>
+=== QUIZ ===
+[
+  { "q": "设 \\(D\\) 是有界闭区域，\\(f\\) 在 \\(D\\) 上连续。关于二重积分 \\(\\iint_D f\\,\\mathrm{d}\\sigma\\)，下列说法正确的是？",
+    "options": ["它一定存在，因为连续函数在有界闭区域上可积", "只有当 \\(f\\ge 0\\) 时才存在", "它等于 \\(D\\) 的面积乘以 \\(f\\) 在 \\(D\\) 上的最大值", "必须先把 \\(D\\) 化成矩形才能定义"],
+    "answer": 0,
+    "explain": "由「有界闭区域上连续必可积」，二重积分由黎曼和极限定义，A 正确。B 错：可积不要求被积函数非负，取负值时照常累加，只是不再表示曲顶柱体体积；C 错：那是估值性质给出的上界，只有 \\(f\\) 为常数时才取等号；D 错：定义对任意有界闭区域都成立，化成矩形是计算手段而不是前提。" },
+  { "q": "把 \\(\\iint_D (x^{2}+y^{2})\\,\\mathrm{d}\\sigma\\)（\\(D\\) 为单位圆 \\(x^{2}+y^{2}\\le 1\\)）化成极坐标下的二次积分，正确形式是？",
+    "options": ["\\(\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{1} r^{3}\\,\\mathrm{d}r\\)", "\\(\\int_0^{2\\pi}\\mathrm{d}\\theta\\int_0^{1} r^{2}\\,\\mathrm{d}r\\)", "\\(\\int_0^{\\pi}\\mathrm{d}\\theta\\int_0^{1} r^{3}\\,\\mathrm{d}r\\)", "\\(\\int_0^{1}\\mathrm{d}\\theta\\int_0^{1} r^{3}\\,\\mathrm{d}r\\)"],
+    "answer": 0,
+    "explain": "极坐标下 \\(x^{2}+y^{2}=r^{2}\\)，面积元素 \\(\\mathrm{d}\\sigma=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\)，故被积式变成 \\(r^{2}\\cdot r=r^{3}\\)，且 \\(\\theta\\) 走满一圈 \\([0,2\\pi]\\)，A 正确（值为 \\(\\pi/2\\)）。B 漏乘了因子 \\(r\\)；C 把 \\(\\theta\\) 范围缩成半圈，只覆盖半圆；D 把 \\(\\theta\\) 上限写成 1，同样没走满一圈。" },
+  { "q": "把二次积分 \\(I=\\int_0^{1}\\mathrm{d}y\\int_0^{y}(x+y)\\,\\mathrm{d}x\\) 交换积分次序，结果是？",
+    "options": ["\\(\\int_0^{1}\\mathrm{d}x\\int_x^{1}(x+y)\\,\\mathrm{d}y\\)", "\\(\\int_0^{1}\\mathrm{d}x\\int_0^{x}(x+y)\\,\\mathrm{d}y\\)", "\\(\\int_0^{1}\\mathrm{d}x\\int_0^{1}(x+y)\\,\\mathrm{d}y\\)", "\\(\\int_0^{1}\\mathrm{d}y\\int_y^{1}(x+y)\\,\\mathrm{d}x\\)"],
+    "answer": 0,
+    "explain": "原区域是 \\(0\\le x\\le y\\le 1\\)。改投影到 \\(x\\) 轴后 \\(0\\le x\\le 1\\)，水平穿线从 \\(y=x\\) 进入、到 \\(y=1\\) 离开，故 A 正确（两种次序都等于 \\(1/2\\)）。B 把下限定成 \\(y=0\\)，多算了一块三角形；C 完全丢掉 \\(x\\le y\\) 这条边界，把区域扩成正方形；D 只对调了微分字母、上下限没重新推导，区域并不是同一块。" },
+  { "q": "在柱面坐标下，体积元素 \\(\\mathrm{d}V\\) 正确的是？",
+    "options": ["\\(r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z\\)", "\\(\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z\\)", "\\(r^{2}\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z\\)", "\\(\\rho^{2}\\sin\\varphi\\,\\mathrm{d}\\rho\\,\\mathrm{d}\\varphi\\,\\mathrm{d}\\theta\\)"],
+    "answer": 0,
+    "explain": "柱面坐标只把 \\(xy\\) 平面换成极坐标、\\(z\\) 不变，故 \\(\\mathrm{d}V=(r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta)\\mathrm{d}z=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z\\)，A 正确。B 漏了极坐标面积元素的因子 \\(r\\)；C 把 \\(r\\) 误写成 \\(r^{2}\\)，不是底面积元素的正确形式；D 本身是球面坐标的公式，虽然对但答非所问，题目问的是柱面坐标。" },
+  { "q": "设 \\(G(t)=\\int_t^{2t}(x^{2}t)\\,\\mathrm{d}x\\)，则 \\(G'(t)\\) 等于？",
+    "options": ["\\(5t^{3}\\)", "\\(\\frac{28t^{3}}{3}\\)", "\\(7t^{3}\\)", "\\(2t^{3}\\)"],
+    "answer": 1,
+    "explain": "被积函数 \\(x^{2}t\\) 与上下限都含 \\(t\\)，莱布尼茨公式三项都要写：\\(G'(t)=\\int_t^{2t}x^{2}\\,\\mathrm{d}x+(2t)^{2}\\cdot t\\cdot 2-t^{2}\\cdot t\\cdot 1=\\Bigl[\\frac{x^{3}}{3}\\Bigr]_t^{2t}+8t^{3}-t^{3}=\\frac{7t^{3}}{3}+7t^{3}=\\frac{28t^{3}}{3}\\)，B 正确。直接积分验算：\\(G(t)=t\\cdot\\frac{(2t)^{3}-t^{3}}{3}=\\frac{7t^{4}}{3}\\)，求导也得 \\(\\frac{28t^{3}}{3}\\)。A 只算了积分号内那一项 \\(\\frac{7t^{3}}{3}\\) 却错记成 \\(5t^{3}\\)、两条边界项全漏；C 只算了边界项 \\(8t^{3}-t^{3}=7t^{3}\\)、漏了积分项；D 把被积函数里的 \\(t\\) 当常数提出去求导，只得到 \\(2t^{3}\\)，连「对 \\(t\\) 求导」这一步都做错了。" }
+]
+=== SUMMARY ===
+      <p>这一章把「累加」从区间搬到平面、再搬到空间：先在有界区域上用黎曼和定义二重积分（被积函数非负时即曲顶柱体体积），再用「先投影后穿线」化成二次积分，必要时交换次序或改用极坐标（记得补 \(r\)）；三重积分沿用同一套动作、只是多了一层，柱面与球面坐标各有自己的雅可比因子。元素法随后把曲面面积、薄片质心、质量与立体体积一一写成重积分。</p>
+      <p>最后一节换了个角度：让被积函数携带参数，积分结果变成参数的函数，在被积函数与偏导连续时可以钻进积分号求导，上下限也含参数时必须用莱布尼茨公式写满三项。到这里，我们会在直角坐标下对「一块区域」积分；下一章的曲线积分与曲面积分，将把积分搬到弯曲的曲线和曲面上，并给出格林公式、高斯公式这类把不同维度的积分连起来的桥梁。</p>
+=== DEMOJS ===
+const DEMOS = {
+  'double-integral-volume': function (el) {
+    const f = (x, y) => 4 - x * x - y * y;   // 在 [0,1]^2 上恒 >= 2 > 0
+    DemoPresets.custom(el, {
+      range: [-0.15, 1.2, -0.15, 1.25], boxH: 380,
+      slider: { label: '等分数', min: 1, max: 16, step: 1, init: 4 },
+      controlsHTML: '<span class="hint">拖动等分数，看细柱体积和怎样逼近精确体积</span>',
+      figureHint: '这是三维曲顶柱体的俯视投影：每个小格代表一根竖立的细柱，底色越深柱越高；真实体积没有画出，读数里的和才是它。',
+      draw: (p, out, v, c, C) => {
+        const n = Math.max(1, Math.round(v)), cell = 1 / n;
+        p.rect(0, 0, 1, 1, { fill: C('accent'), alpha: 0.04, stroke: C('text') });
+        let sum = 0;
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            const x0 = i * cell, y0 = j * cell;
+            const xc = x0 + cell / 2, yc = y0 + cell / 2;
+            const h = f(xc, yc);
+            sum += h * cell * cell;
+            p.rect(x0, y0, x0 + cell, y0 + cell,
+              { fill: C('cyan'), alpha: 0.12 + 0.55 * (h / 4), stroke: C('accent') });
+          }
+        }
+        p.text(0.02, 1.12, '底面俯视：颜色越深柱越高', { size: 11, color: C('text') });
+        out.innerHTML = `细分 ${texHTML('n\\times n=' + n + '\\times' + n)}：每格面积 ${texHTML('\\Delta\\sigma=1/n^{2}')}，柱高取中心处的 ${texHTML('f=4-x^{2}-y^{2}')}（在底面上恒为正）。<br>` +
+          `细柱体积和 ${texHTML('V_n=\\sum f\\,\\Delta\\sigma=' + f4(sum))}，精确体积 ${texHTML('V=\\iint_D(4-x^{2}-y^{2})\\,\\mathrm{d}\\sigma=\\frac{10}{3}\\approx' + f4(10 / 3))}。`;
+      }
+    });
+  },
+
+  'order-switch': function (el) {
+    let order = 0; // 0 竖向穿线（先 y 后 x），1 横向穿线（先 x 后 y）
+    DemoPresets.custom(el, {
+      range: [-0.1, 1.2, -0.1, 1.2], boxH: 380,
+      slider: { label: '扫描位置', min: 0.03, max: 0.97, step: 0.01, init: 0.5 },
+      controlsHTML: '<span class="hint">切换两种穿线方向，拖动扫描位置看内层上下限</span>',
+      buttons: [
+        { label: '竖向穿线', run: () => { order = 0; } },
+        { label: '横向穿线', run: () => { order = 1; } }
+      ],
+      figureHint: '竖向穿线对应「先对纵轴变量积分」，横向穿线对应「先对横轴变量积分」；两条扫描线给出的上下限不同，但总积分值相同。',
+      draw: (p, out, t, c, C) => {
+        for (let i = 0; i < 60; i++) {
+          const x0 = i / 60, x1 = (i + 1) / 60;
+          p.rect(x0, Math.pow(x0, 3), x1, 1, { fill: C('cyan'), alpha: 0.20 });
+        }
+        p.curve(x => Math.pow(x, 3), { from: 0, to: 1, color: C('accent'), width: 2.4 });
+        p.line(0, 1, 1, 1, { color: C('ok'), width: 2.2 });
+        p.line(0, 0, 0, 1, { color: C('ok'), width: 2.2 });
+        p.text(0.62, 0.16, '下边界', { size: 10, color: C('accent') });
+        p.text(0.62, 1.07, '上边界', { size: 10, color: C('ok') });
+        if (order === 0) {
+          const yb = Math.pow(t, 3);
+          p.line(t, yb, t, 1, { color: C('warn'), width: 2.6 });
+          p.dot(t, yb, { r: 5, color: C('danger') });
+          p.dot(t, 1, { r: 5, color: C('danger') });
+          p.text(t + 0.02, (yb + 1) / 2, '竖向穿线', { size: 10, color: C('warn') });
+          out.innerHTML = `竖向穿线：固定 ${texHTML('x=' + f4(t))}，从 ${texHTML('y=x^{3}=' + f4(yb))} 穿入、从 ${texHTML('y=1')} 穿出。<br>` +
+            `先对 ${texHTML('y')} 积分 ${texHTML('\\int_{x^{3}}^{1}3x^{2}\\,\\mathrm{d}y=3x^{2}(1-x^{3})')}，再对 ${texHTML('x')} 积分；总值 ${texHTML('I=\\frac{1}{2}')}。`;
+        } else {
+          const xb = Math.cbrt(t);
+          p.line(0, t, xb, t, { color: C('warn'), width: 2.6 });
+          p.dot(0, t, { r: 5, color: C('danger') });
+          p.dot(xb, t, { r: 5, color: C('danger') });
+          p.text(xb / 2, t + 0.06, '横向穿线', { size: 10, color: C('warn') });
+          out.innerHTML = `横向穿线：固定 ${texHTML('y=' + f4(t))}，从 ${texHTML('x=0')} 穿入、从 ${texHTML('x=\\sqrt[3]{y}=' + f4(xb))} 穿出。<br>` +
+            `先对 ${texHTML('x')} 积分 ${texHTML('\\int_0^{\\sqrt[3]{y}}3x^{2}\\,\\mathrm{d}x=y')}，再对 ${texHTML('y')} 积分；总值仍是 ${texHTML('I=\\frac{1}{2}')}。`;
+        }
+      }
+    });
+  },
+
+  'polar-jacobian': function (el) {
+    const dth = 0.8; // 固定张角（弧度）
+    DemoPresets.twoSliders(el, {
+      range: [-0.2, 3.7, -0.2, 3.7], boxH: 400,
+      sliders: [
+        { label: '半径', min: 0.3, max: 2.6, step: 0.05, init: 1.2 },
+        { label: '径向厚度', min: 0.02, max: 0.8, step: 0.01, init: 0.3 }
+      ],
+      hint: '把径向厚度拖小，看扇环面积怎样贴近拉直后的矩形',
+      figureHint: '彩色扇环是极坐标网格里的一格；拉直后长约为半径乘张角、宽为径向厚度，这就是因子 r 的来历。',
+      dynamic: (p, r, dr, C) => {
+        const outer = [], inner = [], N = 40;
+        for (let i = 0; i <= N; i++) {
+          const a = dth * i / N;
+          outer.push([(r + dr) * Math.cos(a), (r + dr) * Math.sin(a)]);
+          inner.push([r * Math.cos(a), r * Math.sin(a)]);
+        }
+        const pts = outer.concat(inner.slice().reverse());
+        p.polygon(pts, { fill: C('cyan'), alpha: 0.30, color: C('accent'), width: 2 });
+        p.line(r, 0, r + dr, 0, { color: C('warn'), width: 2 });
+        p.dot(r + dr / 2, (r + dr / 2) * Math.sin(dth / 2), { r: 4, color: C('danger') });
+        // 标签原来按 0.6 倍半径摆，被拉进了扇形内部；改标在真实内弧中点稍外侧
+        p.text(r * Math.cos(dth / 2), r * Math.sin(dth / 2) - 0.14, '内弧', { size: 10, color: C('text') });
+        p.text((r + dr) * Math.cos(dth / 2), (r + dr) * Math.sin(dth / 2) + 0.12, '外弧', { size: 10, color: C('text') });
+      },
+      readout: (r, dr) => {
+        const exact = ((r + dr) * (r + dr) - r * r) * dth / 2;
+        const approx = r * dr * dth;
+        const err = exact > 0 ? (exact - approx) / exact : 0;
+        return `半径 ${texHTML('r=' + f4(r))}、径向厚度 ${texHTML('\\Delta r=' + f4(dr))}、张角固定 ${texHTML('\\Delta\\theta=' + f4(dth))}（弧度）。<br>` +
+          `扇环精确面积 ${texHTML('\\tfrac{1}{2}\\bigl[(r+\\Delta r)^{2}-r^{2}\\bigr]\\Delta\\theta=' + f4(exact))}，拉直近似 ${texHTML('r\\,\\Delta r\\,\\Delta\\theta=' + f4(approx))}，相对误差 ${texHTML(f4(err * 100) + '\\%')}。<br>` +
+          `把径向厚度拖小，误差随之消失，于是 ${texHTML('\\mathrm{d}\\sigma=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta')}；柱面坐标里 ${texHTML('\\mathrm{d}V=r\\,\\mathrm{d}r\\,\\mathrm{d}\\theta\\,\\mathrm{d}z')}。`;
+      }
+    });
+  },
+
+  'triple-integral': function (el) {
+    const A = z => Math.pow(2 - z, 2);   // 高度 z 处截面积，非负
+    DemoPresets.riemann(el, {
+      range: [0, 2.2, -0.2, 4.5], boxH: 380,
+      equal: false, aspectNote: '横轴是高度（长度），纵轴是截面积（长度平方），两轴量纲不同',
+      a: 0, b: 2, fn: A, maxN: 40, initN: 6,
+      hint: '拖动等分数，看各层薄片体积之和怎样逼近锥体体积',
+      figureHint: '曲线是高度 z 处的截面积，每个矩形是那一层的薄片；这是截面法的一维投影，三维锥体未画出，矩形面积和就是它的体积。',
+      dynamic: (p, n) => {
+        p.text(0.9, 4.25, '截面积曲线', { size: 10 });
+      },
+      readout: (n, sum) => {
+        return `等分 ${texHTML('n=' + n)}：每层厚 ${texHTML('\\Delta z=2/n=' + f4(2 / n))}，薄片体积 ${texHTML('A(z_i)\\Delta z=(2-z_i)^{2}\\Delta z')}。<br>` +
+          `累加 ${texHTML('V_n=\\sum A(z_i)\\Delta z=' + f4(sum))}，精确体积 ${texHTML('V=\\int_0^{2}(2-z)^{2}\\,\\mathrm{d}z=\\frac{8}{3}\\approx' + f4(8 / 3))}。`;
+      }
+    });
+  },
+
+  'parametric-integral': function (el) {
+    const f = (x, t) => x + t;
+    DemoPresets.sliderCurve(el, {
+      range: [0, 2.8, -0.2, 3.9], boxH: 380, fill: true,
+      slider: { label: '参数', min: 0.2, max: 1, step: 0.01, init: 0.6 },
+      hint: '拖动参数，盯住两条移动的上下限与读数里的三项',
+      curves: [{ fn: (x, t) => f(x, t), color: 'accent', width: 2.4, from: 0, to: 2.6 }],
+      dynamic: (p, t, C) => {
+        const N = 44;
+        for (let i = 0; i < N; i++) {
+          const x0 = t + t * i / N, x1 = t + t * (i + 1) / N;
+          const h = f((x0 + x1) / 2, t);
+          p.rect(x0, 0, x1, h, { fill: C('cyan'), alpha: 0.24 });
+        }
+        p.line(t, 0, t, f(t, t), { color: C('warn'), dash: true, width: 1.8 });
+        p.line(2 * t, 0, 2 * t, f(2 * t, t), { color: C('warn'), dash: true, width: 1.8 });
+        p.dot(t, f(t, t), { r: 5, color: C('danger') });
+        p.dot(2 * t, f(2 * t, t), { r: 5, color: C('danger') });
+        p.text(t - 0.12, 0.15, '下限', { size: 10, color: C('warn') });
+        p.text(2 * t + 0.02, 0.15, '上限', { size: 10, color: C('warn') });
+      },
+      readout: (t) => {
+        const G = 2.5 * t * t;
+        return `参数 ${texHTML('t=' + f4(t))}：积分区间 ${texHTML('[t,2t]=[' + f4(t) + ',' + f4(2 * t) + ']')} 与被积函数一起变化。<br>` +
+          `${texHTML('G(t)=\\int_t^{2t}(x+t)\\,\\mathrm{d}x=\\frac{5}{2}t^{2}=' + f4(G))}，莱布尼茨给出 ${texHTML("G'(t)=t+6t-2t=5t=" + f4(5 * t))}。<br>` +
+          `三项依次是：积分号内 ${texHTML('\\int_t^{2t}1\\,\\mathrm{d}x=t')}、上限 ${texHTML('(2t+t)\\cdot 2=6t')}、下限 ${texHTML('-(t+t)\\cdot 1=-2t')}；漏掉后两项只剩 ${texHTML('t')}。`;
+      },
+      figureHint: '两条橙色虚线是随参数移动的积分上下限；拖动参数时被积函数与积分区间同时改变，求导要把三处贡献都算上。'
+    });
+  }
+};
+
+mountDemos(DEMOS);

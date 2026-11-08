@@ -1,0 +1,453 @@
+=== GOALS ===
+        <li><label><input type="checkbox">用坐标做向量的加减与数乘，并算出模长、方向余弦与两点间距离</label></li>
+        <li><label><input type="checkbox">计算数量积、向量积与混合积，用它们判垂直、求面积与体积</label></li>
+        <li><label><input type="checkbox">由点或法向量写出平面方程，由点与方向向量写出直线方程</label></li>
+        <li><label><input type="checkbox">认出常见二次曲面的标准方程，把空间曲线看成两个曲面的交线</label></li>
+=== MAP ===
+{
+  "nodes": [
+    { "id": "n0", "label": "向量及其线性运算", "kind": "root" },
+    { "id": "n1", "label": "坐标与模长", "kind": "core" },
+    { "id": "n2", "label": "数量积", "kind": "core" },
+    { "id": "n3", "label": "向量积与混合积", "kind": "branch" },
+    { "id": "n4", "label": "平面及其方程", "kind": "core" },
+    { "id": "n5", "label": "空间直线及其方程", "kind": "branch" },
+    { "id": "n6", "label": "曲面及其方程", "kind": "core" },
+    { "id": "n7", "label": "空间曲线及其方程", "kind": "branch" },
+    { "id": "end", "label": "下一章：多元函数微分法", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n2", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n1", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n5", "target": "n7" },
+    { "source": "n3", "target": "end" },
+    { "source": "n7", "target": "end" }
+  ]
+}
+=== SECTION:s1 ===
+        <h3><span class="sec-badge">8.1</span>向量及其线性运算</h3>
+        <p>前一章的量大多只有一个数。从这一章起要同时记录「往哪个方向、走多远」，还得在三维空间里定位——向量和坐标就是为此准备的。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">向量与坐标</span><span class="mb-no">8.1</span></div>
+          <div class="mb-body">
+            既有大小又有方向的量叫<strong class="term">向量</strong>。在空间直角坐标系中，把向量起点移到原点，终点坐标 \((a_1,a_2,a_3)\) 就叫它的坐标，记作 \(\vec{a}=(a_1,a_2,a_3)\)。线性运算逐分量进行：
+            $$\vec{a}\pm\vec{b}=(a_1\pm b_1,\ a_2\pm b_2,\ a_3\pm b_3),\qquad \lambda\vec{a}=(\lambda a_1,\ \lambda a_2,\ \lambda a_3)$$
+            模长 \(\left|\vec{a}\right|=\sqrt{a_1^{2}+a_2^{2}+a_3^{2}}\)；若 \(\vec{a}\neq\vec{0}\)，方向余弦为 \(\left(\dfrac{a_1}{|\vec{a}|},\dfrac{a_2}{|\vec{a}|},\dfrac{a_3}{|\vec{a}|}\right)\)。
+            <mark class="key">两个向量相等要求三个分量分别相等，与起点放在哪里无关</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="vector-operations">
+          <div class="demo-title">演示 1 · 两个向量按比例混合，终点画出一条直线</div>
+          <div class="demo-caption">图里画的是 \(\vec{a}=(1,2,3)\) 与 \(\vec{b}=(2,-1,0)\) 在 \(xy\) 平面上的投影（第三分量请看读数）。拖动比例 \(t\)，橙色箭头是 \(t\vec{a}+(1-t)\vec{b}\) 在 \(xy\) 平面上的投影。<b>它的终点始终落在连接两个终点那条线段上</b>，这就是线性运算的几何含义。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">线性运算与模长一次算清</span><span class="mb-no">例 8.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\vec{a}=(1,2,3)\)、\(\vec{b}=(2,-1,0)\)。求 \(2\vec{a}-3\vec{b}\)、\(\left|\vec{a}\right|\)，以及 \(\vec{a}\) 的方向余弦。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>数乘与加减都逐分量做，三个分量各算各的，别把不同分量混在一起。模长是三个分量平方和的算术平方根；方向余弦就是每个分量除以模长。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(2\vec{a}=(2,4,6)\)，\(3\vec{b}=(6,-3,0)\)，故
+              $$2\vec{a}-3\vec{b}=(2-6,\ 4-(-3),\ 6-0)=(-4,\ 7,\ 6)$$
+              \(\left|\vec{a}\right|=\sqrt{1^{2}+2^{2}+3^{2}}=\sqrt{14}\)。<br>
+              方向余弦为 \(\left(\dfrac{1}{\sqrt{14}},\dfrac{2}{\sqrt{14}},\dfrac{3}{\sqrt{14}}\right)\)。可以核对：三个数的平方和为 \(\dfrac{1+4+9}{14}=1\)，符合方向余弦的性质。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「把向量写成三元组 → 逐分量运算 → 模长用平方和开方」。方向余弦算完后用平方和等于 1 自检，能立刻发现分量抄错或模长算错。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">向量的起点可以随便挪</span></div>
+          <div class="mb-body">向量只记录「相对位移」，起点在哪不重要。演示里两个向量的终点连成一条线段，按 \(t\) 加权得到的终点就在这条线段上滑动——这与把向量起点一律放在原点的约定完全一致。</div>
+        </div>
+=== SECTION:s2 ===
+        <h3><span class="sec-badge">8.2</span>数量积、向量积与混合积</h3>
+        <p>向量之间有两种乘法：一种给出一个数（用来量夹角和投影），另一种给出一个新向量（用来量面积和垂直方向）。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">三种积</span><span class="mb-no">8.2</span></div>
+          <div class="mb-body">
+            设 \(\vec{a}=(a_1,a_2,a_3)\)、\(\vec{b}=(b_1,b_2,b_3)\)。<br>
+            <strong>数量积</strong>：\(\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3=\left|\vec{a}\right|\left|\vec{b}\right|\cos\theta\)。<br>
+            <strong>向量积</strong>：\(\vec{a}\times\vec{b}=(a_2b_3-a_3b_2,\ a_3b_1-a_1b_3,\ a_1b_2-a_2b_1)\)，其模等于以 \(\vec{a},\vec{b}\) 为邻边的平行四边形面积，方向按右手规则垂直于两者。<br>
+            <strong>混合积</strong>：\((\vec{a}\times\vec{b})\cdot\vec{c}\)，其绝对值等于以三个向量为棱的平行六面体体积。
+            <mark class="key">\(\vec{a}\cdot\vec{b}=0\) 判垂直；\(\vec{a}\times\vec{b}=\vec{0}\) 判平行</mark>。注意数量积交换律成立，向量积则满足 \(\vec{b}\times\vec{a}=-(\vec{a}\times\vec{b})\)。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="cross-product">
+          <div class="demo-title">演示 2 · 张成的平行四边形与「垂直纸面」的叉积</div>
+          <div class="demo-caption">\(\vec{a}=(1,2,0)\) 与 \(\vec{b}=(2,-1,0)\) 都在 \(xy\) 平面内，浅色平行四边形由它们张成。拖动缩放系数，读数给出数量积、叉积与面积。<b>两向量点积恒为 0，所以始终垂直；叉积只剩第三个分量，方向垂直纸面</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一题同时练点积与叉积</span><span class="mb-no">例 8.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\vec{a}=(1,2,0)\)、\(\vec{b}=(2,-1,0)\)。求 \(\vec{a}\cdot\vec{b}\) 与 \(\vec{a}\times\vec{b}\)，并求以两者为邻边的平行四边形面积。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>点积按「对应分量相乘再相加」；叉积按三阶行列式展开，三个分量分别是「其余两个分量交叉相乘作差」。最后用叉积的模求面积，并与点积是否为 0 对照。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(\vec{a}\cdot\vec{b}=1\times 2+2\times(-1)+0\times 0=2-2=0\)，故两向量<strong>垂直</strong>。<br>
+              叉积：第一分量 \(2\times 0-0\times(-1)=0\)；第二分量 \(0\times 2-1\times 0=0\)；第三分量 \(1\times(-1)-2\times 2=-1-4=-5\)。故
+              $$\vec{a}\times\vec{b}=(0,0,-5)$$
+              \(\left|\vec{a}\times\vec{b}\right|=5\)，即平行四边形面积为 5。核对：因两向量垂直，面积也等于 \(\left|\vec{a}\right|\left|\vec{b}\right|=\sqrt{5}\times\sqrt{5}=5\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先算点积判夹角 → 再按行列式算叉积 → 用模长给面积」。若点积为 0，可立刻用 \(\left|\vec{a}\right|\left|\vec{b}\right|\) 交叉核对面积，这是最省事的验算。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">点积量「同向程度」，叉积量「张开的面积」</span></div>
+          <div class="mb-body">演示里两向量夹角固定为直角，所以点积恒为 0、平行四边形面积达到最大。叉积方向垂直于两者所在的平面，图中只能标成「垂直纸面向里」，其具体方向由右手规则决定。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把向量积当成可交换</span></div>
+          <div class="mb-body">\(\vec{a}\times\vec{b}\neq\vec{b}\times\vec{a}\)，二者相差一个负号。写混合积或求法向量时，顺序反了会得到方向相反的结果。固定动作是「先按题目给定的顺序写叉积，再用右手规则确认指向」。</div>
+        </div>
+=== SECTION:s3 ===
+        <h3><span class="sec-badge">8.3</span>平面及其方程</h3>
+        <p>一个平面由「过哪个点」和「朝哪个方向」完全确定。后者用法向量表示，因为平面内任何向量都与它垂直。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">平面的三种方程</span><span class="mb-no">8.3</span></div>
+          <div class="mb-body">
+            设平面过点 \(M_0(x_0,y_0,z_0)\)，法向量 \(\vec{n}=(A,B,C)\neq\vec{0}\)。<strong>点法式</strong>：
+            $$A(x-x_0)+B(y-y_0)+C(z-z_0)=0$$
+            展开得<strong>一般式</strong> \(Ax+By+Cz+D=0\)，其中 \(D=-(Ax_0+By_0+Cz_0)\)。若平面在三条坐标轴上的截距分别为 \(a,b,c\)（均不为 0），则<strong>截距式</strong>为 \(\dfrac{x}{a}+\dfrac{y}{b}+\dfrac{z}{c}=1\)。点 \(M_1(x_1,y_1,z_1)\) 到平面的距离为
+            $$d=\frac{\left|Ax_1+By_1+Cz_1+D\right|}{\sqrt{A^{2}+B^{2}+C^{2}}}$$
+            <mark class="key">法向量不能是零向量；截距式要求三个截距都存在且非零</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="plane-normal">
+          <div class="demo-title">演示 3 · 法向量一转，平面跟着转</div>
+          <div class="demo-caption">图里画的是平面与 \(xy\) 面的交线（一条直线）以及法向量在该面上的投影。拖动法向量的 \(y\) 分量，交线会跟着转动，读数同步给出点法式方程与一般式系数。<b>法向量的三个分量就是 \(x,y,z\) 的系数</b>，这一点始终不变。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">三点定一平面，再算原点到它的距离</span><span class="mb-no">例 8.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求过三点 \(A(1,0,0)\)、\(B(0,2,0)\)、\(C(0,0,3)\) 的平面方程，并求原点到该平面的距离。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>三点分别落在三条坐标轴上，正好可以直接用截距式；再化成一般式读系数，最后套点到平面的距离公式。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              三个截距为 \(a=1\)、\(b=2\)、\(c=3\)，故截距式为 \(\dfrac{x}{1}+\dfrac{y}{2}+\dfrac{z}{3}=1\)。两边乘 6：
+              $$6x+3y+2z-6=0$$
+              于是法向量 \(\vec{n}=(6,3,2)\)，\(D=-6\)。原点到平面的距离
+              $$d=\frac{\left|6\cdot0+3\cdot0+2\cdot0-6\right|}{\sqrt{6^{2}+3^{2}+2^{2}}}=\frac{6}{\sqrt{49}}=\frac{6}{7}$$
+              核对：把 \(A,B,C\) 逐一代入 \(6x+3y+2z-6\) 都得 0，说明方程确实过这三点。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「看题目给了什么（点 + 法向量 / 三点 / 三截距）→ 选对应的方程形式 → 化成一般式读系数 → 需要距离时套公式」。算完把已知点代回去验一遍，成本很低。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">法向量是平面的「朝向」</span></div>
+          <div class="mb-body">平面内任取一个向量都与法向量垂直，所以「平面朝哪边」完全由 \(\vec{n}\) 决定，而「平面放在哪」由那个已知点决定。演示里拖动 \(y\) 分量，平面与 \(xy\) 面的交线随之转动，一般式里 \(y\) 的系数跟着变。</div>
+        </div>
+=== SECTION:s4 ===
+        <h3><span class="sec-badge">8.4</span>空间直线及其方程</h3>
+        <p>直线比平面多一个自由度：既要过一点，还要指明沿哪个方向延伸。把「方向」交给方向向量即可。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">直线的三种方程</span><span class="mb-no">8.4</span></div>
+          <div class="mb-body">
+            设直线过 \(M_0(x_0,y_0,z_0)\)，方向向量 \(\vec{s}=(m,n,p)\neq\vec{0}\)。<strong>参数式</strong>：
+            $$x=x_0+mt,\quad y=y_0+nt,\quad z=z_0+pt\quad(t\in\mathbb{R})$$
+            消去 \(t\) 得<strong>对称式</strong> \(\dfrac{x-x_0}{m}=\dfrac{y-y_0}{n}=\dfrac{z-z_0}{p}\)；<strong>一般式</strong>则把直线写成两个平面的交线。
+            <mark class="key">若 \(m,n,p\) 中有分量为 0，对称式里对应项要单独处理，不能写成除以 0</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="space-line">
+          <div class="demo-title">演示 4 · 参数 t 一走，点沿直线滑动</div>
+          <div class="demo-caption">图里是直线在 \(xy\) 平面上的投影，红点随参数 \(t\) 沿投影线滑动。读数给出三个坐标与当前 \(t\)，并把给定点 \((3,1,4)\) 代进对称式核对。<b>三个比值都等于同一个 \(t\)，点才在直线上</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">写直线方程并判断一个点是否在上面</span><span class="mb-no">例 8.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求过点 \((1,2,3)\)、方向向量为 \((2,-1,1)\) 的直线的对称式与参数式，并判断点 \(P(3,1,4)\) 是否在该直线上。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>把点坐标与方向向量直接代入公式写方程；判断点是否在直线上，就把点的坐标代进对称式，看三个比值是否相等。方向向量三个分量都不是 0，可以放心用对称式。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              对称式：\(\dfrac{x-1}{2}=\dfrac{y-2}{-1}=\dfrac{z-3}{1}\)；参数式：
+              $$x=1+2t,\quad y=2-t,\quad z=3+t\quad(t\in\mathbb{R})$$
+              把 \(P(3,1,4)\) 代入三个比值：\(\dfrac{3-1}{2}=1\)、\(\dfrac{1-2}{-1}=1\)、\(\dfrac{4-3}{1}=1\)。三者相等，故 \(P\) 在直线上，对应 \(t=1\)。<br>
+              核对：把 \(t=1\) 代进参数式得 \((1+2,2-1,3+1)=(3,1,4)\)，与 \(P\) 一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">判断点是否在直线上的固定动作是「代进对称式算三个比值，看是否同一个 \(t\)」；用参数式也能反解 \(t\) 再核对第三个坐标。若方向向量含 0 分量，则那一项要改成「分子必须为 0」的条件。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">参数 t 就是沿方向量走了几步</span></div>
+          <div class="mb-body">从 \(M_0\) 出发，每让 \(t\) 增加 1，就沿 \(\vec{s}\) 走一整步；\(t\) 取负值则往反方向走。演示里红点沿投影线匀速滑动，正是这个「步数」的可视化。</div>
+        </div>
+=== SECTION:s5 ===
+        <h3><span class="sec-badge">8.5</span>曲面及其方程</h3>
+        <p>一个方程 \(F(x,y,z)=0\) 通常圈出空间里的一张曲面。认曲面最可靠的办法不是背名字，而是配方、看截面。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">常见二次曲面</span><span class="mb-no">8.5</span></div>
+          <div class="mb-body">
+            球面 \((x-x_0)^{2}+(y-y_0)^{2}+(z-z_0)^{2}=R^{2}\)；圆柱面 \(x^{2}+y^{2}=R^{2}\)（方程里缺哪个字母，就沿哪根轴延伸）；圆锥面 \(z^{2}=x^{2}+y^{2}\)；旋转抛物面 \(z=x^{2}+y^{2}\)。
+            <mark class="key">缺变量意味着沿该轴方向「平移不变」，这是柱面的判据</mark>；用平面 \(z=z_0\) 去截，得到的截线形状能帮你认出曲面类型。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="quadric-surfaces">
+          <div class="demo-title">演示 5 · 换一张曲面，看它的水平截线</div>
+          <div class="demo-caption">点按四个按钮切换曲面，图里画的是用平面 \(z=\dfrac{3}{2}\) 截出来的曲线（在 \(xy\) 平面上），读数给出标准方程与截线半径。<b>同一高度切一刀，四张曲面截出的圆半径各不相同，半径随高度变化的方式才是区分它们的依据</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">配方认出球面</span><span class="mb-no">例 8.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">方程 \(x^{2}+y^{2}+z^{2}-2z=0\) 表示什么曲面？求出它的球心与半径。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>三个平方项系数相同，很可能是球面，只是 \(z\) 的一次项打乱了标准形。对 \(z\) 配方，把常数凑齐，再与球面标准方程对照。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              对 \(z\) 配方：\(z^{2}-2z=(z-1)^{2}-1\)。原方程化为
+              $$x^{2}+y^{2}+(z-1)^{2}-1=0\quad\Longrightarrow\quad x^{2}+y^{2}+(z-1)^{2}=1$$
+              这是球心 \((0,0,1)\)、半径 \(1\) 的球面。<br>
+              核对：取球面上一点 \((0,0,2)\) 代入原方程得 \(0+0+4-4=0\)，成立；点 \((1,0,1)\) 代入得 \(1+0+1-2=0\)，也成立。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">认二次曲面的固定动作是「把每个变量分别配方 → 与标准方程对照 → 用特殊点代回去验算」。若某个变量在方程里完全不出现（如 \(x^{2}+y^{2}=1\)），那不是球而是沿该轴无限延伸的柱面。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">用切片认识一张曲面</span></div>
+          <div class="mb-body">三维曲面不好直接画，但用一叠平行平面去切，每片截线都是熟悉的平面曲线。演示里在 \(z=\dfrac{3}{2}\) 处切一刀，球面、柱面、锥面、抛物面给出的圆半径分别是 \(\dfrac{\sqrt{3}}{2}\)、\(1\)、\(\dfrac{3}{2}\)、\(\sqrt{\dfrac{3}{2}}\)，各不相同——半径随高度怎么变，才是区分它们的依据。</div>
+        </div>
+=== SECTION:s6 ===
+        <h3><span class="sec-badge">8.6</span>空间曲线及其方程</h3>
+        <p>一张曲面对应一个方程，两张曲面相交就得到一条曲线。把两个方程联立，或者引入一个参数，都能描述它。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">空间曲线的两种表示</span><span class="mb-no">8.6</span></div>
+          <div class="mb-body">
+            <strong>一般式</strong>：把曲线看成两张曲面的交线，写成联立方程组 \(\begin{cases}F(x,y,z)=0,\\ G(x,y,z)=0.\end{cases}\)。<br>
+            <strong>参数式</strong>：\(x=x(t),\ y=y(t),\ z=z(t)\)，\(t\) 在某个区间内变化。例如圆柱螺线 \(x=a\cos t,\ y=a\sin t,\ z=bt\)。
+            <mark class="key">求交线时先做代入消元，再检查代入过程中有没有丢掉或额外引入限制</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="space-curve">
+          <div class="demo-title">演示 6 · 球面与平面相切出的那条圆</div>
+          <div class="demo-caption">球面 \(x^{2}+y^{2}+z^{2}=2\) 与平面 \(z=1\) 相交。图里画的是这条交线在 \(xy\) 平面上的投影（与它自身形状相同），红点随角度滑动，读数给出三维坐标。<b>把 \(z=1\) 代进去，两个方程就缩成一个圆的方程</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">联立方程求交线</span><span class="mb-no">例 8.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求球面 \(x^{2}+y^{2}+z^{2}=2\) 与平面 \(z=1\) 的交线，说明它是什么曲线，并写出圆心与半径。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>交线上的点必须同时满足两个方程。把 \(z=1\) 代入球面方程消去 \(z\)，剩下的 \(x,y\) 关系再加上 \(z=1\) 这个条件，就完整地描述了交线。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              代入 \(z=1\)：\(x^{2}+y^{2}+1=2\)，即 \(x^{2}+y^{2}=1\)。因此交线为
+              $$\begin{cases}x^{2}+y^{2}=1,\\ z=1.\end{cases}$$
+              它是平面 \(z=1\) 上以 \((0,0,1)\) 为圆心、半径 \(1\) 的圆。<br>
+              也可写参数式：\(x=\cos t,\ y=\sin t,\ z=1\ (0\le t&lt;2\pi)\)。核对：代入两式分别得 \(\cos^{2}t+\sin^{2}t=1\) 与 \(z=1\)，都成立。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">求交线的固定动作是「把一个方程里的变量代入另一个 → 化简 → 别忘保留被代入的那个条件」。只写 \(x^{2}+y^{2}=1\) 会变成整个圆柱面，丢掉 \(z=1\) 就把圆变成了一大片曲面。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">两刀切出一条线</span></div>
+          <div class="mb-body">一个方程切掉一部分空间留下曲面，两个方程同时成立就只留下它们共同的那条边。演示里红点沿圆滑动，每一点都同时满足球面方程与平面方程，这就是「联立」的几何含义。</div>
+        </div>
+=== PITFALLS ===
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把向量积当成可交换</span></div>
+        <div class="mb-body"><b>错误做法</b>：认为 \(\vec{a}\times\vec{b}=\vec{b}\times\vec{a}\)。<b>为什么错</b>：右手规则给出的方向随顺序反转，两者相差一个负号。<b>正确做法</b>：按题目给定顺序写叉积，并用 \(\vec{b}\times\vec{a}=-(\vec{a}\times\vec{b})\) 核对方向。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">方向向量含 0 时仍写对称式除法</span></div>
+        <div class="mb-body"><b>错误做法</b>：方向向量 \((0,1,2)\) 时写 \(\dfrac{x-x_0}{0}\)。<b>为什么错</b>：分母为零没有意义。<b>正确做法</b>：把该分量单独写成 \(x=x_0\)，其余两项再写成比值相等；或直接改用参数式。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">求交线时丢掉代入的条件</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(z=1\) 代入球面后只留下 \(x^{2}+y^{2}=1\)。<b>为什么错</b>：这个方程在三维里表示一整张圆柱面，不是一条曲线。<b>正确做法</b>：写成联立 \(\begin{cases}x^{2}+y^{2}=1,\\ z=1,\end{cases}\) 或给出参数式。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把缺变量的曲面当成封闭曲面</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(x^{2}+y^{2}=1\) 说成半径 1 的球。<b>为什么错</b>：方程里没有 \(z\)，说明 \(z\) 取任意值都成立，图形沿 \(z\) 轴无限延伸。<b>正确做法</b>：认出这是柱面；球面必须三个变量都出现且能配成三个平方和。</div>
+      </div>
+=== EXERCISES ===
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>设 \(\vec{a}=(2,-1,3)\)、\(\vec{b}=(0,4,-2)\)，求 \(\vec{a}+\vec{b}\)、\(2\vec{a}\) 与 \(\left|\vec{b}\right|\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">逐分量相加得 \(\vec{a}+\vec{b}=(2,3,1)\)；数乘得 \(2\vec{a}=(4,-2,6)\)；\(\left|\vec{b}\right|=\sqrt{0^{2}+4^{2}+(-2)^{2}}=\sqrt{20}=2\sqrt{5}\)。三个分量各算各的，不要把它们混在一起。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>求过点 \((2,-1,3)\) 且法向量为 \((1,2,-2)\) 的平面方程，并求原点到该平面的距离。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">点法式 \(1(x-2)+2(y+1)-2(z-3)=0\)，展开得 \(x+2y-2z+6=0\)。原点到平面距离 \(d=\frac{|6|}{\sqrt{1+4+4}}=\frac{6}{3}=2\)。算完把已知点代入：\(2+(-2)-6+6=0\)，成立。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>判断三点 \(A(1,0,1)\)、\(B(2,1,0)\)、\(C(0,2,2)\) 是否共线；若不共线，求过三点的平面方程。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">\(\overrightarrow{AB}=(1,1,-1)\)、\(\overrightarrow{AC}=(-1,2,1)\)。若共线则两向量应平行，但对应分量比值 \(1/(-1)=-1\)、\(1/2\) 不相等，故不共线。法向量取 \(\overrightarrow{AB}\times\overrightarrow{AC}=(1\cdot1-(-1)\cdot2,\ (-1)\cdot(-1)-1\cdot1,\ 1\cdot2-1\cdot(-1))=(3,0,3)\)，可约成 \((1,0,1)\)。平面：\((x-1)+0(y-0)+(z-1)=0\)，即 \(x+z=2\)。把 \(B,C\) 代入核对：\(2+0=2\)、\(0+2=2\)，都成立。</div></details>
+          </div>
+=== QUIZ ===
+[
+  { "q": "设 \\(\\vec{a}=(1,2,3)\\)、\\(\\vec{b}=(2,-1,0)\\)，则 \\(2\\vec{a}-3\\vec{b}\\) 是？",
+    "options": ["\\((-4,7,6)\\)", "\\((4,1,6)\\)", "\\((8,1,6)\\)", "\\((-4,1,6)\\)"], "answer": 0,
+    "explain": "\\(2\\vec{a}=(2,4,6)\\)、\\(3\\vec{b}=(6,-3,0)\\)，逐分量相减得 \\((2-6,4-(-3),6-0)=(-4,7,6)\\)，A 正确。B 第一分量算成 \\(6-2=4\\)（减反了序）、第二分量把 \\(4-(-3)\\) 算成 \\(4-3=1\\)；C 第一分量把 \\(2-6\\) 算成 \\(2+6=8\\)、第二分量同样错成 1；D 只有第二分量把 \\(4-(-3)\\) 算成 \\(4-3=1\\)，其余两个分量都对。" },
+  { "q": "关于数量积与向量积，下列说法正确的是？",
+    "options": ["\\(\\vec{a}\\times\\vec{b}=\\vec{b}\\times\\vec{a}\\)", "\\(\\vec{a}\\cdot\\vec{b}=0\\) 说明两向量平行", "\\(\\left|\\vec{a}\\times\\vec{b}\\right|\\) 等于以两者为邻边的平行四边形面积", "数量积的结果是一个向量"], "answer": 2,
+    "explain": "C 是向量积的几何意义，正确。A 错在叉积反交换，\\(\\vec{b}\\times\\vec{a}=-(\\vec{a}\\times\\vec{b})\\)；B 说反了，点积为 0 说明垂直，平行应看叉积为零向量；D 错在数量积的结果是一个数。" },
+  { "q": "过三点 \\((1,0,0),(0,2,0),(0,0,3)\\) 的平面方程是？",
+    "options": ["\\(x+2y+3z=1\\)", "\\(6x+3y+2z=6\\)", "\\(2x+3y+6z=6\\)", "\\(x+y+z=6\\)"], "answer": 1,
+    "explain": "截距式 \\(\\frac{x}{1}+\\frac{y}{2}+\\frac{z}{3}=1\\) 两边乘 6 得 \\(6x+3y+2z=6\\)，B 正确，且代入三点均成立。A 把截距直接当系数；C 把系数次序调乱；D 与三个截距都不符。" },
+  { "q": "直线 \\(\\frac{x-1}{2}=\\frac{y-2}{-1}=z-3\\) 上，点 \\((3,1,4)\\) 对应的参数值是？",
+    "options": ["\\(0\\)", "\\(1\\)", "\\(2\\)", "该点不在直线上"], "answer": 1,
+    "explain": "三个比值依次为 \\(\\frac{3-1}{2}=1\\)、\\(\\frac{1-2}{-1}=1\\)、\\(4-3=1\\)，相等，故点在直线上且 \\(t=1\\)，B 正确。A、C 只看了部分比值；D 错在三个比值确实相同。" },
+  { "q": "方程 \\(x^{2}+y^{2}=1\\) 在三维空间中表示？",
+    "options": ["半径 1 的球面", "半径 1 的圆", "沿 \\(z\\) 轴延伸的圆柱面", "半径 1 的圆锥面"], "answer": 2,
+    "explain": "方程里没有 \\(z\\)，说明 \\(z\\) 取任意值都满足，故是母线平行于 \\(z\\) 轴的圆柱面，C 正确。A 需要三个平方项都出现；B 是平面曲线，必须再加一个方程如 \\(z=1\\)；D 的方程形如 \\(z^{2}=x^{2}+y^{2}\\)。" }
+]
+=== SUMMARY ===
+      <p>这一章把「一个数」换成「带方向的量」与「带位置的点」：向量用三个分量记录方向与长度，数量积与向量积分别量出夹角和面积，平面靠法向量定位、直线靠方向向量定位，曲面与曲线则统一写成方程或方程组。</p>
+      <p>有了坐标，就能研究依赖于多个自变量的函数。下一章把导数推广到多元情形：偏导数、全微分、方向导数与梯度，都会反复用到这里的向量语言。</p>
+=== DEMOJS ===
+const DEMOS = {
+  'vector-operations': function (el) {
+    const a = [1, 2, 3], b = [2, -1, 0];
+    const arrow = (p, x, y, color, C) => {
+      p.line(0, 0, x, y, { color: C(color), width: 2.4 });
+      p.dot(x, y, { r: 4, color: C(color) });
+    };
+    DemoPresets.custom(el, {
+      range: [-1, 3, -2, 3], boxH: 380,
+      slider: { label: '混合比例', min: 0, max: 1, step: 0.01, init: 0.5 },
+      figureHint: '图里是 xy 平面投影；第三分量请对照读数中的三元组。',
+      draw: (p, out, t, c, C) => {
+        arrow(p, a[0], a[1], 'accent', C);
+        arrow(p, b[0], b[1], 'ok', C);
+        p.line(a[0], a[1], b[0], b[1], { color: C('axis'), dash: true, width: 1.2 });
+        const q = [t * a[0] + (1 - t) * b[0], t * a[1] + (1 - t) * b[1], t * a[2] + (1 - t) * b[2]];
+        arrow(p, q[0], q[1], 'warn', C);
+        p.text(a[0] + 0.08, a[1] + 0.15, 'a 的终点', { color: C('accent'), size: 11 });
+        p.text(b[0] + 0.08, b[1] - 0.2, 'b 的终点', { color: C('ok'), size: 11 });
+        const norm = Math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2]);
+        out.innerHTML = `比例 ${texHTML('t=' + f4(t))}：${texHTML('t\\vec{a}+(1-t)\\vec{b}=\\bigl(' + f4(q[0]) + ',' + f4(q[1]) + ',' + f4(q[2]) + '\\bigr)')}，三维模长 ${texHTML('\\sqrt{' + f4(norm * norm) + '}=' + f4(norm))}（含第三分量，故不短于图中投影箭头；仅当第三分量为 0 时二者一样长）。<br>` +
+          `橙色向量的终点始终落在两终点连成的线段上；${texHTML('\\vec{a}=(1,2,3)')}、${texHTML('\\vec{b}=(2,-1,0)')} 的第三分量未画在投影里。`;
+      }
+    });
+  },
+
+  'cross-product': function (el) {
+    const a = [1, 2, 0], b = [2, -1, 0];
+    DemoPresets.custom(el, {
+      range: [-1.5, 3.5, -2, 3], boxH: 380,
+      slider: { label: '缩放系数', min: 0.2, max: 1.2, step: 0.01, init: 1 },
+      figureHint: '叉积方向垂直纸面，图中只能标成「向里」；其模就是平行四边形面积。',
+      draw: (p, out, k, c, C) => {
+        const B = [b[0] * k, b[1] * k];
+        p.polygon([[0, 0], [a[0], a[1]], [a[0] + B[0], a[1] + B[1]], [B[0], B[1]]],
+          { fill: C('cyan'), alpha: 0.24, stroke: C('cyan') });
+        p.line(0, 0, a[0], a[1], { color: C('accent'), width: 2.4 });
+        p.line(0, 0, B[0], B[1], { color: C('ok'), width: 2.4 });
+        p.dot(a[0], a[1], { r: 4, color: C('accent') });
+        p.text(0.15, 2.5, '垂直纸面向里', { color: C('warn'), size: 11 });
+        const dot = a[0] * B[0] + a[1] * B[1];
+        const cross = a[0] * B[1] - a[1] * B[0];
+        out.innerHTML = `缩放 ${texHTML('k=' + f4(k))}：${texHTML('\\vec{b}=(' + f4(B[0]) + ',' + f4(B[1]) + ',0)')}。<br>` +
+          `数量积 ${texHTML('\\vec{a}\\cdot\\vec{b}=' + f4(dot))}，恒为 0，说明两向量始终垂直；叉积第三分量 ${texHTML('a_xb_y-a_yb_x=' + f4(cross))}。<br>` +
+          `平行四边形面积 ${texHTML('\\left|\\vec{a}\\times\\vec{b}\\right|=' + f4(Math.abs(cross)))}，也等于 ${texHTML('|\\vec{a}||\\vec{b}|')}。`;
+      }
+    });
+  },
+
+  'plane-normal': function (el) {
+    const M = [1, 0, 0];
+    DemoPresets.custom(el, {
+      range: [-2, 3, -3, 4], boxH: 360,
+      slider: { label: '法向量 y 分量', min: 1.5, max: 6, step: 0.05, init: 3 },
+      figureHint: '法向量的三个分量就是平面方程里 x、y、z 的系数；图里只看 xy 投影。',
+      draw: (p, out, B, c, C) => {
+        // 平面 6(x-1)+By+2z=0，即 6x+By+2z-6=0；常数项与 B 无关
+        const D = -6;
+        // 与 xy 面（z=0）的交线：y=(6-6x)/B
+        p.curve(x => (6 - 6 * x) / B, { color: C('accent'), width: 2.4 });
+        p.line(0, 0, 1.5, 0.25 * B, { color: C('warn'), width: 2.4 });
+        p.dot(1.5, 0.25 * B, { r: 4, color: C('warn') });
+        p.text(-1.8, 3.4, '法向量投影', { color: C('warn'), size: 11 });
+        p.dot(M[0], M[1], { r: 4, color: C('danger') });
+        const dist = Math.abs(D) / Math.sqrt(36 + B * B + 4);
+        out.innerHTML = `法向量 ${texHTML('\\vec{n}=(6,' + f4(B) + ',2)')}，过点 ${texHTML('(1,0,0)')}：点法式 ${texHTML('6(x-1)+' + f4(B) + 'y+2z=0')}。<br>` +
+          `与 xy 面的交线 ${texHTML('y=\\dfrac{6-6x}{' + f4(B) + '}')}，斜率随 y 分量一起变；一般式系数 ${texHTML('A=6,\\ B=' + f4(B) + ',\\ C=2')}。<br>` +
+          `原点到平面距离 ${texHTML('d=' + f4(dist))}，公式分母是 ${texHTML('|\\vec{n}|')}。`;
+      }
+    });
+  },
+
+  'space-line': function (el) {
+    const M = [1, 2, 3], s = [2, -1, 1];
+    DemoPresets.custom(el, {
+      range: [-3, 5, -2, 4], boxH: 360,
+      slider: { label: '参数', min: -1, max: 2, step: 0.01, init: 1 },
+      figureHint: '图里是 xy 投影；判断点是否在直线上要看三个比值是否相同。',
+      draw: (p, out, t, c, C) => {
+        p.line(-3, 2 - (-3 - 1) / 2 * 1, 5, 2 - (5 - 1) / 2 * 1,
+          { color: C('accent'), width: 2.2 });
+        p.line(M[0], M[1], M[0] + s[0], M[1] + s[1], { color: C('ok'), width: 2.4 });
+        const q = [M[0] + s[0] * t, M[1] + s[1] * t, M[2] + s[2] * t];
+        p.dot(q[0], q[1], { r: 5, color: C('danger') });
+        p.dot(M[0], M[1], { r: 4, color: C('accent') });
+        p.text(q[0] + 0.1, q[1] + 0.2, '当前点', { color: C('danger'), size: 11 });
+        const P = [3, 1, 4], rs = [(P[0] - M[0]) / s[0], (P[1] - M[1]) / s[1], (P[2] - M[2]) / s[2]];
+        out.innerHTML = `${texHTML('t=' + f4(t))}：${texHTML('(x,y,z)=\\bigl(' + f4(q[0]) + ',' + f4(q[1]) + ',' + f4(q[2]) + '\\bigr)')}。<br>` +
+          `直线 ${texHTML('\\frac{x-1}{2}=\\frac{y-2}{-1}=z-3')}；检验点 ${texHTML('(3,1,4)')} 的三个比值 ${texHTML(rs.map(f4).join('='))}，相同则点在直线上。`;
+      }
+    });
+  },
+
+  'quadric-surfaces': function (el) {
+    let mode = 0;
+    const h = 1.5;
+    const cases = [
+      { name: '球面', tex: 'x^{2}+y^{2}+(z-1)^{2}=1', r: Math.sqrt(3) / 2, shape: '球心在高度 1，半径随高度先增后减' },
+      { name: '圆柱面', tex: 'x^{2}+y^{2}=1', r: 1, shape: '半径与高度无关' },
+      { name: '圆锥面', tex: 'z^{2}=x^{2}+y^{2}', r: h, shape: '半径与高度成正比' },
+      { name: '抛物面', tex: 'z=x^{2}+y^{2}', r: Math.sqrt(h), shape: '半径是高度的平方根' }
+    ];
+    DemoPresets.custom(el, {
+      range: [-1.8, 1.8, -1.8, 1.8], boxH: 360,
+      controlsHTML: '<span class="hint">切换曲面，比较同一高度截出的圆半径</span>',
+      buttons: cases.map((cs, i) => ({ label: cs.name, run: () => { mode = i; } })),
+      figureHint: '四张曲面在同一高度的水平截线都是圆，但半径各不相同；差别在于半径随高度怎么变。',
+      draw: (p, out, v, c, C) => {
+        const cs = cases[mode];
+        p.circle(0, 0, cs.r, { color: C('accent'), width: 2.4, fill: C('cyan'), alpha: 0.14 });
+        p.dot(cs.r, 0, { r: 4, color: C('danger') });
+        out.innerHTML = `曲面 ${texHTML(cs.tex)}。<br>` +
+          `用平面 ${texHTML('z=\\dfrac{3}{2}')} 去截，得到 ${texHTML('x^{2}+y^{2}=r^{2}')}，半径 ${texHTML('r=' + f4(cs.r))}。<br>` +
+          `${cs.shape}；若方程里完全不出现某个变量，图形就沿那根轴无限延伸（柱面判据）。`;
+      }
+    });
+  },
+
+  'space-curve': function (el) {
+    DemoPresets.custom(el, {
+      range: [-1.6, 1.6, -1.6, 1.6], boxH: 360,
+      slider: { label: '角度', min: 0, max: 6.28, step: 0.01, init: 0.8 },
+      figureHint: '交线在 z=1 平面上，投影就是它本身；别忘了保留 z=1 这个条件。',
+      draw: (p, out, t, c, C) => {
+        p.circle(0, 0, 1, { color: C('accent'), width: 2.4, fill: C('cyan'), alpha: 0.12 });
+        const x = Math.cos(t), y = Math.sin(t);
+        p.dot(x, y, { r: 5, color: C('danger') });
+        p.line(0, 0, x, y, { color: C('warn'), width: 1.4 });
+        p.text(x + 0.08, y + 0.12, '交线上的点', { color: C('danger'), size: 11 });
+        out.innerHTML = `角度 ${texHTML('t=' + f4(t))}：${texHTML('(x,y,z)=\\bigl(' + f4(x) + ',' + f4(y) + ',1\\bigr)')}。<br>` +
+          `把 ${texHTML('z=1')} 代入 ${texHTML('x^{2}+y^{2}+z^{2}=2')} 得 ${texHTML('x^{2}+y^{2}=1')}；交线须写成联立 ${texHTML('\\begin{cases}x^{2}+y^{2}=1\\\\ z=1\\end{cases}')}，只写前一个会变成圆柱面。`;
+      }
+    });
+  }
+};
+
+mountDemos(DEMOS);

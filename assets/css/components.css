@@ -55,6 +55,62 @@
   border-radius: var(--radius);
   max-width: 100%;
 }
+/* 可交互的画布：拖拽手势不能带动页面滚动，也不能触发选中 */
+.demo-canvas.is-interactive { flex-direction: column; }
+.demo-canvas.is-interactive canvas { cursor: grab; touch-action: none; user-select: none; }
+.demo-canvas.is-interactive canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.demo-canvas.is-dragging canvas { cursor: grabbing; }
+
+/* 图像工具条：缩放 / 复位。放在图下方而不是压在图上，
+   窄图（等比例下画布常比容器窄）和满宽图都不会被遮住。 */
+.plot-hud {
+  display: flex; align-items: center; gap: 2px;
+  flex-wrap: wrap; justify-content: center;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-xs);
+  line-height: 1;
+  color: var(--fg-muted);
+}
+.ph-tip {
+  padding: 0 8px 0 2px;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+  user-select: none;
+}
+/* 不等比坐标系的告示：比"滚轮缩放"提示更重要，放最左边且不随移动端隐藏 */
+.ph-note {
+  padding: 0 8px 0 0;
+  color: var(--warn);
+  white-space: nowrap;
+  user-select: none;
+}
+.ph-btn {
+  font: inherit; font-size: var(--fs-xs);
+  min-width: 26px; height: 24px;
+  padding: 0 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  color: var(--fg-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+.ph-btn:hover { background: var(--bg-inset); border-color: var(--border); color: var(--fg); }
+.ph-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ph-reset { border-left: 1px solid var(--border-soft); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding-left: 10px; margin-left: 2px; }
+.ph-zoom {
+  min-width: 42px;
+  text-align: center;
+  color: var(--fg-subtle);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+.demo-canvas.is-zoomed .ph-zoom { color: var(--accent); }
+@media (max-width: 560px) {
+  .ph-tip { display: none; }
+}
 .jxgbox { background: var(--bg-soft) !important; }
 
 .demo-controls {

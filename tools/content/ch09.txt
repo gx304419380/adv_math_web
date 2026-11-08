@@ -1,0 +1,1001 @@
+=== GOALS ===
+        <li><label><input type="checkbox">沿不同路径判断二元极限是否存在，并写出二元函数的定义域与等值线方程</label></li>
+        <li><label><input type="checkbox">对多元函数求偏导数、全微分与复合函数的链式法则，并用混合偏导数相等来验算</label></li>
+        <li><label><input type="checkbox">求曲面的切平面与法线、方向导数与梯度，并解释梯度为什么指向增长最快的方向</label></li>
+        <li><label><input type="checkbox">用二阶判别式区分极大、极小与鞍点，用拉格朗日乘数法求条件极值，用正规方程做最小二乘拟合</label></li>
+=== MAP ===
+{
+  "nodes": [
+    { "id": "n0", "label": "多元函数的基本概念", "kind": "root" },
+    { "id": "n1", "label": "偏导数", "kind": "core" },
+    { "id": "n2", "label": "全微分", "kind": "core" },
+    { "id": "n3", "label": "多元复合函数求导", "kind": "branch" },
+    { "id": "n4", "label": "隐函数求导公式", "kind": "branch" },
+    { "id": "n5", "label": "几何应用：切平面", "kind": "branch" },
+    { "id": "n6", "label": "方向导数与梯度", "kind": "core" },
+    { "id": "n7", "label": "极值与二阶判别式", "kind": "core" },
+    { "id": "n8", "label": "条件极值·拉格朗日", "kind": "branch" },
+    { "id": "n9", "label": "二元泰勒公式", "kind": "branch" },
+    { "id": "n10", "label": "最小二乘法", "kind": "core" },
+    { "id": "end", "label": "下一章：重积分", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n1", "target": "n5" },
+    { "source": "n2", "target": "n5" },
+    { "source": "n2", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n7", "target": "n9" },
+    { "source": "n7", "target": "n10" },
+    { "source": "n9", "target": "end" },
+    { "source": "n10", "target": "end" },
+    { "source": "n4", "target": "end" }
+  ]
+}
+=== SECTION:s1 ===
+        <h3><span class="sec-badge">9.1</span>多元函数的基本概念</h3>
+        <p>一块金属薄板上的温度，只取决于你在板上站的位置：往右多远、往上多远。两个数定下来，温度就定下来。当结果同时由两个量决定时，函数就从「一个数进去、一个数出来」变成「一对数进去、一个数出来」。这一节先回答三件事：它在哪儿有定义、极限怎么才算存在、以及怎么用一张平面上的线把曲面记下来。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">二元函数、二重极限与等值线</span><span class="mb-no">9.1</span></div>
+          <div class="mb-body">
+            设 \(D\subset\mathbb{R}^{2}\)。若对每个 \((x,y)\in D\) 都按某个规则确定唯一的实数 \(z\)，就称 \(z=f(x,y)\) 是定义在 \(D\) 上的<strong class="term">二元函数</strong>，\(D\) 叫<strong class="term">定义域</strong>。
+            设 \(P_0(x_0,y_0)\) 的附近（可以挖掉 \(P_0\) 本身）都在 \(D\) 内。若当 \(P(x,y)\) 以<strong>任意方式</strong>趋于 \(P_0\) 时，\(f(x,y)\) 都趋于同一个数 \(L\)，就说 \(f\) 在 \(P_0\) 的<strong class="term">二重极限</strong>为 \(L\)，记作
+            $$\lim_{(x,y)\to(x_0,y_0)}f(x,y)=L$$
+            用 \(\rho=\sqrt{(x-x_0)^{2}+(y-y_0)^{2}}\) 量两点距离，精确说法是：对任意 \(\varepsilon>0\)，存在 \(\delta>0\)，当 \(0&lt;\rho&lt;\delta\) 时都有 \(\left|f(x,y)-L\right|&lt;\varepsilon\)。条件里 \(\rho>0\) 把 \(P_0\) 本身挖掉了，所以函数在该点有没有定义都不影响极限。
+            当 \(f\) 在 \(P_0\) 有定义且 \(\lim\limits_{(x,y)\to(x_0,y_0)}f(x,y)=f(x_0,y_0)\) 时，称 \(f\) 在 \(P_0\) <strong class="term">连续</strong>。把使 \(f(x,y)=c\) 的点全画出来得到的曲线叫<strong class="term">等值线</strong>（也叫等高线）。
+            <mark class="key">二重极限要求「所有路径、所有方式」趋于同一个数，只试几条直线远远不够</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">极限存在则沿每条路径都相等</span><span class="mb-no">9.2</span></div>
+          <div class="mb-body">
+            若 \(\lim\limits_{(x,y)\to(x_0,y_0)}f(x,y)=L\) 存在，则沿任意一条趋于 \(P_0\) 的路径，\(f\) 的极限都等于 \(L\)。因此只要找到两条路径给出不同的极限值，就能断定二重极限不存在。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">设极限为 \(L\)，取任意一条趋于 \(P_0\) 的路径 \((x(t),y(t))\to P_0\)</span><span class="derive-note">二重极限对「所有方式」成立，当然包含挑出来的这一条</span></li>
+              <li><span class="derive-eq">由定义，当 \(\rho=\sqrt{(x-x_0)^{2}+(y-y_0)^{2}}&lt;\delta\) 时 \(\left|f(x,y)-L\right|&lt;\varepsilon\)</span><span class="derive-note">路径上的点同样满足这个距离条件</span></li>
+              <li><span class="derive-eq">故沿该路径 \(f(x(t),y(t))\to L\)</span><span class="derive-note">于是若有两条路径趋于不同的数，二重极限必不存在</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="surface-and-levelset">
+          <div class="demo-title">演示 1 · 一圈圈放大的等高线：沿同一条线函数值不变</div>
+          <div class="demo-caption">图里是把曲面 \(z=x^{2}+2y^{2}\) 用一组水平面 \(z=c\) 去截、再把截线投影到 \(xy\) 平面得到的等高线（这是三维曲面的一张二维投影图，不是曲面本身）。拖动等高值 \(c\)，高亮的那圈椭圆随之放大，浅灰的是几条固定的参考线。<b>沿同一条等高线走一圈，函数值始终不变</b>；只有换到另一圈，函数值才改变。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">三条路径给出三个数，再对比一个极限存在的例子</span><span class="mb-no">例 9.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x,y)=\dfrac{4x^{2}-y^{2}}{2x^{2}+y^{2}}\)（\((x,y)\neq(0,0)\)）。分别沿 \(y=0\)、\(x=0\)、\(y=x\) 求 \((x,y)\to(0,0)\) 时的极限，并判断二重极限是否存在。再对 \(g(x,y)=\dfrac{x^{2}y^{2}}{x^{2}+y^{2}}\)（\((x,y)\neq(0,0)\)）说明它在原点的极限存在并求出来。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>沿一条路径趋于原点，就是把两个自变量收成一个、变成一元函数再取极限。三条路径若给出不同数，用定理 9.2 就能判「不存在」。对 \(g\)，先把它写成 \(y^{2}\) 乘上一个不超过 1 的因子，再把两边一起逼到 0。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              先算 \(f\) 的三条路径。<br>
+              沿 \(y=0\)（即沿 \(x\) 轴）：\(f(x,0)=\dfrac{4x^{2}}{2x^{2}}=2\)（\(x\neq0\)），故极限为 \(2\)。<br>
+              沿 \(x=0\)（沿 \(y\) 轴）：\(f(0,y)=\dfrac{-y^{2}}{y^{2}}=-1\)，故极限为 \(-1\)。<br>
+              沿 \(y=x\)：\(f(x,x)=\dfrac{4x^{2}-x^{2}}{2x^{2}+x^{2}}=\dfrac{3x^{2}}{3x^{2}}=1\)，故极限为 \(1\)。<br>
+              三个数 \(2\)、\(-1\)、\(1\) 不全相等，由定理 9.2 知 \(\lim\limits_{(x,y)\to(0,0)}f(x,y)\) 不存在。<br>
+              再看 \(g\)：对任意 \((x,y)\neq(0,0)\)，由 \(x^{2}+y^{2}\ge x^{2}\) 得 \(0\le\dfrac{x^{2}}{x^{2}+y^{2}}\le 1\)，于是
+              $$0\le g(x,y)=y^{2}\cdot\frac{x^{2}}{x^{2}+y^{2}}\le y^{2}$$
+              当 \((x,y)\to(0,0)\) 时 \(y^{2}\to0\)，夹在中间的 \(g\) 也只能趋于 \(0\)，故 \(\lim\limits_{(x,y)\to(0,0)}g(x,y)=0\)，极限存在。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「沿路径把两个自变量收成一个，再算一元极限」。想证<strong>不存在</strong>，只需找出两条给出不同值的路径；想证<strong>存在</strong>，只试几条路径都不算数，必须像 \(g\) 那样对所有点作一个统一的估计（这里靠 \(\frac{x^{2}}{x^{2}+y^{2}}\le 1\) 把函数压在两个都趋于 0 的量之间）。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">等高线是把曲面「拍扁」后的地图</span></div>
+          <div class="mb-body">三维曲面不好画，用一叠水平面去切、把截线投到平面上，就得到一组等高线：每条线对应一个固定的函数值。演示里拖动 \(c\) 只是在换「切在哪一层」，同一条线上高度处处相同。而二重极限比一元苛刻得多：一元只从左右两侧逼近，二元要从四面八方、沿直线也沿曲线一起逼近，所有方向都得指向同一个数。</div>
+        </div>
+=== SECTION:s2 ===
+        <h3><span class="sec-badge">9.2</span>偏导数</h3>
+        <p>一元函数的导数回答「沿 \(x\) 轴走，函数变多快」。现在有两个自变量，光说「变化率」就不够了——得先说清楚朝哪个方向。最自然的两个方向是沿 \(x\) 轴和沿 \(y\) 轴，把另一个变量临时当常数，这就是偏导数。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">偏导数</span><span class="mb-no">9.3</span></div>
+          <div class="mb-body">
+            设 \(z=f(x,y)\) 在 \((x_0,y_0)\) 的某邻域内有定义。固定 \(y=y_0\)，把 \(f(x,y_0)\) 看成 \(x\) 的一元函数，若它在 \(x_0\) 可导，则称该导数为 \(f\) 在 \((x_0,y_0)\) <strong class="term">对 \(x\) 的偏导数</strong>，记作 \(f_x(x_0,y_0)\) 或 \(\dfrac{\partial f}{\partial x}(x_0,y_0)\)：
+            $$f_x(x_0,y_0)=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x,\ y_0)-f(x_0,y_0)}{\Delta x}$$
+            同理固定 \(x=x_0\) 得\(f_y(x_0,y_0)=\lim\limits_{\Delta y\to0}\dfrac{f(x_0,\ y_0+\Delta y)-f(x_0,y_0)}{\Delta y}\)。求偏导时<strong>另一个字母全程当常数</strong>，用法则和一元完全一样。对偏导函数再求一次偏导，得四个<strong class="term">二阶偏导数</strong> \(f_{xx},f_{xy},f_{yx},f_{yy}\)：下标顺序表示先对谁、再对谁求导。
+            <mark class="key">\(\partial\) 是偏导专用记号，写 \(f_x\) 时心里要记住「\(y\) 被冻住了」</mark>。
+          </div>
+        </div>
+
+        <div class="math-block property">
+          <div class="mb-head"><span class="mb-tag">性质</span><span class="mb-title">混合偏导数相等</span><span class="mb-no">9.4</span></div>
+          <div class="mb-body">
+            若 \(f_{xy}\) 与 \(f_{yx}\) 在某点附近都存在且连续，则二者在该点相等：\(f_{xy}=f_{yx}\)。这条性质最实用的地方是<strong>验算</strong>：辛苦算出两个混合偏导数后，若它们不相等，八成是某一步把变量看错了，回头重算一遍。本书遇到的函数（多项式、指数、对数及其组合）都满足这个条件。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="partial-slices">
+          <div class="demo-title">演示 2 · 两张切片、两条切线、两个不同的斜率</div>
+          <div class="demo-caption">图里是曲面 \(z=\dfrac{x^{2}}{4}+\dfrac{xy}{2}-\dfrac{y}{2}+\dfrac{y^{2}}{4}\) 被两张竖直平面截出的两条截线（二维曲线，不是把三维曲面投影成二维）：蓝线固定 \(y=a\)、绿线固定 \(x=a\)，横轴都是沿切片走的那个坐标。拖动固定坐标 \(a\)，两条截线始终在 \((a,f(a,a))\) 相交，橙、青两条短线分别是它们在交点的切线，<b>斜率正好是两个偏导数 \(f_x(a,a)\) 与 \(f_y(a,a)\)，一般不相等</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一题算完一阶与四个二阶偏导数</span><span class="mb-no">例 9.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x,y)=x^{2}y+3y-x\)。求 \(f_x,f_y\)，并求在 \((1,2)\) 处的四个二阶偏导数 \(f_{xx},f_{xy},f_{yx},f_{yy}\)，再核对两个混合偏导数是否相等。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>求 \(f_x\) 时把 \(y\) 当常数、只对 \(x\) 求导；求 \(f_y\) 时把 \(x\) 当常数。二阶偏导就是在一次偏导的结果上再求一次，注意下标顺序：\(f_{xy}\) 是先对 \(x\)、再对 \(y\)。算完把点代进去，并用性质 9.4 验算。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              把 \(y\) 当常数：\(f_x=2xy+0-1=2xy-1\)；把 \(x\) 当常数：\(f_y=x^{2}+3-0=x^{2}+3\)。<br>
+              在 \((1,2)\) 处：\(f_x=2\times1\times2-1=3\)，\(f_y=1+3=4\)。<br>
+              再各求一次：\(f_{xx}=\dfrac{\partial}{\partial x}(2xy-1)=2y\)，\(f_{xy}=\dfrac{\partial}{\partial y}(2xy-1)=2x\)，\(f_{yx}=\dfrac{\partial}{\partial x}(x^{2}+3)=2x\)，\(f_{yy}=\dfrac{\partial}{\partial y}(x^{2}+3)=0\)。<br>
+              代入 \((1,2)\)：\(f_{xx}=4\)，\(f_{xy}=2\)，\(f_{yx}=2\)，\(f_{yy}=0\)。两个混合偏导数都等于 \(2\)，与性质 9.4 一致。\(f_{yy}=0\) 是因为 \(f\) 关于 \(y\) 是一次（线性）的，再求一次导自然为 0。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「认准对谁求导，就把另一个字母当常数；求二阶时看清下标顺序」。混合偏导数相等是免费的验算工具：若算出的 \(f_{xy}\neq f_{yx}\)，先别往下做，回头检查哪一步把变量弄混了。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">偏导数是切片曲线在一点的切线斜率</span></div>
+          <div class="mb-body">用平面 \(y=y_0\) 去截曲面，得到一条平面曲线，\(f_x(x_0,y_0)\) 就是这条曲线在 \(x=x_0\) 处的切线斜率；换用 \(x=x_0\) 去截，得到另一条曲线，\(f_y\) 是它的切线斜率。演示里两条截线过同一个点却有两条不同的切线——这正是「必须指明方向」的几何含义。</div>
+        </div>
+
+        <div class="math-block remark">
+          <div class="mb-head"><span class="mb-tag">注记</span><span class="mb-title">偏导数存在，还远不够</span></div>
+          <div class="mb-body">两个偏导数只记录沿两条坐标轴方向的变化，管不到斜着走会怎样。因此「\(f_x,f_y\) 都存在」既不能保证 \(f\) 连续，也不能保证它可微；具体反例放在本章末尾的误区里。要得到更强的结论，得看下一节的全微分。</div>
+        </div>
+=== SECTION:s3 ===
+        <h3><span class="sec-badge">9.3</span>全微分</h3>
+        <p>一元里 \(\Delta y\approx f'(x)\Delta x\)，切线能当近似用。现在两个自变量一起动，增量该由几部分拼成？答案是「每个方向各贡献一份线性的量」，剩下的误差必须比移动的距离小得多。把这层意思写严，就是可微与全微分。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">可微与全微分</span><span class="mb-no">9.5</span></div>
+          <div class="mb-body">
+            设 \(z=f(x,y)\) 在 \(P_0(x_0,y_0)\) 的某邻域内有定义。若存在两个与 \(\Delta x,\Delta y\) 都无关的常数 \(A,B\)，使
+            $$\Delta z=f(x_0+\Delta x,\ y_0+\Delta y)-f(x_0,y_0)=A\Delta x+B\Delta y+o(\rho),\qquad \rho=\sqrt{(\Delta x)^{2}+(\Delta y)^{2}}$$
+            则称 \(f\) 在 \(P_0\) <strong class="term">可微</strong>，并称 \(\mathrm{d}z=A\Delta x+B\Delta y\) 为 \(f\) 在 \(P_0\) 的<strong class="term">全微分</strong>，习惯写成 \(\mathrm{d}z=A\,\mathrm{d}x+B\,\mathrm{d}y\)，其中 \(\mathrm{d}x=\Delta x,\ \mathrm{d}y=\Delta y\)。
+            记号 \(o(\rho)\) 读作「比 \(\rho\) 高阶的无穷小」，意思是 \(\dfrac{\Delta z-(A\Delta x+B\Delta y)}{\rho}\to0\)（当 \(\rho\to0\)）。这里 \(\rho\to0\) 要求 \((\Delta x,\Delta y)\) 以任意方式趋于 \((0,0)\)。
+            <mark class="key">全微分是 \(\Delta x,\Delta y\) 的一次式，误差必须比距离 \(\rho\) 本身消失得更快</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">可微则偏导存在，且系数被唯一确定</span><span class="mb-no">9.6</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \(P_0\) 可微，则 \(f_x(P_0),f_y(P_0)\) 都存在，且 \(A=f_x(P_0)\)、\(B=f_y(P_0)\)。于是全微分只能写成
+            $$\mathrm{d}z=f_x\,\mathrm{d}x+f_y\,\mathrm{d}y$$
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">在定义式中取 \(\Delta y=0\)，得 \(f(x_0+\Delta x,y_0)-f(x_0,y_0)=A\Delta x+o(|\Delta x|)\)</span><span class="derive-note">此时 \(\rho=|\Delta x|\)，\(B\Delta y\) 整项消失</span></li>
+              <li><span class="derive-eq">两边除以 \(\Delta x\) 并令 \(\Delta x\to0\)：左边趋于 \(f_x(P_0)\)，右边趋于 \(A\)</span><span class="derive-note">可微保证这个差商的极限存在</span></li>
+              <li><span class="derive-eq">故 \(A=f_x(P_0)\)；改取 \(\Delta x=0\) 同理得 \(B=f_y(P_0)\)</span><span class="derive-note">两个方向各做一次，系数就被钉死了</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">可微必连续</span><span class="mb-no">9.7</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \(P_0\) 可微，则 \(f\) 在 \(P_0\) 连续。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">由定理 9.6，\(\Delta z=f_x(P_0)\Delta x+f_y(P_0)\Delta y+o(\rho)\)</span><span class="derive-note">把系数换成偏导数</span></li>
+              <li><span class="derive-eq">当 \(\rho\to0\) 时，\(\Delta x\to0\)、\(\Delta y\to0\)，前两项趋于 0</span><span class="derive-note">\(f_x(P_0),f_y(P_0)\) 是固定的数，不是变量</span></li>
+              <li><span class="derive-eq">\(o(\rho)\to0\)，故 \(\Delta z\to0\)，即 \(f\) 在 \(P_0\) 连续</span><span class="derive-note">这正是连续的定义，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">偏导数连续则可微（充分条件）</span><span class="mb-no">9.8</span></div>
+          <div class="mb-body">
+            若 \(f_x,f_y\) 在 \(P_0\) 的某邻域内存在且连续，则 \(f\) 在 \(P_0\) 可微。这是最常用的一条判别：多项式、指数、对数函数拼出来的函数，偏导数通常处处连续，于是处处可微。
+            注意反过来不成立：<mark class="key">偏导数存在推不出连续，更推不出可微</mark>。例如 \(f(x,y)=\begin{cases}1,&xy\neq0,\\ 0,&xy=0\end{cases}\) 在原点，沿两条坐标轴 \(f\) 恒为 0，故 \(f_x(0,0)=f_y(0,0)=0\)；但沿直线 \(y=x\)（\(x\neq0\)）有 \(f=1\neq f(0,0)=0\)，函数不连续，由定理 9.7 也不可微。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="total-differential">
+          <div class="demo-title">演示 3 · 真实增量、线性主部与误差：谁缩得更快</div>
+          <div class="demo-caption">图里画的不是三维曲面，而是把真实增量 \(\Delta z\)、全微分 \(\mathrm{d}z\) 和误差都看成步长 \(\rho\) 的一元函数后画出的二维曲线。基准点取 \((1,2)\)、函数取 \(f(x,y)=x^{2}y\)，那里 \(f_x=4\)、\(f_y=1\)。点按钮选增量方向，再拖动步长：<b>绿色误差除以 \(\rho\) 随 \(\rho\to0\) 一路趋于 0，而误差除以 \(\rho^{2}\) 稳定在一个常数附近</b>，这正是 \(\Delta z=f_x\Delta x+f_y\Delta y+o(\rho)\)。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用定义算一次全微分，并亲手验证误差是高阶的</span><span class="mb-no">例 9.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x,y)=x^{2}y\)。在 \((1,2)\) 处取 \(\Delta x=0.1\)、\(\Delta y=0.2\)：(1) 写出全微分 \(\mathrm{d}z\)；(2) 用 \(\mathrm{d}z\) 近似 \(\Delta z\)；(3) 真算 \(\Delta z\)，并把两个增量同时缩小 10 倍，验证 \(\Delta z-\mathrm{d}z=o(\rho)\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先算两个偏导当系数 \(A,B\)，写出 \(\mathrm{d}z=A\Delta x+B\Delta y\)；再把增量代进去得近似值，另用 \(f(1+\Delta x,2+\Delta y)-f(1,2)\) 真算一遍。最后比较「误差除以 \(\rho\)」在增量缩小前后的变化。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(f_x=2xy\)、\(f_y=x^{2}\)，在 \((1,2)\) 处 \(A=4\)、\(B=1\)，故 \(\mathrm{d}z=4\Delta x+\Delta y\)。<br>
+              代入 \(\Delta x=0.1,\Delta y=0.2\)：\(\mathrm{d}z=4\times0.1+0.2=0.6\)。<br>
+              真值：\(f(1.1,2.2)=1.1^{2}\times2.2=1.21\times2.2=2.662\)，而 \(f(1,2)=2\)，故 \(\Delta z=0.662\)。误差 \(\Delta z-\mathrm{d}z=0.062\)。<br>
+              此时 \(\rho=\sqrt{0.1^{2}+0.2^{2}}=\sqrt{0.05}\approx0.2236\)，\(\dfrac{0.062}{0.2236}\approx0.277\)。<br>
+              把两个增量都缩小 10 倍（\(\Delta x=0.01,\Delta y=0.02\)）：\(\mathrm{d}z=0.06\)，\(\Delta z=f(1.01,2.02)-2=1.0201\times2.02-2=0.060602\)，误差 \(0.000602\)，\(\rho\approx0.02236\)，比值 \(\dfrac{0.000602}{0.02236}\approx0.0269\)，约为原来的十分之一——随 \(\rho\to0\) 趋于 0，正是 \(o(\rho)\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先求两个偏导当系数 → 写 \(\mathrm{d}z=f_x\Delta x+f_y\Delta y\) → 真值另算 → 用误差除以 \(\rho\) 是否趋于 0 来检验可微」。真值里的平方项、交叉项都被丢进了 \(o(\rho)\)；把增量缩小 10 倍，误差大约缩小 100 倍，是这类题最省事的验算。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">可微就是「局部能用一张平面顶替曲面」</span></div>
+          <div class="mb-body">把曲面不断放大，可微函数在一小片里几乎就是一张平面（下一节会把它叫切平面）。全微分 \(\mathrm{d}z=f_x\mathrm{d}x+f_y\mathrm{d}y\) 给出这张平面的增量，真实增量与它相差的高阶小量，放大得越多越看不见。演示里把步长拖小，误差曲线很快就贴到横轴上，而线性主部仍稳稳地张着——这就是「线性主部」这个名字的来历。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把 \(\mathrm{d}z\) 当成 \(\Delta z\)</span></div>
+          <div class="mb-body"><b>错误做法</b>：算出 \(\mathrm{d}z=0.6\) 就说 \(\Delta z=0.6\)。<b>为什么错</b>：\(\Delta z=\mathrm{d}z+o(\rho)\)，丢掉的高阶小量虽小但不为零（真值 \(0.662\)）。<b>正确做法</b>：写明 \(\mathrm{d}z\) 只是近似，需要精确值时必须算 \(f(x_0+\Delta x,y_0+\Delta y)-f(x_0,y_0)\)，并交代误差量级。</div>
+        </div>
+=== SECTION:s4 ===
+        <h3><span class="sec-badge">9.4</span>多元复合函数的求导法则</h3>
+        <p>现实里的量常常一层套一层：产量取决于工时与原料，工时又取决于人数与天数。把中间量分好层，逐层把「变化倍率」乘起来再按通路相加，就是多元链式法则。这一节的功夫全在「别漏掉一条通路」。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">复合函数的链式法则</span><span class="mb-no">9.9</span></div>
+          <div class="mb-body">
+            设 \(z=f(u,v)\) 在 \((u,v)\) 处可微，\(u=u(x,y)\)、\(v=v(x,y)\) 在 \((x,y)\) 处偏导数存在，则复合函数 \(z=f\bigl(u(x,y),v(x,y)\bigr)\) 的偏导数为
+            $$\frac{\partial z}{\partial x}=\frac{\partial f}{\partial u}\frac{\partial u}{\partial x}+\frac{\partial f}{\partial v}\frac{\partial v}{\partial x},\qquad \frac{\partial z}{\partial y}=\frac{\partial f}{\partial u}\frac{\partial u}{\partial y}+\frac{\partial f}{\partial v}\frac{\partial v}{\partial y}$$
+            两个常用特例：若 \(u=\varphi(t),v=\psi(t)\) 只依赖一个参数，则<strong>全导数</strong> \(\dfrac{\mathrm{d}z}{\mathrm{d}t}=\dfrac{\partial f}{\partial u}\dfrac{\mathrm{d}u}{\mathrm{d}t}+\dfrac{\partial f}{\partial v}\dfrac{\mathrm{d}v}{\mathrm{d}t}\)；若中间变量只有一个、另一个就是自变量本身，如 \(z=f(u(x,y),y)\)，则 \(\dfrac{\partial z}{\partial x}=f_u u_x\)，而 \(\dfrac{\partial z}{\partial y}=f_u u_y+f_y\)（这里的 \(f_y\) 指对第二个位置求偏导）。
+            <mark class="key">中间变量有几条通向该自变量的路，就要把每条路的「外层偏导 × 内层偏导」相加</mark>。
+            <div class="proof-title">推导 · 3 步（由全微分读出系数）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">外层可微：\(\mathrm{d}z=f_u\,\mathrm{d}u+f_v\,\mathrm{d}v\)</span><span class="derive-note">这是定理 9.6 的结论</span></li>
+              <li><span class="derive-eq">内层：\(\mathrm{d}u=u_x\mathrm{d}x+u_y\mathrm{d}y\)，\(\mathrm{d}v=v_x\mathrm{d}x+v_y\mathrm{d}y\)，代入并合并 \(\mathrm{d}x,\mathrm{d}y\) 的系数</span><span class="derive-note">纯代数整理，没有新极限</span></li>
+              <li><span class="derive-eq">与 \(\mathrm{d}z=z_x\mathrm{d}x+z_y\mathrm{d}y\) 比较系数，即得两条公式</span><span class="derive-note">全微分里 \(\mathrm{d}x\) 的系数就是 \(z_x\)</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="chain-rule-tree">
+          <div class="demo-title">演示 4 · 数一数：从输出到这个自变量共有几条通路</div>
+          <div class="demo-caption">这是一张「变量分层」示意图，不是函数图像：最上层是输出量，中间层两个中间量，最下层两个自变量。图中「中间量一」对应 \(u=x+2y\)、「中间量二」对应 \(v=xy\)，「自变量一」「自变量二」对应 \(x,y\)，外层取 \(z=u^{2}+v\)。点按钮切换要看的偏导数，<b>亮色箭头就是从输出量到该自变量的两条通路，每条贡献一个乘积，必须相加；漏一条结果就少一块</b>。滑块给出第一个自变量的取值，第二个自变量固定为 1。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">两条通路各算一份，再用直接代入核对</span><span class="mb-no">例 9.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(z=f(u,v)=u^{2}+v\)，其中 \(u=x+2y\)、\(v=xy\)。求 \(\dfrac{\partial z}{\partial x}\) 与 \(\dfrac{\partial z}{\partial y}\)，并在 \((x,y)=(1,1)\) 处算出数值；再把 \(u,v\) 直接代入化成 \(x,y\) 的函数，核对结果一致。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先分层：\(z\) 在最上层，\(u,v\) 在中间，\(x,y\) 在最下层。\(z\) 到 \(x\) 有两条通路（经 \(u\)、经 \(v\)），各写成一个乘积再相加。算完用「直接代入再求导」验一遍。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              各层偏导：\(f_u=2u\)、\(f_v=1\)；\(u_x=1\)、\(u_y=2\)；\(v_x=y\)、\(v_y=x\)。<br>
+              到 \(x\) 的两条通路：\(f_u u_x=2u\cdot1\)，\(f_v v_x=1\cdot y\)，故
+              $$\frac{\partial z}{\partial x}=2(x+2y)+y=2x+5y$$
+              到 \(y\) 的两条通路：\(f_u u_y=2u\cdot2\)，\(f_v v_y=1\cdot x\)，故
+              $$\frac{\partial z}{\partial y}=4(x+2y)+x=5x+8y$$
+              在 \((1,1)\)：\(\dfrac{\partial z}{\partial x}=2+5=7\)，\(\dfrac{\partial z}{\partial y}=5+8=13\)。<br>
+              核对：直接代入 \(z=(x+2y)^{2}+xy=x^{2}+4xy+4y^{2}+xy=x^{2}+5xy+4y^{2}\)，故 \(z_x=2x+5y\)、\(z_y=5x+8y\)，与上面完全一致；在 \((1,1)\) 分别为 7 与 13。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「列出全部中间变量 → 对每个自变量数清通路条数 → 每条通路写成一串偏导相乘 → 相加」。最容易漏的是把某条通路（本题里经 \(v\) 的那条）整个忘掉；算完用直接代入法复核，成本很低。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">链式法则就是「把所有路径的影响加起来」</span></div>
+          <div class="mb-body">把变量关系想成一张有向的分层图：自变量在最下面，输出在最上面。想求输出对某个自变量的变化率，就找出所有从输出连到它的路径，每条路径把沿途的「倍率」乘起来，再把各条路径相加。演示里点亮两条箭头，就是在数这两条路径——分层的价值正在于此：不分层就容易漏乘、漏加。</div>
+        </div>
+=== SECTION:s5 ===
+        <h3><span class="sec-badge">9.5</span>隐函数的求导公式</h3>
+        <p>圆 \(x^{2}+y^{2}=1\) 不能整体写成 \(y=y(x)\)，但在上半个圆附近确实能把 \(y\) 看成 \(x\) 的函数。什么时候可以、导数怎么求，不必先把 \(y\) 解出来——只要检查一个偏导数不为零就够了。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">隐函数存在定理与求导公式</span><span class="mb-no">9.10</span></div>
+          <div class="mb-body">
+            设 \(F(x,y)\) 在 \((x_0,y_0)\) 的某邻域内有连续的偏导数，且 \(F(x_0,y_0)=0\)、\(F_y(x_0,y_0)\neq0\)。则方程 \(F(x,y)=0\) 在 \(x_0\) 附近唯一确定一个可导的函数 \(y=y(x)\)，满足 \(y(x_0)=y_0\)，且
+            $$\frac{\mathrm{d}y}{\mathrm{d}x}=-\frac{F_x}{F_y}$$
+            同理，若 \(F(x,y,z)\) 满足 \(F(x_0,y_0,z_0)=0\) 且 \(F_z(x_0,y_0,z_0)\neq0\)，则方程在附近确定 \(z=z(x,y)\)，并有
+            $$\frac{\partial z}{\partial x}=-\frac{F_x}{F_z},\qquad \frac{\partial z}{\partial y}=-\frac{F_y}{F_z}$$
+            <mark class="key">被解出那个变量对应的偏导数（\(F_y\) 或 \(F_z\)）不为零，是套公式前必须核对的硬条件</mark>。
+            <div class="proof-title">证明 · 3 步（以 \(F(x,y)=0\) 为例）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">设方程确定了 \(y=y(x)\)，则代入后 \(F\bigl(x,y(x)\bigr)\equiv0\) 是恒等式</span><span class="derive-note">曲线上每一点都满足方程</span></li>
+              <li><span class="derive-eq">两边对 \(x\) 求全导数（用 9.9 链式法则）：\(F_x+F_y\,y'=0\)</span><span class="derive-note">\(y\) 是 \(x\) 的函数，所以第二项多出一个 \(y'\)</span></li>
+              <li><span class="derive-eq">由 \(F_y\neq0\) 解出 \(y'=-\dfrac{F_x}{F_y}\)</span><span class="derive-note">这一步正说明为什么必须 \(F_y\neq0\)</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="implicit-partial">
+          <div class="demo-title">演示 5 · 把切点推向端点，看切线怎样变陡</div>
+          <div class="demo-caption">蓝线是方程 \(F(x,y)=x^{2}+2y^{2}-3=0\) 确定的椭圆（一条货真价实的二维曲线），它分成上、下两个单值分支。拖动横坐标、点按钮切换分支，橙色短线是该点切线，读数给出 \(F_x,F_y\) 与斜率。<b>把点推到椭圆最右端附近</b>：\(F_y\) 越来越小、切线越来越陡；真到端点 \(x=\sqrt{3}\) 时 \(F_y=0\)，\(-\frac{F_x}{F_y}\) 彻底失效——本演示停在端点前一步。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">先验条件、再套公式：由方程求两个偏导</span><span class="mb-no">例 9.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设方程 \(F(x,y,z)=x^{2}+y^{2}+z^{2}-3z=0\)。(1) 验证点 \((1,1,1)\) 在曲面上，并检查能否在该点附近把 \(z\) 看成 \(x,y\) 的函数；(2) 若能，求 \(\dfrac{\partial z}{\partial x}\) 与 \(\dfrac{\partial z}{\partial y}\) 在 \((1,1,1)\) 处的值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先把点代进方程验 \(F=0\)，再算被解出变量对应的偏导 \(F_z\) 并确认非零——这是套公式前的硬条件。然后把另外两个变量当常数，对等式两边关于 \(x\)、关于 \(y\) 分别求偏导，解出 \(z_x,z_y\)。注意算 \(F_x\) 时要把 \(z\) 当独立变量。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              代入 \((1,1,1)\)：\(1+1+1-3=0\)，点确实在曲面上。<br>
+              \(F_x=2x\)、\(F_y=2y\)、\(F_z=2z-3\)。在 \((1,1,1)\) 处 \(F_z=2-3=-1\neq0\)，故由定理 9.10，能在该点附近把 \(z\) 看成 \(x,y\) 的函数。<br>
+              由公式 \(\dfrac{\partial z}{\partial x}=-\dfrac{F_x}{F_z}=-\dfrac{2x}{2z-3}\)、\(\dfrac{\partial z}{\partial y}=-\dfrac{F_y}{F_z}=-\dfrac{2y}{2z-3}\)。代入 \((1,1,1)\)：
+              $$\frac{\partial z}{\partial x}\bigg|_{(1,1,1)}=-\frac{2}{-1}=2,\qquad \frac{\partial z}{\partial y}\bigg|_{(1,1,1)}=-\frac{2}{-1}=2$$
+              核对：把 \(z\) 看作 \(x,y\) 的函数，对原方程关于 \(x\) 求偏导得 \(2x+(2z-3)z_x=0\)，代入 \((1,1,1)\) 得 \(2+(-1)z_x=0\)，即 \(z_x=2\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「代点验 \(F=0\) → 算被解出变量的偏导并确认非零 → 才套 \(-\frac{F_x}{F_z}\) 这类公式」。分母为零时公式不能用，别硬算；另外算 \(F_x,F_y,F_z\) 时，\(x,y,z\) 一律当<strong>互相独立</strong>的变量，这正是公式里那些偏导的含义。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">\(F_y\neq0\) 说的是「这一点的曲线不竖直」</span></div>
+          <div class="mb-body">把 \(F(x,y)=0\) 想成一张地形图里高度为 0 的那条线。若曲线在某点不是竖直的，就能在附近把 \(y\) 唯一写成 \(x\) 的函数；一旦曲线竖直（演示里椭圆的最右端），同一个 \(x\) 会对应上下两个 \(y\)，单值函数就不存在了。代数上这正好表现为 \(F_y=0\)：公式的分母塌了。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">不检查 \(F_y\) 就套公式</span></div>
+          <div class="mb-body"><b>错误做法</b>：对 \(x^{2}+2y^{2}-3=0\) 在点 \((\sqrt{3},0)\) 直接写 \(\dfrac{\mathrm{d}y}{\mathrm{d}x}=-\dfrac{2x}{4y}\)。<b>为什么错</b>：该点 \(y=0\)，\(F_y=4y=0\)，公式分母为零；且曲线在此处切线竖直，局部根本写不成单值函数。<b>正确做法</b>：先算 \(F_y\) 并确认非零，为零时改用参数式或直接观察曲线走向。</div>
+        </div>
+=== SECTION:s6 ===
+        <h3><span class="sec-badge">9.6</span>多元函数微分学的几何应用</h3>
+        <p>偏导数算出来是数，全微分写出来是式子，它们其实对应同一件几何物：曲面在一点最贴近的那张平面。这一节把切平面、法线一并写出来，你会看到 \(\mathrm{d}z=f_x\mathrm{d}x+f_y\mathrm{d}y\) 就是切平面的方程。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">曲面的切平面与法线</span><span class="mb-no">9.11</span></div>
+          <div class="mb-body">
+            设曲面由 \(F(x,y,z)=0\) 给出，\(F\) 在 \(M_0(x_0,y_0,z_0)\) 处有连续偏导且 \(\nabla F=(F_x,F_y,F_z)\big|_{M_0}\neq\vec{0}\)。则曲面的<strong class="term">法向量</strong>可取 \(\nabla F\big|_{M_0}\)，切平面与法线分别为
+            $$F_x(x-x_0)+F_y(y-y_0)+F_z(z-z_0)=0$$
+            $$\frac{x-x_0}{F_x}=\frac{y-y_0}{F_y}=\frac{z-z_0}{F_z}$$
+            若曲面写成 \(z=f(x,y)\)，取 \(F=f(x,y)-z\)，则 \(\nabla F=(f_x,f_y,-1)\)，切平面化为
+            $$z-z_0=f_x(x_0,y_0)(x-x_0)+f_y(x_0,y_0)(y-y_0)$$
+            这正好是全微分 \(\mathrm{d}z=f_x\mathrm{d}x+f_y\mathrm{d}y\) 的几何版本。空间曲线 \(x=\varphi(t),y=\psi(t),z=\omega(t)\) 在 \(t_0\) 的切向量则是 \(\bigl(\varphi'(t_0),\psi'(t_0),\omega'(t_0)\bigr)\)。
+            <mark class="key">法向量不能是零向量；对称式里若某个分量为 0，该项要单独处理</mark>。
+            <div class="proof-title">证明 · 3 步（为什么梯度是法向量）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">取曲面上过 \(M_0\) 的任意一条光滑曲线 \(\vec{r}(t)=\bigl(x(t),y(t),z(t)\bigr)\)，\(\vec{r}(t_0)=M_0\)</span><span class="derive-note">曲面由所有这样的曲线织成</span></li>
+              <li><span class="derive-eq">由 \(F(\vec{r}(t))\equiv0\) 对 \(t\) 求导（9.9 链式法则）：\(F_xx'+F_yy'+F_zz'=\nabla F\cdot\vec{r}'=0\)</span><span class="derive-note">点积为零即两向量垂直</span></li>
+              <li><span class="derive-eq">\(\nabla F\) 垂直于曲面上过 \(M_0\) 的一切切向量，故它就是法向量</span><span class="derive-note">所有切向量张成切平面，法向垂直于它</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="tangent-plane">
+          <div class="demo-title">演示 6 · 用一张截面，看见切平面留下的那条切线</div>
+          <div class="demo-caption">图里画的是用竖直平面 \(y=a\) 去截曲面 \(z=x^{2}+2y^{2}\) 得到的一条二维截线（是截面截线，不是把三维曲面硬投影成二维）：蓝线是截线，橙色短线是切平面与同一截面的交线，正好是截线在 \(x=1\) 处的切线。拖动截面位置 \(a\)，读数给出完整的切平面方程，其中沿 \(y\) 方向的倾斜由 \(f_y=4a\) 决定——<b>截面上看不到它，方程里却少不了它</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">两种曲面表示各算一遍，再求法线与平面的交点</span><span class="mb-no">例 9.6</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求曲面 \(z=x^{2}+2y^{2}\) 在点 \((1,1,3)\) 处的切平面方程与法线方程，并求法线与 \(xy\) 平面（即 \(z=0\)）的交点。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先验证点在曲面上。把曲面写成 \(F=x^{2}+2y^{2}-z=0\) 用梯度当法向量；也可以直接用 \(z=f(x,y)\) 的切平面公式，两种写法应当一致。法线用「过点 + 方向向量」写对称式，再令 \(z=0\) 解出交点。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              代入 \((1,1,3)\)：\(1^{2}+2\times1^{2}-3=1+2-3=0\)，点在曲面上。<br>
+              取 \(F=x^{2}+2y^{2}-z\)：\(F_x=2x\)、\(F_y=4y\)、\(F_z=-1\)，在 \((1,1,3)\) 处 \(\vec{n}=(2,4,-1)\neq\vec{0}\)。<br>
+              切平面：\(2(x-1)+4(y-1)-(z-3)=0\)，整理得 \(2x+4y-z-3=0\)。<br>
+              （直接用 \(f_x=2x=2\)、\(f_y=4y=4\)：\(z-3=2(x-1)+4(y-1)\)，化简同样是 \(2x+4y-z-3=0\)，两种表示一致。）<br>
+              法线：\(\dfrac{x-1}{2}=\dfrac{y-1}{4}=\dfrac{z-3}{-1}\)。令 \(z=0\) 得 \(\dfrac{0-3}{-1}=3\)，于是 \(x-1=2\times3=6\)、\(y-1=4\times3=12\)，交点为 \((7,13,0)\)。<br>
+              核对：把 \(M_0(1,1,3)\) 代入切平面方程 \(2+4-3-3=0\)，成立；法线方向 \((2,4,-1)\) 与法向量平行，正确。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「验点 → 选一种曲面表示（\(F=0\) 用梯度，\(z=f(x,y)\) 用两个偏导）→ 写切平面 → 用点向式写法线 → 需要交点时令某个坐标为指定值解出参数」。两种表示给出的法向量只差一个非零倍数，切平面相同，别以为算错了。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">切平面是「局部最像曲面的那张平面」</span></div>
+          <div class="mb-body">曲面在一点附近可以用一张平面近似，这张平面就是切平面；它垂直于法向量，也包含曲面上过该点的所有曲线的切线。演示里用一张竖直截面把这件事压成二维：切平面与截面的交线，恰好就是截线的切线。全微分 \(\mathrm{d}z=f_x\mathrm{d}x+f_y\mathrm{d}y\) 与切平面方程是同一句话的两种写法。</div>
+        </div>
+=== SECTION:s7 ===
+        <h3><span class="sec-badge">9.7</span>方向导数与梯度</h3>
+        <p>偏导数只管东—西、南—北两个方向。若沿任意斜着的方向走，函数变多快？哪个方向变得最快？这一节把偏导数升级成方向导数，再把「最快」这件事浓缩成一个向量——梯度。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">方向导数与梯度</span><span class="mb-no">9.12</span></div>
+          <div class="mb-body">
+            设 \(\boldsymbol{e}_l=(\cos\alpha,\sin\alpha)\) 是与 \(x\) 轴正向夹角为 \(\alpha\) 的<strong class="term">单位方向向量</strong>（长度为 1）。若极限
+            $$\frac{\partial f}{\partial l}\bigg|_{P_0}=\lim_{t\to0^{+}}\frac{f(x_0+t\cos\alpha,\ y_0+t\sin\alpha)-f(x_0,y_0)}{t}$$
+            存在，称之为 \(f\) 在 \(P_0(x_0,y_0)\) 沿方向 \(l\) 的<strong class="term">方向导数</strong>。
+            把两个偏导数排成一个向量，称为 \(f\) 在 \(P_0\) 的<strong class="term">梯度</strong>，记作
+            $$\nabla f(P_0)=\bigl(f_x(P_0),\ f_y(P_0)\bigr)$$
+            三元函数再加一个分量 \(f_z\)。记号 \(\nabla\) 读作「nabla」。
+            <mark class="key">定义里的 \(\boldsymbol{e}_l\) 必须是单位向量；\(t\to0^{+}\) 只从正侧沿该方向趋近</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">方向导数等于梯度在方向上的投影</span><span class="mb-no">9.13</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \(P_0\) 可微，则
+            $$\frac{\partial f}{\partial l}=\nabla f\cdot\boldsymbol{e}_l=f_x\cos\alpha+f_y\sin\alpha=|\nabla f|\cos\theta$$
+            其中 \(\theta\) 是 \(\nabla f\) 与 \(\boldsymbol{e}_l\) 的夹角。于是：沿梯度方向取最大值 \(|\nabla f|\)，沿反梯度方向取最小值 \(-|\nabla f|\)，沿与梯度垂直的方向等于 0。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">令 \(\varphi(t)=f(x_0+t\cos\alpha,\ y_0+t\sin\alpha)\)</span><span class="derive-note">把沿该方向的走动收成一个一元函数</span></li>
+              <li><span class="derive-eq">由 9.9 链式法则，\(\varphi'(0)=f_x\cos\alpha+f_y\sin\alpha=\nabla f\cdot\boldsymbol{e}_l\)</span><span class="derive-note">偏导数在 \(P_0\) 处取值</span></li>
+              <li><span class="derive-eq">方向导数定义正是 \(\varphi'(0^{+})\)，故二者相等；再由点积公式得 \(|\nabla f|\cos\theta\)</span><span class="derive-note">点积的几何意义给出最大/最小值</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="gradient-field">
+          <div class="demo-title">演示 7 · 转动方向箭头，读数什么时候最大、什么时候为零</div>
+          <div class="demo-caption">图里画的是 \(f(x,y)=x^{2}+2y^{2}\) 的等高线：它是把三维曲面用一组水平面截开、再把截线投影到 \(xy\) 平面得到的（二维投影图，不是曲面本身）。固定观测点 \((1,0.5)\)，绿箭头是梯度 \(\nabla f=(2,2)\)，红箭头是滑块转动的指定方向。<b>红箭头与绿箭头同向时方向导数最大、反向时最小、垂直时恰好为 0</b>，而梯度箭头始终垂直于穿过该点的等高线。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">先单位化方向，再点乘梯度</span><span class="mb-no">例 9.7</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(f(x,y)=x^{2}-xy+2y^{2}\)。求在 \(P_0(1,2)\) 处：(1) 梯度 \(\nabla f\)；(2) 沿方向 \(\boldsymbol{l}=(3,4)\) 的方向导数；(3) 函数增长最快的方向与最大变化率。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先算两个偏导得梯度。方向导数必须先把给定方向<strong>单位化</strong>，再用 \(\nabla f\cdot\boldsymbol{e}_l\)。最快方向就是梯度方向，最大值是梯度的模。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(f_x=2x-y\)、\(f_y=-x+4y\)。在 \((1,2)\)：\(f_x=2-2=0\)、\(f_y=-1+8=7\)，故 \(\nabla f(1,2)=(0,7)\)。<br>
+              方向 \((3,4)\) 的模为 \(\sqrt{3^{2}+4^{2}}=5\)，单位向量 \(\boldsymbol{e}_l=\left(\dfrac{3}{5},\dfrac{4}{5}\right)\)。于是
+              $$\frac{\partial f}{\partial l}=(0,7)\cdot\left(\frac{3}{5},\frac{4}{5}\right)=0\times\frac{3}{5}+7\times\frac{4}{5}=\frac{28}{5}$$
+              增长最快的方向即 \(\nabla f=(0,7)\) 的方向（正 \(y\) 轴方向，单位向量 \((0,1)\)），最大变化率为 \(|\nabla f|=\sqrt{0^{2}+7^{2}}=7\)。<br>
+              核对：沿 \((0,1)\) 时方向导数为 \(7\)，而沿 \((3,4)\) 得 \(\dfrac{28}{5}=5.6&lt;7\)，方向导数确实不超过梯度的模。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「算梯度 → 把给定方向除以它的模变成单位向量 → 点乘」。若没单位化就直接代进去，会多乘一个模长（本题会错算成 \(0\times3+7\times4=28\)）。另外「最快方向」永远指梯度方向，不是题目给的那个方向。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">梯度是等高线的法向，指向「上坡最陡」的一侧</span></div>
+          <div class="mb-body">沿等高线走函数值不变，所以方向导数为 0；垂直于等高线走变化最快，那个方向就是梯度。方向导数不过是梯度在指定方向上的投影长度，因此它的绝对值永远不会超过梯度自身的长度。演示里把红箭头转到与绿箭头垂直，读数立刻归零，就是这件事。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">方向向量没单位化就直接点乘</span></div>
+          <div class="mb-body"><b>错误做法</b>：沿 \((3,4)\) 直接算 \(f_x\cdot3+f_y\cdot4\)。<b>为什么错</b>：定义里的 \(\boldsymbol{e}_l\) 长度必须是 1，而 \((3,4)\) 的模是 5，直接代入会把结果放大 5 倍。<b>正确做法</b>：先写 \(\boldsymbol{e}_l=\frac{(3,4)}{5}\)，再用 \(\frac{\partial f}{\partial l}=\nabla f\cdot\boldsymbol{e}_l\)；例 9.7 的正确值是 \(\frac{28}{5}\)，直接代会错成 28。</div>
+        </div>
+=== SECTION:s8 ===
+        <h3><span class="sec-badge">9.8</span>多元函数的极值及其求法</h3>
+        <p>一元里先找导数为零的点，再看二阶导数定极大极小。二元也一样：先解两个偏导同时为零得驻点，再用一个由二阶偏导拼出的判别式 \(AC-B^{2}\) 分类。若还带一个约束条件，就把拉格朗日乘数请出来。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">极值与驻点</span><span class="mb-no">9.14</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \(P_0\) 的某邻域内恒有 \(f(x,y)\le f(P_0)\)，称 \(f(P_0)\) 为<strong class="term">极大值</strong>；恒有 \(f(x,y)\ge f(P_0)\) 则为<strong class="term">极小值</strong>。使 \(f_x(P_0)=f_y(P_0)=0\) 的点叫<strong class="term">驻点</strong>。
+            注意驻点只是「候选」：它可能是极值点，也可能不是（例如鞍点，见 9.9 节）；偏导数不存在的点同样可能是极值点，别忘了单独看。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">极值的必要条件</span><span class="mb-no">9.15</span></div>
+          <div class="mb-body">
+            若 \(f\) 在 \(P_0\) 的两个偏导数都存在，且 \(f\) 在 \(P_0\) 取极值，则 \(f_x(P_0)=f_y(P_0)=0\)。
+            <div class="proof-title">证明 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">固定 \(y=y_0\)，令 \(\varphi(x)=f(x,y_0)\)，则 \(\varphi\) 在 \(x_0\) 取一元极值</span><span class="derive-note">把二维问题压成一维</span></li>
+              <li><span class="derive-eq">由一元费马定理，\(\varphi'(x_0)=0\)</span><span class="derive-note">可导的一元函数在内点取极值则导数为零</span></li>
+              <li><span class="derive-eq">而 \(\varphi'(x_0)=f_x(P_0)\)，故 \(f_x(P_0)=0\)；固定 \(x=x_0\) 同理得 \(f_y(P_0)=0\)</span><span class="derive-note">两个方向各做一次，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">极值的充分条件（二阶判别式）</span><span class="mb-no">9.16</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \(P_0\) 附近有二阶连续偏导，\(P_0\) 是驻点，记
+            $$A=f_{xx}(P_0),\quad B=f_{xy}(P_0),\quad C=f_{yy}(P_0)$$
+            则：\(AC-B^{2}>0\) 且 \(A>0\) 时取极小值；\(AC-B^{2}>0\) 且 \(A&lt;0\) 时取极大值；\(AC-B^{2}&lt;0\) 时不是极值（鞍点）；\(AC-B^{2}=0\) 时判别失效，需另作讨论。
+            <mark class="key">\(AC-B^{2}=0\) 时定理不给任何结论，不能凭感觉猜</mark>。
+            <div class="proof-title">推导 · 3 步（判别式的来历）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">驻点处一阶项消失，\(f-f(P_0)\) 主要由二次型 \(Q(h,k)=\dfrac{1}{2}\left(Ah^{2}+2Bhk+Ck^{2}\right)\) 决定</span><span class="derive-note">这一步的严格化由 9.9 节二元泰勒公式补上</span></li>
+              <li><span class="derive-eq">配方：\(Ah^{2}+2Bhk+Ck^{2}=A\left(h+\dfrac{B}{A}k\right)^{2}+\dfrac{AC-B^{2}}{A}k^{2}\)（\(A\neq0\)）</span><span class="derive-note">纯代数变形，把交叉项收进平方里</span></li>
+              <li><span class="derive-eq">\(AC-B^{2}>0\) 时两项同号、符号由 \(A\) 定（极小或极大）；\(&lt;0\) 时取 \(h=-\frac{B}{A}k\) 与 \(k=0\) 可使 \(Q\) 一正一负（非极值）；\(=0\) 时二次型退化，无法下结论</span><span class="derive-note">这正是三条判据与「失效」情形的来源</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">条件极值与拉格朗日乘数法</span><span class="mb-no">9.17</span></div>
+          <div class="mb-body">
+            极值点上目标的梯度 \(\nabla f\) 与约束的梯度 \(\nabla\varphi\) 必须平行（否则沿约束曲线还能继续往高处走），即 \(\nabla f=-\lambda\nabla\varphi\)。这个比例系数就是<strong class="term">拉格朗日乘数</strong>：先把它当未知数乘到约束上，再用约束方程把它和 \(x,y\) 一起解出来。<br>
+            求 \(z=f(x,y)\) 在约束 \(\varphi(x,y)=0\)（且 \(\nabla\varphi\neq\vec{0}\)）下的可能极值点：构造
+            $$L(x,y,\lambda)=f(x,y)+\lambda\varphi(x,y)$$
+            解方程组
+            $$\begin{cases}L_x=f_x+\lambda\varphi_x=0,\\ L_y=f_y+\lambda\varphi_y=0,\\ \varphi(x,y)=0.\end{cases}$$
+            解出的点是「可能极值点」，还要结合实际情况或比较函数值来判断；几何上就是目标函数的等高线与约束曲线相切。
+            <mark class="key">\(\lambda\) 也要当未知数一起解；漏掉约束方程就少一个条件</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="multivar-extrema">
+          <div class="demo-title">演示 8 · 把二次项系数拖过 0，极小怎样变成鞍点</div>
+          <div class="demo-caption">图里画的是曲面 \(f(x,y)=x^{2}+ky^{2}\) 过原点的三条竖直截线（二维截线，不是把三维曲面投影成二维）：蓝线沿横轴、绿线沿纵轴、橙线沿对角。拖动系数 \(k\)，读数里的 \(A=2,B=0,C=2k\) 与 \(AC-B^{2}=4k\) 一起变。<b>把 \(k\) 拖过 0</b>，绿线开口翻向下方，正是判别式由正变负、极小变鞍点的瞬间；\(k=0\) 时绿线压成一条平线，判别式给不出结论。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">无条件极值判别 + 拉格朗日乘数，一次练两种</span><span class="mb-no">例 9.8</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 求 \(f(x,y)=x^{2}+2y^{2}-2x-4y+5\) 的极值，并说明是极大还是极小。(2) 用拉格朗日乘数法求在约束 \(x+y=2\) 下 \(g(x,y)=xy\) 的可能极值点，并算出对应的 \(g\) 值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问先解 \(f_x=f_y=0\) 得驻点，再算 \(A,B,C\) 看 \(AC-B^{2}\)；顺手配方验一遍。第 (2) 问把约束写成 \(\varphi=x+y-2=0\)，构造 \(L\)，解含 \(\lambda\) 的三个方程。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(f_x=2x-2\)、\(f_y=4y-4\)，令二者为 0 得驻点 \((1,1)\)。<br>
+              二阶偏导：\(A=f_{xx}=2\)、\(B=f_{xy}=0\)、\(C=f_{yy}=4\)，故 \(AC-B^{2}=2\times4-0=8>0\)，且 \(A=2>0\)，由定理 9.16 知 \((1,1)\) 是极小值点，极小值 \(f(1,1)=1+2-2-4+5=2\)。<br>
+              配方核对：\(f=(x-1)^{2}+2(y-1)^{2}+2\)，显然在 \((1,1)\) 取最小值 2，一致。<br>
+              (2) \(\varphi(x,y)=x+y-2\)，\(\nabla\varphi=(1,1)\neq\vec{0}\)。构造 \(L=xy+\lambda(x+y-2)\)。方程组：\(L_x=y+\lambda=0\)，\(L_y=x+\lambda=0\)，\(x+y-2=0\)。<br>
+              前两式相减得 \(y=x\)，代入约束得 \(2x=2\)，即 \(x=y=1\)；再由 \(y+\lambda=0\) 得 \(\lambda=-1\)。<br>
+              故可能极值点为 \((1,1)\)，\(g(1,1)=1\)。核对：在约束上 \(y=2-x\)，\(g=x(2-x)=-(x-1)^{2}+1\)，在 \(x=1\) 取最大值 1，与拉格朗日法给出的点一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">无条件极值的固定动作是「解驻点 → 算 \(A,B,C\) → 看 \(AC-B^{2}\) 的符号」，配方往往能一眼验出结论；条件极值的固定动作是「写 \(\varphi=0\) → 构造 \(L\)（别漏 \(\lambda\)）→ 解含 \(\lambda\) 的方程组 → 把候选点代回实际情形判断」。\(AC-B^{2}=0\) 时别硬套，改用配方或直接比较函数值。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">\(AC-B^{2}\) 是一台「地形分类器」</span></div>
+          <div class="mb-body">驻点处曲面暂时走平，二阶项决定它往哪边弯：正且 \(A>0\) 是洼地（极小），正且 \(A<0\) 是山包（极大），负是马鞍（一个方向是谷、另一个方向是峰），等于 0 是平地，二阶信息不够用。演示里拖 \(k\) 看到的正是绿线从「向上弯」翻成「向下弯」的那一瞬。条件极值则把搜索范围限制在一条曲线上，拉格朗日乘数把「梯度平行、等高线相切」写成了可以解的方程。</div>
+        </div>
+=== SECTION:s9 ===
+        <h3><span class="sec-badge">9.9</span>二元函数的泰勒公式</h3>
+        <p>一元泰勒把函数拆成「常数 + 一次 + 二次 + …」。二元也一样，只是二次项变成一个二次型——上一节的 \(AC-B^{2}\) 正是从这里来的。这一节也顺带把「鞍点」和「判别式失效」彻底讲清楚。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">二元函数的二阶泰勒公式</span><span class="mb-no">9.18</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \(P_0(x_0,y_0)\) 附近有直到三阶的连续偏导数，记 \(h=x-x_0,\ k=y-y_0,\ \rho=\sqrt{h^{2}+k^{2}}\)，则
+            $$f(x_0+h,\ y_0+k)=f(P_0)+\bigl(f_xh+f_yk\bigr)+\frac{1}{2}\bigl(f_{xx}h^{2}+2f_{xy}hk+f_{yy}k^{2}\bigr)+o(\rho^{2})$$
+            其中各偏导数都在 \(P_0\) 处取值。更高阶的形式用算子 \(\left(h\dfrac{\partial}{\partial x}+k\dfrac{\partial}{\partial y}\right)^{m}\) 逐阶写出，余项是 \(o(\rho^{n})\)。
+            <mark class="key">驻点处一次项消失，二阶项（那个二次型）决定地形；余项 \(o(\rho^{2})\) 比 \(\rho^{2}\) 高阶</mark>。
+            <div class="proof-title">推导 · 3 步（借一元泰勒走一条直线）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">引入一元辅助函数 \(\Phi(t)=f(x_0+th,\ y_0+tk)\)，则 \(\Phi(1)=f(x_0+h,y_0+k)\)、\(\Phi(0)=f(P_0)\)</span><span class="derive-note">把二维增量压成一条直线上的一元问题</span></li>
+              <li><span class="derive-eq">对 \(\Phi\) 在 \(t=0\) 作一元二阶泰勒：\(\Phi(1)=\Phi(0)+\Phi'(0)+\dfrac{1}{2}\Phi''(0)+o(1)\)</span><span class="derive-note">一元结论直接可用</span></li>
+              <li><span class="derive-eq">由 9.9 链式法则 \(\Phi'(0)=f_xh+f_yk\)、\(\Phi''(0)=f_{xx}h^{2}+2f_{xy}hk+f_{yy}k^{2}\)（用 \(f_{xy}=f_{yx}\)），代入并把 \(o(1)\) 换成 \(o(\rho^{2})\) 即得</span><span class="derive-note">\(\Phi\) 的各阶导数都带着 \(\rho\) 的幂</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">鞍点与退化驻点</span><span class="mb-no">9.19</span></div>
+          <div class="mb-body">
+            是驻点却不是极值点的点叫<strong class="term">鞍点</strong>：二次型 \(Q\) 在某些方向取正值、另一些方向取负值，曲面像马鞍，沿一个方向是谷、沿另一个方向是峰。典型如 \(f(x,y)=x^{2}-y^{2}\) 在原点，\(A=2,B=0,C=-2\)，\(AC-B^{2}=-4&lt;0\)。
+            当 \(AC-B^{2}=0\) 时称驻点<strong class="term">退化</strong>：二阶项不足以判定，必须看更高阶项或回到定义直接比较 \(f-f(P_0)\) 的符号。
+            <mark class="key">两个函数可以有完全相同的 \(A,B,C\) 却一个取极值、一个不取，判别式等于 0 时务必另判</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="saddle-point">
+          <div class="demo-title">演示 9 · 鞍点长什么样：一条截线向上、一条向下</div>
+          <div class="demo-caption">图里画的是三个函数过原点的两条坐标轴截线（二维截线，不是把三维曲面投影成二维）：蓝线沿横轴、橙线沿纵轴。点按钮在「鞍点」与两个「判别失效」的例子之间切换，读数同步给出 \(A,B,C\) 与 \(AC-B^{2}\)。<b>一条截线开口向上、一条向下就是鞍点</b>；而 \(AC-B^{2}=0\) 时两条截线可能都向上（仍取极小），也可能一条穿过横轴（变号、不取极值）——只看二阶项给不出结论。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">写出二阶展开，再处理两个判别失效的例子</span><span class="mb-no">例 9.9</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 写出 \(f(x,y)=x^{2}+2xy+3y^{2}\) 在 \(P_0=(0,0)\) 附近的二阶泰勒公式，并用二次型判断原点是不是极值点。(2) 对 \(g(x,y)=x^{2}+y^{4}\) 与 \(u(x,y)=x^{2}+y^{3}\)，分别算原点处的 \(A,B,C\) 与 \(AC-B^{2}\)，说明判别式为什么失效，再判断原点是否取极值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问先算所有一、二阶偏导在原点的值，代入二阶公式；驻点处一次项为 0，看二次型 \(Q\) 的符号，并用配方与 \(AC-B^{2}\) 双重核对。第 (2) 问会发现 \(AC-B^{2}=0\)，这时二阶项不够用，要直接用定义比较 \(f-f(0,0)\) 的符号。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(f_x=2x+2y\)、\(f_y=2x+6y\)，在原点都为 0（故原点是驻点）；\(f_{xx}=2\)、\(f_{xy}=2\)、\(f_{yy}=6\)，且 \(f(0,0)=0\)。代入二阶泰勒公式：
+              $$f(h,k)=0+0+\frac{1}{2}\left(2h^{2}+2\times2\,hk+6k^{2}\right)+o(\rho^{2})=h^{2}+2hk+3k^{2}+o(\rho^{2})$$
+              （这个函数本身就是二次多项式，余项其实为 0。）二次型 \(Q=h^{2}+2hk+3k^{2}=(h+k)^{2}+2k^{2}\ge0\)，且仅当 \(h=k=0\) 取 0，故原点取极小值 0。核对：\(A=2,B=2,C=6\)，\(AC-B^{2}=12-4=8>0\) 且 \(A>0\)，与定理 9.16 一致。<br>
+              (2) 对 \(g=x^{2}+y^{4}\)：\(g_x=2x\)、\(g_y=4y^{3}\)，原点为驻点；\(g_{xx}=2\)、\(g_{xy}=0\)、\(g_{yy}=12y^{2}\)，在原点 \(A=2,B=0,C=0\)，\(AC-B^{2}=0\)，判别失效。但 \(g=x^{2}+y^{4}\ge0=g(0,0)\)，故原点取极小值 0。<br>
+              对 \(u=x^{2}+y^{3}\)：\(u_x=2x\)、\(u_y=3y^{2}\)，原点为驻点；\(u_{xx}=2\)、\(u_{xy}=0\)、\(u_{yy}=6y\)，在原点同样 \(A=2,B=0,C=0\)，\(AC-B^{2}=0\)。但取 \((0,-\varepsilon)\) 时 \(u=-\varepsilon^{3}&lt;0\)，取 \((0,\varepsilon)\) 时 \(u=\varepsilon^{3}>0\)，原点附近既有比 0 大也有比 0 小的值，故原点不取极值。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「驻点处看二阶项 → 用 \(AC-B^{2}\) 分类 → 一旦等于 0，立刻回到定义直接比较 \(f-f(P_0)\) 的符号，或补上更高阶的泰勒项」。两个函数 \(A,B,C\) 完全相同却一个取极小、一个不取极值，正好说明判别式等于 0 时二阶信息不够用。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">泰勒公式是「按阶拆地形」</span></div>
+          <div class="mb-body">常数项给高度，一次项给坡度，二次项给弯曲方向。驻点把一次项抹掉，于是二次型的符号（也就是 \(AC-B^{2}\)）说了算：恒正是洼、恒负是包、有正有负是鞍。二次型退化（等于 0）时胜负交给三次、四次项——演示里 \(x^{2}+y^{4}\) 靠四次项仍是极小，\(x^{2}+y^{3}\) 却被三次项拖得上下变号。这正是把 9.8 节判别式补严的那块拼图。</div>
+        </div>
+=== SECTION:s10 ===
+        <h3><span class="sec-badge">9.10</span>最小二乘法</h3>
+        <p>测一组数据，点并不落在一条直线上，怎么找「最贴合」的那条？把每个点的竖直偏差平方后加起来，得到一个关于斜率、截距的二元函数；让这个平方和最小来定直线，就是<strong class="term">最小二乘</strong>。求它的极小值，用的正是本章的偏导与驻点。全章的方法在这一节合拢。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">最小二乘与正规方程</span><span class="mb-no">9.20</span></div>
+          <div class="mb-body">
+            设测得 \(n\) 组数据 \((x_i,y_i)\ (i=1,\dots,n)\)，想用直线 \(y=ax+b\) 拟合。令偏差平方和
+            $$S(a,b)=\sum_{i=1}^{n}\bigl(y_i-(ax_i+b)\bigr)^{2}$$
+            把 \(S\) 看成 \(a,b\) 的二元函数，令 \(S_a=S_b=0\) 得<strong class="term">正规方程</strong>
+            $$\begin{cases}a\sum x_i^{2}+b\sum x_i=\sum x_iy_i,\\ a\sum x_i+nb=\sum y_i.\end{cases}$$
+            解出 \(a,b\) 即得拟合直线。只要 \(x_i\) 不全相同，\(S\) 的二次部分正定，这个驻点就是唯一的极小值点。
+            <mark class="key">式子里每个 \(\sum\) 都是对全部 \(n\) 组数据求和；\(x_i\) 不全相同保证解唯一</mark>。
+            <div class="proof-title">推导 · 3 步（为什么这是一组线性方程）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">\(S_a=\sum 2\bigl(y_i-ax_i-b\bigr)(-x_i)=0\ \Rightarrow\ a\sum x_i^{2}+b\sum x_i=\sum x_iy_i\)</span><span class="derive-note">对每个平方用链式法则求导，再整理</span></li>
+              <li><span class="derive-eq">\(S_b=\sum 2\bigl(y_i-ax_i-b\bigr)(-1)=0\ \Rightarrow\ a\sum x_i+nb=\sum y_i\)</span><span class="derive-note">对 \(b\) 求导时括号外只多一个 \(-1\)</span></li>
+              <li><span class="derive-eq">\(S\) 的二次部分为 \(a^{2}\sum x_i^{2}+2ab\sum x_i+nb^{2}\)，判别式 \(n\sum x_i^{2}-\left(\sum x_i\right)^{2}=n\sum(x_i-\bar{x})^{2}>0\)</span><span class="derive-note">\(x_i\) 不全相同则上式为正，由定理 9.16 知是极小值</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="least-squares">
+          <div class="demo-title">演示 10 · 自己拖出一条「误差平方和最小」的直线</div>
+          <div class="demo-caption">蓝点是四组数据 \((1,2),(2,4),(3,5),(4,7)\)，蓝线是当前的 \(y=ax+b\)，橙色竖短线是各点的残差（竖直方向的距离）。分别拖动斜率与截距，<b>盯住读数里的平方和 \(S\)</b>：把两条残差和都拖成 0 的那组 \(a,b\)，就是正规方程给出的最小二乘解。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">列五个和、解正规方程、再用残差验算</span><span class="mb-no">例 9.10</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">测得 4 组数据 \((1,2)\)、\((2,4)\)、\((3,5)\)、\((4,7)\)。用最小二乘法求拟合直线 \(y=ax+b\)，并求 \(S\) 在这组 \(a,b\) 下的值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先把 \(n,\sum x_i,\sum y_i,\sum x_i^{2},\sum x_iy_i\) 五个数算出来列成表，代入正规方程解二元一次方程组，最后把 \(a,b\) 代回 \(S\) 并用「残差和为 0、残差与 \(x\) 的加权和为 0」验算。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              \(n=4\)；\(\sum x_i=1+2+3+4=10\)；\(\sum y_i=2+4+5+7=18\)；\(\sum x_i^{2}=1+4+9+16=30\)；\(\sum x_iy_i=2+8+15+28=53\)。<br>
+              正规方程：
+              $$\begin{cases}30a+10b=53,\\ 10a+4b=18.\end{cases}$$
+              第二式乘 3 得 \(30a+12b=54\)，与第一式相减得 \(2b=1\)，即 \(b=\dfrac{1}{2}\)；代回第二式：\(10a+2=18\)，得 \(a=\dfrac{8}{5}\)。<br>
+              故拟合直线为 \(y=\dfrac{8}{5}x+\dfrac{1}{2}\)。<br>
+              验算 \(S\)：四个残差 \(y_i-(ax_i+b)\) 依次为 \(2-(1.6+0.5)=-0.1\)、\(4-(3.2+0.5)=0.3\)、\(5-(4.8+0.5)=-0.3\)、\(7-(6.4+0.5)=0.1\)，故
+              $$S=0.01+0.09+0.09+0.01=0.2$$
+              核对：\(\sum\) 残差 \(=-0.1+0.3-0.3+0.1=0\)，\(\sum x_ie_i=-0.1+0.6-0.9+0.4=0\)，正是正规方程的两条。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「列五个和 → 写正规方程 → 解 \(a,b\) → 用两条残差和为 0 验算」。注意拟合的是 \(y\) 关于 \(x\) 的直线，残差是竖直方向的距离；若改成 \(x\) 关于 \(y\) 的拟合，会得到另一条直线，两者不能混用。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">最小二乘是本章方法的一次总演练</span></div>
+          <div class="mb-body">「找最贴合的直线」原本不像求导题，把它改写成「求二元二次函数 \(S(a,b)\) 的极小值」后，偏导 → 驻点 → 极值判别整套工具立刻能用：两个一阶偏导为零给出正规方程，\(S\) 的正定二次型保证那是极小值。演示里拖两个滑块，读数里的 \(S\) 与两条残差和同步变化，等于把这套推导亲手走了一遍。</div>
+        </div>
+=== PITFALLS ===
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">只沿直线试二元极限就下结论</span></div>
+        <div class="mb-body"><b>错误做法</b>：验证 \(\lim\limits_{(x,y)\to(0,0)}h(x,y)\) 时只沿 \(x\) 轴、\(y\) 轴和几条直线 \(y=kx\)，发现都趋于 0 就说极限存在且为 0。<b>为什么错</b>：直线只是所有路径里的一小部分，弯曲的路径可能给出别的值。反例取 \(h(x,y)=\dfrac{2x^{2}y}{x^{4}+y^{2}}\)（\((x,y)\neq(0,0)\)）：沿任意直线 \(y=kx\) 有 \(h=\dfrac{2kx}{x^{2}+k^{2}}\to0\)，但沿抛物线 \(y=x^{2}\) 有 \(h=\dfrac{2x^{4}}{x^{4}+x^{4}}=1\)，故二重极限不存在。<b>正确做法</b>：想证<strong>存在</strong>，必须像例 9.1 的 \(g\) 那样对所有 \((x,y)\) 作统一估计；想证<strong>不存在</strong>，只需找一条给出不同值的路径——别忘了把弯曲路径也试一试。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">偏导数存在就以为连续、可微</span></div>
+        <div class="mb-body"><b>错误做法</b>：算出 \(f_x(0,0)=f_y(0,0)=0\) 就断言 \(f\) 在原点连续、可微。<b>为什么错</b>：偏导只记录沿两条坐标轴的变化，管不到斜着走会怎样。反例取 \(f(x,y)=\begin{cases}1,&xy\neq0,\\ 0,&xy=0.\end{cases}\) 在原点，沿 \(x\) 轴恒有 \(f(h,0)=0\)，故 \(f_x(0,0)=\lim\limits_{h\to0}\dfrac{0-0}{h}=0\)，同理 \(f_y(0,0)=0\)；但沿直线 \(y=x\)（\(x\neq0\)）有 \(f=1\neq f(0,0)=0\)，故不连续，由定理 9.7 也不可微。<b>正确做法</b>：偏导存在只保证沿两轴「看起来平」；要判连续或可微，得用定义，或用「偏导数连续则 \(f\) 可微」这条充分条件（定理 9.8）。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">方向导数忘记把方向单位化</span></div>
+        <div class="mb-body"><b>错误做法</b>：求 \(f\) 沿 \((3,4)\) 的方向导数时直接算 \(f_x\cdot3+f_y\cdot4\)。<b>为什么错</b>：定义里的 \(\boldsymbol{e}_l\) 必须是单位向量，而 \((3,4)\) 的模是 5，直接代入把结果放大了 5 倍。<b>正确做法</b>：先归一化 \(\boldsymbol{e}_l=\dfrac{(3,4)}{5}=\left(\dfrac{3}{5},\dfrac{4}{5}\right)\)，再用 \(\dfrac{\partial f}{\partial l}=\nabla f\cdot\boldsymbol{e}_l\)；例 9.7 的正确值是 \(\dfrac{28}{5}\)，直接代会错成 28。另外别把梯度的模 \(|\nabla f|\) 当成沿任意方向的方向导数，它只是最大值。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">\(AC-B^{2}=0\) 时仍硬套极值判别式</span></div>
+        <div class="mb-body"><b>错误做法</b>：对 \(g=x^{2}+y^{4}\) 与 \(u=x^{2}+y^{3}\) 都算出 \(AC-B^{2}=0\)，就凭感觉断言「都不是极值」或「都取极小」。<b>为什么错</b>：判别式等于 0 只说明二阶项退化，定理 9.16 此时不给任何结论，两个函数可以一个有极小、一个无极值（见例 9.9）。<b>正确做法</b>：回到极值定义，直接比较 \(f-f(P_0)\) 在 \(P_0\) 附近的符号；或按 9.9 节补上更高阶的泰勒项再判断。\(g\ge0\) 故取极小，\(u\) 在原点附近变号故不取极值。</div>
+      </div>
+=== EXERCISES ===
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>设 \(f(x,y)=x^{2}y-3xy^{2}+2\)。求 \(f_x,f_y\) 及它们在 \((1,1)\) 处的值；再求 \(f_{xy}\) 与 \(f_{yx}\)，核对二者相等。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">求 \(f_x\) 时把 \(y\) 当常数：\(f_x=2xy-3y^{2}\)；求 \(f_y\) 时把 \(x\) 当常数：\(f_y=x^{2}-6xy\)。代入 \((1,1)\)：\(f_x=2-3=-1\)，\(f_y=1-6=-5\)。再各求一次：\(f_{xy}=\dfrac{\partial}{\partial y}(2xy-3y^{2})=2x-6y\)，\(f_{yx}=\dfrac{\partial}{\partial x}(x^{2}-6xy)=2x-6y\)，二者相等（代入 \((1,1)\) 都等于 \(-4\)）。固定动作是「认准对谁求导，另一个字母全程当常数」，混合偏导相等正好用来验算有没有把变量看错。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>设 \(z=f(u,v)=uv+v^{2}\)，其中 \(u=x+y\)、\(v=x-y\)。用链式法则求 \(\dfrac{\partial z}{\partial x}\) 与 \(\dfrac{\partial z}{\partial y}\)，再把 \(u,v\) 直接代入化成 \(x,y\) 的函数核对。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">先分层：\(f_u=v\)、\(f_v=u+2v\)；\(u_x=1,u_y=1\)，\(v_x=1,v_y=-1\)。到 \(x\) 有两条通路：\(\dfrac{\partial z}{\partial x}=f_u u_x+f_v v_x=v+(u+2v)=u+3v=(x+y)+3(x-y)=4x-2y\)。到 \(y\) 也有两条：\(\dfrac{\partial z}{\partial y}=f_u u_y+f_v v_y=v-(u+2v)=-u-v=-(x+y)-(x-y)=-2x\)。核对：直接代入 \(z=(x+y)(x-y)+(x-y)^{2}=x^{2}-y^{2}+x^{2}-2xy+y^{2}=2x^{2}-2xy\)，故 \(z_x=4x-2y\)、\(z_y=-2x\)，与链式法则一致。最容易错的是漏掉经 \(v\) 的那条通路，或把 \(v_y=-1\) 写成 1。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>用拉格朗日乘数法求 \(f(x,y)=x^{2}+y^{2}\) 在约束 \(x+2y=5\) 下的最小值，并说明所得点的几何意义。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">约束写成 \(\varphi=x+2y-5=0\)，\(\nabla\varphi=(1,2)\neq\vec{0}\)。构造 \(L=x^{2}+y^{2}+\lambda(x+2y-5)\)。方程组：\(L_x=2x+\lambda=0\)，\(L_y=2y+2\lambda=0\)，\(x+2y-5=0\)。前两式给出 \(\lambda=-2x\) 与 \(\lambda=-y\)，故 \(y=2x\)；代入约束 \(x+4x=5\) 得 \(x=1\)、\(y=2\)，再由 \(2x+\lambda=0\) 得 \(\lambda=-2\)。于是 \(f(1,2)=1+4=5\)。几何意义：\(f=x^{2}+y^{2}\) 是点到原点距离的平方，约束是直线 \(x+2y=5\)，最小值正是原点到该直线距离的平方 \(\left(\dfrac{5}{\sqrt{1^{2}+2^{2}}}\right)^{2}=5\)，垂足 \((1,2)\) 即最近点。可核对：直线方向向量 \((2,-1)\) 与梯度 \((2x,2y)=(2,4)\) 点积为 \(4-4=0\)，梯度垂直于直线，正是「等高线与约束相切」的条件。</div></details>
+          </div>
+=== QUIZ ===
+[
+  { "q": "设 \\(f(x,y)=\\dfrac{4x^{2}-y^{2}}{2x^{2}+y^{2}}\\)（\\((x,y)\\neq(0,0)\\)）。当 \\((x,y)\\to(0,0)\\) 时，下列说法正确的是？",
+    "options": ["沿 \\(y=0\\) 的极限是 \\(2\\)、沿 \\(x=0\\) 的极限是 \\(-1\\)，故二重极限不存在", "沿 \\(y=0\\) 与沿 \\(y=x\\) 的极限都是 \\(2\\)，故二重极限为 \\(2\\)", "二重极限为 \\(0\\)", "沿 \\(x=0\\) 的极限是 \\(-1\\)，故二重极限为 \\(-1\\)"],
+    "answer": 0,
+    "explain": "沿 \\(y=0\\) 时 \\(f=\\frac{4x^{2}}{2x^{2}}=2\\)，沿 \\(x=0\\) 时 \\(f=\\frac{-y^{2}}{y^{2}}=-1\\)，沿 \\(y=x\\) 时 \\(f=\\frac{3x^{2}}{3x^{2}}=1\\)；三条路径给出 2、-1、1 三个不同的数，所以二重极限不存在，A 正确。B 错在沿 \\(y=x\\) 的极限是 1 而不是 2，且仅凭两条路径相同也不能断定极限存在；C 错在把分子分母同阶的情形误当成趋于 0，沿坐标轴根本不趋于 0；D 错在只取一条路径的值当二重极限，二重极限要求所有路径趋于同一个数。" },
+  { "q": "关于「偏导数存在」「可微」「连续」，下列说法正确的是？",
+    "options": ["偏导数在一点存在，则函数在该点一定连续", "函数在该点可微，则两个偏导数都存在，且 \\(\\mathrm{d}z=f_x\\mathrm{d}x+f_y\\mathrm{d}y\\)", "函数在该点连续，则两个偏导数都存在", "两个偏导数都存在，则函数在该点可微"],
+    "answer": 1,
+    "explain": "由定理 9.6，可微时 \\(\\Delta z=A\\Delta x+B\\Delta y+o(\\rho)\\)，令 \\(\\Delta y=0\\) 后除以 \\(\\Delta x\\) 取极限即得 \\(A=f_x\\)，同理 \\(B=f_y\\)，故 B 正确。A 错：如 \\(f(x,y)\\) 在 \\(xy\\neq0\\) 时取 1、在坐标轴上取 0，原点两个偏导都是 0 却不连续；C 错：连续只要求函数值逼近，不能保证差商有极限，例如 \\(f(x,y)=|x|+|y|\\) 在原点连续但 \\(f_x\\) 不存在；D 与 A 同理，偏导存在远不足以保证可微，可微还额外要求误差是 \\(o(\\rho)\\)。" },
+  { "q": "设 \\(F(x,y)=x^{2}+y^{2}-5\\)，方程 \\(F(x,y)=0\\) 在 \\((1,2)\\) 附近把 \\(y\\) 确定成 \\(x\\) 的函数。则 \\(\\dfrac{\\mathrm{d}y}{\\mathrm{d}x}\\) 在 \\((1,2)\\) 处为？",
+    "options": ["\\(-\\dfrac{1}{2}\\)", "\\(-2\\)", "\\(\\dfrac{1}{2}\\)", "不存在（因为 \\(F_y=0\\)）"],
+    "answer": 0,
+    "explain": "\\(F_x=2x=2\\)、\\(F_y=2y=4\\neq0\\)，代入隐函数求导公式 \\(\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{F_x}{F_y}=-\\frac{2}{4}=-\\frac12\\)，A 正确。B 把分子分母弄反，算成了 \\(-F_y/F_x=-2\\)；C 漏掉了公式里的负号；D 错在 \\(F_y(1,2)=4\\) 并不为 0，公式适用，只有 \\(F_y=0\\) 的点（本例中 \\(y=0\\) 处的 \\((\\pm\\sqrt{5},0)\\)）公式才失效。" },
+  { "q": "设 \\(f(x,y)=x^{2}-xy+2y^{2}\\)，在 \\(P_0(1,2)\\) 处沿方向 \\((3,4)\\) 的方向导数是？",
+    "options": ["\\(\\dfrac{28}{5}\\)", "\\(28\\)", "\\(7\\)", "\\(\\dfrac{4}{5}\\)"],
+    "answer": 0,
+    "explain": "\\(f_x=2x-y=0\\)、\\(f_y=-x+4y=7\\)，梯度为 \\((0,7)\\)；方向 \\((3,4)\\) 的模为 5，单位化得 \\((\\frac35,\\frac45)\\)，故方向导数 \\(=0\\cdot\\frac35+7\\cdot\\frac45=\\frac{28}{5}\\)，A 正确。B 忘了把方向向量除以模 5，直接算成 \\(0\\cdot3+7\\cdot4=28\\)；C 是梯度的模 \\(|\\nabla f|=7\\)，那是最大方向导数而不是沿 \\((3,4)\\) 的值；D 只取了单位向量的第二个分量，根本没有与梯度点乘。" },
+  { "q": "设 \\(f(x,y)=x^{2}+2y^{2}-2x-4y+5\\)，关于它在 \\((1,1)\\) 处，下列说法正确的是？",
+    "options": ["\\(AC-B^{2}=8>0\\) 且 \\(A>0\\)，取极小值", "\\(AC-B^{2}=8>0\\) 且 \\(A>0\\)，取极大值", "\\(AC-B^{2}=0\\)，判别失效", "\\((1,1)\\) 不是驻点"],
+    "answer": 0,
+    "explain": "\\(f_x=2x-2=0\\)、\\(f_y=4y-4=0\\) 得驻点 \\((1,1)\\)；\\(A=f_{xx}=2\\)、\\(B=f_{xy}=0\\)、\\(C=f_{yy}=4\\)，\\(AC-B^{2}=8>0\\) 且 \\(A=2>0\\)，由定理 9.16 取极小值，A 正确（也可配方 \\(f=(x-1)^{2}+2(y-1)^{2}+2\\) 直接看出）。B 把 \\(A>0\\) 的情形错判成极大（\\(A<0\\) 才是极大）；C 算错了判别式，实际是 8 而非 0；D 错在 \\((1,1)\\) 确实满足两个一阶偏导都为 0，正是驻点。" }
+]
+=== SUMMARY ===
+      <p>这一章把「一个自变量」换成「两个自变量」，重走了整套微分学：先规定二重极限必须沿所有路径一致，再用冻结其它变量的办法定义偏导数，用 \(\Delta z=A\Delta x+B\Delta y+o(\rho)\) 定义可微与全微分；链式法则靠变量分层把各条通路相加，隐函数公式靠 \(F_y\neq0\) 保证能解出函数，切平面、方向导数与梯度则把偏导数翻译成几何与方向语言。最后用 \(AC-B^{2}\) 分类驻点、用拉格朗日乘数处理约束、用正规方程做最小二乘拟合，把全章工具收束到「求一个二元函数的极值」这一件事上。</p>
+      <p>不过本章的所有运算（求导、微分）都还停留在「对每个自变量分别做」的层面，真正把两个自变量一起积分、算体积与曲面面积，要等下一章的重积分：那里会把这里的偏导数以「先对一个变量积分、再对另一个变量积分」的方式重新用一遍。</p>
+=== DEMOJS ===
+const DEMOS = {
+  'surface-and-levelset': function (el) {
+    DemoPresets.custom(el, {
+      range: [-3, 3, -2.2, 2.2], boxH: 380,
+      slider: { label: '等高值', min: 0.5, max: 6, step: 0.05, init: 2 },
+      controlsHTML: '<span class="hint">拖动等高值，看椭圆一圈圈放大</span>',
+      figureHint: '图里是曲面水平截线在平面上的投影，是二维投影图，不是曲面本身。',
+      draw: (p, out, cv, c, C) => {
+        const ellipse = (k, color, width) => {
+          const rx = Math.sqrt(k), ry = Math.sqrt(k / 2);
+          let prev = null;
+          for (let i = 0; i <= 160; i++) {
+            const th = 2 * Math.PI * i / 160;
+            const q = [rx * Math.cos(th), ry * Math.sin(th)];
+            if (prev) p.line(prev[0], prev[1], q[0], q[1], { color: color, width: width });
+            prev = q;
+          }
+        };
+        [1, 2, 3, 4, 5].forEach(k => ellipse(k, C('axis'), 1.1));
+        ellipse(cv, C('accent'), 2.6);
+        const x0 = Math.sqrt(cv);
+        p.line(0, 0, x0, 0, { color: C('warn'), width: 1.6, dash: true });
+        p.dot(x0, 0, { r: 5, color: C('danger') });
+        p.text(x0 + 0.08, 0.18, '等高线上的点', { color: C('danger'), size: 11 });
+        p.text(-2.8, 1.9, '等高线', { color: C('accent'), size: 11 });
+        out.innerHTML = `函数 ${texHTML('f(x,y)=x^{2}+2y^{2}')}，等值线方程 ${texHTML('x^{2}+2y^{2}=' + f4(cv))}。<br>` +
+          `红点 ${texHTML('(\\sqrt{' + f4(cv) + '},0)')} 落在这条等高线上；沿它走一圈，${texHTML('f')} 始终等于 ${texHTML(f4(cv))}。<br>` +
+          `定义域是整个 ${texHTML('\\mathbb{R}^{2}')}；只有换到另一圈等高线，函数值才改变。`;
+      }
+    });
+  },
+
+  'partial-slices': function (el) {
+    const fx = a => a, fy = a => a - 1 / 2;
+    DemoPresets.sliderCurve(el, {
+      range: [-0.5, 2.2, -1.7, 3.6], boxH: 380, fill: true,
+      slider: { label: '固定坐标', min: 0.5, max: 1.5, step: 0.01, init: 1.0 },
+      hint: '拖动固定坐标，比较两条切片在交点处的切线斜率',
+      curves: [
+        { fn: (t, a) => t * t / 4 + a * t / 2 - a / 2 + a * a / 4, color: 'accent', width: 2.6 },
+        { fn: (t, a) => t * t / 4 + (a - 1) * t / 2 + a * a / 4, color: 'ok', width: 2.2 }
+      ],
+      marks: [{ type: 'hline', y: 0, color: 'axis' }],
+      dynamic: (p, a, C) => {
+        const y0 = a * a - a / 2;
+        p.line(a - 0.45, y0 - 0.45 * fx(a), a + 0.45, y0 + 0.45 * fx(a), { color: C('warn'), width: 1.8 });
+        p.line(a - 0.45, y0 - 0.45 * fy(a), a + 0.45, y0 + 0.45 * fy(a), { color: C('cyan'), width: 1.8, dash: true });
+        p.dot(a, y0, { r: 5, color: C('danger') });
+        p.text(a + 0.06, y0 + 0.22, '公共点', { color: C('danger'), size: 11 });
+      },
+      readout: (a) => `固定坐标 ${texHTML('a=' + f4(a))}：两条切片都经过 ${texHTML('(a,\\,f(a,a))')}，公共纵坐标 ${texHTML('f(a,a)=' + f4(a * a - a / 2))}。<br>` +
+        `沿 ${texHTML('x')} 方向的切线斜率 ${texHTML('f_x(a,a)=a=' + f4(fx(a)))}，沿 ${texHTML('y')} 方向的切线斜率 ${texHTML('f_y(a,a)=a-\\frac{1}{2}=' + f4(fy(a)))}。<br>` +
+        `两条切线斜率一般不同，正说明「偏导数必须指明朝哪个方向」。`,
+      figureHint: '蓝线是固定纵坐标为 a 的切片，绿线是固定横坐标为 a 的切片；橙、青短线是各自在公共点处的切线。'
+    });
+  },
+
+  'total-differential': function (el) {
+    let mode = 0;
+    const dirs = [
+      { name: '沿横轴', c: 1, s: 0 },
+      { name: '沿 (3,4)', c: 0.6, s: 0.8 },
+      { name: '沿对角', c: Math.SQRT1_2, s: Math.SQRT1_2 }
+    ];
+    const dz = (r, d) => Math.pow(1 + r * d.c, 2) * (2 + r * d.s) - 2;
+    const lin = (r, d) => (4 * d.c + d.s) * r;
+    DemoPresets.custom(el, {
+      range: [-0.05, 1.2, -0.6, 8.4], boxH: 380, fill: true,
+      slider: { label: '步长', min: 0.02, max: 1.0, step: 0.01, init: 0.4 },
+      controlsHTML: '<span class="hint">选一个增量方向，再把步长拖小</span>',
+      buttons: dirs.map((d, i) => ({ label: d.name, run: () => { mode = i; } })),
+      figureHint: '把步长拖小，绿色误差除以步长一路趋于 0，这就是 o(ρ) 的含义。',
+      draw: (p, out, r, c, C) => {
+        const d = dirs[mode];
+        p.curve(q => dz(q, d), { from: 0, to: 1.2, color: C('accent'), width: 2.6 });
+        p.curve(q => lin(q, d), { from: 0, to: 1.2, color: C('warn'), width: 2.0, dash: true });
+        p.curve(q => dz(q, d) - lin(q, d), { from: 0, to: 1.2, color: C('ok'), width: 2.0 });
+        const D = dz(r, d), L = lin(r, d), E = D - L;
+        p.dot(r, D, { r: 5, color: C('accent') });
+        p.dot(r, L, { r: 4, color: C('warn') });
+        p.dot(r, E, { r: 4, color: C('ok') });
+        out.innerHTML = `方向：${d.name}，步长 ${texHTML('\\rho=' + f4(r))}，${texHTML('\\Delta x=' + f4(r * d.c))}、${texHTML('\\Delta y=' + f4(r * d.s))}。<br>` +
+          `真实增量 ${texHTML('\\Delta z=' + f4(D))}，全微分 ${texHTML('\\mathrm{d}z=f_x\\Delta x+f_y\\Delta y=' + f4(L))}（这里 ${texHTML('f_x=4,\\,f_y=1')}）。<br>` +
+          `误差 ${texHTML('\\Delta z-\\mathrm{d}z=' + f4(E))}，比值 ${texHTML('\\frac{\\Delta z-\\mathrm{d}z}{\\rho}=' + f4(E / r))}、${texHTML('\\frac{\\Delta z-\\mathrm{d}z}{\\rho^{2}}=' + f4(E / (r * r)))}；把 ${texHTML('\\rho')} 拖小，前一个比值趋于 0。`;
+      }
+    });
+  },
+
+  'chain-rule-tree': function (el) {
+    let mode = 0;
+    const nodes = [
+      { id: 'top', x: 0, y: 1.9, label: '输出量' },
+      { id: 'm1', x: -1.4, y: 0.5, label: '中间量一' },
+      { id: 'm2', x: 1.4, y: 0.5, label: '中间量二' },
+      { id: 'b1', x: -2.0, y: -1.2, label: '自变量一' },
+      { id: 'b2', x: 2.0, y: -1.2, label: '自变量二' }
+    ];
+    const byId = {};
+    nodes.forEach(n => { byId[n.id] = n; });
+    const edges = [['top', 'm1'], ['top', 'm2'], ['m1', 'b1'], ['m1', 'b2'], ['m2', 'b1'], ['m2', 'b2']];
+    DemoPresets.custom(el, {
+      range: [-3, 3, -2, 2.6], boxH: 380,
+      slider: { label: '第一个自变量的取值', min: 0, max: 2, step: 0.01, init: 1 },
+      controlsHTML: '<span class="hint">点按钮切换要看的偏导数，亮色箭头就是必须相加的通路</span>',
+      buttons: [
+        { label: '看第一个自变量', run: () => { mode = 0; } },
+        { label: '看第二个自变量', run: () => { mode = 1; } }
+      ],
+      figureHint: '从输出量到所选自变量共有两条通路，漏掉任意一条，偏导数就会少一块。',
+      draw: (p, out, xv, c, C) => {
+        edges.forEach(e => {
+          const A = byId[e[0]], B = byId[e[1]];
+          const on = (mode === 0 && B.id === 'b1') || (mode === 1 && B.id === 'b2');
+          p.line(A.x, A.y, B.x, B.y, { color: on ? C('accent') : C('axis'), width: on ? 2.6 : 1.1, dash: !on });
+        });
+        nodes.forEach(n => {
+          p.dot(n.x, n.y, { r: 7, color: C('text') });
+          p.text(n.x + 0.1, n.y + 0.22, n.label, { color: C('text'), size: 11 });
+        });
+        const fu = 2 * xv + 4;
+        if (mode === 0) {
+          const t1 = fu * 1, t2 = 1 * 1;
+          out.innerHTML = `看第一个自变量（记作 ${texHTML('x')}，另一个固定为 ${texHTML('y=1')}）：中间量一对应 ${texHTML('u=x+2')}，中间量二对应 ${texHTML('v=x')}。<br>` +
+            `经中间量一的通路 ${texHTML('f_u\\,u_x=(2x+4)\\cdot 1=' + f4(t1))}，经中间量二的通路 ${texHTML('f_v\\,v_x=1\\cdot 1=' + f4(t2))}。<br>` +
+            `相加得 ${texHTML('\\frac{\\partial z}{\\partial x}=2x+5=' + f4(t1 + t2))}，在 ${texHTML('x=' + f4(xv))} 处为 ${texHTML(f4(t1 + t2))}。`;
+        } else {
+          const t1 = fu * 2, t2 = 1 * xv;
+          out.innerHTML = `看第二个自变量（记作 ${texHTML('y')}，点取在 ${texHTML('y=1')}，第一个自变量由滑块给出）：${texHTML('u_y=2')}、${texHTML('v_y=x')}。<br>` +
+            `经中间量一的通路 ${texHTML('f_u\\,u_y=(2x+4)\\cdot 2=' + f4(t1))}，经中间量二的通路 ${texHTML('f_v\\,v_y=1\\cdot x=' + f4(t2))}。<br>` +
+            `相加得 ${texHTML('\\frac{\\partial z}{\\partial y}=5x+8=' + f4(t1 + t2))}，在 ${texHTML('x=' + f4(xv))} 处为 ${texHTML(f4(t1 + t2))}。`;
+        }
+      }
+    });
+  },
+
+  'implicit-partial': function (el) {
+    let branch = 1;
+    const upper = xx => Math.sqrt(Math.max(0, (3 - xx * xx) / 2));
+    DemoPresets.custom(el, {
+      range: [-2.2, 2.2, -1.8, 1.8], boxH: 380,
+      slider: { label: '横坐标', min: -1.7, max: 1.7, step: 0.01, init: 0.8 },
+      controlsHTML: '<span class="hint">切换上、下半支，把点推向椭圆最右端</span>',
+      buttons: [
+        { label: '上半支', run: () => { branch = 1; } },
+        { label: '下半支', run: () => { branch = -1; } }
+      ],
+      figureHint: '点越靠近椭圆端点，F_y 越小、切线越陡；到端点处 F_y=0，公式失效。',
+      draw: (p, out, x0, c, C) => {
+        p.curve(xx => upper(xx), { from: -Math.sqrt(3), to: Math.sqrt(3), color: C('accent'), width: 2.4 });
+        p.curve(xx => -upper(xx), { from: -Math.sqrt(3), to: Math.sqrt(3), color: C('accent'), width: 2.4 });
+        const y0 = branch * upper(x0);
+        const Fx = 2 * x0, Fy = 4 * y0;
+        const slope = -Fx / Fy;
+        const half = 0.5 / (1 + Math.abs(slope));
+        p.line(x0 - half, y0 - half * slope, x0 + half, y0 + half * slope, { color: C('warn'), width: 2.2 });
+        p.dot(x0, y0, { r: 5, color: C('danger') });
+        p.text(1.35, 0.12, '端点附近', { color: C('text'), size: 11 });
+        out.innerHTML = `方程 ${texHTML('F(x,y)=x^{2}+2y^{2}-3=0')}，当前点 ${texHTML('(' + f4(x0) + ',' + f4(y0) + ')')}。<br>` +
+          `${texHTML('F_x=2x=' + f4(Fx))}，${texHTML('F_y=4y=' + f4(Fy))}；` +
+          (Math.abs(Fy) > 1e-6
+            ? `因为 ${texHTML('F_y\\neq 0')}，可用 ${texHTML('\\frac{\\mathrm{d}y}{\\mathrm{d}x}=-\\frac{F_x}{F_y}=' + f4(slope))}，橙色短线就是该点切线。`
+            : `此时 ${texHTML('F_y=0')}，公式分母为零，曲线出现竖直切线，不能套用。`);
+      }
+    });
+  },
+
+  'tangent-plane': function (el) {
+    const slice = (x, a) => x * x + 2 * a * a;
+    const tangent = (x, a) => 2 * x + 2 * a * a - 1;
+    DemoPresets.sliderCurve(el, {
+      range: [-2.2, 2.2, -1, 8.5], boxH: 380, fill: true,
+      slider: { label: '截面位置', min: 0, max: 1.2, step: 0.01, init: 1 },
+      hint: '拖动截面位置，看截线与切平面截痕一起变',
+      curves: [{ fn: slice, color: 'accent', width: 2.6 }],
+      marks: [{ type: 'vline', x: 1, color: 'cyan' }],
+      dynamic: (p, a, C) => {
+        p.line(0.2, tangent(0.2, a), 2.0, tangent(2.0, a), { color: C('warn'), width: 2.2 });
+        p.dot(1, slice(1, a), { r: 5, color: C('danger') });
+        p.text(1.05, slice(1, a) + 0.3, '切点', { color: C('danger'), size: 11 });
+      },
+      readout: (a) => `截面 ${texHTML('y=' + f4(a))}：截线 ${texHTML('z=x^{2}+' + f4(2 * a * a))}，切点 ${texHTML('(1,' + f4(a) + ',' + f4(1 + 2 * a * a) + ')')}。<br>` +
+        `曲面 ${texHTML('z=x^{2}+2y^{2}')} 在该点的切平面 ${texHTML('2x+4ay-z-1-2a^{2}=0')}（${texHTML('a=' + f4(a))}），由 ${texHTML('f_x=2')} 与 ${texHTML('f_y=4a=' + f4(4 * a))} 共同决定。<br>` +
+        `橙色短线是切平面与截面 ${texHTML('y=' + f4(a))} 的交线，即截线在 ${texHTML('x=1')} 处的切线 ${texHTML('z=2x+' + f4(2 * a * a - 1))}。`,
+      figureHint: '蓝线是曲面被竖直平面截出的截线；橙色短线是切平面在同一截面上的截痕，两条线在切点相切。'
+    });
+  },
+
+  'gradient-field': function (el) {
+    const gx = 2, gy = 2, norm = Math.hypot(gx, gy), P = [1, 0.5];
+    DemoPresets.custom(el, {
+      range: [-2, 2.5, -1.8, 2.2], boxH: 380,
+      slider: { label: '方向角', min: 0, max: 6.28, step: 0.01, init: 0.8 },
+      controlsHTML: '<span class="hint">转动方向箭头，比较方向导数与梯度方向</span>',
+      figureHint: '梯度箭头垂直于等高线；方向箭头与梯度同向时方向导数最大，垂直时为 0。',
+      draw: (p, out, ang, c, C) => {
+        const ellipse = (k, color, width) => {
+          const rx = Math.sqrt(k), ry = Math.sqrt(k / 2);
+          let prev = null;
+          for (let i = 0; i <= 160; i++) {
+            const th = 2 * Math.PI * i / 160;
+            const q = [rx * Math.cos(th), ry * Math.sin(th)];
+            if (prev) p.line(prev[0], prev[1], q[0], q[1], { color: color, width: width });
+            prev = q;
+          }
+        };
+        const arrow = (dx, dy, color) => {
+          const L = 1.15, ex = P[0] + L * dx, ey = P[1] + L * dy;
+          p.line(P[0], P[1], ex, ey, { color: C(color), width: 2.4 });
+          p.dot(ex, ey, { r: 4, color: C(color) });
+        };
+        [0.5, 1, 2, 2.5].forEach(k => ellipse(k, C('axis'), 1.1));
+        ellipse(1.5, C('accent'), 2.2);
+        arrow(gx / norm, gy / norm, 'ok');
+        const ex = Math.cos(ang), ey = Math.sin(ang);
+        arrow(ex, ey, 'danger');
+        p.dot(P[0], P[1], { r: 5, color: C('text') });
+        p.text(P[0] + 0.08, P[1] - 0.28, '观测点', { color: C('text'), size: 11 });
+        p.text(0.55, 1.55, '梯度方向', { color: C('ok'), size: 11 });
+        p.text(-1.7, -1.4, '等高线', { color: C('accent'), size: 11 });
+        const D = gx * ex + gy * ey;
+        out.innerHTML = `在 ${texHTML('(1,0.5)')} 处 ${texHTML('\\nabla f=(2x,4y)=(2,2)')}，模 ${texHTML('|\\nabla f|=' + f4(norm))}，方向角 ${texHTML('\\alpha=' + f4(ang))}。<br>` +
+          `单位方向 ${texHTML('\\boldsymbol{e}_l=(\\cos\\alpha,\\sin\\alpha)=(' + f4(ex) + ',' + f4(ey) + ')')}。<br>` +
+          `方向导数 ${texHTML('\\frac{\\partial f}{\\partial l}=\\nabla f\\cdot\\boldsymbol{e}_l=2\\cos\\alpha+2\\sin\\alpha=' + f4(D))}；最大 ${texHTML(f4(norm))}、最小 ${texHTML(f4(-norm))}、垂直时为 ${texHTML('0')}。`;
+      }
+    });
+  },
+
+  'multivar-extrema': function (el) {
+    DemoPresets.sliderCurve(el, {
+      range: [-1.2, 1.2, -3.2, 3.2], boxH: 380, fill: true,
+      slider: { label: '二次项系数', min: -2, max: 2, step: 0.05, init: 1 },
+      hint: '把系数拖过 0，观察三条截线开口方向的变化',
+      curves: [
+        { fn: (t, k) => t * t, color: 'accent', width: 2.4 },
+        { fn: (t, k) => k * t * t, color: 'ok', width: 2.2 },
+        { fn: (t, k) => (1 + k) / 2 * t * t, color: 'warn', width: 2.2 }
+      ],
+      marks: [{ type: 'hline', y: 0, color: 'axis' }],
+      dynamic: (p, k, C) => {
+        p.dot(1, 1, { r: 4, color: C('accent') });
+        p.dot(1, k, { r: 4, color: C('ok') });
+        p.dot(1, (1 + k) / 2, { r: 4, color: C('warn') });
+        p.text(-1.1, 2.8, '三条过原点的截线', { color: C('text'), size: 11 });
+      },
+      readout: (k) => {
+        const disc = 4 * k;
+        let verdict;
+        if (disc > 1e-9) verdict = `${texHTML('AC-B^{2}>0')} 且 ${texHTML('A>0')}，原点取极小值`;
+        else if (disc < -1e-9) verdict = `${texHTML('AC-B^{2}<0')}，原点是鞍点、不是极值`;
+        else verdict = `${texHTML('AC-B^{2}=0')}，二阶判别失效，需另判`;
+        return `${texHTML('f(x,y)=x^{2}+' + f4(k) + 'y^{2}')}：${texHTML('A=2,\\,B=0,\\,C=' + f4(2 * k))}，${texHTML('AC-B^{2}=' + f4(disc))}。<br>` +
+          `沿横轴 ${texHTML('t^{2}')}、沿纵轴 ${texHTML(f4(k) + 't^{2}')}、沿对角 ${texHTML(f4((1 + k) / 2) + 't^{2}')}；${verdict}。`;
+      },
+      figureHint: '三条截线开口都向上时是极小，出现一上一下就是鞍点；系数恰为 0 时判别式给不出结论。'
+    });
+  },
+
+  'saddle-point': function (el) {
+    let mode = 0;
+    const cases = [
+      { name: '鞍点', tex: 'f(x,y)=x^{2}-y^{2}', A: 2, B: 0, C: -2, ax: t => t * t, ay: t => -t * t, note: '二次项一正一负' },
+      { name: '失效但极小', tex: 'f(x,y)=x^{2}+y^{4}', A: 2, B: 0, C: 0, ax: t => t * t, ay: t => Math.pow(t, 4), note: '四阶项仍非负' },
+      { name: '失效且非极值', tex: 'f(x,y)=x^{2}+y^{3}', A: 2, B: 0, C: 0, ax: t => t * t, ay: t => Math.pow(t, 3), note: '三次项会变号' }
+    ];
+    DemoPresets.custom(el, {
+      range: [-1.2, 1.2, -2.2, 2.5], boxH: 380, fill: true,
+      slider: { label: '观察位置', min: -1, max: 1, step: 0.01, init: 0.6 },
+      controlsHTML: '<span class="hint">点按钮切换三个函数，比较两条截线的形状</span>',
+      buttons: cases.map((cs, i) => ({ label: cs.name, run: () => { mode = i; } })),
+      figureHint: '一条截线开口向上、一条向下就是鞍点；判别式为零时两条截线可能都向上，也可能一条穿过横轴。',
+      draw: (p, out, t0, c, C) => {
+        const cs = cases[mode];
+        p.curve(t => cs.ax(t), { from: -1.2, to: 1.2, color: C('accent'), width: 2.6 });
+        p.curve(t => cs.ay(t), { from: -1.2, to: 1.2, color: C('warn'), width: 2.4 });
+        p.line(-1.2, 0, 1.2, 0, { color: C('axis'), width: 1.2 });
+        p.dot(t0, cs.ax(t0), { r: 5, color: C('accent') });
+        p.dot(t0, cs.ay(t0), { r: 5, color: C('warn') });
+        p.text(0.15, 2.2, '沿横轴截线', { color: C('accent'), size: 11 });
+        p.text(0.15, -1.9, '沿纵轴截线', { color: C('warn'), size: 11 });
+        const disc = cs.A * cs.C - cs.B * cs.B;
+        let verdict;
+        if (mode === 0) verdict = `${texHTML('AC-B^{2}=-4<0')}，原点不是极值（鞍点）`;
+        else if (mode === 1) verdict = `${texHTML('AC-B^{2}=0')}，判别失效，但 ${texHTML('f\\geq 0')}，原点取极小值`;
+        else verdict = `${texHTML('AC-B^{2}=0')}，判别失效，${texHTML('f')} 在原点附近变号，不取极值`;
+        out.innerHTML = `函数 ${texHTML(cs.tex)}，${verdict}。<br>` +
+          `沿横轴截线在 ${texHTML('t=' + f4(t0))} 处为 ${texHTML('f(t,0)=' + f4(cs.ax(t0)))}，沿纵轴截线 ${texHTML('f(0,t)=' + f4(cs.ay(t0)))}。<br>` +
+          `判别式 ${texHTML('AC-B^{2}=' + f4(disc))}：${cs.note}，所以只看二阶项不足以定论。`;
+      }
+    });
+  },
+
+  'least-squares': function (el) {
+    const pts = [[1, 2], [2, 4], [3, 5], [4, 7]];
+    DemoPresets.twoSliders(el, {
+      range: [0, 4.5, -1, 9.5], boxH: 380, fill: true,
+      sliders: [
+        { label: '斜率', min: 0.8, max: 1.8, step: 0.01, init: 1.1 },
+        { label: '截距', min: -0.2, max: 1.0, step: 0.01, init: 0.8 }
+      ],
+      hint: '分别拖动斜率与截距，盯住残差平方和的变化',
+      curves: [{ fn: (x, a, b) => a * x + b, color: 'accent', width: 2.4 }],
+      dynamic: (p, a, b, C) => {
+        pts.forEach(q => {
+          const yl = a * q[0] + b;
+          p.line(q[0], q[1], q[0], yl, { color: C('warn'), width: 1.6, dash: true });
+          p.dot(q[0], q[1], { r: 5, color: C('danger') });
+        });
+        p.text(0.2, 8.6, '数据点', { color: C('danger'), size: 11 });
+      },
+      readout: (a, b) => {
+        let S = 0, sr = 0, sxr = 0;
+        const res = pts.map(q => {
+          const e = q[1] - (a * q[0] + b);
+          S += e * e; sr += e; sxr += q[0] * e;
+          return e;
+        });
+        return `斜率 ${texHTML('a=' + f4(a))}、截距 ${texHTML('b=' + f4(b))}，残差平方和 ${texHTML('S(a,b)=' + f4(S))}。<br>` +
+          `四个残差 ${texHTML('(' + res.map(f4).join(', ') + ')')}；和 ${texHTML('\\sum e_i=' + f4(sr))}、加权和 ${texHTML('\\sum x_ie_i=' + f4(sxr))}。<br>` +
+          `正规方程 ${texHTML('30a+10b=53,\\quad 10a+4b=18')} 的解 ${texHTML('a=1.6,\\ b=0.5')} 给出 ${texHTML('S_{\\min}=0.2')}；把两个滑块拖到那里，两条和都变成 0。`;
+      },
+      figureHint: '橙色竖短线是各点的残差；S 最小时残差和与按横坐标加权的残差和同时为 0。'
+    });
+  }
+};
+
+mountDemos(DEMOS);

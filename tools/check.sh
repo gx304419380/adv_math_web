@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 静态校验：元数据一致性、模板完整性、版权关键词、外链可用性
+# 静态校验：元数据一致性、模板完整性、版权关键词、外链可用性、章节装配、数学排版、图像交互
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -80,13 +80,15 @@ if bad:
 print(f'   ✓ {len(urls)} 个 CDN 资源全部返回 200')
 PY
 
-echo "== 6. 章节数据同步与全局样式约束 =="
+echo "== 6. 章节数据同步与全局约束 =="
 python3 tools/sync-chapters.py --check || FAIL=1
 if grep -rInE 'type="module"|injectCSS|import\.meta' --include='*.js' --include='*.html' assets chapters index.html style-guide.html 2>/dev/null; then
   bad '发现 ES module / 动态注入 CSS / import.meta 残留（会破坏 file:// 直开）'
 else
   ok '无 module / 动态注入 / import.meta 残留，file:// 可直接打开'
 fi
+
+# 规范文件必须齐全
 MISSING=0
 for f in assets/css/base.css assets/css/design-system.css assets/css/demos.css \
          docs/PRINCIPLES.md docs/VISUAL_SPEC.md docs/CONTENT_SPEC.md \
@@ -95,46 +97,62 @@ for f in assets/css/base.css assets/css/design-system.css assets/css/demos.css \
 done
 [ "$MISSING" -eq 0 ] && ok '视觉规范、设计 token 与维护文档齐全'
 
-# 4) 按钮 / 读数 / 标签里不得用 Unicode 凑数学（见 docs/MATH_TYPESET.md §9）
-if grep -nE "label: *'[^']*[²³ˣⁿ√]|name: *'[^']*[²³ˣⁿ√]" chapters/*/demo.js assets/js/*.js 2>/dev/null | head -1 | grep -q .; then
-  bad "按钮/标签用了 Unicode 假数学（x²、eˣ、√x 等），应改用 tex: '...' 走 KaTeX"
-else ok "按钮与标签均使用规范数学排版"; fi
-
-# 5) 定理证明不得折叠（只允许习题答案折叠）
-if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head -1 | grep -q .; then
-  bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
-else ok "证明与推导均直接显示，未折叠"; fi
-
-# 6) 组件库文档必须存在，且组件库里提到的类要真的在 CSS 里有定义
+# 组件库文档必须存在，且文档里登记的类要真的在 CSS 里有定义
 MISSING_COMP=0
 for f in docs/COMPONENTS.md docs/MATH_TYPESET.md docs/PRINCIPLES.md docs/VISUAL_SPEC.md; do
   [ -f "$f" ] || { bad "缺少 $f"; MISSING_COMP=1; }
 done
-
-# 抽查组件库里的核心类是否有样式定义（防止文档写了、样式没了）
 for cls in math-block mb-head mb-tag derive derive-eq ex-part formula-box demo-box mm-node; do
   grep -q "\\.$cls" assets/css/*.css || { bad "组件库登记的 .$cls 在 CSS 中找不到定义"; MISSING_COMP=1; }
 done
 [ "$MISSING_COMP" -eq 0 ] && ok '组件库文档与样式定义齐全'
 
-echo
-if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi
+# 图像交互（见 docs/PRINCIPLES.md §2.5、docs/COMPONENTS.md §6）
+NUM=0
+for cls in plot-hud ph-btn ph-zoom ph-note; do
+  grep -q "\\.$cls" assets/css/*.css || { bad "图像交互组件 .$cls 缺少样式定义"; NUM=1; }
+done
+grep -q '缩放与平移' docs/COMPONENTS.md || { bad '组件库文档缺少「缩放与平移」一节'; NUM=1; }
+grep -q '滚轮' docs/PRINCIPLES.md || { bad '核心原则缺少「图必须能被学生自己动」'; NUM=1; }
+[ "$NUM" -eq 0 ] && ok '图像交互规范：组件样式、文档条款齐全'
 
-# ---- 数学排版静态检查（见 docs/MATH_TYPESET.md）----
+# 演示不得直接改绘图器的范围字段（会绕过比例重算、清掉用户的缩放平移）
+if grep -nE '\.o\.(xmin|xmax|ymin|ymax)[[:space:]]*=' chapters/*/demo.js 2>/dev/null | head -3 | grep -q .; then
+  bad '演示里直接写 p.o.xmin 之类的字段：请改用 p.setRange()（见 docs/COMPONENTS.md §6）'
+else ok '演示均未直接改绘图器范围，缩放平移状态不会被重绘覆盖'
+fi
+
 echo
-echo "== 7. 数学排版 =="
-FILES=$(git ls-files '*.html' 2>/dev/null)
-[ -z "$FILES" ] && FILES=$(find . -name '*.html' -not -path './.git/*')
+echo "== 7. 章节正文与演示装配 =="
+if python3 tools/check-demos.py >/tmp/demos-audit.log 2>&1; then
+  ok "$(tail -1 /tmp/demos-audit.log)"
+else
+  bad "章节装配检查失败：$(tail -1 /tmp/demos-audit.log)；明细运行 python3 tools/check-demos.py"
+fi
+
+# texInline() 返回 DOM 元素，用 + 拼进字符串会得到 [object HTMLSpanElement]
+if grep -nE 'texInline\([^)]*\)[[:space:]]*\+' chapters/*/demo.js assets/js/*.js 2>/dev/null | head -1 | grep -q .; then
+  bad 'texInline() 返回 DOM 元素，不能用 + 拼进字符串；读数里请改用 texHTML()'
+else ok '演示读数未把 DOM 元素拼进字符串'; fi
+
+echo
+echo "== 8. 数学排版 =="
+# 必须用 find 覆盖全部页面：git ls-files 只返回已跟踪文件，
+# 新增/未跟踪的章节页会被漏检（曾因此漏掉整章的排版问题）。
+FILES=$(find . -name '*.html' -not -path './.git/*' -not -path './node_modules/*')
 
 # 1) 单美元定界符（本站规定统一用 \( \)）
 if grep -nE '(^|[^\\$])\$[^$]{1,80}\$([^$]|$)' $FILES 2>/dev/null | grep -v 'fb-no' | head -1 | grep -q .; then
   bad "存在 $…$ 单美元定界符，应改为 \\( \\)"
 else ok "定界符统一（未使用单美元）"; fi
 
-# 2) Unicode 数学符号
-if grep -nP '[\x{03A3}\x{222B}\x{221A}\x{2264}\x{2265}\x{221E}\x{03B1}-\x{03C9}]' $FILES 2>/dev/null | head -1 | grep -q .; then
-  bad "存在 Unicode 数学符号（Σ ∫ √ ≤ ≥ α ∞ 等），请改用 LaTeX 宏"
-else ok "无 Unicode 数学符号"; fi
+# 2) Unicode 数学符号。排除三类合法出现：brand 的 ∫ 装饰图标（视觉标记）、
+#    style-guide.html 里「错误写法」的反面示例、中文术语缩写（ε-N 描述、Γ 函数）。
+#    公式内一律走 KaTeX 宏。
+if grep -nP '[\x{03A3}\x{222B}\x{221A}\x{2264}\x{2265}\x{221E}\x{00B2}\x{00B3}\x{207F}]' $FILES 2>/dev/null \
+     | grep -v 'class="brand"' | grep -v 'style-guide\.html' | head -1 | grep -q .; then
+  bad "存在 Unicode 数学符号（Σ ∫ √ ≤ ≥ ∞ ² ³ ⁿ），请改用 LaTeX 宏"
+else ok "无 Unicode 数学符号（品牌图标与中文术语缩写除外）"; fi
 
 # 3) 综合审计：HTML 实体、中文裸进公式、函数名缺反斜杠、定界符配对
 if python3 tools/audit-math.py >/tmp/math-audit.log 2>&1; then
@@ -143,7 +161,7 @@ else
   bad "数学排版问题：$(tail -1 /tmp/math-audit.log)；明细运行 python3 tools/audit-math.py"
 fi
 
-# 4) 按钮 / 读数 / 标签里不得用 Unicode 凑数学（见 docs/MATH_TYPESET.md §9）
+# 4) 按钮 / 标签里不得用 Unicode 凑数学（见 docs/MATH_TYPESET.md §9）
 if grep -nE "label: *'[^']*[²³ˣⁿ√]|name: *'[^']*[²³ˣⁿ√]" chapters/*/demo.js assets/js/*.js 2>/dev/null | head -1 | grep -q .; then
   bad "按钮/标签用了 Unicode 假数学（x²、eˣ、√x 等），应改用 tex: '...' 走 KaTeX"
 else ok "按钮与标签均使用规范数学排版"; fi
@@ -152,18 +170,6 @@ else ok "按钮与标签均使用规范数学排版"; fi
 if grep -nE '<summary>[^<]*(证明|推导)' chapters/*/*.html 2>/dev/null | head -1 | grep -q .; then
   bad "存在折叠的证明/推导，应改为常显（.proof-title + .derive）"
 else ok "证明与推导均直接显示，未折叠"; fi
-
-# 6) 组件库文档必须存在，且组件库里提到的类要真的在 CSS 里有定义
-MISSING_COMP=0
-for f in docs/COMPONENTS.md docs/MATH_TYPESET.md docs/PRINCIPLES.md docs/VISUAL_SPEC.md; do
-  [ -f "$f" ] || { bad "缺少 $f"; MISSING_COMP=1; }
-done
-
-# 抽查组件库里的核心类是否有样式定义（防止文档写了、样式没了）
-for cls in math-block mb-head mb-tag derive derive-eq ex-part formula-box demo-box mm-node; do
-  grep -q "\\.$cls" assets/css/*.css || { bad "组件库登记的 .$cls 在 CSS 中找不到定义"; MISSING_COMP=1; }
-done
-[ "$MISSING_COMP" -eq 0 ] && ok '组件库文档与样式定义齐全'
 
 echo
 if [ "$FAIL" -eq 0 ]; then printf '\033[32m全部校验通过\033[0m\n'; else printf '\033[31m存在校验失败项\033[0m\n'; fi

@@ -78,6 +78,8 @@ function auditMath(root = document) {
    JS 里画布内无法渲染 KaTeX 时，才允许退化为 Unicode，且必须走 canvasLabel()。
    ============================================================ */
 function texInline(tex, opts = {}) {
+  // 读数里偶尔会把数字直接传进来；统一转成字符串，避免降级分支调用 .replace 报错
+  tex = String(tex);
   const span = document.createElement('span');
   span.className = 'tex-inline';
   if (!window.katex) {

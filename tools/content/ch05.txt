@@ -1,0 +1,434 @@
+=== GOALS ===
+        <li><label><input type="checkbox">说出定积分定义里的四步（分割、取点、求和、取极限），并用它算一个简单积分</label></li>
+        <li><label><input type="checkbox">用微积分基本公式把「求面积」变成「找原函数、代两端」，并解释变上限积分的导数</label></li>
+        <li><label><input type="checkbox">对定积分正确换元（连积分限一起换）与分部积分，不再把结果回代</label></li>
+        <li><label><input type="checkbox">判断反常积分是否收敛，并用 Γ 函数的递推关系算出具体值</label></li>
+=== MAP ===
+{
+  "nodes": [
+    { "id": "n0", "label": "定积分的概念", "kind": "root" },
+    { "id": "n1", "label": "分割取点求和取极限", "kind": "core" },
+    { "id": "n2", "label": "定积分的性质", "kind": "branch" },
+    { "id": "n3", "label": "变上限积分", "kind": "core" },
+    { "id": "n4", "label": "微积分基本公式", "kind": "core" },
+    { "id": "n5", "label": "换元与分部积分", "kind": "branch" },
+    { "id": "n6", "label": "反常积分", "kind": "core" },
+    { "id": "n7", "label": "审敛法", "kind": "branch" },
+    { "id": "n8", "label": "Γ 函数", "kind": "branch" },
+    { "id": "end", "label": "下一章：定积分的应用", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n4", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n5", "target": "end" },
+    { "source": "n8", "target": "end" }
+  ]
+}
+=== SECTION:s1 ===
+        <h3><span class="sec-badge">5.1</span>定积分的概念与性质</h3>
+        <p>上一章的不定积分给的是「一族函数」，这一章要的是一个数：曲线下方、横轴上方，从 \(a\) 到 \(b\) 那一块到底有多大。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">定积分</span><span class="mb-no">5.1</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \([a,b]\) 上有界。<strong>分割</strong>：用分点 \(a=x_0&lt;x_1&lt;\cdots&lt;x_n=b\) 把区间切成 \(n\) 段，记 \(\Delta x_k=x_k-x_{k-1}\)、\(\lambda=\max_k\Delta x_k\)。<strong>取点</strong>：每段任取 \(\xi_k\in[x_{k-1},x_k]\)。<strong>求和</strong>：\(\displaystyle\sum_{k=1}^{n}f(\xi_k)\Delta x_k\)。<strong>取极限</strong>：若 \(\lambda\to 0\) 时该和的极限存在，且与分割方式、取点方式都无关，则称 \(f\) 在 \([a,b]\) <strong class="term">可积</strong>，极限值叫定积分，记作 \(\displaystyle\int_a^b f(x)\,\mathrm{d}x\)。
+            <mark class="key">必须是 \(\lambda\to 0\)（最宽的一段也要趋于 0），只让 \(n\to\infty\) 不够</mark>；连续函数与只有有限个间断点的有界函数都可积。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">常用性质</span><span class="mb-no">5.2</span></div>
+          <div class="mb-body">
+            $$\int_a^b\bigl[\alpha f(x)+\beta g(x)\bigr]\,\mathrm{d}x=\alpha\int_a^b f\,\mathrm{d}x+\beta\int_a^b g\,\mathrm{d}x$$
+            $$\int_a^b f\,\mathrm{d}x=\int_a^c f\,\mathrm{d}x+\int_c^b f\,\mathrm{d}x,\qquad \int_a^a f\,\mathrm{d}x=0,\qquad \int_b^a f\,\mathrm{d}x=-\int_a^b f\,\mathrm{d}x$$
+            若在 \([a,b]\) 上 \(m\le f(x)\le M\)，则 \(m(b-a)\le\int_a^b f\,\mathrm{d}x\le M(b-a)\)。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="riemann-sum">
+          <div class="demo-title">演示 1 · 分割越细，矩形和越接近那个数</div>
+          <div class="demo-caption">蓝线是 \(f(x)=2x+1\)，浅色矩形是取右端点的小矩形面积之和。拖动等分数 \(n\)，读数给出矩形面积和、精确值与误差。<b>注意误差随 \(n\) 增大而缩小，而且始终偏大</b>——因为取的是右端点，函数又在递增。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">老老实实按定义算一次</span><span class="mb-no">例 5.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">用定积分定义求 \(\displaystyle\int_0^1(2x+1)\,\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>把 \([0,1]\) 等分成 \(n\) 段，每段长 \(\dfrac{1}{n}\)，取右端点 \(\xi_k=\dfrac{k}{n}\)。写出和式、用 \(\sum_{k=1}^{n}k=\dfrac{n(n+1)}{2}\) 化简，最后让 \(n\to\infty\)。等分时 \(\lambda=\dfrac{1}{n}\to 0\)，满足定义要求。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              $$S_n=\sum_{k=1}^{n}\left(2\cdot\frac{k}{n}+1\right)\frac{1}{n}=\frac{2}{n^{2}}\sum_{k=1}^{n}k+\frac{1}{n}\sum_{k=1}^{n}1=\frac{2}{n^{2}}\cdot\frac{n(n+1)}{2}+1=\frac{n+1}{n}+1=2+\frac{1}{n}$$
+              令 \(n\to\infty\)，\(\dfrac{1}{n}\to 0\)，故 \(\displaystyle\int_0^1(2x+1)\,\mathrm{d}x=\lim_{n\to\infty}S_n=2\)。<br>
+              对照：被积函数的原函数是 \(x^{2}+x\)，在 1 与 0 处的值之差 \((1+1)-0=2\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">用定义算积分的固定动作是「等分 → 选右端点 → 求和 → 用求和公式化简 → 取极限」。这一步只在验证定义时做；真要算积分，下一节的基本公式会快得多。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">定积分是一个数，不是一族函数</span></div>
+          <div class="mb-body">不定积分 \(\int f\,\mathrm{d}x\) 是一族曲线，定积分 \(\int_a^b f\,\mathrm{d}x\) 是带符号的面积：横轴上方的算正、下方的算负。演示里所有矩形加起来，最后收敛到一个固定的数，与你怎么切、在每段里取哪个点都无关。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把 \(\lambda\to 0\) 写成 \(n\to\infty\)</span></div>
+          <div class="mb-body">只让段数变多，却把其中一段始终留得很宽，最宽那段上的误差不会消失。定义要求的是最宽的一段也趋于 0。等分时两者等价，一般分割时必须写 \(\lambda\to 0\)。</div>
+        </div>
+=== SECTION:s2 ===
+        <h3><span class="sec-badge">5.2</span>微积分基本公式</h3>
+        <p>如果每算一个定积分都要回到分割求和，微积分就太难用了。这一节把「累积」与「求导」接起来，让求面积变成找原函数。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">变上限积分与牛顿-莱布尼茨公式</span><span class="mb-no">5.3</span></div>
+          <div class="mb-body">
+            设 \(f\) 在 \([a,b]\) 上连续。定义变上限积分 \(\Phi(x)=\displaystyle\int_a^x f(t)\,\mathrm{d}t\)，则 \(\Phi\) 在 \([a,b]\) 上可导且
+            $$\Phi'(x)=f(x)$$
+            又若 \(F\) 是 \(f\) 的任一原函数，则
+            $$\int_a^b f(x)\,\mathrm{d}x=F(b)-F(a)$$
+            <div class="proof-title">证明 · 变上限积分求导（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">\(\Delta\Phi=\Phi(x+\Delta x)-\Phi(x)=\int_x^{x+\Delta x}f(t)\,\mathrm{d}t\)</span><span class="derive-note">用区间可加性把增量写成一小段积分</span></li>
+              <li><span class="derive-eq">由积分中值定理，\(\Delta\Phi=f(\xi)\,\Delta x\)，其中 \(\xi\) 在 \(x\) 与 \(x+\Delta x\) 之间</span><span class="derive-note">连续性保证中值定理可用</span></li>
+              <li><span class="derive-eq">\(\dfrac{\Delta\Phi}{\Delta x}=f(\xi)\to f(x)\)，故 \(\Phi'(x)=f(x)\)</span><span class="derive-note">令 \(\Delta x\to 0\) 时 \(\xi\to x\)，证毕</span></li>
+            </ol>
+            <mark class="key">\(f\) 连续是硬条件；被积函数里上限是变量时，积分变量要换成另一个字母</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="ftc-accumulation">
+          <div class="demo-title">演示 2 · 累积面积与它的变化率</div>
+          <div class="demo-caption">蓝线是 \(f(t)=t^{2}+1\)，浅色填充是从 0 累积到 \(x_0\) 的面积，绿线是 \(\Phi(x)=\dfrac{x^{3}}{3}+x\)。拖动上限，读数同时给出 \(\Phi(x_0)\) 与 \(f(x_0)\)：<b>绿线在那一点的斜率恰好等于蓝线的高度</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">变上限函数：既求导又算值</span><span class="mb-no">例 5.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">设 \(\Phi(x)=\displaystyle\int_0^x\left(t^{2}+1\right)\mathrm{d}t\)。求 \(\Phi'(x)\) 与 \(\Phi(2)\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>求导用定理：被积函数连续，把上限 \(x\) 直接代进被积函数即可（注意被积函数用的是 \(t\)，别和上限混淆）。算 \(\Phi(2)\) 用牛顿-莱布尼茨公式找原函数代两端。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              由 \(\Phi'(x)=f(x)\) 得 \(\Phi'(x)=x^{2}+1\)。<br>
+              又 \(t^{2}+1\) 的原函数是 \(\dfrac{t^{3}}{3}+t\)，故
+              $$\Phi(2)=\int_0^2\left(t^{2}+1\right)\mathrm{d}t=\left[\frac{t^{3}}{3}+t\right]_0^2=\left(\frac{8}{3}+2\right)-0=\frac{14}{3}$$
+              可以顺手核对：\(\Phi'(2)=2^{2}+1=5\)，表示上限再增加一点点时，面积大约按每单位 5 的速度增长。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">遇到变上限积分，先分清「求导数」还是「求数值」：前者用 \(\Phi'(x)=f(x)\) 一步到位，后者才需要找原函数。若上限是 \(x^{2}\) 之类的复合函数，还要再乘一层链式倍率。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">基本公式是「局部」与「整体」的桥</span></div>
+          <div class="mb-body">演示里填充面积的「增长速度」就是蓝线的高度，这是局部信息；把增长速度从 \(a\) 累加到 \(b\)，得到的总量就是 \(F(b)-F(a)\)，这是整体信息。微积分基本公式说的正是：整体的累积可以由端点处的原函数值算出来。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把积分变量和上限写成同一个字母</span></div>
+          <div class="mb-body">写成 \(\int_0^x f(x)\,\mathrm{d}x\) 会让 \(x\) 同时充当积分变量与上限，含义混乱。固定动作是把积分变量换成 \(t\)：\(\int_0^x f(t)\,\mathrm{d}t\)。换字母不改变积分值，只让每个符号职责清楚。</div>
+        </div>
+=== SECTION:s3 ===
+        <h3><span class="sec-badge">5.3</span>定积分的换元法和分部积分法</h3>
+        <p>不定积分的两件工具都能搬到定积分上，但多了积分限，规则也就多了一条。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">带限的换元与分部</span><span class="mb-no">5.4</span></div>
+          <div class="mb-body">
+            <strong>换元</strong>：设 \(x=\psi(t)\) 在 \([\alpha,\beta]\) 上单调可导，\(\psi(\alpha)=a\)、\(\psi(\beta)=b\)，\(f\) 连续，则
+            $$\int_a^b f(x)\,\mathrm{d}x=\int_\alpha^\beta f(\psi(t))\,\psi'(t)\,\mathrm{d}t$$
+            <strong>分部</strong>：\(\displaystyle\int_a^b u v'\,\mathrm{d}x=\bigl[uv\bigr]_a^b-\int_a^b v u'\,\mathrm{d}x\)。
+            <mark class="key">定积分换元要同步换限，换完之后直接算到底，不需要回代</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="definite-substitution">
+          <div class="demo-title">演示 3 · 换元之后，积分限跟着一起变</div>
+          <div class="demo-caption">蓝线是 \(2x(1+x^{2})^{2}\)，浅色填充是 \([0,b]\) 上的积分。拖动上限 \(b\)，读数给出换元 \(u=1+x^{2}\) 后新的上下限 \(1\) 与 \(1+b^{2}\)，以及在新变量下算出的积分值。<b>换限之后不用回代</b>，这是定积分换元与不定积分换元最大的不同。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">换限，然后直接算到底</span><span class="mb-no">例 5.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\displaystyle\int_0^1 2x\left(1+x^{2}\right)^{2}\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>括号里是 \(1+x^{2}\)，它的导数 \(2x\) 正好在括号外，适合令 \(u=1+x^{2}\)。关键是同步把 \(x\) 的限 \(0,1\) 换成 \(u\) 的限，之后就不再回代。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              令 \(u=1+x^{2}\)，则 \(\mathrm{d}u=2x\,\mathrm{d}x\)。换限：\(x=0\) 时 \(u=1\)；\(x=1\) 时 \(u=2\)。<br>
+              $$\int_0^1 2x\left(1+x^{2}\right)^{2}\mathrm{d}x=\int_1^2 u^{2}\,\mathrm{d}u=\left[\frac{u^{3}}{3}\right]_1^2=\frac{8}{3}-\frac{1}{3}=\frac{7}{3}$$
+              注意最后一步直接对 \(u\) 的限求值，没有把 \(u\) 还原成 \(x\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">定积分换元的固定动作是「选代换 → 算微分 → 换两个限 → 在新变量下算到底」。漏换限是最常见错误：若仍用 0 与 1 作 \(u\) 的限，会得到 \(\dfrac{1}{3}\) 这种错值。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">同一块面积，换一把尺子量</span></div>
+          <div class="mb-body">换元不改变面积大小，只改变横轴的刻度：原来 \(x\) 从 0 走到 1，对应 \(u\) 从 1 走到 2，同时被积函数乘上伸缩倍率 \(\psi'(t)\)。两者抵消，面积还是那块面积。</div>
+        </div>
+=== SECTION:s4 ===
+        <h3><span class="sec-badge">5.4</span>反常积分</h3>
+        <p>把积分区间拉到无穷，或者让被积函数在区间内冲向无穷，普通的定积分定义就用不了了。办法是：先算有限的一段，再取极限。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">两类反常积分</span><span class="mb-no">5.5</span></div>
+          <div class="mb-body">
+            <strong>无穷限</strong>：若 \(f\) 在 \([a,+\infty)\) 上连续，且极限 \(\displaystyle\lim_{b\to+\infty}\int_a^b f(x)\,\mathrm{d}x\) 存在且有限，则称 \(\int_a^{+\infty}f(x)\,\mathrm{d}x\) <strong class="term">收敛</strong>，其值就是该极限；否则称<strong class="term">发散</strong>。<br>
+            <strong>无界函数</strong>：设 \(f\) 在 \((a,b]\) 上连续、在 \(x=a\) 附近无界，则定义 \(\displaystyle\int_a^b f(x)\,\mathrm{d}x=\lim_{\varepsilon\to 0^+}\int_{a+\varepsilon}^{b}f(x)\,\mathrm{d}x\)，同样按极限是否存在判定敛散。
+            <mark class="key">「被积函数趋于 0」不足以保证收敛，必须真的把极限算出来</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="improper-tail">
+          <div class="demo-title">演示 4 · 尾巴拖到无穷：谁收敛，谁发散</div>
+          <div class="demo-caption">切换三个幂次，蓝线是 \(\dfrac{1}{x^{p}}\)，浅色填充是 \([1,B]\) 上的积分。把上限 \(B\) 一路推大，读数给出部分积分值：<b>\(p=1\) 时它像对数一样一直长，\(p=2\) 与 \(p=3\) 时它分别稳定在 1 与 0.5 附近</b>。三条曲线都趋于 0，结局却不同。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">两个都趋于 0，结局却相反</span><span class="mb-no">例 5.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">分别判断 \(\displaystyle\int_1^{+\infty}\frac{1}{x}\,\mathrm{d}x\) 与 \(\displaystyle\int_1^{+\infty}\frac{1}{x^{2}}\,\mathrm{d}x\) 的敛散性；收敛时求出值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>按定义先算 \(\int_1^b\)，再令 \(b\to+\infty\)。两者的原函数分别是 \(\ln x\) 与 \(-\dfrac{1}{x}\)，一个是无界的对数，一个是有理式，取极限的行为自然不同。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              第一题：\(\displaystyle\int_1^b\frac{1}{x}\,\mathrm{d}x=\bigl[\ln x\bigr]_1^b=\ln b\)。当 \(b\to+\infty\) 时 \(\ln b\to+\infty\)，极限不存在，故该反常积分<strong>发散</strong>。<br>
+              第二题：\(\displaystyle\int_1^b\frac{1}{x^{2}}\,\mathrm{d}x=\left[-\frac{1}{x}\right]_1^b=-\frac{1}{b}+1\)。当 \(b\to+\infty\) 时 \(-\dfrac{1}{b}\to 0\)，故极限为 1，该反常积分<strong>收敛于 1</strong>。<br>
+              两个被积函数在 \(x\to+\infty\) 时都趋于 0，但衰减速度不同，结论完全不同。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先算有限上限的定积分、把结果写成 \(b\) 的函数、再取极限」。千万不要凭「函数看起来贴着横轴」下结论；用 \(p\)-积分的结论可以速判：\(\int_1^{+\infty}\dfrac{1}{x^{p}}\mathrm{d}x\) 在 \(p>1\) 时收敛、在 \(p\le 1\) 时发散。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">无穷远处那截尾巴有没有有限面积</span></div>
+          <div class="mb-body">演示里 \(B\) 越推越大，就是在问「再往右添的那一小条面积加起来会不会失控」。\(p=2\) 时尾部按 \(\dfrac{1}{b}\) 缩小，累加有限；\(p=1\) 时尾部按 \(\dfrac{1}{x}\) 缩小，累加却像 \(\ln b\) 一样无限增长。</div>
+        </div>
+=== SECTION:s5 ===
+        <h3><span class="sec-badge">5.5</span>反常积分的审敛法与 Γ 函数</h3>
+        <p>很多反常积分算不出精确值，但只要能判断它收不收敛，就够用了。这一节给出比较的思路，再认识一个把阶乘推广到非整数的函数。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">比较判别与 Γ 函数</span><span class="mb-no">5.6</span></div>
+          <div class="mb-body">
+            <strong>比较判别</strong>：设 \(f,g\) 在 \([a,+\infty)\) 上连续且 \(0\le f(x)\le g(x)\)，则 \(\int_a^{+\infty}g\,\mathrm{d}x\) 收敛可推出 \(\int_a^{+\infty}f\,\mathrm{d}x\) 收敛；\(\int_a^{+\infty}f\,\mathrm{d}x\) 发散可推出 \(\int_a^{+\infty}g\,\mathrm{d}x\) 发散。常用的比较尺是 \(p\)-积分。<br>
+            <strong>Γ 函数</strong>：\(\Gamma(s)=\displaystyle\int_0^{+\infty}x^{s-1}\mathrm{e}^{-x}\,\mathrm{d}x\ (s>0)\)，满足递推 \(\Gamma(s+1)=s\,\Gamma(s)\) 与 \(\Gamma(1)=1\)，于是 \(\Gamma(n+1)=n!\)。
+            <div class="proof-title">推导 · 递推关系（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">\(\Gamma(s+1)=\int_0^{+\infty}x^{s}\mathrm{e}^{-x}\mathrm{d}x\)，取 \(u=x^{s}\)、\(\mathrm{d}v=\mathrm{e}^{-x}\mathrm{d}x\)</span><span class="derive-note">用分部积分</span></li>
+              <li><span class="derive-eq">\(=\bigl[-x^{s}\mathrm{e}^{-x}\bigr]_0^{+\infty}+s\int_0^{+\infty}x^{s-1}\mathrm{e}^{-x}\mathrm{d}x\)</span><span class="derive-note">指数衰减压过幂次，边界项为 0</span></li>
+              <li><span class="derive-eq">\(=s\,\Gamma(s)\)</span><span class="derive-note">由 \(\Gamma(1)=1\) 递推得 \(\Gamma(n+1)=n!\)，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="gamma-function">
+          <div class="demo-title">演示 5 · 拖动参数，看 Γ 函数的形状与数值</div>
+          <div class="demo-caption">蓝线是被积函数 \(x^{s-1}\mathrm{e}^{-x}\)，曲线下方的总面积就是 \(\Gamma(s)\)。拖动参数 \(s\)，读数给出数值积分结果，并与整数点的阶乘对照：<b>\(s=3\) 时面积约 2，正好是 \(2!\)</b>。指数衰减保证 \(x\to+\infty\) 时面积有限。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">用递推算 Γ(4)，并用比较判别看敛散</span><span class="mb-no">例 5.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">(1) 已知 \(\Gamma(1)=1\) 与 \(\Gamma(s+1)=s\Gamma(s)\)，求 \(\Gamma(4)\)。(2) 判断 \(\displaystyle\int_1^{+\infty}\frac{1}{x^{2}+x}\,\mathrm{d}x\) 是否收敛；若收敛，求出值。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>第 (1) 问反复用递推把参数降到 1。第 (2) 问可以先与 \(\dfrac{1}{x^{2}}\) 比较得到收敛性，再用部分分式把积分精确算出来——这样既练判别，又验证结论。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              (1) \(\Gamma(2)=1\cdot\Gamma(1)=1\)，\(\Gamma(3)=2\Gamma(2)=2\)，\(\Gamma(4)=3\Gamma(3)=6\)。这也等于 \(3!=6\)。<br>
+              (2) 先比较：对 \(x\ge 1\) 有 \(0&lt;\dfrac{1}{x^{2}+x}&lt;\dfrac{1}{x^{2}}\)，而 \(\int_1^{+\infty}\dfrac{1}{x^{2}}\mathrm{d}x=1\) 收敛，故原积分收敛。<br>
+              再求值：\(\dfrac{1}{x^{2}+x}=\dfrac{1}{x}-\dfrac{1}{x+1}\)，于是
+              $$\int_1^b\left(\frac{1}{x}-\frac{1}{x+1}\right)\mathrm{d}x=\left[\ln\frac{x}{x+1}\right]_1^b=\ln\frac{b}{b+1}-\ln\frac{1}{2}$$
+              令 \(b\to+\infty\)，\(\dfrac{b}{b+1}\to 1\)，\(\ln\dfrac{b}{b+1}\to 0\)，故积分值为 \(\ln 2\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">比较判别的固定动作是「找一个已知敛散、又比它大（或小）的简单函数」；\(p\)-积分是最顺手的尺子。Γ 函数的递推则把「算积分」变成「连乘」，不必每次都去积分。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">Γ 函数是曲线下方面积随参数的变化</span></div>
+          <div class="mb-body">演示里 \(s\) 越大，峰值越往右移；从 \(s=2\) 起面积随 \(s\) 增大而迅速变大，在整数点上这些面积恰好排成阶乘序列。递推关系说的就是「相邻两个参数对应的面积相差一个倍数」，这把无穷区间上的积分变成了简单的乘法。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">比较方向搞反</span></div>
+          <div class="mb-body">由「小函数发散」才能推出「大函数发散」；由「大函数收敛」才能推出「小函数收敛」。反过来由 \(\int\dfrac{1}{x^{2}}\) 收敛去说 \(\int\dfrac{1}{x^{2}+x}\) 发散，或由 \(\int\dfrac{1}{x}\) 发散去说 \(\int\dfrac{1}{x^{2}}\) 发散，都是错的。写之前先确认不等号朝向。</div>
+        </div>
+=== PITFALLS ===
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把定积分与不定积分混为一谈</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(\int_0^1 2x\,\mathrm{d}x\) 写成 \(x^{2}+C\)。<b>为什么错</b>：定积分是一个数，不定积分才是一族函数。<b>正确做法</b>：写成 \(\bigl[x^{2}\bigr]_0^1=1\)，常数在相减时自动消掉。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">定积分换元漏换积分限</span></div>
+        <div class="mb-body"><b>错误做法</b>：令 \(u=1+x^{2}\) 后仍写 \(\int_0^1 u^{2}\mathrm{d}u\)。<b>为什么错</b>：\(x=0,1\) 对应 \(u=1,2\)，沿用旧限得到的是另一块面积。<b>正确做法</b>：同步换成 \(\int_1^2 u^{2}\mathrm{d}u\)，换完之后直接算到底、不回代。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">凭「函数趋于 0」判断反常积分收敛</span></div>
+        <div class="mb-body"><b>错误做法</b>：因为 \(\dfrac{1}{x}\to 0\) 就说 \(\int_1^{+\infty}\dfrac{1}{x}\mathrm{d}x\) 收敛。<b>为什么错</b>：衰减得太慢，累加结果 \(\ln b\) 无界。<b>正确做法</b>：按定义算出 \(\int_1^b\) 再取极限，或用 \(p\)-积分结论 \(p>1\) 才收敛。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">变上限积分把积分变量写成上限</span></div>
+        <div class="mb-body"><b>错误做法</b>：写 \(\int_0^x f(x)\,\mathrm{d}x\)。<b>为什么错</b>：\(x\) 既当积分变量又当上限，\(\Phi'(x)=f(x)\) 这类结论会被误用。<b>正确做法</b>：改用 \(t\) 作积分变量，写成 \(\int_0^x f(t)\,\mathrm{d}t\)；若上限是 \(x^{2}\)，求导时还要乘 \(2x\)。</div>
+      </div>
+=== EXERCISES ===
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>用牛顿-莱布尼茨公式求 \(\displaystyle\int_1^3(2x-1)\,\mathrm{d}x\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">原函数是 \(x^{2}-x\)。代入两端：\(\bigl[x^{2}-x\bigr]_1^3=(9-3)-(1-1)=6-0=6\)。注意常数项在相减时抵消，所以不需要写 \(+C\)；若用几何核对，这是上底 1、下底 5、高 2 的梯形面积 \(\frac{1+5}{2}\times 2=6\)，一致。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>求 \(\displaystyle\int_0^1 x\mathrm{e}^{x}\,\mathrm{d}x\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">取 \(u=x\)、\(\mathrm{d}v=\mathrm{e}^{x}\mathrm{d}x\)，则 \(\mathrm{d}u=\mathrm{d}x\)、\(v=\mathrm{e}^{x}\)。带限的分部公式给出 \(\bigl[x\mathrm{e}^{x}\bigr]_0^1-\int_0^1\mathrm{e}^{x}\mathrm{d}x=\mathrm{e}-(\mathrm{e}-1)=1\)。边界项 \(\bigl[uv\bigr]_0^1\) 必须一起代入两端，不能只写不定积分的形式再加常数。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>判断 \(\displaystyle\int_0^1\frac{1}{\sqrt{x}}\,\mathrm{d}x\)（被积函数在 \(x=0\) 附近无界）是否收敛；若收敛，求出它的值。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">这是无界函数的反常积分：先避开 \(x=0\)，算 \(\displaystyle\int_\varepsilon^1 x^{-1/2}\,\mathrm{d}x=\bigl[2\sqrt{x}\bigr]_\varepsilon^1=2-2\sqrt{\varepsilon}\)。令 \(\varepsilon\to 0^+\)，极限为 2，故积分<strong>收敛于 2</strong>。核对：原函数 \(2\sqrt{x}\) 在 \(x=0\) 处取 0，没有出现无穷大；与「无穷限」那一类不同，这里区间有限，麻烦出在被积函数无界。判别与求值两步都要写，只答「收敛」不完整。</div></details>
+          </div>
+=== QUIZ ===
+[
+  { "q": "关于定积分 \\(\\int_a^b f(x)\\,\\mathrm{d}x\\)，下列说法正确的是？",
+    "options": ["它是一族相差常数的函数", "它是一个数（带符号的面积）", "它一定大于 0", "它与积分区间无关"], "answer": 1,
+    "explain": "定积分是小矩形面积之和的极限，结果是一个数，B 正确。A 描述的是不定积分；C 错在横轴下方的部分取负值，积分可以为负或零；D 错在换区间会改变累加范围，且有 \\(\\int_a^a f\\,\\mathrm{d}x=0\\)。" },
+  { "q": "设 \\(\\Phi(x)=\\int_0^x(t^{2}+1)\\,\\mathrm{d}t\\)，则 \\(\\Phi'(x)\\) 是？",
+    "options": ["\\(x^{2}+1\\)", "\\(\\dfrac{x^{3}}{3}+x\\)", "\\(2x\\)", "\\(0\\)"], "answer": 0,
+    "explain": "被积函数连续，由变上限积分求导定理 \\(\\Phi'(x)=f(x)=x^{2}+1\\)，A 正确。B 是 \\(\\Phi(x)\\) 本身而不是它的导数；C 是 \\(x^{2}+1\\) 的导数，多求了一次；D 只有在上限为常数时才成立。" },
+  { "q": "求 \\(\\int_0^1 2x(1+x^{2})^{2}\\,\\mathrm{d}x\\)，令 \\(u=1+x^{2}\\) 后正确的算式是？",
+    "options": ["\\(\\int_0^1 u^{2}\\,\\mathrm{d}u\\)", "\\(\\int_1^2 u^{2}\\,\\mathrm{d}u\\)", "\\(\\int_0^1 2u^{2}\\,\\mathrm{d}u\\)", "\\(\\int_1^2 2u^{2}\\,\\mathrm{d}u\\)"], "answer": 1,
+    "explain": "\\(\\mathrm{d}u=2x\\,\\mathrm{d}x\\) 把括号外的 \\(2x\\) 一并吸收，且限由 \\(x=0,1\\) 换成 \\(u=1,2\\)，故 B 正确（值为 \\(7/3\\)）。A 漏换限；C、D 重复计入了 \\(2x\\)，会导致结果翻倍。" },
+  { "q": "下列反常积分中收敛的是？",
+    "options": ["\\(\\int_1^{+\\infty}\\frac{1}{x}\\,\\mathrm{d}x\\)", "\\(\\int_1^{+\\infty}\\frac{1}{\\sqrt{x}}\\,\\mathrm{d}x\\)", "\\(\\int_1^{+\\infty}\\frac{1}{x^{2}}\\,\\mathrm{d}x\\)", "\\(\\int_1^{+\\infty}1\\,\\mathrm{d}x\\)"], "answer": 2,
+    "explain": "\\(\\int_1^b x^{-2}\\,\\mathrm{d}x=1-1/b\\to 1\\)，故 C 收敛于 1。A 得 \\(\\ln b\\)、B 得 \\(2\\sqrt{b}-2\\)、D 得 \\(b-1\\)，都随 \\(b\\) 增大而无界，故发散；其中 A、B 的被积函数都趋于 0 却仍发散，说明「被积函数趋于 0」不足以保证收敛，而 D 连趋于 0 都不满足。" },
+  { "q": "已知 \\(\\Gamma(1)=1\\)、\\(\\Gamma(s+1)=s\\Gamma(s)\\)，则 \\(\\Gamma(4)\\) 等于？",
+    "options": ["\\(3\\)", "\\(6\\)", "\\(24\\)", "\\(12\\)"], "answer": 1,
+    "explain": "\\(\\Gamma(2)=1\\)、\\(\\Gamma(3)=2\\)、\\(\\Gamma(4)=3\\times 2=6\\)，即 \\(3!=6\\)，B 正确。A 只乘到最后一步的 3 却漏了前面；C 把 \\(\\Gamma(5)=4!\\) 错当成 \\(\\Gamma(4)\\)；D 没有按 \\(s=1,2,3\\) 依次递推。" }
+]
+=== SUMMARY ===
+      <p>这一章把「一族原函数」收成一个数：先用分割求和取极限定义定积分，再用微积分基本公式把它变成原函数在两端取值之差。换元与分部积分搬过来时多了积分限这条规则；把区间推到无穷，则要靠取极限判断收敛，比较判别与 Γ 函数是两件顺手的工具。</p>
+      <p>有了「一段区间上的总量」这个工具，下一章就能把它用到具体形状上：面积、体积、弧长、做功，都可以先切出一小份、写出微元，再积起来。同一套思想从抽象定义走向真实问题。</p>
+=== DEMOJS ===
+const DEMOS = {
+  'riemann-sum': function (el) {
+    const f = x => 2 * x + 1;
+    DemoPresets.custom(el, {
+      range: [-0.2, 1.2, -0.2, 3.4],
+      equal: false, aspectNote: '横轴为自变量、纵轴为函数值，两轴刻度各自标定',
+      boxH: 360,
+      slider: { label: '等分数', min: 2, max: 60, step: 1, init: 8 },
+      controlsHTML: '<span class="hint">把等分数推大，看小矩形面积之和怎样逼近 2</span>',
+      figureHint: '定义里的四步：分割、取点、求和、让最宽的一段趋于 0。',
+      draw: (p, out, n, c, C) => {
+        n = Math.round(n);
+        p.curve(f, { from: 0, to: 1, color: C('accent'), width: 2.4 });
+        let sum = 0;
+        for (let k = 1; k <= n; k++) {
+          const x0 = (k - 1) / n, x1 = k / n, h = f(x1);
+          p.rect(x0, 0, x1, h, { fill: C('cyan'), alpha: 0.22, stroke: C('cyan') });
+          sum += h / n;
+        }
+        p.line(0, 0, 1, 0, { color: C('axis'), width: 1.2 });
+        out.innerHTML = `等分数 ${texHTML('n=' + n)}：小矩形面积之和 ${texHTML('S_n=' + f4(sum))}；精确值 ${texHTML('\\int_0^1(2x+1)\\,\\mathrm{d}x=2')}。<br>` +
+          `误差 ${texHTML(f4(Math.abs(2 - sum)))}。取右端点时每个矩形都偏高，所以和始终略大于 2，但随 ${texHTML('n\\to\\infty')} 挤到 2。`;
+      }
+    });
+  },
+
+  'ftc-accumulation': function (el) {
+    const f = t => t * t + 1;
+    const Phi = x => Math.pow(x, 3) / 3 + x;
+    DemoPresets.custom(el, {
+      range: [0, 2.5, 0, 8], boxH: 380, fill: true,
+      slider: { label: '上限', min: 0.1, max: 2.4, step: 0.01, init: 1.2 },
+      figureHint: '填充面积是变上限积分的值，蓝线在该点的高度正是它的导数。',
+      draw: (p, out, x0, c, C) => {
+        p.curve(f, { color: C('accent'), width: 2.4 });
+        p.curve(Phi, { color: C('ok'), width: 2.2 });
+        for (let i = 0; i < 45; i++) {
+          const a = x0 * i / 45, b = x0 * (i + 1) / 45;
+          p.rect(a, 0, b, f(b), { fill: C('cyan'), alpha: 0.16 });
+        }
+        p.line(x0, 0, x0, 8, { color: C('warn'), dash: true, width: 1.4 });
+        p.dot(x0, Phi(x0), { r: 5, color: C('ok') });
+        p.dot(x0, f(x0), { r: 5, color: C('accent') });
+        out.innerHTML = `上限 ${texHTML('x_0=' + f4(x0))}：累积面积 ${texHTML('\\Phi(x_0)=' + f4(Phi(x0)))}，蓝线高度 ${texHTML('f(x_0)=' + f4(f(x0)))}。<br>` +
+          `绿线在该点的切线斜率正好是 ${texHTML(f4(f(x0)))}，即 ${texHTML("\\Phi'(x)=f(x)")}；这正是微积分基本公式的局部版本。`;
+      }
+    });
+  },
+
+  'definite-substitution': function (el) {
+    const g = x => 2 * x * Math.pow(1 + x * x, 2);
+    DemoPresets.custom(el, {
+      range: [0, 1.2, 0, 15], boxH: 360,
+      equal: false, aspectNote: '横轴为自变量、纵轴为函数值，两轴刻度各自标定',
+      slider: { label: '积分上限', min: 0.1, max: 1, step: 0.01, init: 1 },
+      figureHint: '换元后积分限从 0 到 b 变成从 1 到 1 加 b 的平方，算出数值即可，不必回代。',
+      draw: (p, out, b, c, C) => {
+        p.curve(g, { color: C('accent'), width: 2.5 });
+        for (let i = 0; i < 50; i++) {
+          const a = b * i / 50, d = b * (i + 1) / 50;
+          p.rect(a, 0, d, g(d), { fill: C('cyan'), alpha: 0.18 });
+        }
+        p.line(b, 0, b, 15, { color: C('warn'), dash: true, width: 1.4 });
+        const u1 = 1 + b * b, val = (Math.pow(u1, 3) - 1) / 3;
+        out.innerHTML = `原限 ${texHTML('x\\in[0,' + f4(b) + ']')}；令 ${texHTML('u=1+x^{2}')} 后新限 ${texHTML('u\\in[1,' + f4(u1) + ']')}。<br>` +
+          `${texHTML('\\mathrm{d}u=2x\\,\\mathrm{d}x')} 吸收了括号外的因子，于是 ${texHTML('\\int_0^b 2x(1+x^{2})^{2}\\mathrm{d}x=\\int_1^{1+b^{2}}u^{2}\\,\\mathrm{d}u=' + f4(val))}。<br>` +
+          `把上限拖到 1，就得到例题里的 ${texHTML('\\dfrac{7}{3}')}。`;
+      }
+    });
+  },
+
+  'improper-tail': function (el) {
+    let pw = 2;
+    DemoPresets.sliderCurve(el, {
+      range: [1, 12, 0, 1.1], boxH: 340,
+      equal: false, aspectNote: '横轴跨度远大于纵轴，纵向刻度已单独缩放',
+      slider: { label: '上限', min: 1.5, max: 12, step: 0.1, init: 4 },
+      hint: '切换幂次，再把上限一路推大，看部分积分值停不停得下来',
+      buttons: [
+        { tex: 'p=1', run: () => { pw = 1; } },
+        { tex: 'p=2', run: () => { pw = 2; } },
+        { tex: 'p=3', run: () => { pw = 3; } }
+      ],
+      curves: [{ fn: x => 1 / Math.pow(x, pw), color: 'accent', width: 2.5 }],
+      dynamic: (p, B, C) => {
+        const n = 60;
+        for (let i = 0; i < n; i++) {
+          const a = 1 + (B - 1) * i / n, b = 1 + (B - 1) * (i + 1) / n;
+          p.rect(a, 0, b, 1 / Math.pow(b, pw), { fill: C('cyan'), alpha: 0.16 });
+        }
+        p.line(B, 0, B, 1.1, { color: C('warn'), dash: true, width: 1.4 });
+      },
+      readout: (B) => {
+        const val = pw === 1 ? Math.log(B) : (1 - Math.pow(B, 1 - pw)) / (pw - 1);
+        const lim = pw === 1 ? '随 ' + texHTML('\\ln B') + ' 无限增长，发散' : ('趋于 ' + f4(1 / (pw - 1)) + '，收敛');
+        return `${texHTML('p=' + pw)}、${texHTML('B=' + f4(B))}：${texHTML('\\int_1^B\\frac{1}{x^{p}}\\,\\mathrm{d}x=' + f4(val))}。<br>` +
+          `三条曲线在 ${texHTML('x\\to+\\infty')} 时都趋于 0，但 ${lim}。${texHTML('p>1')} 才收敛，这就是 ${texHTML('p')}-积分结论。`;
+      },
+      figureHint: '尾巴的面积会不会失控，取决于衰减速度而不是是否趋于 0。'
+    });
+  },
+
+  'gamma-function': function (el) {
+    const gamma = s => {
+      const h = 0.01; let acc = 0;
+      for (let i = 1; i <= 3000; i++) {
+        const x = i * h;
+        acc += Math.pow(x, s - 1) * Math.exp(-x) * h;
+      }
+      return acc;
+    };
+    DemoPresets.sliderCurve(el, {
+      range: [0, 8, 0, 5], boxH: 340,
+      equal: false, aspectNote: '横轴跨度大于纵轴，纵向刻度已单独缩放',
+      slider: { label: '参数', min: 1, max: 5, step: 0.05, init: 3 },
+      hint: '把参数拖到整数点，对照阶乘值',
+      curves: [{ fn: (x, s) => Math.pow(x, s - 1) * Math.exp(-x), color: 'accent', width: 2.5 }],
+      dynamic: (p, s, C) => {
+        const peak = Math.max(0, s - 1);
+        p.line(peak, 0, peak, 5, { color: C('warn'), dash: true, width: 1.2 });
+        p.dot(peak, Math.pow(peak, s - 1) * Math.exp(-peak) || 0, { r: 4, color: C('warn') });
+      },
+      readout: (s) => `参数 ${texHTML('s=' + f4(s))}：曲线下方面积 ${texHTML('\\Gamma(s)\\approx' + f4(gamma(s)))}。<br>` +
+        `递推 ${texHTML('\\Gamma(s+1)=s\\,\\Gamma(s)')} 与 ${texHTML('\\Gamma(1)=1')} 给出 ${texHTML('\\Gamma(n+1)=n!')}：${texHTML('\\Gamma(3)=2')}、${texHTML('\\Gamma(4)=6')}。`,
+      figureHint: '指数衰减让无穷远处的尾巴面积有限，所以这个含参积分对所有正参数都收敛。'
+    });
+  }
+};
+
+mountDemos(DEMOS);

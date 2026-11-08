@@ -320,7 +320,18 @@ strong.term, .term {
 /* ---------- 知识结构图（原生 SVG）---------- */
 .mermaid-box { min-height: 0; padding: 0; }
 .mm-wrap { padding: var(--sp-4); background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: var(--radius); }
-.mm-svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* 图按 viewBox 的比例等比缩放，绝不拉伸。
+   只写 width:100% + height:auto 时，浏览器会用「容器宽 × 由 viewBox 推来的高」
+   同时改写两个方向，一旦宽高比和容器不同，x/y 就被拉成两个不同的倍率——
+   框会横向抻长、贴到旁边那一列上去（ch06「旋转体体积」压住「写出微元」就是这么来的）。
+   max-height 兜住超高图（ch11/ch12 有 774px 高），高度封顶后交给
+   preserveAspectRatio 居中缩放，文字始终是等比放大的。 */
+.mm-svg {
+  display: block; margin: 0 auto;
+  width: auto; height: auto;
+  max-width: 100%; max-height: 78vh;
+  overflow: visible;
+}
 .mm-node { cursor: pointer; }
 .mm-node:focus { outline: none; }
 .mm-node:focus-visible rect { stroke: var(--accent); stroke-width: 2; }

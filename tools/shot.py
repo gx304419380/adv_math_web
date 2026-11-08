@@ -129,7 +129,7 @@ def main():
 
     report = {
         'chapter': ch, 'katex_nodes': katex, 'demos': demos,
-        'mermaid_svg': mermaid, 'sidebar_chapter_links': chapters_in_nav,
+        'mermaid_svg': mermaid, 'sidebar_section_links': sec_links,
         'screenshots': screenshots, 'console_errors': errors,
         'failed_requests': failed_requests,
         'passed': not errors and not failed_requests and demos > 0 and katex > 0

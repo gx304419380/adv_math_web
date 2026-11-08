@@ -37,14 +37,16 @@ function createBoard(el, opts = {}) {
     axis: opts.axis !== false,
     grid: opts.grid ?? true,
     showCopyright: false,
-    showNavigation: false,
+    /* 缩放/平移默认开启：学生要能自己把图放大看清楚、拖到想看的地方。
+       keepaspectratio 下 JSXGraph 会把 y 方向一起缩放，比例不会坏。 */
+    showNavigation: opts.interactive !== false,
+    pan: { enabled: opts.interactive !== false, needShift: false },
+    zoom: { enabled: opts.interactive !== false, needShift: false, wheel: true, min: 0.1, max: 40 },
     /* 必须保持等比例：1 个单位在横纵方向占同样像素。
        关掉的话 (1,1) 会被拉成长条、圆变成椭圆、斜率失真——
        学生看到的是错的图形。只有「横轴不是同一量纲」的图
        （如以项数 n、时间为横轴）才可显式传 equal: false。 */
-    keepaspectratio: opts.equal !== false,
-    pan: { enabled: false },
-    zoom: { enabled: false }
+    keepaspectratio: opts.equal !== false
   });
 
   // JSXGraph 在 keepaspectratio 下会自动调整 boundingbox，

@@ -1,0 +1,438 @@
+=== GOALS ===
+        <li><label><input type="checkbox">说出「原函数」与「不定积分」的区别，并随手用求导检验自己的积分结果</label></li>
+        <li><label><input type="checkbox">对凑微分、第二类换元、分部积分各判断一次「该用哪条」并完整算到底</label></li>
+        <li><label><input type="checkbox">把有理分式配方、拆成部分分式，再逐项积出来</label></li>
+        <li><label><input type="checkbox">查积分表时先把题目化成表里那一行的标准形状，并说明每一步的依据</label></li>
+=== MAP ===
+{
+  "nodes": [
+    { "id": "n0", "label": "原函数与不定积分", "kind": "root" },
+    { "id": "n1", "label": "不定积分的性质", "kind": "core" },
+    { "id": "n2", "label": "凑微分（第一类换元）", "kind": "core" },
+    { "id": "n3", "label": "第二类换元", "kind": "branch" },
+    { "id": "n4", "label": "分部积分法", "kind": "core" },
+    { "id": "n5", "label": "有理函数的积分", "kind": "branch" },
+    { "id": "n6", "label": "部分分式与配方", "kind": "branch" },
+    { "id": "n7", "label": "积分表的使用", "kind": "core" },
+    { "id": "n8", "label": "结果求导验算", "kind": "branch" },
+    { "id": "end", "label": "下一章：定积分", "kind": "end" }
+  ],
+  "edges": [
+    { "source": "n0", "target": "n1" },
+    { "source": "n1", "target": "n2" },
+    { "source": "n2", "target": "n3" },
+    { "source": "n1", "target": "n4" },
+    { "source": "n4", "target": "n5" },
+    { "source": "n5", "target": "n6" },
+    { "source": "n6", "target": "n7" },
+    { "source": "n7", "target": "n8" },
+    { "source": "n3", "target": "n8" },
+    { "source": "n8", "target": "end" }
+  ]
+}
+=== SECTION:s1 ===
+        <h3><span class="sec-badge">4.1</span>不定积分的概念与性质</h3>
+        <p>上一章是「给函数，求它的变化率」。这一章把问题反过来：给一个变化率，把原来的函数找回来。找回来之后你会发现，答案不止一个。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">原函数与不定积分</span><span class="mb-no">4.1</span></div>
+          <div class="mb-body">
+            设在区间 \(I\) 上 \(F'(x)=f(x)\)，则称 \(F\) 是 \(f\) 在 \(I\) 上的一个<strong class="term">原函数</strong>。\(f\) 在 \(I\) 上的全体原函数称为<strong class="term">不定积分</strong>，记作
+            $$\int f(x)\,\mathrm{d}x=F(x)+C$$
+            其中 \(C\) 是任意常数，\(\int\) 叫积分号，\(f(x)\) 叫被积函数。
+            <mark class="key">同一函数的任意两个原函数在区间上只相差一个常数；连续函数一定有原函数</mark>。
+          </div>
+        </div>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">两条基本性质</span><span class="mb-no">4.2</span></div>
+          <div class="mb-body">
+            $$\int\bigl[\alpha f(x)+\beta g(x)\bigr]\,\mathrm{d}x=\alpha\int f(x)\,\mathrm{d}x+\beta\int g(x)\,\mathrm{d}x$$
+            $$\frac{\mathrm{d}}{\mathrm{d}x}\int f(x)\,\mathrm{d}x=f(x),\qquad \int F'(x)\,\mathrm{d}x=F(x)+C$$
+            <div class="proof-title">说明 · 为什么两个原函数只差常数（3 步）</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">设 \(F\) 与 \(G\) 都是 \(f\) 的原函数，令 \(H=F-G\)</span><span class="derive-note">把两个候选放一起比较</span></li>
+              <li><span class="derive-eq">\(H'(x)=F'(x)-G'(x)=f(x)-f(x)=0\)</span><span class="derive-note">差的导数恒为零</span></li>
+              <li><span class="derive-eq">由拉格朗日中值定理的推论，\(H(x)\equiv C\)</span><span class="derive-note">区间上导数恒零必为常数，证毕</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="antiderivative-family">
+          <div class="demo-title">演示 1 · 一族曲线：常数怎么变，斜率都不变</div>
+          <div class="demo-caption">三条曲线是同一个 \(F(x)\) 加上三个不同的常数。拖动常数滑块，整族曲线一起上下平移；<b>同一点处的三条虚线切线始终互相平行</b>，因为求导会把常数抹掉。这就是不定积分必须写 \(+C\) 的原因。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">算完立刻验算</span><span class="mb-no">例 4.1</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\int(3x^{2}-2x+1)\,\mathrm{d}x\)，并用求导验证结果。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>用线性性质把三项拆开，逐项找「求导后能得到它」的函数：\(\dfrac{\mathrm{d}}{\mathrm{d}x}x^{3}=3x^{2}\)、\(\dfrac{\mathrm{d}}{\mathrm{d}x}(-x^{2})=-2x\)、\(\dfrac{\mathrm{d}}{\mathrm{d}x}x=1\)。最后别忘加常数。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              $$\int(3x^{2}-2x+1)\,\mathrm{d}x=x^{3}-x^{2}+x+C$$
+              验算：\(\dfrac{\mathrm{d}}{\mathrm{d}x}\bigl(x^{3}-x^{2}+x+C\bigr)=3x^{2}-2x+1+0=3x^{2}-2x+1\)，与被积函数一致，结果正确。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「拆项 → 逐项认出原函数 → 加 \(C\) → 求导验算」。验算不是多余步骤：它能一次性抓出系数写错、符号写反、漏掉常数这三类最常见错误。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">积分是一族曲线，不是一个函数</span></div>
+          <div class="mb-body">已知斜率场，要找回一族曲线：它们在竖直方向可以整体平移，彼此永远不会相交，因为每一点处的斜率都由 \(f(x)\) 决定。演示里三条曲线像三张叠在一起、可以上下滑动的透明纸。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">漏掉任意常数</span></div>
+          <div class="mb-body">\(x^{3}-x^{2}+x\) 的确是一个原函数，但写成不定积分的答案时不完整：还差整个函数族。只要题目要求的是「不定积分」，末尾的 \(+C\) 就必须写；只有在求定积分或已知某个初值条件时，常数才会被确定下来。</div>
+        </div>
+=== SECTION:s2 ===
+        <h3><span class="sec-badge">4.2</span>换元积分法</h3>
+        <p>复合函数求导要乘一层链式倍率，反过来积分时就要把这层倍率「认出来」或者「补上去」。这就是换元。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">两类换元</span><span class="mb-no">4.3</span></div>
+          <div class="mb-body">
+            <strong>第一类（凑微分）</strong>：若 \(F'(u)=f(u)\)、\(u=\varphi(x)\) 可导，则
+            $$\int f(\varphi(x))\,\varphi'(x)\,\mathrm{d}x=F(\varphi(x))+C$$
+            <strong>第二类</strong>：设 \(x=\psi(t)\) 单调可导且 \(\psi'(t)\neq 0\)，把 \(\mathrm{d}x=\psi'(t)\,\mathrm{d}t\) 一并代入：
+            $$\int f(x)\,\mathrm{d}x=\int f(\psi(t))\,\psi'(t)\,\mathrm{d}t$$
+            算出关于 \(t\) 的原函数后<strong>必须回代</strong>成 \(x\) 的式子。
+            <mark class="key">换元时微分也要一起换；第二类换元不能忘记回代</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="substitution-flow">
+          <div class="demo-title">演示 2 · 分子恰好是分母的导数</div>
+          <div class="demo-caption">蓝线是被积函数 \(\dfrac{2x+1}{x^{2}+x+3}\)，绿线是它的原函数 \(\ln(x^{2}+x+3)\)。拖动观察点，读数反复提示同一件事：<b>分母的导数正好等于分子</b>，所以凑微分可以一步完成。分母恒大于零，对数才有意义。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">凑微分前先检查分母是否为正</span><span class="mb-no">例 4.2</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\displaystyle\int\frac{2x+1}{x^{2}+x+3}\,\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先算分母的导数：\(\bigl(x^{2}+x+3\bigr)'=2x+1\)，恰好就是分子，这是凑微分的信号。但对数 \(\ln u\) 只有 \(u>0\) 时才有定义（这里 \(u\) 叫<strong class="term">真数</strong>），所以必须先确认 \(x^{2}+x+3\) 恒为正；若不恒为正则要加绝对值或分区间讨论。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              真数 \(x^{2}+x+3\) 的判别式为 \(1-12=-11&lt;0\)，且二次项系数为正，故它对所有实数 \(x\) 都大于 0，可直接写 \(\ln\)。<br>
+              令 \(u=x^{2}+x+3\)，则 \(\mathrm{d}u=(2x+1)\,\mathrm{d}x\)，于是
+              $$\int\frac{2x+1}{x^{2}+x+3}\,\mathrm{d}x=\int\frac{1}{u}\,\mathrm{d}u=\ln u+C=\ln\!\left(x^{2}+x+3\right)+C$$
+              验算：\(\dfrac{\mathrm{d}}{\mathrm{d}x}\ln(x^{2}+x+3)=\dfrac{2x+1}{x^{2}+x+3}\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">看到分式先做两件事：算分母导数、看定义域。分子等于分母导数时立刻凑微分得到对数；分子差一个常数倍就先提出倍数；分子还多出一项就把分式拆成「对数部分 + 反正切部分」。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">换元是把链式法则倒着放</span></div>
+          <div class="mb-body">求导时 \(\bigl(F(\varphi(x))\bigr)'=F'(\varphi(x))\varphi'(x)\)，多出来的 \(\varphi'(x)\) 是「传递倍率」。积分时若被积函数里正好带着这个因子，就能把整块压缩回 \(F(\varphi(x))\)；若没带齐，就要用第二类换元把变量整个换掉，并记得把 \(\mathrm{d}x\) 也换成 \(\psi'(t)\mathrm{d}t\)。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">只换被积函数，不换微分</span></div>
+          <div class="mb-body">令 \(x=\psi(t)\) 后写成 \(\int f(\psi(t))\,\mathrm{d}t\) 是错的，漏掉了 \(\psi'(t)\)。正确写法是 \(\int f(\psi(t))\,\psi'(t)\,\mathrm{d}t\)。另外，算出关于 \(t\) 的结果后必须回代，否则答案不是 \(x\) 的函数。</div>
+        </div>
+=== SECTION:s3 ===
+        <h3><span class="sec-badge">4.3</span>分部积分法</h3>
+        <p>乘积求导会生出两项，把它倒过来写，就得到处理「两个函数相乘」的积分工具。</p>
+
+        <div class="math-block theorem">
+          <div class="mb-head"><span class="mb-tag">定理</span><span class="mb-title">分部积分公式</span><span class="mb-no">4.4</span></div>
+          <div class="mb-body">
+            设 \(u=u(x)\)、\(v=v(x)\) 都有连续导数，由 \((uv)'=u'v+uv'\) 移项积分得
+            $$\int u\,\mathrm{d}v=uv-\int v\,\mathrm{d}u\qquad\text{即}\qquad \int u v'\,\mathrm{d}x=uv-\int v u'\,\mathrm{d}x$$
+            <div class="proof-title">推导 · 3 步</div>
+            <ol class="derive proof-body">
+              <li><span class="derive-eq">\((uv)'=u'v+uv'\)</span><span class="derive-note">乘积法则</span></li>
+              <li><span class="derive-eq">两边对 \(x\) 积分：\(uv=\int u'v\,\mathrm{d}x+\int uv'\,\mathrm{d}x+C\)</span><span class="derive-note">积分与求导互为逆运算</span></li>
+              <li><span class="derive-eq">移项得 \(\int uv'\,\mathrm{d}x=uv-\int vu'\,\mathrm{d}x\)</span><span class="derive-note">常数合并进不定积分，证毕</span></li>
+            </ol>
+            <mark class="key">选 \(u\) 的原则：求导后变简单（对数、反三角、幂函数优先），\(\mathrm{d}v\) 要容易积出来</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="parts-visual">
+          <div class="demo-title">演示 3 · 一块矩形被曲线分成两个积分</div>
+          <div class="demo-caption">取 \(v=u^{2}\)，矩形面积 \(u_{0}v_{0}\) 被曲线下方那块（\(\int v\,\mathrm{d}u\)）和剩下的那块（\(\int u\,\mathrm{d}v\)）恰好填满。拖动终点 \(u_{0}\)，读数把三项数值都算出来：<b>它们的和始终等于矩形面积</b>，这就是分部积分公式的几何原型。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">对数优先当 \(u\)</span><span class="mb-no">例 4.3</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\displaystyle\int x^{2}\ln x\,\mathrm{d}x\)（\(x>0\)）。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>两个因子里 \(\ln x\) 求导后变成 \(\dfrac{1}{x}\)，明显变简单；而 \(x^{2}\) 很容易积出 \(\dfrac{x^{3}}{3}\)。所以取 \(u=\ln x\)、\(\mathrm{d}v=x^{2}\mathrm{d}x\)。注意题目给出 \(x>0\) 正是为了保证 \(\ln x\) 有意义。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              取 \(u=\ln x\)、\(\mathrm{d}v=x^{2}\,\mathrm{d}x\)，则 \(\mathrm{d}u=\dfrac{1}{x}\mathrm{d}x\)、\(v=\dfrac{x^{3}}{3}\)。代入公式：
+              $$\int x^{2}\ln x\,\mathrm{d}x=\frac{x^{3}}{3}\ln x-\int\frac{x^{3}}{3}\cdot\frac{1}{x}\,\mathrm{d}x=\frac{x^{3}}{3}\ln x-\frac{1}{3}\int x^{2}\,\mathrm{d}x=\frac{x^{3}}{3}\ln x-\frac{x^{3}}{9}+C$$
+              验算：\(\left(\dfrac{x^{3}}{3}\ln x-\dfrac{x^{3}}{9}\right)'=x^{2}\ln x+\dfrac{x^{2}}{3}-\dfrac{x^{2}}{3}=x^{2}\ln x\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">固定动作是「先按求导后是否变简单来选 \(u\)，再写出 \(u,\mathrm{d}u,v,\mathrm{d}v\) 四行，最后套公式」。若算出来的新积分比原来更复杂，说明 \(u\) 选反了，回头换一次选法即可。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">把难算的一块换成好算的一块</span></div>
+          <div class="mb-body">演示里的矩形说明公式并非凭空而来：整体面积由两块积分拼成，移项就是把难算的那块用「整体减去另一块」表示。分部积分的价值在于「交换难度」——让求导落在会变简单的因子上，让积分落在容易积的因子上。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">把 \(u\) 选成幂函数</span></div>
+          <div class="mb-body">对 \(\int x^{2}\ln x\,\mathrm{d}x\) 若取 \(u=x^{2}\)、\(\mathrm{d}v=\ln x\,\mathrm{d}x\)，就先得求出 \(\ln x\) 的原函数，反而绕远；更糟的是新积分里会出现 \(x^{3}\cdot\dfrac{1}{x}\) 之外的更高次项。记住优先顺序：对数与反三角优先当 \(u\)，其次幂函数，指数与三角适合当 \(\mathrm{d}v\)。</div>
+        </div>
+=== SECTION:s4 ===
+        <h3><span class="sec-badge">4.4</span>有理函数的积分</h3>
+        <p>两个多项式相除叫有理函数。把它拆成几类「标准小块」，每一块都能用前面学过的对数或反正切积出来。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">部分分式分解</span><span class="mb-no">4.5</span></div>
+          <div class="mb-body">
+            设 \(R(x)=\dfrac{P(x)}{Q(x)}\) 为有理函数。先用多项式除法把假分式化成「多项式 + 真分式」，再把分母 \(Q(x)\) 分解成一次因式与二次不可约因式的乘积，把真分式写成相应简单分式之和。二次不可约因式（判别式 \(&lt;0\)）对应的一项形如 \(\dfrac{Ax+B}{ax^{2}+bx+c}\)，配方后积出对数与反正切。
+            <mark class="key">分母必须先在实数范围内分解完，且每一块的分子次数低于分母</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="rational-integration">
+          <div class="demo-title">演示 4 · 配方之后，分子拆成两份</div>
+          <div class="demo-caption">蓝线是 \(\dfrac{2x+3}{x^{2}+2x+2}\)，绿线是它的原函数。拖动观察点，读数把分母配方成 \((x+1)^{2}+1\)、把分子拆成 \((2x+2)+1\) 的过程一步步写出来：<b>第一份给对数，第二份给反正切</b>。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">一份凑微分，一份查反正切</span><span class="mb-no">例 4.4</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">求 \(\displaystyle\int\frac{2x+3}{x^{2}+2x+2}\,\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>先看分母：判别式 \(4-8=-4&lt;0\)，二次不可约，无法再分解成一次因式，只能配方。再看分子：分母导数是 \(2x+2\)，分子比它多 1，于是把 \(2x+3\) 拆成 \((2x+2)+1\)，两部分分别处理。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              配方：\(x^{2}+2x+2=(x+1)^{2}+1\)，恒大于 0，取对数无需绝对值。<br>
+              拆开积分：
+              $$\int\frac{2x+3}{x^{2}+2x+2}\,\mathrm{d}x=\int\frac{2x+2}{x^{2}+2x+2}\,\mathrm{d}x+\int\frac{1}{(x+1)^{2}+1}\,\mathrm{d}x$$
+              第一项分子是分母导数，凑微分得 \(\ln\!\left(x^{2}+2x+2\right)\)；第二项令 \(u=x+1\)，用 \(\int\dfrac{1}{u^{2}+1}\mathrm{d}u=\arctan u+C\)，得 \(\arctan(x+1)\)。<br>
+              合并：\(\displaystyle\int\frac{2x+3}{x^{2}+2x+2}\,\mathrm{d}x=\ln\!\left(x^{2}+2x+2\right)+\arctan(x+1)+C\)。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">遇到二次不可约分母的固定动作：配方 → 把分子凑出「分母导数」那一份 → 剩下常数那一份查反正切公式。配方一步最关键，它把二次式变成 \((x+a)^{2}+b^{2}\) 的标准形状。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">复杂分式只是几块简单分式的和</span></div>
+          <div class="mb-body">部分分式分解像把一个复杂的和拆成几笔简单账：每一笔要么分子是分母导数（积出对数），要么分母是平方加常数（积出反正切）。演示里绿线原函数的两处「来源」正对应蓝线被拆开的两份。</div>
+        </div>
+=== SECTION:s5 ===
+        <h3><span class="sec-badge">4.5</span>积分表的使用</h3>
+        <p>实际计算里常备一张积分表，但表里每行都有固定的标准形状。用表的关键不是背公式，而是把题目化到那一行去。</p>
+
+        <div class="math-block definition">
+          <div class="mb-head"><span class="mb-tag">定义</span><span class="mb-title">查表三步</span><span class="mb-no">4.6</span></div>
+          <div class="mb-body">
+            ① <strong>配形</strong>：通过配方、线性换元，把被积函数化成表中某行的标准形式；<br>
+            ② <strong>套公式并回代</strong>：注意换元带来的系数（例如 \(\int\dfrac{\mathrm{d}u}{u^{2}+a^{2}}=\dfrac{1}{a}\arctan\dfrac{u}{a}+C\) 里的 \(\dfrac{1}{a}\)）；<br>
+            ③ <strong>求导验算</strong>：把结果求导，看是否回到原被积函数。
+            <mark class="key">换元时的比例系数与回代是最容易漏的两处</mark>。
+          </div>
+        </div>
+
+        <div class="demo-box" data-demo="integral-table">
+          <div class="demo-title">演示 5 · 四步走：认形 → 配方 → 换元查表 → 验算</div>
+          <div class="demo-caption">点按四个步骤按钮，读数逐屏展示 \(\int\dfrac{1}{x^{2}+4x+5}\mathrm{d}x\) 的处理过程，图里同时高亮对应的变换。<b>重点看第 ② 步的配方</b>：不先把分母写成 \((x+2)^{2}+1\)，表里那一行根本对不上。</div>
+        </div>
+
+        <div class="math-block example">
+          <div class="mb-head"><span class="mb-tag">例题</span><span class="mb-title">配方后再查表</span><span class="mb-no">例 4.5</span></div>
+          <div class="mb-body">
+            <div class="ex-part"><span class="ex-label">题目</span><span class="ex-q">利用积分表公式 \(\displaystyle\int\frac{1}{u^{2}+a^{2}}\,\mathrm{d}u=\frac{1}{a}\arctan\frac{u}{a}+C\) 求 \(\displaystyle\int\frac{1}{x^{2}+4x+5}\,\mathrm{d}x\)。</span></div>
+            <div class="ex-part"><span class="ex-label">思路</span><span>表里要求分母是「一个变量的平方加常数平方」，题目里却是 \(x^{2}+4x+5\)。先配方，再令 \(u=x+2\)，把 \(a\) 认出来。</span></div>
+            <div class="ex-part"><span class="ex-label">解</span><span>
+              配方：\(x^{2}+4x+5=(x+2)^{2}+1=(x+2)^{2}+1^{2}\)。<br>
+              令 \(u=x+2\)，则 \(\mathrm{d}u=\mathrm{d}x\)，且 \(a=1\)。代入表中公式：
+              $$\int\frac{1}{x^{2}+4x+5}\,\mathrm{d}x=\int\frac{1}{u^{2}+1^{2}}\,\mathrm{d}u=\arctan u+C=\arctan(x+2)+C$$
+              验算：\(\bigl(\arctan(x+2)\bigr)'=\dfrac{1}{1+(x+2)^{2}}=\dfrac{1}{x^{2}+4x+5}\)，一致。
+            </span></div>
+            <div class="ex-part"><span class="ex-label">评注</span><span class="ex-note">查表的固定动作是「先配形、再对号入座、最后求导验算」。本题 \(a=1\) 让系数 \(\dfrac{1}{a}\) 恰好为 1；若分母配成 \((x+2)^{2}+4\)，就别忘了 \(a=2\) 带来的 \(\dfrac{1}{2}\)。</span></div>
+          </div>
+        </div>
+
+        <div class="math-block insight">
+          <div class="mb-head"><span class="mb-tag">直观理解</span><span class="mb-title">积分表是「标准形状」的索引</span></div>
+          <div class="mb-body">表里每一行只对一种形状成立。配方与换元做的事，就是把题目搬到那一行上去。演示的四步按钮把这个搬运过程拆开，任何一步走不通，就说明形状还没对准。</div>
+        </div>
+
+        <div class="math-block pitfall">
+          <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">对不上号就硬套公式</span></div>
+          <div class="mb-body">把 \(\int\dfrac{1}{x^{2}+4x+5}\mathrm{d}x\) 直接写成 \(\arctan x+C\) 是错的：分母多了一次项。必须先配方；此外换元 \(u=x+2\) 虽然 \(\mathrm{d}u=\mathrm{d}x\)，但一般换元会带来系数，连同回代一起漏掉是查表最常见的错误。</div>
+        </div>
+=== PITFALLS ===
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">不定积分漏写 \(+C\)</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(\int 2x\,\mathrm{d}x\) 写成 \(x^{2}\)。<b>为什么错</b>：任意两个原函数相差常数，只写一个函数丢掉了整个函数族。<b>正确做法</b>：写 \(x^{2}+C\)；只有在定积分或给定初值时常数才被确定。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">换元只换函数不换微分</span></div>
+        <div class="mb-body"><b>错误做法</b>：令 \(x=\psi(t)\) 后写 \(\int f(\psi(t))\,\mathrm{d}t\)。<b>为什么错</b>：\(\mathrm{d}x=\psi'(t)\mathrm{d}t\)，漏掉 \(\psi'(t)\) 等于把被积函数换了、尺度没换。<b>正确做法</b>：写成 \(\int f(\psi(t))\psi'(t)\,\mathrm{d}t\)，算出后回代成 \(x\)。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">分部积分把 \(u\) 选反</span></div>
+        <div class="mb-body"><b>错误做法</b>：对 \(\int x^{2}\ln x\,\mathrm{d}x\) 取 \(u=x^{2}\)。<b>为什么错</b>：需要先求 \(\ln x\) 的原函数，新积分更复杂。<b>正确做法</b>：优先让对数、反三角当 \(u\)，因为它们求导后变简单。</div>
+      </div>
+      <div class="math-block pitfall">
+        <div class="mb-head"><span class="mb-tag">误区</span><span class="mb-title">用对数前不查真数正负</span></div>
+        <div class="mb-body"><b>错误做法</b>：把 \(\int\dfrac{1}{x}\mathrm{d}x\) 无条件写成 \(\ln x+C\)。<b>为什么错</b>：\(\ln x\) 只在 \(x>0\) 有定义，而被积函数在 \(x\neq 0\) 都有意义。<b>正确做法</b>：写成 \(\ln|x|+C\)，或分区间讨论；本题例 4.2 因判别式为负、真数恒正才可直接写 \(\ln\)。</div>
+      </div>
+=== EXERCISES ===
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">1</span><span class="ex-level">基础</span><strong>求 \(\int(4x^{3}-6x+2)\,\mathrm{d}x\)，并求导验算。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">逐项找原函数：\(\int4x^{3}\mathrm{d}x=x^{4}\)、\(\int(-6x)\mathrm{d}x=-3x^{2}\)、\(\int2\,\mathrm{d}x=2x\)，故结果为 \(x^{4}-3x^{2}+2x+C\)。验算：导数为 \(4x^{3}-6x+2\)，与被积函数一致。别忘了常数项。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">2</span><span class="ex-level">进阶</span><strong>求 \(\int x\sin x\,\mathrm{d}x\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">取 \(u=x\)（求导后变简单）、\(\mathrm{d}v=\sin x\,\mathrm{d}x\)，则 \(\mathrm{d}u=\mathrm{d}x\)、\(v=-\cos x\)。代入分部积分公式：\(\int x\sin x\,\mathrm{d}x=-x\cos x-\int(-\cos x)\,\mathrm{d}x=-x\cos x+\sin x+C\)。验算：导数为 \(-\cos x+x\sin x+\cos x=x\sin x\)，正确。</div></details>
+          </div>
+          <div class="exercise-card">
+            <div class="ex-head"><span class="ex-no">3</span><span class="ex-level">综合</span><strong>求 \(\displaystyle\int\frac{1}{x^{2}+4x+8}\,\mathrm{d}x\)。</strong></div>
+            <details class="ex-answer"><summary>查看答案与解析</summary><div class="ex-answer-body">先配方：\(x^{2}+4x+8=(x+2)^{2}+4=(x+2)^{2}+2^{2}\)，判别式 \(16-32&lt;0\)，二次不可约。令 \(u=x+2\)，\(\mathrm{d}u=\mathrm{d}x\)，\(a=2\)。查表公式 \(\int\dfrac{\mathrm{d}u}{u^{2}+a^{2}}=\dfrac{1}{a}\arctan\dfrac{u}{a}+C\) 给出 \(\dfrac{1}{2}\arctan\dfrac{x+2}{2}+C\)。这里最容易漏的是系数 \(\dfrac{1}{2}\)；验算时它正好被链式法则的 \(\dfrac{1}{2}\) 抵消，回到原被积函数。</div></details>
+          </div>
+=== QUIZ ===
+[
+  { "q": "关于不定积分 \\(\\int f(x)\\,\\mathrm{d}x\\)，下列说法正确的是？",
+    "options": ["它表示一个确定的函数", "它表示一族相差常数的函数", "它一定等于 \\(f(x)\\)", "它只在 \\(x>0\\) 时有意义"], "answer": 1,
+    "explain": "由「两个原函数之差导数恒为零」可知它们只差常数，故不定积分是一族函数，B 正确。A 漏掉任意常数 \\(C\\)；C 把积分与求导混为一谈，正确的是 \\(\\frac{\\mathrm{d}}{\\mathrm{d}x}\\int f\\mathrm{d}x=f\\)；D 毫无依据，定义域由 \\(f\\) 决定。" },
+  { "q": "求 \\(\\int\\frac{2x+1}{x^{2}+x+3}\\,\\mathrm{d}x\\)，结果是？",
+    "options": ["\\(\\dfrac{1}{2}\\ln\\left(x^{2}+x+3\\right)+C\\)", "\\(\\ln\\left(x^{2}+x+3\\right)+C\\)", "\\(\\arctan(x^{2}+x+3)+C\\)", "\\(\\dfrac{1}{x^{2}+x+3}+C\\)"], "answer": 1,
+    "explain": "分母导数恰为 \\(2x+1\\)，凑微分得对数；又因判别式 \\(1-12=-11<0\\)、真数恒正，无需绝对值，B 正确。A 多了系数 \\(\\frac{1}{2}\\)，求导得 \\(\\frac{2x+1}{2(x^{2}+x+3)}\\)，不等于被积函数；C 把对数公式与反正切公式用反了；D 把积分写成了倒数。" },
+  { "q": "用分部积分求 \\(\\int x^{2}\\ln x\\,\\mathrm{d}x\\)（\\(x>0\\)）时，最合适的选择是？",
+    "options": ["\\(u=x^{2},\\ \\mathrm{d}v=\\ln x\\,\\mathrm{d}x\\)", "\\(u=\\ln x,\\ \\mathrm{d}v=x^{2}\\,\\mathrm{d}x\\)", "\\(u=x^{2}\\ln x,\\ \\mathrm{d}v=\\mathrm{d}x\\)", "\\(u=1,\\ \\mathrm{d}v=x^{2}\\ln x\\,\\mathrm{d}x\\)"], "answer": 1,
+    "explain": "\\(\\ln x\\) 求导后变成 \\(1/x\\)，明显变简单，而 \\(x^{2}\\) 容易积出 \\(x^{3}/3\\)，故 B 正确。A 要先求 \\(\\ln x\\) 的原函数，反而绕远；C、D 没有把「求导变简单」这一原则用上，新积分不会比原来容易。" },
+  { "q": "在 \\(t>0\\) 上令 \\(x=t^{2}+1\\) 作第二类换元时，下列写法正确的是？",
+    "options": ["\\(\\int f(t^{2}+1)\\,\\mathrm{d}t\\)", "\\(\\int f(t^{2}+1)\\cdot 2t\\,\\mathrm{d}t\\)", "\\(\\int f(t^{2}+1)\\cdot t^{2}\\,\\mathrm{d}t\\)", "\\(\\int f(x)\\cdot 2t\\,\\mathrm{d}t\\)"], "answer": 1,
+    "explain": "\\(\\mathrm{d}x=2t\\,\\mathrm{d}t\\)，被积函数与微分必须同时换，B 正确。A 漏掉 \\(2t\\)；C 把 \\(\\psi'(t)\\) 错写成 \\(\\psi(t)\\) 的一部分；D 只换了微分、没换被积函数里的 \\(x\\)。限定 \\(t>0\\) 后 \\(\\psi'(t)=2t>0\\) 且单调递增，满足定理 4.3 条件，可唯一回代 \\(t=\\sqrt{x-1}\\)。" },
+  { "q": "求 \\(\\int\\frac{1}{x^{2}+4x+5}\\,\\mathrm{d}x\\)，结果是？",
+    "options": ["\\(\\arctan x+C\\)", "\\(\\arctan(x+2)+C\\)", "\\(\\dfrac{1}{2}\\arctan(x+2)+C\\)", "\\(\\ln\\left(x^{2}+4x+5\\right)+C\\)"], "answer": 1,
+    "explain": "配方 \\(x^{2}+4x+5=(x+2)^{2}+1\\)，令 \\(u=x+2\\)、\\(a=1\\)，查表得 \\(\\arctan(x+2)+C\\)，B 正确。A 没有配方、漏了平移；C 把 \\(a\\) 错当成 2；D 用的是「分子为分母导数」的对数公式，但本题分子是常数 1，不适用。" }
+]
+=== SUMMARY ===
+      <p>这一章把求导反过来做：先承认答案是一族相差常数的原函数，再用凑微分、换元、分部积分、部分分式分解与查表这五件工具，把不认识的被积函数搬到认识的标准形状上去。每一步之后都用求导验算一次，是成本最低的纠错办法。</p>
+      <p>但不定积分回答的还是「函数长什么样」，不是「一段区间上累积了多少」。下一章把积分限加进来，分割、取点、求和、取极限，定积分把面积、路程、功这些「总量」统一成一个数，微积分基本公式也会把这两章接起来。</p>
+=== DEMOJS ===
+const DEMOS = {
+  'antiderivative-family': function (el) {
+    const f = x => x * x - 2 * x + 1;
+    const F = x => x * x * x / 3 - x * x + x;
+    DemoPresets.sliderCurve(el, {
+      range: [-1, 3, -4.6, 5.2], boxH: 360, fill: true,
+      slider: { label: '常数', min: -1, max: 1, step: 0.05, init: 0 },
+      hint: '拖动常数，看整族曲线一起上下平移',
+      curves: [
+        { fn: (x, v) => F(x) + v - 1, color: 'cyan', width: 1.8 },
+        { fn: (x, v) => F(x) + v, color: 'accent', width: 2.6 },
+        { fn: (x, v) => F(x) + v + 1, color: 'ok', width: 1.8 }
+      ],
+      dynamic: (p, v, C) => {
+        const x0 = 1.5, k = f(x0);
+        [-1, 0, 1].forEach(d => {
+          const y = F(x0) + v + d;
+          p.line(x0 - 0.7, y - 0.7 * k, x0 + 0.7, y + 0.7 * k,
+            { color: C(d === 0 ? 'danger' : 'axis'), width: 1.4, dash: true });
+        });
+        p.text(1.8, 3.4, '切线互相平行', { color: C('text'), size: 11 });
+      },
+      readout: (v) => `常数 ${texHTML('C=' + f4(v))}：三条曲线在同一横坐标处的切线斜率都是 ${texHTML('f(x)=x^{2}-2x+1')}。<br>` +
+        `求导会把常数抹掉，所以 ${texHTML('\\int f\\,\\mathrm{d}x=F(x)+C')} 是<b>一族</b>函数，不是单个函数。`,
+      figureHint: '三条曲线形状完全相同，只是竖直位置不同；虚线切线始终平行。'
+    });
+  },
+
+  'substitution-flow': function (el) {
+    const den = x => x * x + x + 3;
+    const g = x => (2 * x + 1) / den(x);
+    const G = x => Math.log(den(x));
+    DemoPresets.sliderCurve(el, {
+      range: [-2, 3, -1.5, 3], boxH: 360,
+      slider: { label: '观察点', min: -1.5, max: 2.5, step: 0.01, init: 0.5 },
+      hint: '分子恰好是分母的导数，凑微分可一步完成',
+      curves: [
+        { fn: g, color: 'accent', width: 2.4 },
+        { fn: G, color: 'ok', width: 2.4 }
+      ],
+      dynamic: (p, v, C) => {
+        p.line(v, -1.5, v, 3, { color: C('cyan'), dash: true, width: 1.2 });
+        p.dot(v, g(v), { r: 5, color: C('accent') });
+        p.dot(v, G(v), { r: 5, color: C('ok') });
+      },
+      readout: (v) => `在 ${texHTML('x=' + f4(v))} 处：分母 ${texHTML('x^{2}+x+3=' + f4(den(v)))}，其导数 ${texHTML('2x+1=' + f4(2 * v + 1))} 正是分子。<br>` +
+        `判别式 ${texHTML('1-12=-11<0')}，真数恒正，故 ${texHTML('\\int\\frac{2x+1}{x^{2}+x+3}\\,\\mathrm{d}x=\\ln(x^{2}+x+3)+C')}，无需绝对值。`,
+      figureHint: '绿线是蓝线的原函数；把分子凑成微分时，先确认真数恒正。'
+    });
+  },
+
+  'parts-visual': function (el) {
+    DemoPresets.custom(el, {
+      range: [0, 2.2, 0, 4.6], boxH: 380, fill: true,
+      slider: { label: '终点', min: 0.4, max: 2, step: 0.01, init: 1.4 },
+      figureHint: '矩形面积被曲线分成两块：曲线下方那块对应曲线与横轴围出的面积，剩下那块是矩形扣除它后的部分，两块相加正好等于整个矩形，对应分部积分公式。',
+      draw: (p, out, u0, c, C) => {
+        const v0 = u0 * u0;
+        p.rect(0, 0, u0, v0, { fill: C('accent'), alpha: 0.10, stroke: C('accent') });
+        const pts = [[0, 0]];
+        for (let i = 0; i <= 80; i++) { const u = u0 * i / 80; pts.push([u, u * u]); }
+        pts.push([u0, 0]);
+        p.polygon(pts, { fill: C('cyan'), alpha: 0.30, stroke: C('cyan') });
+        p.curve(u => u * u, { from: 0, to: u0, color: C('warn'), width: 2.4 });
+        p.dot(u0, v0, { r: 5, color: C('danger') });
+        p.text(u0 + 0.06, v0, '右上角', { color: C('danger'), size: 11 });
+        const A = Math.pow(u0, 3) / 3, B = 2 * Math.pow(u0, 3) / 3;
+        out.innerHTML = `取 ${texHTML('v=u^{2}')}，矩形面积 ${texHTML('u_0v_0=' + f4(u0 * v0))}。<br>` +
+          `曲线下方 ${texHTML('\\int_{0}^{u_0}v\\,\\mathrm{d}u=' + f4(A))}，剩余 ${texHTML('\\int_{0}^{v_0}u\\,\\mathrm{d}v=' + f4(B))}，两者之和 ${texHTML(f4(A + B))} 恰等于矩形面积。<br>` +
+          `这正是 ${texHTML('uv=\\int u\\,\\mathrm{d}v+\\int v\\,\\mathrm{d}u')}，移项即得分部积分公式。`;
+      }
+    });
+  },
+
+  'rational-integration': function (el) {
+    const den = x => x * x + 2 * x + 2;
+    const g = x => (2 * x + 3) / den(x);
+    const G = x => Math.log(den(x)) + Math.atan(x + 1);
+    DemoPresets.sliderCurve(el, {
+      range: [-3, 2, -2, 4], boxH: 360, fill: true,
+      slider: { label: '观察点', min: -2.5, max: 1.5, step: 0.01, init: 0 },
+      hint: '分母配方后，分子拆成两份',
+      curves: [
+        { fn: g, color: 'accent', width: 2.4 },
+        { fn: G, color: 'ok', width: 2.4 }
+      ],
+      dynamic: (p, v, C) => {
+        p.line(v, -2, v, 4, { color: C('cyan'), dash: true, width: 1.2 });
+        p.dot(v, g(v), { r: 5, color: C('accent') });
+        p.dot(v, G(v), { r: 5, color: C('ok') });
+      },
+      readout: () => `配方 ${texHTML('x^{2}+2x+2=(x+1)^{2}+1')}，判别式为负、恒大于 0。<br>` +
+        `分子拆成 ${texHTML('2x+3=(2x+2)+1')}：第一份是分母导数，积出 ${texHTML('\\ln(x^{2}+2x+2)')}；第二份配方后查反正切，积出 ${texHTML('\\arctan(x+1)')}。<br>` +
+        `故 ${texHTML('\\int\\frac{2x+3}{x^{2}+2x+2}\\,\\mathrm{d}x=\\ln(x^{2}+2x+2)+\\arctan(x+1)+C')}。`,
+      figureHint: '绿线是蓝线的原函数，两个来源分别对应分子拆开的两份。'
+    });
+  },
+
+  'integral-table': function (el) {
+    let step = 0;
+    const texts = [
+      `① 认出形式：被积函数 ${texHTML('\\dfrac{1}{x^{2}+4x+5}')} 分母是二次式，但表里要求 ${texHTML('u^{2}+a^{2}')}，直接对不上号。`,
+      `② 配方：${texHTML('x^{2}+4x+5=(x+2)^{2}+1=(x+2)^{2}+1^{2}')}，标准形状出现了。`,
+      `③ 换元查表：令 ${texHTML('u=x+2')}、${texHTML('a=1')}，由 ${texHTML('\\int\\dfrac{\\mathrm{d}u}{u^{2}+a^{2}}=\\dfrac{1}{a}\\arctan\\dfrac{u}{a}+C')} 得 ${texHTML('\\arctan(x+2)+C')}。`,
+      `④ 求导验算：${texHTML('\\bigl(\\arctan(x+2)\\bigr)\'=\\dfrac{1}{1+(x+2)^{2}}=\\dfrac{1}{x^{2}+4x+5}')}，回到原式，结果正确。`
+    ];
+    DemoPresets.custom(el, {
+      range: [-4, 2, 0, 1.2], boxH: 320,
+      controlsHTML: '<span class="hint">逐个点按步骤，看查表公式怎么落到本题</span>',
+      buttons: [
+        { label: '① 认出形式', run: () => { step = 0; } },
+        { label: '② 配方', run: () => { step = 1; } },
+        { label: '③ 换元查表', run: () => { step = 2; } },
+        { label: '④ 求导验算', run: () => { step = 3; } }
+      ],
+      draw: (p, out, v, c, C) => {
+        p.curve(x => 1 / (x * x + 4 * x + 5), { color: C('accent'), width: 2.6 });
+        p.line(-2, 0, -2, 1.2, { color: C(step >= 1 ? 'warn' : 'axis'), dash: true, width: 1.4 });
+        if (step >= 1) p.text(-1.9, 1.05, '对称轴', { color: C('warn'), size: 11 });
+        if (step >= 2) p.dot(-2, 1, { r: 5, color: C('danger') });
+        out.innerHTML = texts[step] + `<br><span class="hint">第 ${step + 1} 步 / 共 4 步</span>`;
+      }
+    });
+  }
+};
+
+mountDemos(DEMOS);
